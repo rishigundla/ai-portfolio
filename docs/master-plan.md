@@ -17,10 +17,10 @@
 |-------|-------|
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
-| **Current Day** | Day 2 (Tue) — Extract Portfolio-Site Tokens |
-| **Overall Progress** | 15 tasks of 98 complete · Phase 0 ✓ · Week 1 Day 1 ✓ |
-| **Status** | Pre-flight + Day 1 complete. Monorepo scaffolded, pushed to GitHub, shared packages placeholder-ready |
-| **Next Action** | Day 2: Extract Tailwind tokens from portfolio-site into `packages/design-system/src/tokens/*.css` |
+| **Current Day** | Day 3 (Wed) — Install shadcn Primitives |
+| **Overall Progress** | 22 tasks of 98 complete · Phase 0 ✓ · Week 1 Days 1-2 ✓ |
+| **Status** | Day 2 complete. Design-system tokens extracted and published as `@rishi/design-system` internal package. Tailwind preset + typed token exports ready. |
+| **Next Action** | Day 3: Run `pnpm dlx shadcn@latest init` in design-system and install themed primitives (Button, Dialog, Card, Tabs, Tooltip, Popover, Input, Select, Toast, Command, Combobox, Badge, Avatar) |
 | **Blockers** | None |
 
 ### Phase Progress Overview
@@ -41,6 +41,22 @@
 ## Recent Activity Log
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
+
+### 2026-04-24 · Day 2 complete — Design system tokens extracted
+- Created `packages/design-system/src/tokens/` with 7 files: `colors.css`, `typography.css`, `spacing.css`, `motion.css`, `shadows.css`, `index.css` (barrel), `index.ts` (typed exports)
+- `colors.css`: teal accent (`#2dd4bf`), base-900→600 scale, surface/text/status/severity tokens, dark + light theme variants
+- `typography.css`: Space Grotesk + JetBrains Mono + Source Serif 4 font face imports + size/weight/line-height/tracking scales
+- `spacing.css`: 4px base spacing scale, radius scale, container widths, border widths
+- `motion.css`: durations, easings, keyframes (fadeIn, slideUp, pulseGlow, float, gridFlow, shimmer, blink) + utility classes
+- `shadows.css`: elevation system + accent glow shadows + card variants + focus rings
+- `tailwind.config.ts`: shared Tailwind preset that all 5 apps will consume via `presets: [baseConfig]`
+- `tsconfig.json`: extends `@repo/typescript-config/react-library`
+- `package.json`: added `@fontsource/space-grotesk`, `@fontsource/jetbrains-mono`, `@fontsource/source-serif-4` dependencies + `tailwindcss` 3.4.17 + `typescript` 5.9.2 devDeps
+- README: full usage documentation with consumer examples
+- `pnpm install` succeeded; `pnpm tsc --noEmit` clean
+- Commit `f23762e` pushed to main
+- **Context for Day 3**: Design system tokens ready. Next is installing shadcn primitives and theming them. Note: used Tailwind v3.4.17 (stable, matches portfolio-site) instead of v4 to avoid v4 breaking changes — can upgrade later.
+- **Next**: Day 3 — Install shadcn primitives
 
 ### 2026-04-24 · Day 1 complete — Monorepo scaffolded and live on GitHub
 - Installed pnpm 10.33.2 globally
@@ -389,16 +405,23 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 - Day 2 target: create `tokens/colors.css`, `tokens/typography.css`, `tokens/spacing.css`, `tokens/motion.css`, `tokens/shadows.css` as CSS variables, plus Tailwind v4 config consuming them
 - Repo root README, docs, and all placeholder packages are live and browseable on GitHub
 
-#### Day 2 (Tue) · Extract Portfolio-Site Tokens
-- [ ] Create `packages/design-system/` with package.json + tsconfig
-- [ ] Copy `tailwind.config.js` tokens from `portfolio-site/` as reference
-- [ ] Create `src/tokens/colors.css` (accent `#2dd4bf`, base-900 → base-600, surface tokens, text tokens)
-- [ ] Create `src/tokens/typography.css` (Space Grotesk, JetBrains Mono, Source Serif 4)
-- [ ] Create `src/tokens/spacing.css`, `src/tokens/motion.css`, `src/tokens/shadows.css`
-- [ ] Configure Tailwind v4 in `packages/design-system/tailwind.config.ts` to consume tokens
-- [ ] Export tokens barrel via `src/tokens/index.ts`
+#### Day 2 (Tue) · Extract Portfolio-Site Tokens — COMPLETED 2026-04-24
+- [x] Create `packages/design-system/` with package.json + tsconfig (package.json updated with deps, tsconfig.json extends `@repo/typescript-config/react-library`)
+- [x] Referenced `tailwind.config.js` and `src/index.css` tokens from portfolio-site (teal `#2dd4bf`, base scale, Space Grotesk, motion keyframes)
+- [x] Created `src/tokens/colors.css` with accent / base / surface / text / status / severity + light theme
+- [x] Created `src/tokens/typography.css` with 3 font families + size / weight / line-height / tracking scales
+- [x] Created `src/tokens/spacing.css`, `motion.css`, `shadows.css`
+- [x] Created `tailwind.config.ts` shared preset (chose v3.4.17 for stability — matches portfolio-site; v4 can come later)
+- [x] Exported tokens barrel: `src/tokens/index.css` (CSS side-effect import) + `src/tokens/index.ts` (typed constants)
 
-**Context for Next Session**: _(fill in after completion)_
+**Context for Next Session (Day 3)**:
+- Design system tokens complete and consumable via `@rishi/design-system/tokens` (CSS) and `@rishi/design-system/tokens/typed` (TS)
+- Tailwind preset at `@rishi/design-system/tailwind.config` ready to be imported by all 5 apps
+- Next: `pnpm dlx shadcn@latest init` inside `packages/design-system/` to scaffold shadcn setup
+- Primitives to install: Button, Dialog, Tabs, Tooltip, Popover, Card, Input, Select, Toast, Command, Combobox, Badge, Avatar
+- All primitives must be themed to the existing CSS variables (e.g., `bg-accent`, `text-text-primary`, `border-surface-border`)
+- `pnpm install` state: 5 workspace projects, 298 packages, clean (no warnings)
+- `pnpm tsc --noEmit` in design-system: passes
 
 #### Day 3 (Wed) · Install shadcn Primitives
 - [ ] Run `pnpm dlx shadcn@latest init` in design-system package

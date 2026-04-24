@@ -1472,10 +1472,10 @@
       currentStatus: {
         phase: "Phase 1 — Project 1 (Dashboard Factory)",
         week: "Week 1 of 14",
-        day: "Day 2 (Tue) — Extract Portfolio-Site Tokens",
-        progress: { done: 15, total: 98 },
-        status: "Pre-flight + Day 1 complete. Monorepo scaffolded, pushed to GitHub, placeholder packages ready.",
-        nextAction: "Day 2: Extract Tailwind tokens from portfolio-site into packages/design-system/src/tokens/*.css",
+        day: "Day 3 (Wed) — Install shadcn Primitives",
+        progress: { done: 22, total: 98 },
+        status: "Day 2 complete. Design-system tokens extracted and exported. Tailwind preset + typed token exports ready.",
+        nextAction: "Day 3: Run pnpm dlx shadcn@latest init in design-system, install Button, Dialog, Card, Tabs, Tooltip, Popover, Input, Select, Toast, Command, Combobox, Badge, Avatar themed to tokens",
         blockers: "None"
       },
 
@@ -1488,7 +1488,10 @@
         "0-P0.3-0",
         // Phase 1 · Week 1 · Day 1 (10 tasks)
         "1-W1.D1-0", "1-W1.D1-1", "1-W1.D1-2", "1-W1.D1-3", "1-W1.D1-4",
-        "1-W1.D1-5", "1-W1.D1-6", "1-W1.D1-7", "1-W1.D1-8", "1-W1.D1-9"
+        "1-W1.D1-5", "1-W1.D1-6", "1-W1.D1-7", "1-W1.D1-8", "1-W1.D1-9",
+        // Phase 1 · Week 1 · Day 2 (7 tasks)
+        "1-W1.D2-0", "1-W1.D2-1", "1-W1.D2-2", "1-W1.D2-3",
+        "1-W1.D2-4", "1-W1.D2-5", "1-W1.D2-6"
       ],
 
       phases: [
@@ -1501,6 +1504,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-04-24",
+          title: "Day 2 COMPLETE — Design system tokens extracted",
+          desc: "Created 7 token files in packages/design-system/src/tokens/: colors.css (teal accent, base scale, surface, text, status, severity + light theme), typography.css (Space Grotesk + JetBrains Mono + Source Serif 4 with font face imports + size/weight/spacing scales), spacing.css (4px base scale + radius + container widths), motion.css (durations + easings + 7 keyframes + utility classes), shadows.css (elevation + glow shadows + card variants), index.css (barrel), index.ts (typed constants). Added tailwind.config.ts shared preset, tsconfig.json extending @repo/typescript-config/react-library. package.json now declares @fontsource deps + tailwindcss 3.4.17. pnpm install clean, tsc clean. Commit f23762e pushed.",
+          next: "Day 3 — Install shadcn primitives (pnpm dlx shadcn@latest init) and theme to tokens"
+        },
         {
           date: "2026-04-24",
           title: "Day 1 COMPLETE — Monorepo live on GitHub",
