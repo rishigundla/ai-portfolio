@@ -1472,10 +1472,10 @@
       currentStatus: {
         phase: "Phase 1 — Project 1 (Dashboard Factory)",
         week: "Week 1 of 14",
-        day: "Day 7 (Sun) — Week 1 Polish",
-        progress: { done: 43, total: 98 },
-        status: "Day 6 complete. @rishi/ai-core fully implemented + integration-tested via the deployed showcase site. Vercel auto-redeploying.",
-        nextAction: "Day 7: Polish Week 1 — README per package, monorepo root README with Mermaid architecture diagram, visual QA of deployed site, tag Week 1 complete.",
+        day: "Week 2 · Day 8 (Mon) — Project 1 App Scaffolding",
+        progress: { done: 47, total: 98 },
+        status: "WEEK 1 COMPLETE. Monorepo + design-system + ai-core + live deploy + all READMEs shipped. Foundation done; next 7 weeks build 5 AI apps on top.",
+        nextAction: "Week 2 Day 1: Scaffold apps/dashboard-factory/ as Next.js 16 App Router, install design-system + ai-core, landing page with Browse sample datasets CTA.",
         blockers: "None"
       },
 
@@ -1499,7 +1499,9 @@
         // Phase 1 · Week 1 · Day 5 (5 tasks — scaffold, install DS, pages, deploy VERIFIED LIVE, README)
         "1-W1.D5-0", "1-W1.D5-1", "1-W1.D5-2", "1-W1.D5-3", "1-W1.D5-4",
         // Phase 1 · Week 1 · Day 6 (6 tasks — package+tsconfig, deps, replay, generate, types, test-fixture)
-        "1-W1.D6-0", "1-W1.D6-1", "1-W1.D6-2", "1-W1.D6-3", "1-W1.D6-4", "1-W1.D6-5"
+        "1-W1.D6-0", "1-W1.D6-1", "1-W1.D6-2", "1-W1.D6-3", "1-W1.D6-4", "1-W1.D6-5",
+        // Phase 1 · Week 1 · Day 7 (4 tasks — package READMEs, root README, visual QA, tag week complete)
+        "1-W1.D7-0", "1-W1.D7-1", "1-W1.D7-2", "1-W1.D7-3"
       ],
 
       phases: [
@@ -1512,6 +1514,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-04-24",
+          title: "WEEK 1 COMPLETE — Foundation shipped",
+          desc: "Day 7 polish: rewrote packages/design-system/README.md to cover final state (tokens + 14 primitives + 5 AI components + motion + Tailwind preset); rewrote monorepo root README.md with live status table for all 6 apps, Mermaid architecture diagram showing packages → apps → fixtures relationships, repo tree, dev commands, tech stack, conventions. Verified post-refactor deploy at /components — all 5 sections and streaming button intact. Week 1 tagged complete: monorepo + design system + ai-core + live deploy + integration-tested. 47 of 98 tasks done (48%). Next 7 weeks build 5 AI apps on top of the foundation.",
+          next: "Week 2 Day 1 — Scaffold apps/dashboard-factory/ (Project 1 Next.js app)"
+        },
         {
           date: "2026-04-24",
           title: "Day 6 COMPLETE — @rishi/ai-core streaming infrastructure shipped",

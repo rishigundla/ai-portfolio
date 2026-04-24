@@ -1,39 +1,89 @@
 # AI Portfolio
 
 > Five AI-native portfolio projects anchored to real Nutanix SaaS Data Team work.
-> Built with Next.js 16, deployed on Vercel, designed to complete the Senior BI Engineer → Data / Analytics Engineer transition.
+> Built on Next.js + Vercel with a shared design system. Designed to complete the Senior BI Engineer → Data / Analytics Engineer transition.
 
-**Author**: Rishikesh Gundla ([rishikeshgundla.com](https://rishikeshgundla.com))
-**Status**: Phase 1 · Week 1 · Day 1 — Foundation
-**Build Plan**: [docs/master-plan.md](./docs/master-plan.md) · [docs/plan.html](./docs/plan.html) (rich interactive view)
+**Author**: Rishikesh Gundla — [rishikeshgundla.com](https://rishikeshgundla.com)
+**Status**: Phase 1 · Week 1 complete (44 / 98 tasks · 44.9%)
+**Live demo**: [ai-portfolio-design-system-docs.vercel.app](https://ai-portfolio-design-system-docs.vercel.app)
+**Plan**: [docs/master-plan.md](./docs/master-plan.md) · [docs/plan.html](./docs/plan.html) (interactive)
 
 ---
 
 ## The Five Projects
 
-| # | Project | Status | Live Demo |
-|---|---------|--------|-----------|
-| 1 | **Instant Analytics Dashboard Factory** | Not Started | — |
-| 2 | **Dashboard-to-Deck Narrative Generator** | Not Started | — |
-| 3 | **Smart Metric Anomaly Alerting** | Not Started | — |
-| 4 | **AI Sprint Intelligence Dashboard** | Not Started | — |
-| 5 | **AI Pipeline Debugger & Self-Healer** | Not Started | — |
+| # | Project | What it does | Status | Live |
+|---|---------|--------------|--------|------|
+| 0 | [Design System Docs](./apps/design-system-docs/) | Showcase of tokens, primitives, AI components | **Live** | [link](https://ai-portfolio-design-system-docs.vercel.app) |
+| 1 | Instant Analytics Dashboard Factory | Pick a sample dataset → streaming AI profiling → interactive dashboard | Not started | — |
+| 2 | Dashboard-to-Deck Narrative Generator | Sample dashboard PDF → AI narrative → polished PPTX | Not started | — |
+| 3 | Smart Metric Anomaly Alerting | Curated anomalies → AI root-cause narration with correlation analysis | Not started | — |
+| 4 | AI Sprint Intelligence Dashboard | Synthetic sprints → team + individual KPIs → AI meeting brief | Not started | — |
+| 5 | AI Pipeline Debugger & Self-Healer | PySpark failure scenarios → AI diagnosis + patch + mock Slack approval | Not started | — |
 
-Each project is a standalone Next.js app in [`apps/`](./apps/) with its own README, case study, and 90-second Loom video.
+Each app will have its own `README.md`, `portfolio.meta.json`, case study in `docs/case-studies/`, and 90-second Loom walkthrough.
 
 ---
 
 ## Architecture
 
-- **Monorepo**: pnpm workspaces + turborepo
-- **Apps**: Next.js 16 App Router, Vercel AI SDK for streaming simulation
-- **Shared packages**:
-  - `packages/design-system` — tokens, primitives, AI components
-  - `packages/ai-core` — streaming replay + fixture generation utilities
-- **Data**: Pre-generated JSON fixtures replayed via `streamText` (no runtime Claude API calls)
-- **Deployment**: Vercel per app · $0 monthly runtime cost
+```mermaid
+flowchart TB
+    subgraph packages["packages/ · shared infrastructure"]
+        DS["@rishi/design-system<br/>tokens · primitives · AI components · motion"]
+        AI["@rishi/ai-core<br/>replayFixture · generate · types · prompts"]
+        TS["@repo/typescript-config<br/>base · nextjs · react-library"]
+        EL["@repo/eslint-config<br/>base · next · react"]
+    end
 
-See [docs/master-plan.md](./docs/master-plan.md) for the full 14-week day-by-day build plan.
+    subgraph apps["apps/ · 6 Next.js apps on Vercel"]
+        DSD["design-system-docs<br/>(live)"]
+        P1["dashboard-factory<br/>(Project 1)"]
+        P2["narrative-generator<br/>(Project 2)"]
+        P3["anomaly-alerting<br/>(Project 3)"]
+        P4["sprint-intelligence<br/>(Project 4)"]
+        P5["pipeline-healer<br/>(Project 5)"]
+    end
+
+    subgraph data["fixtures/ · pre-generated AI responses"]
+        F1["dashboard-factory/"]
+        F2["narrative-generator/"]
+        F3["anomaly-alerting/"]
+        F4["sprint-intelligence/"]
+        F5["pipeline-healer/"]
+    end
+
+    DS --> DSD
+    DS --> P1
+    DS --> P2
+    DS --> P3
+    DS --> P4
+    DS --> P5
+
+    AI --> DSD
+    AI --> P1
+    AI --> P2
+    AI --> P3
+    AI --> P4
+    AI --> P5
+
+    TS --> DS
+    TS --> AI
+    TS --> DSD
+
+    F1 -.consumed by.-> P1
+    F2 -.consumed by.-> P2
+    F3 -.consumed by.-> P3
+    F4 -.consumed by.-> P4
+    F5 -.consumed by.-> P5
+```
+
+### Why this shape works
+
+- **One design system, six surfaces.** Every visual surface — 5 demo apps + 1 showcase site — imports from `@rishi/design-system`. Change a token once, all six update.
+- **One streaming primitive, six use cases.** `@rishi/ai-core`'s `replayFixture` is the single way streaming AI output is handled across every app. Apps don't reinvent the streaming animation; they pass a fixture + config.
+- **Fixtures sit beside code.** Pre-generated AI responses live in `fixtures/` at the repo root, committed to git, reviewed as regular source files. No runtime API calls, no hidden cost.
+- **TurboRepo + pnpm workspaces.** Packages rebuild only when their inputs change. Vercel's turborepo integration deploys any app from the same monorepo by just setting a different Root Directory.
 
 ---
 
@@ -41,19 +91,28 @@ See [docs/master-plan.md](./docs/master-plan.md) for the full 14-week day-by-day
 
 ```
 ai-portfolio/
-├── apps/                           Each AI project as a standalone Next.js app
+├── apps/                           6 Next.js apps on Vercel
+│   └── design-system-docs/         ← live: showcases all design system exports
 ├── packages/
-│   ├── design-system/              @rishi/design-system — tokens + components
-│   ├── ai-core/                    @rishi/ai-core — streaming replay
+│   ├── design-system/              @rishi/design-system
+│   │   ├── src/tokens/             CSS variables
+│   │   ├── src/primitives/         14 Radix-backed components
+│   │   ├── src/components/         5 AI-specific composed components
+│   │   └── src/motion/             Framer Motion variants
+│   ├── ai-core/                    @rishi/ai-core
+│   │   ├── src/replay.ts           Streaming replay primitive
+│   │   ├── src/generate.ts         Dev-only Anthropic SDK wrapper
+│   │   ├── src/prompts/            System prompts for all 5 projects
+│   │   └── src/types/              Fixture, Scenario, StreamConfig
 │   ├── eslint-config/              Shared lint config
 │   └── typescript-config/          Shared tsconfig bases
 ├── fixtures/                       Pre-generated AI responses per project
 ├── docs/
-│   ├── master-plan.md              Canonical 14-week build plan
-│   ├── plan.html                   Rich interactive view of the plan
-│   └── case-studies/               MDX case studies per project
-├── scripts/                        Portfolio + resume sync automation
-└── .github/workflows/              GitHub Actions (sync, deploy verification)
+│   ├── master-plan.md              Canonical 14-week day-by-day plan
+│   ├── plan.html                   Interactive plan dashboard
+│   └── case-studies/               Per-project MDX case studies
+├── scripts/                        Portfolio + resume sync automation (Week 4)
+└── .github/workflows/              GitHub Actions (Week 4)
 ```
 
 ---
@@ -61,26 +120,52 @@ ai-portfolio/
 ## Development
 
 ```bash
-pnpm install              # install workspace dependencies
-pnpm dev                  # run all apps in dev mode
-pnpm build                # build all apps + packages
-pnpm lint                 # lint across workspaces
-pnpm format               # prettier write all files
-pnpm check-types          # tsc --noEmit across workspaces
+pnpm install                        # install workspace dependencies
+pnpm dev --filter design-system-docs  # run the live showcase at :3001
+pnpm build                          # build all apps + packages
+pnpm lint                           # lint across workspaces
+pnpm format                         # prettier write all files
+pnpm check-types                    # tsc --noEmit across workspaces
 ```
+
+Per-app scripts delegated through Turborepo — run `pnpm --filter <app-name> <script>` to scope.
 
 ---
 
-## Portfolio + Resume Automation
+## Tech Stack
 
-When a project ships with `portfolio.meta.json#deployedAt` populated, GitHub Actions opens PRs on:
+- **Framework**: Next.js 15.1 App Router with Turbopack
+- **Language**: TypeScript 5.9 with strict mode
+- **Styling**: Tailwind 3.4 with a shared preset
+- **Primitives**: Radix UI (9 packages)
+- **Motion**: Framer Motion 11 + CSS keyframes
+- **Markdown**: react-markdown + remark-gfm
+- **AI**: Vercel AI SDK + Anthropic SDK (dev-only)
+- **Monorepo**: pnpm workspaces + Turborepo
+- **Deploy**: Vercel per app
+
+---
+
+## Automation (shipping Week 4)
+
+When an app ships with `apps/<project>/portfolio.meta.json#deployedAt` populated, a GitHub Action will open pull requests on:
+
 - [`rishigundla/portfolio-site`](https://github.com/rishigundla/portfolio-site) — new project card + case study MDX
 - [`rishigundla/resume-builder`](https://github.com/rishigundla/resume-builder) — new bullet under AI Projects category
 
-See [Part G of the master plan](./docs/master-plan.md) for details.
+See [Part G of the master plan](./docs/master-plan.md) for the automation design.
+
+---
+
+## Conventions
+
+- **No runtime AI calls.** Every deployed app streams pre-generated fixtures. `$0/month` runtime cost.
+- **No `[x]` without verification.** Checking a task means the outcome is observable. When downstream validation is required, tasks stay at `[~]` until validated.
+- **Plan MD and plan HTML stay in sync.** Daily updates touch both `docs/master-plan.md` and `docs/plan.html`.
+- **Commits are factual.** No AI co-author tags unless explicitly requested. Commit messages state what changed and why.
 
 ---
 
 ## License
 
-MIT — feel free to learn from the patterns. The architecture and design system are a reference for building AI-native portfolio projects.
+MIT — reuse any pattern you find useful. The architecture is deliberately reusable for anyone building an AI-native portfolio on Vercel.

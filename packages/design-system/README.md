@@ -1,39 +1,71 @@
 # @rishi/design-system
 
-Design system for the AI Portfolio monorepo. Tokens, primitives, and AI-specific components extracted from [rishikeshgundla.com](https://rishikeshgundla.com) portfolio site.
+Design system for the AI Portfolio monorepo. Tokens, primitives, AI-specific components, and Framer Motion variants — extracted from [rishikeshgundla.com](https://rishikeshgundla.com) and extended for streaming UIs, KPI dashboards, and narrative-heavy interfaces.
 
-## Status
+**Live showcase**: [ai-portfolio-design-system-docs.vercel.app](https://ai-portfolio-design-system-docs.vercel.app)
 
-- **Day 2 (Tokens)**: Complete — all tokens extracted and exported
-- **Day 3 (Primitives)**: Pending — install shadcn and theme to tokens
-- **Day 4 (AI Components)**: Pending — KpiCard, ChartCard, AiNarrativeBlock, FilterBar, DataGrid
+## What's Inside
 
-## Exports
+### Tokens — CSS variables + typed constants
 
-```ts
-// CSS tokens (loads :root CSS variables)
-import '@rishi/design-system/tokens'
+| File | Covers |
+|------|--------|
+| `src/tokens/colors.css` | Accent (`#2dd4bf`), base-900→600 scale, surface / text / status / severity + light theme |
+| `src/tokens/typography.css` | Space Grotesk + JetBrains Mono + Source Serif 4 with font face imports, size/weight/tracking scales |
+| `src/tokens/spacing.css` | 4px base scale, radius, container widths, border widths |
+| `src/tokens/motion.css` | Durations, easings, keyframes (fadeIn, slideUp, pulseGlow, float, gridFlow, shimmer, blink) + utility classes |
+| `src/tokens/shadows.css` | Elevation + accent glow shadows + card/focus/modal variants |
+| `src/tokens/index.css` | Barrel — the single CSS import apps consume |
+| `src/tokens/index.ts` | Typed constants (`tokens.color.accent`, etc.) for programmatic access |
 
-// Typed token constants for programmatic use
-import { tokens } from '@rishi/design-system/tokens/typed'
+### Primitives — 14 accessible base components
 
-// Tailwind preset for consuming apps
-import baseConfig from '@rishi/design-system/tailwind.config'
+Built on Radix UI + `cva` + `clsx` + `tailwind-merge`, themed to tokens:
+
+```
+Button · Card · Badge · Input · Label · Dialog · Tabs · Tooltip
+Popover · Select · Toast · Command · Combobox · Avatar
 ```
 
-## Token Files
+Deep imports for tree-shaking or the barrel for convenience:
 
-| File | Purpose |
-|------|---------|
-| `src/tokens/colors.css` | Accent (teal), base-900→600 scale, surface, text, status, severity |
-| `src/tokens/typography.css` | Space Grotesk, JetBrains Mono, Source Serif 4 + size / weight / spacing scales |
-| `src/tokens/spacing.css` | 4px base spacing scale, radius scale, container widths |
-| `src/tokens/motion.css` | Durations, easings, keyframes (fadeIn, slideUp, pulseGlow, float, gridFlow, shimmer, blink) + animation utility classes |
-| `src/tokens/shadows.css` | Elevation system + accent glow shadows + card variants |
-| `src/tokens/index.css` | Barrel import — the one file apps consume |
-| `src/tokens/index.ts` | Typed token constants for JS access |
+```ts
+import { Button } from '@rishi/design-system/primitives/button'  // granular
+import { Button, Card, Badge } from '@rishi/design-system/primitives'  // barrel
+```
 
-## Usage in a Consuming App
+### Components — 5 AI-specific composed components
+
+| Component | Purpose |
+|-----------|---------|
+| `KpiCard` | Value + directional delta + inline SVG sparkline + 4 states (ready / loading / empty / error). `invertGood` flips color semantics for metrics where down is good (e.g. churn). |
+| `ChartCard` | Library-agnostic themed container. Accepts any chart library as children. 4 states with skeleton loader and error fallback. |
+| `AiNarrativeBlock` | Markdown renderer (react-markdown + remark-gfm) with blink cursor when `streaming=true`. 3 variants. **This is the component every Claude output flows through.** |
+| `FilterBar` | Compound component — `.Search`, `.Select`, `.DateRange` (6 preset ranges), `.Clear`. |
+| `DataGrid` | Sortable columns (3-state cycle), pagination, row click handler, per-column render fn. |
+
+### Motion — Framer variants
+
+```ts
+import { fadeIn, slideUp, staggerContainer, pulseGlow } from '@rishi/design-system/motion'
+```
+
+Variants match the CSS keyframes so the motion language stays consistent whether you use CSS or Framer.
+
+### Tailwind preset
+
+```ts
+// your app's tailwind.config.ts
+import type { Config } from 'tailwindcss'
+import baseConfig from '@rishi/design-system/tailwind.config'
+
+export default {
+  presets: [baseConfig],
+  content: ['./src/**/*.{ts,tsx}'],
+} satisfies Config
+```
+
+## Quick Start
 
 ```css
 /* app globals.css */
@@ -43,30 +75,44 @@ import baseConfig from '@rishi/design-system/tailwind.config'
 @tailwind utilities;
 ```
 
-```ts
-// app tailwind.config.ts
-import type { Config } from 'tailwindcss'
-import baseConfig from '@rishi/design-system/tailwind.config'
+```tsx
+// app/layout.tsx
+import '@rishi/design-system/tokens'
+import './globals.css'
 
-const config: Config = {
-  presets: [baseConfig],
-  content: ['./src/**/*.{ts,tsx}'],
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html className="dark">
+      <body className="bg-base-900 text-text-primary">{children}</body>
+    </html>
+  )
 }
+```
 
-export default config
+```tsx
+// any component
+import { Button, Card } from '@rishi/design-system/primitives'
+import { KpiCard, AiNarrativeBlock } from '@rishi/design-system/components'
 ```
 
 ## Design Principles
 
-- **One teal accent** — `#2dd4bf` is the single brand signature. Never introduce a second accent color.
-- **Dark theme primary** — light theme variables exist for future toggle but are not the default.
-- **Space Grotesk for display and body** — pair with JetBrains Mono for technical details and Source Serif 4 for editorial accents only.
-- **Motion is subtle** — fadeIn / slideUp on entry. pulseGlow reserved for active / primary states. Always respect `prefers-reduced-motion` at the app level.
+- **One teal accent** (`#2dd4bf`) is the single brand signature. Never introduce a second accent color.
+- **Dark theme primary**; light theme variables exist for future toggle but aren't the default.
+- **Space Grotesk for display and body**; pair with JetBrains Mono for technical details and Source Serif 4 for editorial accents only.
+- **Motion is subtle** — fadeIn / slideUp on entry, pulseGlow reserved for active / primary states. Respect `prefers-reduced-motion` at the app level.
+- **Primitives expose the Radix contract unchanged.** Apps that need custom behavior wrap them; they don't fight the primitive.
 
-## Planned Next Layers
+## Dependencies
 
-- `src/primitives/` — shadcn-themed Button, Dialog, Card, Tabs, Tooltip, Popover, Input, Select, Toast, Command, Combobox
-- `src/components/` — `KpiCard`, `ChartCard`, `AiNarrativeBlock`, `FilterBar`, `DataGrid`
-- `src/motion/` — Framer Motion variants (variants objects for common animations)
+Runtime: `@radix-ui/*` (9 packages), `class-variance-authority`, `clsx`, `tailwind-merge`, `cmdk`, `framer-motion`, `lucide-react`, `react-markdown`, `remark-gfm`, `@fontsource/*` (3 fonts).
 
-See [master plan](../../docs/master-plan.md) for the full build schedule.
+Peer: `react >= 18`, `react-dom >= 18`.
+
+Dev: Tailwind 3.4.17, TypeScript 5.9.
+
+## Related
+
+- **[@rishi/ai-core](../ai-core)** — streaming replay primitive used by `AiNarrativeBlock` consumers
+- **[../../docs/master-plan.md](../../docs/master-plan.md)** — 14-week build plan
+- **[../../apps/design-system-docs](../../apps/design-system-docs)** — live showcase application

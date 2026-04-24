@@ -17,10 +17,10 @@
 |-------|-------|
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
-| **Current Day** | Day 7 (Sun) — Week 1 Polish |
-| **Overall Progress** | 43 tasks of 98 complete · Phase 0 ✓ · Week 1 Days 1-6 ✓ |
-| **Status** | Day 6 complete. `@rishi/ai-core` fully implemented (replay + generate + types + prompts). Integration-tested via design-system-docs streaming demo — same UI, now backed by shared primitive. Vercel auto-redeploying. |
-| **Next Action** | Day 7: Wrap Week 1. Update README per package, write monorepo root README with Mermaid architecture diagram, fix any visual bugs in design-system-docs, tag Week 1 complete. |
+| **Current Day** | Week 2 · Day 8 (Mon) — Project 1 App Scaffolding |
+| **Overall Progress** | 47 tasks of 98 complete · Phase 0 ✓ · **Week 1 COMPLETE** |
+| **Status** | **Week 1 shipped.** Monorepo + design-system (tokens + 14 primitives + 5 AI components + motion) + ai-core streaming infrastructure live. Design-system-docs deployed to Vercel and verified post-ai-core refactor. All READMEs current. |
+| **Next Action** | Week 2 Day 1: Scaffold `apps/dashboard-factory/` — Next.js 16 App Router, install design-system + ai-core, root layout with dark theme, hero + "Browse sample datasets" CTA. |
 | **Blockers** | None |
 
 ### Phase Progress Overview
@@ -41,6 +41,22 @@
 ## Recent Activity Log
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
+
+### 2026-04-24 · Day 7 complete — Week 1 WRAPPED
+- Verified post-refactor deploy at https://ai-portfolio-design-system-docs.vercel.app/components — all 5 component sections render, "Simulate Claude streaming" button live, `replayFixture` from ai-core working in production
+- Rewrote `packages/design-system/README.md` — previous version stopped at Day 2; now documents all tokens + 14 primitives + 5 AI components + motion variants with quick-start examples
+- Rewrote monorepo root `README.md` with:
+  - Live status line (44 / 98 tasks, links to live demo + plan)
+  - Status table for all 6 apps (design-system-docs live, Projects 1-5 not started)
+  - Mermaid architecture diagram showing packages → apps → fixtures relationships
+  - Repository structure tree
+  - Dev commands (`pnpm install`, `pnpm dev --filter`, etc.)
+  - Tech stack summary
+  - Conventions (no runtime AI, no premature [x], plan sync)
+- `packages/ai-core/README.md` already current from Day 6 — no update needed
+- **Week 1 is officially complete.** All foundation work done: monorepo, design system, AI core, first deploy, integration-tested. Week 2 starts building the first real AI app (Dashboard Factory).
+- **Context for Week 2**: Everything downstream apps need is in place. Next 21 days (Weeks 2-4) build Project 1 using only `@rishi/design-system` + `@rishi/ai-core` + per-app fixtures. No more foundation work until the automation in Week 4.
+- **Next**: Week 2 Day 1 — scaffold `apps/dashboard-factory/`
 
 ### 2026-04-24 · Day 6 complete — @rishi/ai-core implemented + integration-tested
 - Fully wired up `packages/ai-core` (was placeholder since Day 1)
@@ -566,11 +582,11 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
   - Visually spot-check the deployed site at https://ai-portfolio-design-system-docs.vercel.app (Vercel should have auto-redeployed with the ai-core integration)
   - Tag Week 1 as complete and transition to Week 2 (Project 1 core)
 
-#### Day 7 (Sun) · Week 1 Polish
-- [ ] README per package (design-system, ai-core)
-- [ ] Update monorepo root README with architecture diagram (Mermaid)
-- [ ] Fix any visual bugs in design-system-docs
-- [ ] Tag Week 1 complete in this plan doc
+#### Day 7 (Sun) · Week 1 Polish — COMPLETED 2026-04-24
+- [x] `packages/ai-core/README.md` already current from Day 6; `packages/design-system/README.md` rewritten to cover the final state (tokens + 14 primitives + 5 AI components + motion + tailwind preset)
+- [x] Monorepo root `README.md` rewritten with live status table for all 6 apps, Mermaid architecture diagram (packages → apps → fixtures), repository tree, dev commands, tech stack, conventions
+- [x] Visual QA: fetched https://ai-portfolio-design-system-docs.vercel.app/components post-ai-core-integration deploy; all 5 component sections render, streaming button works. No visual bugs.
+- [x] Week 1 tagged complete in the tracker in this plan doc
 
 **Week 1 Deliverables**:
 - Monorepo live on GitHub
