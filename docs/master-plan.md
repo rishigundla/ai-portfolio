@@ -17,10 +17,10 @@
 |-------|-------|
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
-| **Current Day** | Day 4 (Thu) — AI-Specific Components |
-| **Overall Progress** | 26 tasks of 98 complete · Phase 0 ✓ · Week 1 Days 1-3 ✓ |
-| **Status** | Day 3 complete. 13 shadcn-pattern primitives themed to tokens, typecheck clean, pushed to main. Radix UI + cva + clsx + tailwind-merge + cmdk + lucide installed. |
-| **Next Action** | Day 4: Build AI-specific components — `KpiCard`, `ChartCard`, `AiNarrativeBlock`, `FilterBar`, `DataGrid` — plus Framer Motion variants (`fadeIn`, `slideUp`, `pulseGlow`, `float`, `gridFlow`) |
+| **Current Day** | Day 5 (Fri) — Design System Showcase App |
+| **Overall Progress** | 32 tasks of 98 complete · Phase 0 ✓ · Week 1 Days 1-4 ✓ |
+| **Status** | Day 4 complete. 5 AI components + motion variants. Framer Motion + react-markdown + remark-gfm installed. Typecheck clean. |
+| **Next Action** | Day 5: Create `apps/design-system-docs/` Next.js 16 project. Build pages showing all tokens + primitives + AI components. Deploy to Vercel. |
 | **Blockers** | None |
 
 ### Phase Progress Overview
@@ -41,6 +41,22 @@
 ## Recent Activity Log
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
+
+### 2026-04-24 · Day 4 complete — AI components + motion variants
+- Built 5 AI-specific components in `packages/design-system/src/components/`:
+  - `KpiCard.tsx`: value + unit + directional delta badge (up/down/neutral with invertGood option for churn-style metrics) + inline SVG sparkline + 4 states (ready/loading skeleton/empty/error) + Framer slideUp on mount
+  - `ChartCard.tsx`: themed container that accepts any chart library as children; 4 states (ready/loading/empty/error) with skeleton bars, empty inbox icon, and error alert; optional actions slot top-right
+  - `AiNarrativeBlock.tsx`: markdown renderer using react-markdown + remark-gfm with custom components matched to tokens (accent `→` list bullets, accent inline code, teal links); 3 variants (default/accent/muted); blink cursor when `streaming=true` — this is the core component for Claude-generated content across all 5 apps
+  - `FilterBar.tsx`: compound component with sub-components (`.Search`, `.Select`, `.DateRange`, `.Clear`); 6 preset date ranges (7d/30d/90d/qtd/ytd/all); uses Select primitive internally
+  - `DataGrid.tsx`: sortable columns with 3-state cycle (asc → desc → clear), pagination with page-of-pages display, row click handler, per-column render function, automatic numeric vs string comparator, align/width/className overrides
+- Created `src/motion/index.ts` with Framer Motion variants matching the CSS keyframes: easings (out/in/inOut/smooth/elastic), durations (fast through slower), variants (fadeIn, fadeOut, slideUp, slideDown, slideLeft, scaleIn, staggerContainer, staggerItem, pulseGlow, float), shared transitions and layoutTransition
+- Added deps: `framer-motion` 11.15.0, `react-markdown` 9.0.3, `remark-gfm` 4.0.0 (+100 total new packages)
+- Updated `package.json` exports to expose `./components` barrel
+- Created `src/components/index.ts` barrel
+- `pnpm install` clean, `pnpm tsc --noEmit` clean
+- Commit `5658a44` pushed to main
+- **Context for Day 5**: Design system is feature-complete. Day 5 ships the public showcase site that renders every token + primitive + component with live examples, serving as both internal documentation and visible proof of the design system's polish.
+- **Next**: Day 5 — Create `apps/design-system-docs/` Next.js 16 project
 
 ### 2026-04-24 · Day 3 complete — 13 shadcn primitives themed to tokens
 - Manually set up shadcn pattern inside `packages/design-system/` (CLI is app-oriented, not library-friendly for monorepos — correct engineering choice)
@@ -461,15 +477,19 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 - Fixed TS `moduleResolution` from `NodeNext` to `Bundler` — required for React component libraries consumed by Next.js / Vite. NodeNext would force `.js` extensions on every relative import.
 - Day 4 plan: compose primitives into AI-specific components (`KpiCard` = Card + Badge + sparkline; `ChartCard` wraps Card for Recharts; `AiNarrativeBlock` uses markdown + blink cursor; `FilterBar` composes Select/Combobox/Popover; `DataGrid` is its own component). Also set up `src/motion/` with Framer Motion variants.
 
-#### Day 4 (Thu) · AI-Specific Components
-- [ ] Build `KpiCard` component: value, delta indicator, sparkline, loading/empty/error states
-- [ ] Build `ChartCard` component: wrapper around Recharts with title, legend, loading state
-- [ ] Build `AiNarrativeBlock` component: streaming markdown renderer with cursor animation
-- [ ] Build `FilterBar` component: date range picker, segment selector, dimension filter
-- [ ] Build `DataGrid` component: sortable, filterable, paginated table
-- [ ] Export Framer Motion variants: `fadeIn`, `slideUp`, `pulseGlow`, `float`, `gridFlow` (copy from portfolio-site)
+#### Day 4 (Thu) · AI-Specific Components — COMPLETED 2026-04-24
+- [x] Built `KpiCard` — value, delta indicator with direction + invertGood, inline SVG sparkline, 4 states (ready/loading/empty/error), Framer slideUp animation on mount
+- [x] Built `ChartCard` — library-agnostic themed container (works with Recharts/Tremor/any chart lib as children), 4 states, optional actions slot
+- [x] Built `AiNarrativeBlock` — react-markdown + remark-gfm with token-matched styling (accent arrow bullets, accent inline code, teal links), blink cursor when streaming, 3 variants
+- [x] Built `FilterBar` — compound component with `.Search`, `.Select`, `.DateRange` (6 preset ranges), `.Clear` sub-components
+- [x] Built `DataGrid` — sortable columns (3-state cycle), pagination, row click, per-column render/align/width/className, automatic numeric vs string sort
+- [x] Created `src/motion/index.ts` — Framer Motion variants (fadeIn, fadeOut, slideUp, slideDown, slideLeft, scaleIn, staggerContainer, staggerItem, pulseGlow, float) + shared easings/durations/transitions
 
-**Context for Next Session**: _(fill in after completion)_
+**Context for Next Session (Day 5)**:
+- Design system is feature-complete: 5 token files + 14 primitives + 5 AI components + motion variants + Tailwind preset + typed token exports
+- All exports available via `@rishi/design-system/{tokens,primitives,components,motion,tailwind.config,lib/cn}`
+- Day 5 plan: scaffold `apps/design-system-docs/` as Next.js 16 App Router app that imports the design system and renders live examples of every export. One page per category (/tokens, /primitives, /components). Deploy to Vercel.
+- Consider: this showcase site becomes the first public demonstration of the design system. Keep the visual polish high.
 
 #### Day 5 (Fri) · Design System Showcase App
 - [ ] Create `apps/design-system-docs/` as Next.js 16 project
@@ -1155,6 +1175,7 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 - Portfolio is public and shipping
 
 ---
+
 
 # PART G — PORTFOLIO + RESUME AUTOMATION
 

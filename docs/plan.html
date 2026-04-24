@@ -1472,10 +1472,10 @@
       currentStatus: {
         phase: "Phase 1 — Project 1 (Dashboard Factory)",
         week: "Week 1 of 14",
-        day: "Day 4 (Thu) — AI-Specific Components",
-        progress: { done: 26, total: 98 },
-        status: "Day 3 complete. 13 primitives themed to tokens. Radix UI + cva + lucide installed. TS moduleResolution fixed to Bundler. Typecheck clean.",
-        nextAction: "Day 4: Build KpiCard, ChartCard, AiNarrativeBlock, FilterBar, DataGrid + Framer Motion variants (fadeIn, slideUp, pulseGlow, float, gridFlow)",
+        day: "Day 5 (Fri) — Design System Showcase App",
+        progress: { done: 32, total: 98 },
+        status: "Day 4 complete. 5 AI components + Framer Motion variants. react-markdown + remark-gfm installed. Typecheck clean.",
+        nextAction: "Day 5: Scaffold apps/design-system-docs/ as Next.js 16 project. Build pages showing tokens + primitives + AI components. Deploy to Vercel.",
         blockers: "None"
       },
 
@@ -1493,7 +1493,9 @@
         "1-W1.D2-0", "1-W1.D2-1", "1-W1.D2-2", "1-W1.D2-3",
         "1-W1.D2-4", "1-W1.D2-5", "1-W1.D2-6",
         // Phase 1 · Week 1 · Day 3 (4 tasks — install + primitives + theme + visual-test-deferred)
-        "1-W1.D3-0", "1-W1.D3-1", "1-W1.D3-2", "1-W1.D3-3"
+        "1-W1.D3-0", "1-W1.D3-1", "1-W1.D3-2", "1-W1.D3-3",
+        // Phase 1 · Week 1 · Day 4 (6 tasks — KpiCard, ChartCard, AiNarrativeBlock, FilterBar, DataGrid, motion)
+        "1-W1.D4-0", "1-W1.D4-1", "1-W1.D4-2", "1-W1.D4-3", "1-W1.D4-4", "1-W1.D4-5"
       ],
 
       phases: [
@@ -1506,6 +1508,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-04-24",
+          title: "Day 4 COMPLETE — AI components + motion variants",
+          desc: "Built 5 AI-specific components in packages/design-system/src/components/: KpiCard (value + delta + SVG sparkline + 4 states + Framer slideUp), ChartCard (library-agnostic themed container with 4 states), AiNarrativeBlock (react-markdown + remark-gfm with blink cursor + 3 variants — this powers all AI-generated content across the 5 apps), FilterBar (compound component with Search/Select/DateRange/Clear + 6 date presets), DataGrid (sortable with 3-state cycle, pagination, render functions). Added src/motion/index.ts with Framer Motion variants matching CSS keyframes (fadeIn, slideUp, scaleIn, staggerContainer, pulseGlow, float) + easings + durations. Added deps: framer-motion 11.15.0, react-markdown 9.0.3, remark-gfm 4.0.0 (+100 packages). Typecheck clean. Commit 5658a44 pushed.",
+          next: "Day 5 — Scaffold apps/design-system-docs/ showcase site, deploy to Vercel"
+        },
         {
           date: "2026-04-24",
           title: "Day 3 COMPLETE — 13 primitives themed to tokens",
