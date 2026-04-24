@@ -1,0 +1,22 @@
+{
+  "slug": "design-system-docs",
+  "title": "AI Portfolio Design System",
+  "category": "AI",
+  "tags": ["Design System", "React", "Next.js", "Tailwind"],
+  "description": "Live documentation site for @rishi/design-system — tokens, primitives, and AI-specific components used across the five AI portfolio projects.",
+  "thumbnail": "/projects/ai-design-system-docs.png",
+  "liveUrl": "",
+  "githubUrl": "https://github.com/rishigundla/ai-portfolio/tree/main/apps/design-system-docs",
+  "caseStudyUrl": "",
+  "loomUrl": "",
+  "deployedAt": null,
+  "resumeBullet": {
+    "category": "AI-Powered Analytics & Data Engineering Projects",
+    "text": "Extracted and packaged a production-grade design system (tokens, 14 primitives, 5 AI components, Framer Motion variants) consumed by 5 AI apps in a pnpm + turborepo monorepo."
+  },
+  "portfolioCard": {
+    "problem": "Every app in the portfolio needs a consistent visual identity and accessible interaction patterns without reinventing wheels per app.",
+    "approach": "Extracted design tokens from rishikeshgundla.com, built 14 Radix-backed primitives, 5 AI-specific components (streaming narrative, KPI card with sparkline, sortable grid), and Framer Motion variants — published as an internal npm package.",
+    "impact": "Day 1 of each subsequent app ships with a polished, accessible UI. Component code duplication eliminated across 5 apps."
+  }
+}

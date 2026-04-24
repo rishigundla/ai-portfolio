@@ -1,0 +1,50 @@
+/* Load the design-system tokens first so CSS variables are available everywhere */
+@import '@rishi/design-system/tokens';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body {
+    background-color: var(--color-base-900);
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: rgba(45, 212, 191, 0.3);
+    color: #fff;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover);
+  }
+}
+
+@layer components {
+  .section-container {
+    @apply max-w-content mx-auto px-5 sm:px-8 lg:px-16;
+  }
+
+  .data-grid-bg {
+    background-image:
+      linear-gradient(rgba(var(--particle-color), var(--grid-opacity)) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(var(--particle-color), var(--grid-opacity)) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+}
