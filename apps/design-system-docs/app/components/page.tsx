@@ -10,6 +10,7 @@ import {
   type DataGridColumn,
 } from '@rishi/design-system/components'
 import { Button } from '@rishi/design-system/primitives'
+import { replayFixture, ReplayAbortedError, type Fixture } from '@rishi/ai-core'
 import { Section, SubSection } from '../_components/Section'
 
 const SAMPLE_NARRATIVE = `Revenue is **up 12.4% MoM** to $14.8M, driven primarily by APAC expansion (+$1.2M) and strong renewal in the enterprise segment.
@@ -19,6 +20,19 @@ const SAMPLE_NARRATIVE = `Revenue is **up 12.4% MoM** to $14.8M, driven primaril
 - **NA enterprise** remains the anchor segment (42% of revenue)
 
 Recommended focus for next week: investigate SMB churn drivers and double down on APAC channel partner enablement.`
+
+// Live integration test: use @rishi/ai-core replayFixture to stream this fixture.
+// When this renders correctly on production, it proves the full chain works:
+// fixture JSON → replayFixture async generator → React state → AiNarrativeBlock.
+const DEMO_FIXTURE: Fixture = {
+  id: 'revops-weekly-demo',
+  text: SAMPLE_NARRATIVE,
+  metadata: {
+    generatedAt: '2026-04-24T00:00:00.000Z',
+    model: 'claude-sonnet-4-6',
+    notes: 'Pre-generated showcase fixture for the design system docs site.',
+  },
+}
 
 type Row = { name: string; category: string; revenue: number; delta: number }
 const SAMPLE_ROWS: Row[] = [
@@ -31,25 +45,37 @@ const SAMPLE_ROWS: Row[] = [
 ]
 
 export default function ComponentsPage() {
-  // Streaming simulation for AiNarrativeBlock
+  // Streaming simulation for AiNarrativeBlock — uses @rishi/ai-core replayFixture
+  // (async generator) instead of a raw setInterval. Same UX, but exercises the
+  // shared streaming primitive used by all 5 future AI apps.
   const [streamedText, setStreamedText] = React.useState('')
   const [streaming, setStreaming] = React.useState(false)
+  const abortRef = React.useRef<AbortController | null>(null)
 
-  const startStream = () => {
+  const startStream = async () => {
+    // Cancel any prior in-flight stream cleanly
+    abortRef.current?.abort()
+    const ac = new AbortController()
+    abortRef.current = ac
+
     setStreamedText('')
     setStreaming(true)
-    const target = SAMPLE_NARRATIVE
-    let i = 0
-    const interval = setInterval(() => {
-      i += 4 // ~40 chars/sec at 10ms interval, feels like live token streaming
-      setStreamedText(target.slice(0, i))
-      if (i >= target.length) {
-        clearInterval(interval)
-        setStreamedText(target)
-        setStreaming(false)
+
+    try {
+      for await (const chunk of replayFixture(DEMO_FIXTURE, {
+        charsPerSecond: 40,
+        signal: ac.signal,
+      })) {
+        setStreamedText(chunk)
       }
-    }, 10)
+    } catch (err) {
+      if (!(err instanceof ReplayAbortedError)) throw err
+    } finally {
+      if (!ac.signal.aborted) setStreaming(false)
+    }
   }
+
+  React.useEffect(() => () => abortRef.current?.abort(), [])
 
   // FilterBar state
   const [search, setSearch] = React.useState('')
