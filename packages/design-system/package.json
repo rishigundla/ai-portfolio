@@ -7,6 +7,8 @@
   "sideEffects": ["**/*.css"],
   "exports": {
     "./tokens": "./src/tokens/index.css",
+    "./tokens/typed": "./src/tokens/index.ts",
+    "./tailwind.config": "./tailwind.config.ts",
     "./components/*": "./src/components/*.tsx",
     "./primitives/*": "./src/primitives/*.tsx",
     "./motion": "./src/motion/index.ts"
@@ -14,5 +16,15 @@
   "scripts": {
     "lint": "eslint src",
     "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fontsource/jetbrains-mono": "^5.2.8",
+    "@fontsource/source-serif-4": "^5.2.9",
+    "@fontsource/space-grotesk": "^5.2.10"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.9.2"
   }
 }

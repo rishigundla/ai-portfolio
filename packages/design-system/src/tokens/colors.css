@@ -1,0 +1,90 @@
+/**
+ * Color tokens — extracted from rishikeshgundla.com portfolio-site
+ * Dark theme primary. Light theme variables kept for future toggle.
+ */
+
+:root,
+.dark {
+  /* Accent — teal signature */
+  --color-accent: #2dd4bf;
+  --color-accent-light: #5eead4;
+  --color-accent-dark: #14b8a6;
+  --color-accent-glow: rgba(45, 212, 191, 0.15);
+  --color-accent-glow-strong: rgba(45, 212, 191, 0.35);
+
+  /* Base dark scale — ascending lightness */
+  --color-base-900: #0a0a0f;
+  --color-base-800: #12121a;
+  --color-base-700: #1a1a25;
+  --color-base-600: #222230;
+
+  /* Surface — cards, panels, elevated containers */
+  --color-surface: #16161e;
+  --color-surface-hover: #1e1e28;
+  --color-surface-border: #2a2a3a;
+  --color-surface-elevated: #1a1a25;
+  --color-card-bg: rgba(22, 22, 30, 0.6);
+
+  /* Text */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #9ca3af;
+  --color-text-muted: #6b7280;
+  --color-text-dim: #4b5563;
+
+  /* Status — used across AI apps for progress, alerts, severity */
+  --color-status-not-started: #475569;
+  --color-status-in-progress: #f59e0b;
+  --color-status-completed: #10b981;
+  --color-status-blocked: #ef4444;
+
+  /* Severity — mirrors status but semantically named for ops dashboards */
+  --color-severity-sev1: #ef4444;
+  --color-severity-sev2: #f59e0b;
+  --color-severity-sev3: #eab308;
+
+  /* Overlay / gradient */
+  --color-overlay: rgba(0, 0, 0, 0.7);
+  --hero-gradient-start: rgba(10, 10, 15, 0.3);
+  --hero-gradient-end: #0a0a0f;
+
+  /* Background patterns (data-grid, dot-pattern) */
+  --particle-color: 45, 212, 191;
+  --grid-opacity: 0.04;
+  --dot-opacity: 0.08;
+
+  /* Scrollbar */
+  --scrollbar-track: #0a0a0f;
+  --scrollbar-thumb: #2a2a3a;
+  --scrollbar-thumb-hover: #3a3a4a;
+}
+
+/* Light theme — matches portfolio-site for future toggle support */
+.light {
+  --color-base-900: #f8f9fa;
+  --color-base-800: #f1f3f5;
+  --color-base-700: #e9ecef;
+  --color-base-600: #dee2e6;
+
+  --color-surface: #ffffff;
+  --color-surface-hover: #f1f3f5;
+  --color-surface-border: #dee2e6;
+  --color-surface-elevated: #e9ecef;
+  --color-card-bg: rgba(255, 255, 255, 0.8);
+
+  --color-text-primary: #1a1a2e;
+  --color-text-secondary: #495057;
+  --color-text-muted: #868e96;
+  --color-text-dim: #adb5bd;
+
+  --color-overlay: rgba(255, 255, 255, 0.8);
+  --hero-gradient-start: rgba(248, 249, 250, 0.3);
+  --hero-gradient-end: #f8f9fa;
+
+  --particle-color: 13, 148, 136;
+  --grid-opacity: 0.08;
+  --dot-opacity: 0.12;
+
+  --scrollbar-track: #f1f3f5;
+  --scrollbar-thumb: #ced4da;
+  --scrollbar-thumb-hover: #adb5bd;
+}

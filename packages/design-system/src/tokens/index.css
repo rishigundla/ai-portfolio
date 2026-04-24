@@ -1,0 +1,14 @@
+/**
+ * Design System Tokens — barrel import
+ *
+ * Usage in consuming app:
+ *   import '@rishi/design-system/tokens'
+ *
+ * This loads all CSS variables into :root, plus keyframes and animation utilities.
+ */
+
+@import './colors.css';
+@import './typography.css';
+@import './spacing.css';
+@import './motion.css';
+@import './shadows.css';
