@@ -18,8 +18,8 @@
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
 | **Current Day** | Day 2 (Tue) — Extract Portfolio-Site Tokens |
-| **Overall Progress** | 10 tasks of 98 day-sections complete · Day 1 ✓ |
-| **Status** | Day 1 complete. Monorepo scaffolded, pushed to GitHub, shared packages placeholder-ready |
+| **Overall Progress** | 15 tasks of 98 complete · Phase 0 ✓ · Week 1 Day 1 ✓ |
+| **Status** | Pre-flight + Day 1 complete. Monorepo scaffolded, pushed to GitHub, shared packages placeholder-ready |
 | **Next Action** | Day 2: Extract Tailwind tokens from portfolio-site into `packages/design-system/src/tokens/*.css` |
 | **Blockers** | None |
 
@@ -353,12 +353,13 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 
 **Goal**: Tooling installed, GitHub repo created, ready to scaffold.
 
-### Pre-flight Checklist
-- [ ] Install pnpm globally: `npm install -g pnpm`
-- [ ] Verify pnpm: `pnpm --version`
-- [ ] Create GitHub repo `rishigundla/ai-portfolio` (public) via GitHub MCP
-- [ ] Push resume-builder to GitHub as `rishigundla/resume-builder` (deferred to Week 4 when automation is wired up)
-- [ ] Confirm Node 24, npm, git ready (already verified)
+### Pre-flight Checklist — COMPLETED 2026-04-24
+- [x] Install pnpm globally: v10.33.2 installed
+- [x] Verify pnpm: `pnpm --version` → 10.33.2
+- [x] Create GitHub repo `rishigundla/ai-portfolio` (public) — live at https://github.com/rishigundla/ai-portfolio (created manually by user; GitHub MCP returned auth error)
+- [x] Set description + README — description set on creation, custom README committed in `d572a1e`
+- [x] Confirm Node 24, npm, git ready — Node v24.14.0, npm 10.9.4, git 2.53.0
+- [-] Push resume-builder to GitHub as `rishigundla/resume-builder` — **DEFERRED to Week 4 Day 5** per plan (only needed when automation wires up)
 
 ---
 
