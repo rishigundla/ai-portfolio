@@ -19,7 +19,7 @@
 | **Current Week** | Week 1 of 14 |
 | **Current Day** | Day 6 (Sat) — Build `@rishi/ai-core` Package |
 | **Overall Progress** | 37 tasks of 98 complete · Phase 0 ✓ · Week 1 Days 1-5 ✓ |
-| **Status** | Day 5 complete. design-system-docs app built (4 routes, static build), pushed to GitHub. Awaiting Vercel deploy connection from user. |
+| **Status** | Day 5 complete + deployed. **First live URL: https://ai-portfolio-design-system-docs.vercel.app** — design system now publicly accessible. |
 | **Next Action** | Day 6: Wire up `packages/ai-core` — build `replay.ts` streamText wrapper that chunks fixture JSON at ~40 tokens/sec + `generate.ts` dev-only Anthropic SDK client + types (Fixture, Scenario, StreamConfig, AiNarrative). Test with a mock fixture. |
 | **Blockers** | None |
 
@@ -41,6 +41,14 @@
 ## Recent Activity Log
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
+
+### 2026-04-24 · First deploy LIVE — design-system-docs on Vercel
+- Deployed via Vercel dashboard with Root Directory `apps/design-system-docs`, default turborepo auto-detection
+- Public URL: **https://ai-portfolio-design-system-docs.vercel.app**
+- Verified render via WebFetch — home page returns correct hero eyebrow, title, 3 catalog card titles, and install snippet mentioning `@rishi/design-system`
+- `portfolio.meta.json` updated with `liveUrl` + `deployedAt: 2026-04-24`
+- Phase 1 first concrete milestone: the portfolio now has a publicly accessible asset
+- **Next**: Day 6 — Implement `@rishi/ai-core` (streaming replay + generate + types)
 
 ### 2026-04-24 · Day 5 complete — Design system showcase app built
 - Scaffolded `apps/design-system-docs/` manually (not `create-next-app`) for monorepo precision — all configs hand-written with proper workspace wiring
@@ -515,7 +523,7 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 - [x] Created `apps/design-system-docs/` as Next.js 15.1 App Router project (chose 15.1 over 16 for stable React 19 support)
 - [x] Installed `@rishi/design-system` as workspace dep; also added `lucide-react` directly for icon imports
 - [x] Built a page per category: `/`, `/tokens`, `/primitives`, `/components` — covering all 14 primitives and 5 AI components with live interactive variants
-- [-] Deploy to Vercel — **deferred** to user (requires one-time GitHub→Vercel connection in Vercel dashboard; portfolio.meta.json has placeholder for liveUrl + deployedAt)
+- [x] Deploy to Vercel — **LIVE at https://ai-portfolio-design-system-docs.vercel.app** (deployed 2026-04-24, WebFetch verified render of home + catalog cards + install snippet)
 - [x] Added `apps/design-system-docs/README.md` with dev/build/deploy instructions
 
 **Context for Next Session (Day 6)**:
