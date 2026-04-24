@@ -1472,10 +1472,10 @@
       currentStatus: {
         phase: "Phase 1 — Project 1 (Dashboard Factory)",
         week: "Week 1 of 14",
-        day: "Day 6 (Sat) — Build @rishi/ai-core Package",
-        progress: { done: 37, total: 98 },
-        status: "Day 5 complete + FIRST DEPLOY LIVE at https://ai-portfolio-design-system-docs.vercel.app — design system now publicly accessible.",
-        nextAction: "Day 6: Implement @rishi/ai-core — replay.ts (chunks fixture JSON as fake Claude streams), generate.ts (dev-only Anthropic client), types. Then connect repo to Vercel for first deploy.",
+        day: "Day 7 (Sun) — Week 1 Polish",
+        progress: { done: 43, total: 98 },
+        status: "Day 6 complete. @rishi/ai-core fully implemented + integration-tested via the deployed showcase site. Vercel auto-redeploying.",
+        nextAction: "Day 7: Polish Week 1 — README per package, monorepo root README with Mermaid architecture diagram, visual QA of deployed site, tag Week 1 complete.",
         blockers: "None"
       },
 
@@ -1496,8 +1496,10 @@
         "1-W1.D3-0", "1-W1.D3-1", "1-W1.D3-2", "1-W1.D3-3",
         // Phase 1 · Week 1 · Day 4 (6 tasks — KpiCard, ChartCard, AiNarrativeBlock, FilterBar, DataGrid, motion)
         "1-W1.D4-0", "1-W1.D4-1", "1-W1.D4-2", "1-W1.D4-3", "1-W1.D4-4", "1-W1.D4-5",
-        // Phase 1 · Week 1 · Day 5 (5 tasks — scaffold, install DS, pages, deploy, README; deploy deferred but task checked via README)
-        "1-W1.D5-0", "1-W1.D5-1", "1-W1.D5-2", "1-W1.D5-3", "1-W1.D5-4"
+        // Phase 1 · Week 1 · Day 5 (5 tasks — scaffold, install DS, pages, deploy VERIFIED LIVE, README)
+        "1-W1.D5-0", "1-W1.D5-1", "1-W1.D5-2", "1-W1.D5-3", "1-W1.D5-4",
+        // Phase 1 · Week 1 · Day 6 (6 tasks — package+tsconfig, deps, replay, generate, types, test-fixture)
+        "1-W1.D6-0", "1-W1.D6-1", "1-W1.D6-2", "1-W1.D6-3", "1-W1.D6-4", "1-W1.D6-5"
       ],
 
       phases: [
@@ -1510,6 +1512,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-04-24",
+          title: "Day 6 COMPLETE — @rishi/ai-core streaming infrastructure shipped",
+          desc: "Fully implemented ai-core: types (Scenario, Fixture, StreamConfig, AiNarrative), replay.ts (async generator replayFixture at 40 cps with jitter, ReadableStream variant fixtureToReadableStream, Promise collector, ReplayAbortedError), generate.ts (Anthropic SDK wrapper with prompt caching — dev-only, excluded from barrel to keep bundle clean), prompt templates for all 5 projects. Added deps: @anthropic-ai/sdk 0.40, ai 4.0, @types/node. Integration-tested by refactoring design-system-docs /components streaming demo to use replayFixture with AbortController cleanup — same UX, now backed by shared primitive. Client bundle grew only 0.8 kB confirming Anthropic SDK stays out. Commit 7e55b7d pushed; Vercel auto-redeploying.",
+          next: "Day 7 — Week 1 polish: READMEs, root Mermaid architecture diagram, visual QA, tag Week 1 complete"
+        },
         {
           date: "2026-04-24",
           title: "FIRST DEPLOY LIVE — design-system-docs on Vercel",

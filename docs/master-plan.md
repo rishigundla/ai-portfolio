@@ -17,10 +17,10 @@
 |-------|-------|
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
-| **Current Day** | Day 6 (Sat) — Build `@rishi/ai-core` Package |
-| **Overall Progress** | 37 tasks of 98 complete · Phase 0 ✓ · Week 1 Days 1-5 ✓ |
-| **Status** | Day 5 complete + deployed. **First live URL: https://ai-portfolio-design-system-docs.vercel.app** — design system now publicly accessible. |
-| **Next Action** | Day 6: Wire up `packages/ai-core` — build `replay.ts` streamText wrapper that chunks fixture JSON at ~40 tokens/sec + `generate.ts` dev-only Anthropic SDK client + types (Fixture, Scenario, StreamConfig, AiNarrative). Test with a mock fixture. |
+| **Current Day** | Day 7 (Sun) — Week 1 Polish |
+| **Overall Progress** | 43 tasks of 98 complete · Phase 0 ✓ · Week 1 Days 1-6 ✓ |
+| **Status** | Day 6 complete. `@rishi/ai-core` fully implemented (replay + generate + types + prompts). Integration-tested via design-system-docs streaming demo — same UI, now backed by shared primitive. Vercel auto-redeploying. |
+| **Next Action** | Day 7: Wrap Week 1. Update README per package, write monorepo root README with Mermaid architecture diagram, fix any visual bugs in design-system-docs, tag Week 1 complete. |
 | **Blockers** | None |
 
 ### Phase Progress Overview
@@ -41,6 +41,23 @@
 ## Recent Activity Log
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
+
+### 2026-04-24 · Day 6 complete — @rishi/ai-core implemented + integration-tested
+- Fully wired up `packages/ai-core` (was placeholder since Day 1)
+- Five TypeScript files:
+  - `src/types/index.ts` — `Scenario`, `Fixture`, `FixtureMetadata`, `StreamConfig`, `AiNarrative`
+  - `src/replay.ts` — core streaming primitives: `replayFixture` (async generator yielding accumulated text), `replayFixtureToString` (Promise<string> collector), `fixtureToReadableStream` (native web ReadableStream for `Response()`), `ReplayAbortedError`, `DEFAULT_STREAM_CONFIG` (40 cps, 300ms initial delay, 20% jitter)
+  - `src/generate.ts` — dev-only Anthropic SDK wrapper: `generateFixture` + `generateFixtures` with optional prompt caching (90% cost reduction on repeat system prompts). Uses `claude-sonnet-4-6` by default.
+  - `src/prompts/index.ts` — system prompts for all 5 projects (DASHBOARD_PROFILING, DASHBOARD_NARRATIVE, ANOMALY_RCA, SPRINT_BRIEF, PIPELINE_DIAGNOSIS)
+  - `src/index.ts` — barrel that intentionally excludes `generate.ts` so client bundles never pull in `@anthropic-ai/sdk`
+- Added deps: `@anthropic-ai/sdk` 0.40.0, `ai` (Vercel AI SDK) 4.0.22, `@types/node` 22.10.5
+- tsconfig uses `moduleResolution: Bundler` (same as design-system) for relative imports without `.js` extensions
+- **Integration test**: refactored `apps/design-system-docs/app/components/page.tsx` streaming demo to use `replayFixture` from ai-core instead of raw `setInterval`. Added proper `AbortController` with `useEffect` cleanup to prevent orphan streams on route navigation.
+- Build validation: `/components` page size grew by only **0.8 kB** (86.2 → 87.0 kB), proving dev-only code is excluded from the client bundle.
+- Typecheck clean across ai-core + design-system-docs
+- Commit `7e55b7d` pushed to main — Vercel auto-redeploying the showcase
+- **Context for Day 7**: Week 1 is effectively done. Day 7 is pure polish — READMEs per package, monorepo-level README with Mermaid architecture diagram, final design-system-docs visual QA.
+- **Next**: Day 7 — Week 1 polish and wrap
 
 ### 2026-04-24 · First deploy LIVE — design-system-docs on Vercel
 - Deployed via Vercel dashboard with Root Directory `apps/design-system-docs`, default turborepo auto-detection
@@ -533,15 +550,21 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 - Run locally: `pnpm dev --filter design-system-docs` (serves on :3001)
 - To deploy: connect `rishigundla/ai-portfolio` to Vercel via dashboard, set root directory to `apps/design-system-docs`, build command `pnpm build --filter design-system-docs...`, output directory `.next`
 
-#### Day 6 (Sat) · Build `packages/ai-core`
-- [ ] Create `packages/ai-core/` with package.json + tsconfig
-- [ ] Install `ai` (Vercel AI SDK) and `@anthropic-ai/sdk`
-- [ ] Build `src/replay.ts` — streamText wrapper that chunks fixture JSON at ~40 tokens/sec
-- [ ] Build `src/generate.ts` — Anthropic SDK client for dev-time fixture generation
-- [ ] Define types: `Fixture`, `Scenario`, `StreamConfig`, `AiNarrative`
-- [ ] Write a test fixture + verify streaming works in a toy page
+#### Day 6 (Sat) · Build `packages/ai-core` — COMPLETED 2026-04-24
+- [x] Created `packages/ai-core/tsconfig.json` extending `@repo/typescript-config/base` with `moduleResolution: Bundler`; package.json was scaffolded on Day 1
+- [x] Installed `ai` (Vercel AI SDK) 4.0.22, `@anthropic-ai/sdk` 0.40.0, `@types/node` 22.10.5
+- [x] Built `src/replay.ts` — async generator `replayFixture` + ReadableStream variant `fixtureToReadableStream` + Promise collector + ReplayAbortedError. Default cadence 40 cps with 300ms initial delay and 20% jitter.
+- [x] Built `src/generate.ts` — `generateFixture` + `generateFixtures` with optional prompt caching (cache_control: ephemeral). Defaults to `claude-sonnet-4-6`. Excluded from the barrel so client bundles don't pull in Anthropic SDK.
+- [x] Defined types in `src/types/index.ts`: `Scenario`, `Fixture`, `FixtureMetadata`, `StreamConfig`, `AiNarrative`. Plus system prompt templates for all 5 projects in `src/prompts/index.ts`.
+- [x] Verified end-to-end via the design-system-docs `/components` streaming demo: refactored from raw setInterval to `replayFixture(DEMO_FIXTURE, { signal: ac.signal })` with AbortController cleanup. Build size delta just 0.8 kB confirms no Anthropic SDK in client bundle.
 
-**Context for Next Session**: _(fill in after completion)_
+**Context for Next Session (Day 7)**:
+- All Week 1 functional work is done. Day 7 is polish:
+  - Verify `@rishi/ai-core/README.md` covers client + server + dev usage (already updated Day 6)
+  - Verify `@rishi/design-system/README.md` is current with final export list
+  - Write monorepo root README with a Mermaid architecture diagram showing packages + apps + fixtures flow
+  - Visually spot-check the deployed site at https://ai-portfolio-design-system-docs.vercel.app (Vercel should have auto-redeployed with the ai-core integration)
+  - Tag Week 1 as complete and transition to Week 2 (Project 1 core)
 
 #### Day 7 (Sun) · Week 1 Polish
 - [ ] README per package (design-system, ai-core)
