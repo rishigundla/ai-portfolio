@@ -12,6 +12,7 @@
     "./lib/cn": "./src/lib/cn.ts",
     "./primitives": "./src/primitives/index.ts",
     "./primitives/*": "./src/primitives/*.tsx",
+    "./components": "./src/components/index.ts",
     "./components/*": "./src/components/*.tsx",
     "./motion": "./src/motion/index.ts"
   },
@@ -35,7 +36,10 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.4",
+    "framer-motion": "^11.15.0",
     "lucide-react": "^0.469.0",
+    "react-markdown": "^9.0.3",
+    "remark-gfm": "^4.0.0",
     "tailwind-merge": "^2.5.5"
   },
   "peerDependencies": {
