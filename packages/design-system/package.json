@@ -9,8 +9,10 @@
     "./tokens": "./src/tokens/index.css",
     "./tokens/typed": "./src/tokens/index.ts",
     "./tailwind.config": "./tailwind.config.ts",
-    "./components/*": "./src/components/*.tsx",
+    "./lib/cn": "./src/lib/cn.ts",
+    "./primitives": "./src/primitives/index.ts",
     "./primitives/*": "./src/primitives/*.tsx",
+    "./components/*": "./src/components/*.tsx",
     "./motion": "./src/motion/index.ts"
   },
   "scripts": {
@@ -20,10 +22,32 @@
   "dependencies": {
     "@fontsource/jetbrains-mono": "^5.2.8",
     "@fontsource/source-serif-4": "^5.2.9",
-    "@fontsource/space-grotesk": "^5.2.10"
+    "@fontsource/space-grotesk": "^5.2.10",
+    "@radix-ui/react-avatar": "^1.1.2",
+    "@radix-ui/react-dialog": "^1.1.4",
+    "@radix-ui/react-label": "^2.1.1",
+    "@radix-ui/react-popover": "^1.1.4",
+    "@radix-ui/react-select": "^2.1.4",
+    "@radix-ui/react-slot": "^1.1.1",
+    "@radix-ui/react-tabs": "^1.1.2",
+    "@radix-ui/react-toast": "^1.2.4",
+    "@radix-ui/react-tooltip": "^1.1.5",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "cmdk": "^1.0.4",
+    "lucide-react": "^0.469.0",
+    "tailwind-merge": "^2.5.5"
+  },
+  "peerDependencies": {
+    "react": "^18 || ^19",
+    "react-dom": "^18 || ^19"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.9.2"
   }
