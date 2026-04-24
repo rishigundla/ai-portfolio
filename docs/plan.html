@@ -1472,12 +1472,19 @@
       currentStatus: {
         phase: "Phase 1 — Project 1 (Dashboard Factory)",
         week: "Week 1 of 14",
-        day: "Day 1 (not yet started)",
-        progress: { done: 0, total: 98 },
-        status: "Pre-flight — ready to kick off Week 1 Day 1",
-        nextAction: "Install pnpm, create GitHub repo rishigundla/ai-portfolio, scaffold monorepo",
+        day: "Day 2 (Tue) — Extract Portfolio-Site Tokens",
+        progress: { done: 10, total: 98 },
+        status: "Day 1 complete. Monorepo scaffolded, pushed to GitHub, placeholder packages ready.",
+        nextAction: "Day 2: Extract Tailwind tokens from portfolio-site into packages/design-system/src/tokens/*.css",
         blockers: "None"
       },
+
+      // IDs of tasks completed so far — seeded into localStorage on first load
+      // Format: "{week}-{day.num}-{taskIdx}" matching the render taskId() function
+      completedTasks: [
+        "1-W1.D1-0", "1-W1.D1-1", "1-W1.D1-2", "1-W1.D1-3", "1-W1.D1-4",
+        "1-W1.D1-5", "1-W1.D1-6", "1-W1.D1-7", "1-W1.D1-8", "1-W1.D1-9"
+      ],
 
       phases: [
         { id: 0, name: "Pre-flight Setup", weeks: "—", totalDays: 5, done: 0, status: "not-started", code: "P0" },
@@ -1489,6 +1496,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-04-24",
+          title: "Day 1 COMPLETE — Monorepo live on GitHub",
+          desc: "Installed pnpm 10.33.2 globally. Created public repo rishigundla/ai-portfolio. Scaffolded with create-turbo@latest. Cleaned default apps/web, apps/docs, packages/ui. Added placeholder @rishi/design-system + @rishi/ai-core packages with README + package.json. Created fixtures/, scripts/, docs/case-studies/, .github/workflows/ directories. Copied master-plan.md and plan.html into docs/. Wrote custom root README. Added .prettierrc. Initial commit d572a1e pushed to main.",
+          next: "Day 2 — Extract Tailwind tokens from portfolio-site into packages/design-system/src/tokens/*.css (colors, typography, spacing, motion, shadows)"
+        },
         {
           date: "2026-04-24",
           title: "Plan finalized (v3)",
@@ -2171,7 +2184,20 @@
       headerEl.parentElement.classList.toggle('expanded');
     };
 
+    // Seed localStorage with authoritative completedTasks list from planData.
+    // This ensures the HTML reflects the canonical state recorded in master-plan.md,
+    // regardless of browser or previous localStorage state. User toggles during the
+    // day overwrite this locally; end-of-day sync updates the data + this list.
+    function seedProgress() {
+      const progress = loadProgress();
+      (planData.completedTasks || []).forEach(id => {
+        progress[id] = true;
+      });
+      saveProgress(progress);
+    }
+
     // INIT
+    seedProgress();
     renderHero();
     renderPhaseGrid();
     renderStatusTable();

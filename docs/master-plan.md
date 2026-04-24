@@ -17,10 +17,10 @@
 |-------|-------|
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
-| **Current Day** | Day 1 (not yet started) |
-| **Overall Progress** | 0 / 98 days complete |
-| **Status** | Pre-flight — ready to kick off Week 1 Day 1 |
-| **Next Action** | Install pnpm, create GitHub repo `rishigundla/ai-portfolio`, scaffold monorepo |
+| **Current Day** | Day 2 (Tue) — Extract Portfolio-Site Tokens |
+| **Overall Progress** | 10 tasks of 98 day-sections complete · Day 1 ✓ |
+| **Status** | Day 1 complete. Monorepo scaffolded, pushed to GitHub, shared packages placeholder-ready |
+| **Next Action** | Day 2: Extract Tailwind tokens from portfolio-site into `packages/design-system/src/tokens/*.css` |
 | **Blockers** | None |
 
 ### Phase Progress Overview
@@ -42,11 +42,24 @@
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
 
-### 2026-04-24 · Plan finalized
+### 2026-04-24 · Day 1 complete — Monorepo scaffolded and live on GitHub
+- Installed pnpm 10.33.2 globally
+- Created GitHub repo `rishigundla/ai-portfolio` (public)
+- Scaffolded monorepo at `C:\Users\Rishi\Documents\ai-portfolio` with `create-turbo@latest`
+- Removed default `apps/web`, `apps/docs`, `packages/ui` from starter
+- Created placeholder `packages/design-system` (@rishi/design-system) and `packages/ai-core` (@rishi/ai-core) with README + package.json
+- Created `fixtures/`, `scripts/`, `docs/case-studies/`, `.github/workflows/` directories
+- Copied master-plan.md and plan.html (interactive dashboard) into `docs/`
+- Wrote custom root README (portfolio overview, architecture, development commands, automation notes)
+- Added `.prettierrc`
+- Committed + pushed to main at https://github.com/rishigundla/ai-portfolio
+- **Context for Day 2**: `packages/design-system` has empty `src/tokens/`, `src/primitives/`, `src/components/`, `src/motion/` subdirectories ready. Source material is `C:\Users\Rishi\Documents\portfolio-site\tailwind.config.js` (teal `#2dd4bf`, Space Grotesk, base-900→600 scale, motion keyframes).
+- **Next**: Day 2 — Extract Tailwind tokens into CSS variables
+
+### 2026-04-24 · Plan finalized (earlier)
 - Locked all 5 projects, final architecture (Vercel + pre-generated fixtures), 14-week build sequence
 - Locked GitHub repo name, monorepo tool (pnpm + turborepo), deployment strategy, automation design
 - Master plan doc v3 finalized with day-by-day tracking
-- **Next**: Week 1 Day 1 — pre-flight + monorepo scaffold
 
 ---
 
@@ -355,19 +368,25 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 
 **Week goal**: Design system package extracted and deployed as showcase site.
 
-#### Day 1 (Mon) · Monorepo Scaffolding
-- [ ] Install pnpm globally
-- [ ] Create GitHub repo `rishigundla/ai-portfolio` via GitHub MCP
-- [ ] Create local directory `C:\Users\Rishi\Documents\ai-portfolio`
-- [ ] Scaffold with `pnpm dlx create-turbo@latest . --skip-install`
-- [ ] Clean out default `apps/web` and `apps/docs` from starter
-- [ ] Configure `pnpm-workspace.yaml`, `turbo.json`, root `package.json`
-- [ ] Add `.gitignore`, `.prettierrc`, `.eslintrc.json`, root `tsconfig.json`
-- [ ] `pnpm install`
-- [ ] Initial commit + push to GitHub
-- [ ] Copy master plan to `docs/master-plan.md` in the repo
+#### Day 1 (Mon) · Monorepo Scaffolding — COMPLETED 2026-04-24
+- [x] Install pnpm globally (v10.33.2)
+- [x] Create GitHub repo `rishigundla/ai-portfolio` (public)
+- [x] Create local directory `C:\Users\Rishi\Documents\ai-portfolio`
+- [x] Scaffold with `pnpm dlx create-turbo@latest ai-portfolio --package-manager pnpm`
+- [x] Clean out default `apps/web` and `apps/docs` from starter; removed `packages/ui` too
+- [x] Kept default `pnpm-workspace.yaml`, `turbo.json`, root `package.json` (already configured correctly by create-turbo)
+- [x] Added `.prettierrc` · kept existing `.gitignore` · ESLint + TS configs via `packages/eslint-config` + `packages/typescript-config` (modern turborepo pattern)
+- [x] `pnpm install` (5 workspace projects registered)
+- [x] Initial commit `d572a1e` + push to `main` at https://github.com/rishigundla/ai-portfolio
+- [x] Copied master-plan.md and plan.html into `docs/` (rich interactive dashboard included)
 
-**Context for Next Session**: _(fill in after completion)_
+**Context for Next Session (Day 2)**:
+- Monorepo at `C:\Users\Rishi\Documents\ai-portfolio` is clean and pushed
+- Packages `@rishi/design-system` and `@rishi/ai-core` are placeholder with README + package.json only
+- Empty subdirectories ready: `packages/design-system/src/{tokens,primitives,components,motion}/`
+- Day 2 source material: `C:\Users\Rishi\Documents\portfolio-site\tailwind.config.js` — teal `#2dd4bf` accent, Space Grotesk + JetBrains Mono + Source Serif 4, base-900→base-600 dark scale, motion keyframes (fadeIn, slideUp, pulseGlow, float, gridFlow)
+- Day 2 target: create `tokens/colors.css`, `tokens/typography.css`, `tokens/spacing.css`, `tokens/motion.css`, `tokens/shadows.css` as CSS variables, plus Tailwind v4 config consuming them
+- Repo root README, docs, and all placeholder packages are live and browseable on GitHub
 
 #### Day 2 (Tue) · Extract Portfolio-Site Tokens
 - [ ] Create `packages/design-system/` with package.json + tsconfig
