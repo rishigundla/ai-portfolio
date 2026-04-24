@@ -497,7 +497,7 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 - [x] Set up shadcn pattern manually inside `packages/design-system/` (CLI is app-oriented; manual setup is correct for monorepo library packages)
 - [x] Built 13 primitives + Label bonus: Button, Dialog, Tabs, Tooltip, Popover, Card, Input, Select, Toast, Command, Combobox, Badge, Avatar, Label
 - [x] All primitives themed to token system — `bg-accent`, `text-text-primary`, `border-surface-border`, `shadow-glow-sm`, etc.
-- [x] Visual validation deferred to Day 5 showcase site (design-system-docs). Typecheck clean; primitives ready for composition.
+- [x] Visual-tested every primitive with teal accent + Space Grotesk — **VERIFIED 2026-04-24** via live deploy at https://ai-portfolio-design-system-docs.vercel.app/primitives (all 14 primitives render correctly: Button variants, Card composition, Badge palette, Input focus ring, Dialog modal, Popover, Tooltip, Tabs active state, Select dropdown, Combobox search, Avatar fallback). Typecheck was clean on Day 3; visual confirmation came on Day 5 deploy.
 
 **Context for Next Session (Day 4)**:
 - All primitives exported at `@rishi/design-system/primitives` (barrel) and individually via subpaths
