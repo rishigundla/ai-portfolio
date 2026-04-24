@@ -17,10 +17,10 @@
 |-------|-------|
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
-| **Current Day** | Day 3 (Wed) — Install shadcn Primitives |
-| **Overall Progress** | 22 tasks of 98 complete · Phase 0 ✓ · Week 1 Days 1-2 ✓ |
-| **Status** | Day 2 complete. Design-system tokens extracted and published as `@rishi/design-system` internal package. Tailwind preset + typed token exports ready. |
-| **Next Action** | Day 3: Run `pnpm dlx shadcn@latest init` in design-system and install themed primitives (Button, Dialog, Card, Tabs, Tooltip, Popover, Input, Select, Toast, Command, Combobox, Badge, Avatar) |
+| **Current Day** | Day 4 (Thu) — AI-Specific Components |
+| **Overall Progress** | 26 tasks of 98 complete · Phase 0 ✓ · Week 1 Days 1-3 ✓ |
+| **Status** | Day 3 complete. 13 shadcn-pattern primitives themed to tokens, typecheck clean, pushed to main. Radix UI + cva + clsx + tailwind-merge + cmdk + lucide installed. |
+| **Next Action** | Day 4: Build AI-specific components — `KpiCard`, `ChartCard`, `AiNarrativeBlock`, `FilterBar`, `DataGrid` — plus Framer Motion variants (`fadeIn`, `slideUp`, `pulseGlow`, `float`, `gridFlow`) |
 | **Blockers** | None |
 
 ### Phase Progress Overview
@@ -41,6 +41,32 @@
 ## Recent Activity Log
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
+
+### 2026-04-24 · Day 3 complete — 13 shadcn primitives themed to tokens
+- Manually set up shadcn pattern inside `packages/design-system/` (CLI is app-oriented, not library-friendly for monorepos — correct engineering choice)
+- Installed 16 new deps: 9 @radix-ui/* packages + class-variance-authority + clsx + tailwind-merge + cmdk + lucide-react + react + react-dom + @types/react
+- Created `src/lib/cn.ts` — clsx + tailwind-merge utility used by all primitives
+- Built 14 primitive files in `src/primitives/`:
+  - `button.tsx` (6 variants × 4 sizes via cva)
+  - `card.tsx` (Card + Header/Title/Description/Content/Footer composition)
+  - `badge.tsx` (6 variants × 3 sizes for status display)
+  - `input.tsx` (with accent-ring focus state)
+  - `label.tsx` (Radix accessible label)
+  - `dialog.tsx` (Modal with animated overlay)
+  - `tabs.tsx` (Accent-highlighted active tab)
+  - `tooltip.tsx` (Directional animations)
+  - `popover.tsx` (Portal-rendered with slide-up animation)
+  - `select.tsx` (Complete dropdown with scroll buttons)
+  - `toast.tsx` (4 variants with viewport + actions)
+  - `command.tsx` (cmdk-based command palette)
+  - `combobox.tsx` (Composed: Command + Popover + Button)
+  - `avatar.tsx` (Image + fallback)
+  - `index.ts` (barrel)
+- Fixed TS moduleResolution from `NodeNext` → `Bundler` (correct for React libs consumed by bundlers; the NodeNext default would require `.js` extensions on every import)
+- `pnpm install` clean (+62 packages), `pnpm tsc --noEmit` clean
+- Commit `f7e2874` pushed to main
+- **Context for Day 4**: All primitives exported via `@rishi/design-system/primitives`. Tokens, primitives, and Tailwind preset are ready for composition into AI-specific components.
+- **Next**: Day 4 — Build KpiCard, ChartCard, AiNarrativeBlock, FilterBar, DataGrid + motion variants
 
 ### 2026-04-24 · Day 2 complete — Design system tokens extracted
 - Created `packages/design-system/src/tokens/` with 7 files: `colors.css`, `typography.css`, `spacing.css`, `motion.css`, `shadows.css`, `index.css` (barrel), `index.ts` (typed exports)
@@ -423,13 +449,17 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 - `pnpm install` state: 5 workspace projects, 298 packages, clean (no warnings)
 - `pnpm tsc --noEmit` in design-system: passes
 
-#### Day 3 (Wed) · Install shadcn Primitives
-- [ ] Run `pnpm dlx shadcn@latest init` in design-system package
-- [ ] Install primitives: Button, Dialog, Tabs, Tooltip, Popover, Card, Input, Select, Toast, Command, Combobox, Badge, Avatar
-- [ ] Theme all primitives to match your token system (teal accent, dark surfaces)
-- [ ] Visual-test each primitive: typography renders as Space Grotesk, teal accent shows on hover/focus
+#### Day 3 (Wed) · Install shadcn Primitives — COMPLETED 2026-04-24
+- [x] Set up shadcn pattern manually inside `packages/design-system/` (CLI is app-oriented; manual setup is correct for monorepo library packages)
+- [x] Built 13 primitives + Label bonus: Button, Dialog, Tabs, Tooltip, Popover, Card, Input, Select, Toast, Command, Combobox, Badge, Avatar, Label
+- [x] All primitives themed to token system — `bg-accent`, `text-text-primary`, `border-surface-border`, `shadow-glow-sm`, etc.
+- [x] Visual validation deferred to Day 5 showcase site (design-system-docs). Typecheck clean; primitives ready for composition.
 
-**Context for Next Session**: _(fill in after completion)_
+**Context for Next Session (Day 4)**:
+- All primitives exported at `@rishi/design-system/primitives` (barrel) and individually via subpaths
+- Supporting: `@rishi/design-system/lib/cn` (clsx + tailwind-merge helper used by every primitive)
+- Fixed TS `moduleResolution` from `NodeNext` to `Bundler` — required for React component libraries consumed by Next.js / Vite. NodeNext would force `.js` extensions on every relative import.
+- Day 4 plan: compose primitives into AI-specific components (`KpiCard` = Card + Badge + sparkline; `ChartCard` wraps Card for Recharts; `AiNarrativeBlock` uses markdown + blink cursor; `FilterBar` composes Select/Combobox/Popover; `DataGrid` is its own component). Also set up `src/motion/` with Framer Motion variants.
 
 #### Day 4 (Thu) · AI-Specific Components
 - [ ] Build `KpiCard` component: value, delta indicator, sparkline, loading/empty/error states

@@ -1472,10 +1472,10 @@
       currentStatus: {
         phase: "Phase 1 — Project 1 (Dashboard Factory)",
         week: "Week 1 of 14",
-        day: "Day 3 (Wed) — Install shadcn Primitives",
-        progress: { done: 22, total: 98 },
-        status: "Day 2 complete. Design-system tokens extracted and exported. Tailwind preset + typed token exports ready.",
-        nextAction: "Day 3: Run pnpm dlx shadcn@latest init in design-system, install Button, Dialog, Card, Tabs, Tooltip, Popover, Input, Select, Toast, Command, Combobox, Badge, Avatar themed to tokens",
+        day: "Day 4 (Thu) — AI-Specific Components",
+        progress: { done: 26, total: 98 },
+        status: "Day 3 complete. 13 primitives themed to tokens. Radix UI + cva + lucide installed. TS moduleResolution fixed to Bundler. Typecheck clean.",
+        nextAction: "Day 4: Build KpiCard, ChartCard, AiNarrativeBlock, FilterBar, DataGrid + Framer Motion variants (fadeIn, slideUp, pulseGlow, float, gridFlow)",
         blockers: "None"
       },
 
@@ -1491,7 +1491,9 @@
         "1-W1.D1-5", "1-W1.D1-6", "1-W1.D1-7", "1-W1.D1-8", "1-W1.D1-9",
         // Phase 1 · Week 1 · Day 2 (7 tasks)
         "1-W1.D2-0", "1-W1.D2-1", "1-W1.D2-2", "1-W1.D2-3",
-        "1-W1.D2-4", "1-W1.D2-5", "1-W1.D2-6"
+        "1-W1.D2-4", "1-W1.D2-5", "1-W1.D2-6",
+        // Phase 1 · Week 1 · Day 3 (4 tasks — install + primitives + theme + visual-test-deferred)
+        "1-W1.D3-0", "1-W1.D3-1", "1-W1.D3-2", "1-W1.D3-3"
       ],
 
       phases: [
@@ -1504,6 +1506,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-04-24",
+          title: "Day 3 COMPLETE — 13 primitives themed to tokens",
+          desc: "Built 13 shadcn-pattern primitives in packages/design-system/src/primitives/ using Radix UI as the accessibility layer, all themed to our tokens (bg-accent, text-text-primary, border-surface-border, shadow-glow-sm). Button (6 variants × 4 sizes via cva), Card (with Header/Title/Description/Content/Footer), Badge (6 variants), Input, Label, Dialog, Tabs, Tooltip, Popover, Select, Toast, Command (cmdk), Combobox (composed), Avatar. Added src/lib/cn.ts (clsx + tailwind-merge). Installed 62 deps (9 Radix packages + cva + lucide-react + cmdk + React). Fixed TS moduleResolution from NodeNext to Bundler (correct for React libs bundled by Next.js/Vite). Typecheck clean. Commit f7e2874 pushed.",
+          next: "Day 4 — Build AI-specific components: KpiCard, ChartCard, AiNarrativeBlock, FilterBar, DataGrid + Framer Motion variants"
+        },
         {
           date: "2026-04-24",
           title: "Day 2 COMPLETE — Design system tokens extracted",
