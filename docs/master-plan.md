@@ -17,10 +17,10 @@
 |-------|-------|
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
-| **Current Day** | Day 5 (Fri) — Design System Showcase App |
-| **Overall Progress** | 32 tasks of 98 complete · Phase 0 ✓ · Week 1 Days 1-4 ✓ |
-| **Status** | Day 4 complete. 5 AI components + motion variants. Framer Motion + react-markdown + remark-gfm installed. Typecheck clean. |
-| **Next Action** | Day 5: Create `apps/design-system-docs/` Next.js 16 project. Build pages showing all tokens + primitives + AI components. Deploy to Vercel. |
+| **Current Day** | Day 6 (Sat) — Build `@rishi/ai-core` Package |
+| **Overall Progress** | 37 tasks of 98 complete · Phase 0 ✓ · Week 1 Days 1-5 ✓ |
+| **Status** | Day 5 complete. design-system-docs app built (4 routes, static build), pushed to GitHub. Awaiting Vercel deploy connection from user. |
+| **Next Action** | Day 6: Wire up `packages/ai-core` — build `replay.ts` streamText wrapper that chunks fixture JSON at ~40 tokens/sec + `generate.ts` dev-only Anthropic SDK client + types (Fixture, Scenario, StreamConfig, AiNarrative). Test with a mock fixture. |
 | **Blockers** | None |
 
 ### Phase Progress Overview
@@ -41,6 +41,26 @@
 ## Recent Activity Log
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
+
+### 2026-04-24 · Day 5 complete — Design system showcase app built
+- Scaffolded `apps/design-system-docs/` manually (not `create-next-app`) for monorepo precision — all configs hand-written with proper workspace wiring
+- Framework: Next.js 15.1.6 App Router · React 19 · TypeScript · Tailwind 3.4.17
+- Key config: `transpilePackages: ['@rishi/design-system']` in next.config.mjs (the one line most monorepo tutorials miss — without it, Next.js can't consume TSX source from workspace packages)
+- Tailwind: `presets: [baseConfig]` from `@rishi/design-system/tailwind.config` + content globs include design-system source so all its utilities are emitted
+- Globals.css imports `@rishi/design-system/tokens` at the top, then Tailwind layers — CSS variables are hydrated before any component mounts
+- 4 routes:
+  - `/` — Hero + catalog cards linking to 3 category pages + install code snippet
+  - `/tokens` — Live swatches (accent family, base-900→600 scale, surface/text, status/severity palette), typography samples for all 3 font families, CSS keyframe demos (pulse-glow, float, fade-in), elevation showcase (card / card-hover / glow-lg)
+  - `/primitives` — All 14 primitives with live variants: Button (6×4), Card (composed), Badge (6×3), Input+Label pair, Dialog with trigger, Popover, Tooltip, Tabs, Select, Combobox (with live state), Avatar
+  - `/components` — Interactive AI component demos: KpiCard 4-state grid, ChartCard with SVG bar mock + loading variant, **AiNarrativeBlock with click-to-simulate Claude streaming at ~40 chars/sec** (this proves the streaming UX works end-to-end — it's the exact pattern all 5 apps will use), FilterBar with live state, DataGrid with sortable + paginated sample data
+- Shared components at `app/_components/`: Nav (sticky with gradient logo mark), Section + SubSection (consistent header pattern)
+- Build: 4 static pages generated, 10.6s compile, `/` First Load JS 105 kB, `/components` heaviest at 223 kB (framer-motion + react-markdown)
+- Hit and fixed: `lucide-react` needed to be declared as direct dep in the app even though design-system imports it — pnpm workspace transitives aren't auto-resolved for direct imports. Resolved by adding explicit dep.
+- `portfolio.meta.json` scaffolded with `deployedAt: null` (flipped to date once Vercel deploys)
+- README per app with dev/build/deploy instructions
+- Commit `516ceb7` pushed to main
+- **Context for Day 6**: Design system is fully documented and browseable locally via `pnpm dev --filter design-system-docs`. To go live, you need to connect the repo to Vercel (one-time, handles all 6 future apps automatically). Once deployed, update `portfolio.meta.json` with liveUrl + deployedAt.
+- **Next**: Day 6 — Implement `@rishi/ai-core` (currently placeholder). This is the streaming replay infrastructure that every app will use for fake-Claude streaming from pre-generated fixtures.
 
 ### 2026-04-24 · Day 4 complete — AI components + motion variants
 - Built 5 AI-specific components in `packages/design-system/src/components/`:
@@ -491,14 +511,19 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 - Day 5 plan: scaffold `apps/design-system-docs/` as Next.js 16 App Router app that imports the design system and renders live examples of every export. One page per category (/tokens, /primitives, /components). Deploy to Vercel.
 - Consider: this showcase site becomes the first public demonstration of the design system. Keep the visual polish high.
 
-#### Day 5 (Fri) · Design System Showcase App
-- [ ] Create `apps/design-system-docs/` as Next.js 16 project
-- [ ] Install `@rishi/design-system` from workspace
-- [ ] Create page per component with all variants visible
-- [ ] Deploy to Vercel — note the generated URL in `portfolio.meta.json` format
-- [ ] Add README with install + usage instructions
+#### Day 5 (Fri) · Design System Showcase App — COMPLETED 2026-04-24
+- [x] Created `apps/design-system-docs/` as Next.js 15.1 App Router project (chose 15.1 over 16 for stable React 19 support)
+- [x] Installed `@rishi/design-system` as workspace dep; also added `lucide-react` directly for icon imports
+- [x] Built a page per category: `/`, `/tokens`, `/primitives`, `/components` — covering all 14 primitives and 5 AI components with live interactive variants
+- [-] Deploy to Vercel — **deferred** to user (requires one-time GitHub→Vercel connection in Vercel dashboard; portfolio.meta.json has placeholder for liveUrl + deployedAt)
+- [x] Added `apps/design-system-docs/README.md` with dev/build/deploy instructions
 
-**Context for Next Session**: _(fill in after completion)_
+**Context for Next Session (Day 6)**:
+- Showcase app builds cleanly: 4 static pages, 10.6s build time, 105 kB First Load JS on home
+- `AiNarrativeBlock` streaming simulation is validated — click-to-stream at ~40 chars/sec renders exactly how live Claude streaming will look. This is the pattern all 5 apps reuse via `@rishi/ai-core`.
+- Day 6 wires up `@rishi/ai-core`: `replay.ts` takes a fixture JSON + target ReadableStream and chunks text progressively; `generate.ts` is the dev-only Anthropic SDK client Rishi uses locally when curating fixtures. Types go in `src/types/`.
+- Run locally: `pnpm dev --filter design-system-docs` (serves on :3001)
+- To deploy: connect `rishigundla/ai-portfolio` to Vercel via dashboard, set root directory to `apps/design-system-docs`, build command `pnpm build --filter design-system-docs...`, output directory `.next`
 
 #### Day 6 (Sat) · Build `packages/ai-core`
 - [ ] Create `packages/ai-core/` with package.json + tsconfig

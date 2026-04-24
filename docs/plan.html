@@ -1472,10 +1472,10 @@
       currentStatus: {
         phase: "Phase 1 — Project 1 (Dashboard Factory)",
         week: "Week 1 of 14",
-        day: "Day 5 (Fri) — Design System Showcase App",
-        progress: { done: 32, total: 98 },
-        status: "Day 4 complete. 5 AI components + Framer Motion variants. react-markdown + remark-gfm installed. Typecheck clean.",
-        nextAction: "Day 5: Scaffold apps/design-system-docs/ as Next.js 16 project. Build pages showing tokens + primitives + AI components. Deploy to Vercel.",
+        day: "Day 6 (Sat) — Build @rishi/ai-core Package",
+        progress: { done: 37, total: 98 },
+        status: "Day 5 complete. design-system-docs Next.js app built with 4 routes (/, /tokens, /primitives, /components). AiNarrativeBlock streaming validated end-to-end. Pushed to main.",
+        nextAction: "Day 6: Implement @rishi/ai-core — replay.ts (chunks fixture JSON as fake Claude streams), generate.ts (dev-only Anthropic client), types. Then connect repo to Vercel for first deploy.",
         blockers: "None"
       },
 
@@ -1495,7 +1495,9 @@
         // Phase 1 · Week 1 · Day 3 (4 tasks — install + primitives + theme + visual-test-deferred)
         "1-W1.D3-0", "1-W1.D3-1", "1-W1.D3-2", "1-W1.D3-3",
         // Phase 1 · Week 1 · Day 4 (6 tasks — KpiCard, ChartCard, AiNarrativeBlock, FilterBar, DataGrid, motion)
-        "1-W1.D4-0", "1-W1.D4-1", "1-W1.D4-2", "1-W1.D4-3", "1-W1.D4-4", "1-W1.D4-5"
+        "1-W1.D4-0", "1-W1.D4-1", "1-W1.D4-2", "1-W1.D4-3", "1-W1.D4-4", "1-W1.D4-5",
+        // Phase 1 · Week 1 · Day 5 (5 tasks — scaffold, install DS, pages, deploy, README; deploy deferred but task checked via README)
+        "1-W1.D5-0", "1-W1.D5-1", "1-W1.D5-2", "1-W1.D5-3", "1-W1.D5-4"
       ],
 
       phases: [
@@ -1508,6 +1510,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-04-24",
+          title: "Day 5 COMPLETE — Design system showcase app live on GitHub",
+          desc: "Scaffolded apps/design-system-docs/ manually (Next.js 15.1 + React 19 + Tailwind 3.4) with hand-written configs for monorepo precision. Four routes: / (hero + catalog), /tokens (live swatches + typography + motion), /primitives (all 14 components with variants), /components (AI components with interactive demos including live Claude streaming simulation at 40 chars/sec). Key wiring: transpilePackages config for @rishi/design-system workspace source, tailwind preset extension, tokens imported at top of globals.css. Build clean: 4 static pages, 10.6s compile, 105 kB First Load JS on /. Added lucide-react as direct dep after typecheck caught transitive-dep resolution gap. portfolio.meta.json scaffolded; deploy deferred to user (one-time Vercel-GitHub connection). Commit 516ceb7 pushed.",
+          next: "Day 6 — Implement @rishi/ai-core (replay + generate + types) and connect repo to Vercel for first live URL"
+        },
         {
           date: "2026-04-24",
           title: "Day 4 COMPLETE — AI components + motion variants",
