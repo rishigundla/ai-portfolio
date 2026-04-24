@@ -1,0 +1,2187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Portfolio Projects · Master Plan · Rishikesh Gundla</title>
+  <meta name="description" content="14-week build plan for 5 AI-powered portfolio projects. Anchored to Nutanix SaaS Data Team work. Tracking day-by-day progress through Phase 1 to Phase 5." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --accent: #2dd4bf;
+      --accent-light: #5eead4;
+      --accent-dark: #14b8a6;
+      --accent-glow: rgba(45, 212, 191, 0.18);
+      --accent-glow-strong: rgba(45, 212, 191, 0.35);
+
+      --base-900: #07090f;
+      --base-800: #0d111c;
+      --base-700: #131827;
+      --base-600: #1c2235;
+
+      --surface: #11152380;
+      --surface-solid: #111523;
+      --surface-hover: #161c2f;
+      --surface-elevated: #1a2036;
+
+      --border: rgba(148, 163, 184, 0.1);
+      --border-hover: rgba(148, 163, 184, 0.2);
+      --border-accent: rgba(45, 212, 191, 0.35);
+
+      --text-primary: #f1f5f9;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+
+      --status-not-started: #475569;
+      --status-in-progress: #f59e0b;
+      --status-completed: #10b981;
+      --status-blocked: #ef4444;
+
+      --gradient-hero: radial-gradient(ellipse at top, rgba(45, 212, 191, 0.08) 0%, transparent 60%);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--base-900);
+      color: var(--text-primary);
+      font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+      font-weight: 400;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      background-image:
+        radial-gradient(circle at 15% 10%, rgba(45, 212, 191, 0.04) 0%, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(45, 212, 191, 0.03) 0%, transparent 45%);
+      background-attachment: fixed;
+      min-height: 100vh;
+    }
+
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .serif { font-family: 'Source Serif 4', serif; font-style: italic; }
+
+    /* TOP BAR */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(7, 9, 15, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      color: var(--base-900);
+      box-shadow: 0 0 20px var(--accent-glow);
+      font-size: 14px;
+    }
+
+    .topbar-title {
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: -0.01em;
+    }
+
+    .topbar-version {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      background: var(--accent-glow);
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--border-accent);
+    }
+
+    .topbar-nav {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .topbar-nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: all 0.15s ease;
+      font-weight: 500;
+    }
+
+    .topbar-nav a:hover {
+      color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    /* HERO */
+    .hero {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 80px 32px 48px;
+      text-align: center;
+      background: var(--gradient-hero);
+      position: relative;
+    }
+
+    .hero-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: inline-block;
+      padding: 6px 14px;
+      border: 1px solid var(--border-accent);
+      border-radius: 20px;
+      background: var(--accent-glow);
+    }
+
+    .hero-title {
+      font-size: clamp(36px, 6vw, 72px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-light) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-family: 'Source Serif 4', serif;
+      font-style: italic;
+      font-size: clamp(18px, 2.2vw, 24px);
+      color: var(--text-secondary);
+      max-width: 720px;
+      margin: 0 auto 48px;
+      font-weight: 400;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 20px;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(8px);
+    }
+
+    .stat-card:hover {
+      border-color: var(--border-accent);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), 0 0 24px var(--accent-glow);
+    }
+
+    .stat-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--accent);
+      line-height: 1.1;
+    }
+
+    .stat-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    /* SECTIONS */
+    .section {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 64px 32px;
+    }
+
+    .section-header {
+      margin-bottom: 40px;
+    }
+
+    .section-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .section-title {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+
+    .section-desc {
+      color: var(--text-secondary);
+      font-size: 16px;
+      max-width: 720px;
+    }
+
+    /* PROGRESS TRACKER */
+    .phase-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .phase-card {
+      background: var(--surface-solid);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .phase-card.active {
+      border-color: var(--border-accent);
+      box-shadow: 0 0 32px var(--accent-glow);
+    }
+
+    .phase-card.active::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-light), var(--accent));
+    }
+
+    .phase-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .phase-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+    }
+
+    .phase-status {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 500;
+    }
+
+    .phase-status.not-started {
+      background: rgba(71, 85, 105, 0.2);
+      color: var(--status-not-started);
+      border: 1px solid rgba(71, 85, 105, 0.3);
+    }
+
+    .phase-status.in-progress {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--status-in-progress);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .phase-status.completed {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--status-completed);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .phase-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      letter-spacing: -0.01em;
+    }
+
+    .phase-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .progress-track {
+      height: 4px;
+      background: var(--base-700);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-dark), var(--accent));
+      border-radius: 2px;
+      transition: width 0.6s ease;
+      box-shadow: 0 0 8px var(--accent-glow-strong);
+    }
+
+    .progress-count {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* STATUS TABLE */
+    .status-table {
+      background: var(--surface-solid);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .status-row {
+      display: flex;
+      padding: 14px 24px;
+      border-bottom: 1px solid var(--border);
+      align-items: center;
+      gap: 16px;
+    }
+
+    .status-row:last-child {
+      border-bottom: none;
+    }
+
+    .status-row-key {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      min-width: 160px;
+    }
+
+    .status-row-value {
+      font-size: 14px;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .status-row-value.accent {
+      color: var(--accent);
+    }
+
+    /* ACTIVITY LOG */
+    .activity-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .activity-item {
+      background: var(--surface-solid);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 10px;
+      padding: 20px 24px;
+      transition: all 0.2s ease;
+    }
+
+    .activity-item:hover {
+      border-color: var(--border-hover);
+      border-left-color: var(--accent);
+      background: var(--surface-hover);
+    }
+
+    .activity-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .activity-date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .activity-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .activity-desc {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    .activity-next {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .activity-next strong {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* PROJECTS GRID */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .project-card {
+      background: var(--surface-solid);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--accent), transparent);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-hover);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .project-card:hover::before {
+      opacity: 1;
+    }
+
+    .project-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .project-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 36px;
+      font-weight: 300;
+      color: var(--accent);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .project-title {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+
+    .project-scope {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .project-pitch {
+      font-family: 'Source Serif 4', serif;
+      font-style: italic;
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 20px;
+      padding-left: 12px;
+      border-left: 2px solid var(--accent);
+    }
+
+    .project-section {
+      margin-bottom: 16px;
+    }
+
+    .project-section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .project-list {
+      list-style: none;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .project-list li {
+      padding: 4px 0;
+      padding-left: 16px;
+      position: relative;
+    }
+
+    .project-list li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+
+    .tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 4px 10px;
+      background: var(--base-700);
+      color: var(--text-secondary);
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      letter-spacing: 0.02em;
+    }
+
+    .tag.accent {
+      background: var(--accent-glow);
+      color: var(--accent);
+      border-color: var(--border-accent);
+    }
+
+    /* DECISIONS GRID */
+    .decisions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    .decision-card {
+      background: var(--surface-solid);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      transition: all 0.2s ease;
+    }
+
+    .decision-card:hover {
+      border-color: var(--border-accent);
+    }
+
+    .decision-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .decision-question {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: var(--text-primary);
+    }
+
+    .decision-answer {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* ARCHITECTURE */
+    .code-block {
+      background: var(--base-900);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 28px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--text-secondary);
+      overflow-x: auto;
+      line-height: 1.7;
+      white-space: pre;
+    }
+
+    .code-block .comment { color: var(--text-muted); }
+    .code-block .highlight { color: var(--accent); }
+    .code-block .keyword { color: var(--accent-light); }
+
+    /* PLAN (Week Accordion) */
+    .plan-container {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .phase-block {
+      background: var(--surface-solid);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .phase-block.active {
+      border-color: var(--border-accent);
+      box-shadow: 0 0 40px var(--accent-glow);
+    }
+
+    .phase-block-header {
+      padding: 24px 28px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      transition: background 0.2s ease;
+    }
+
+    .phase-block-header:hover {
+      background: var(--surface-hover);
+    }
+
+    .phase-block-title {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .phase-block-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--accent);
+      background: var(--accent-glow);
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border-accent);
+      letter-spacing: 0.08em;
+    }
+
+    .phase-block-name {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .phase-block-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .chevron {
+      transition: transform 0.3s ease;
+      color: var(--text-muted);
+    }
+
+    .phase-block.expanded .chevron {
+      transform: rotate(90deg);
+      color: var(--accent);
+    }
+
+    .phase-block-body {
+      display: none;
+      padding: 0 28px 28px;
+    }
+
+    .phase-block.expanded .phase-block-body {
+      display: block;
+    }
+
+    .week-block {
+      margin-top: 16px;
+      background: var(--base-800);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .week-block.expanded {
+      border-color: var(--border-accent);
+    }
+
+    .week-header {
+      padding: 16px 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      transition: background 0.2s ease;
+    }
+
+    .week-header:hover {
+      background: var(--surface-hover);
+    }
+
+    .week-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .week-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .week-name {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .week-goal {
+      font-style: italic;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin: 8px 0 16px;
+      padding: 0 20px;
+    }
+
+    .week-body {
+      display: none;
+      padding: 0 20px 20px;
+    }
+
+    .week-block.expanded .week-body {
+      display: block;
+    }
+
+    .days-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .day-card {
+      background: var(--base-700);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      transition: all 0.2s ease;
+    }
+
+    .day-card.in-progress {
+      border-color: var(--status-in-progress);
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.15);
+    }
+
+    .day-card.completed {
+      border-color: var(--status-completed);
+      background: linear-gradient(180deg, var(--base-700) 0%, rgba(16, 185, 129, 0.03) 100%);
+    }
+
+    .day-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .day-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .day-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .day-badge.not-started {
+      background: rgba(71, 85, 105, 0.2);
+      color: var(--status-not-started);
+    }
+
+    .day-badge.in-progress {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--status-in-progress);
+    }
+
+    .day-badge.completed {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--status-completed);
+    }
+
+    .day-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+
+    .task-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .task-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .task-item:hover {
+      background: var(--surface-hover);
+    }
+
+    .task-checkbox {
+      width: 14px;
+      height: 14px;
+      border: 1.5px solid var(--text-dim);
+      border-radius: 3px;
+      margin-top: 2px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+
+    .task-item.checked .task-checkbox {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .task-item.checked .task-checkbox::after {
+      content: '✓';
+      color: var(--base-900);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .task-item.checked .task-text {
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
+
+    .task-text {
+      flex: 1;
+    }
+
+    .week-deliverables {
+      margin-top: 16px;
+      padding: 16px;
+      background: var(--accent-glow);
+      border: 1px solid var(--border-accent);
+      border-radius: 8px;
+    }
+
+    .week-deliverables-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .week-deliverables ul {
+      list-style: none;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .week-deliverables li {
+      padding: 2px 0 2px 18px;
+      position: relative;
+    }
+
+    .week-deliverables li::before {
+      content: '◆';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 10px;
+      top: 5px;
+    }
+
+    /* NUTANIX MAPPING */
+    .mapping-table {
+      background: var(--surface-solid);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .mapping-row {
+      display: grid;
+      grid-template-columns: 1.2fr 1.5fr 1.8fr;
+      padding: 18px 24px;
+      gap: 20px;
+      border-bottom: 1px solid var(--border);
+      align-items: start;
+    }
+
+    .mapping-row:last-child {
+      border-bottom: none;
+    }
+
+    .mapping-row.header {
+      background: var(--base-700);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 14px 24px;
+    }
+
+    .mapping-col {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .mapping-col.project-name {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* AUTOMATION FLOW */
+    .flow-container {
+      background: var(--surface-solid);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+    }
+
+    .flow-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .flow-step {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .flow-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent-glow);
+      border: 1px solid var(--border-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .flow-content h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .flow-content p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* FOOTER */
+    footer {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 40px 32px 60px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    footer .mono {
+      color: var(--accent);
+    }
+
+    /* UTILITIES */
+    .hl-accent { color: var(--accent); }
+    .text-muted { color: var(--text-muted); }
+    .text-secondary { color: var(--text-secondary); }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .topbar { padding: 12px 20px; flex-wrap: wrap; gap: 12px; }
+      .topbar-nav { display: none; }
+      .hero { padding: 48px 20px 32px; }
+      .section { padding: 40px 20px; }
+      .mapping-row { grid-template-columns: 1fr; gap: 8px; }
+      .mapping-row.header { display: none; }
+      .status-row { flex-direction: column; align-items: flex-start; gap: 4px; }
+      .status-row-key { min-width: 0; }
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-in {
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 20px var(--accent-glow); }
+      50% { box-shadow: 0 0 40px var(--accent-glow-strong); }
+    }
+
+    .pulse {
+      animation: pulseGlow 3s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body>
+  <nav class="topbar">
+    <div class="topbar-left">
+      <div class="logo-mark">AI</div>
+      <span class="topbar-title">AI Portfolio Master Plan</span>
+      <span class="topbar-version">v3.0</span>
+    </div>
+    <div class="topbar-nav">
+      <a href="#status">Status</a>
+      <a href="#activity">Activity</a>
+      <a href="#projects">Projects</a>
+      <a href="#plan">Plan</a>
+      <a href="#automation">Automation</a>
+      <a href="#reference">Reference</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <span class="hero-eyebrow">Senior BI Engineer → Data / Analytics Engineer</span>
+    <h1 class="hero-title">AI Portfolio<br />Projects</h1>
+    <p class="hero-subtitle">Five AI-native applications anchored to real Nutanix SaaS Data Team work. Tracking 14 weeks of day-by-day build progress.</p>
+
+    <div class="hero-stats" id="hero-stats">
+      <!-- rendered by JS -->
+    </div>
+  </header>
+
+  <section class="section" id="status">
+    <div class="section-header">
+      <div class="section-eyebrow">Part A · Live Tracker</div>
+      <h2 class="section-title">Current Status</h2>
+      <p class="section-desc">Real-time view of where we are in the 14-week plan. Updated at end of each work session.</p>
+    </div>
+
+    <div class="phase-grid" id="phase-grid">
+      <!-- rendered by JS -->
+    </div>
+
+    <div class="status-table" id="status-table">
+      <!-- rendered by JS -->
+    </div>
+  </section>
+
+  <section class="section" id="activity">
+    <div class="section-header">
+      <div class="section-eyebrow">Part A · Daily Log</div>
+      <h2 class="section-title">Recent Activity</h2>
+      <p class="section-desc">Rolling log of recent work. Each entry: what was completed, blockers, tomorrow's focus.</p>
+    </div>
+
+    <div class="activity-list" id="activity-list">
+      <!-- rendered by JS -->
+    </div>
+  </section>
+
+  <section class="section" id="context">
+    <div class="section-header">
+      <div class="section-eyebrow">Part B · Strategic Context</div>
+      <h2 class="section-title">Why These Projects</h2>
+      <p class="section-desc">Existing portfolio shows traditional BI and data engineering. These five projects add AI-native systems anchored to real Nutanix work.</p>
+    </div>
+
+    <div class="mapping-table">
+      <div class="mapping-row header">
+        <div>Project</div>
+        <div>Nutanix Anchor</div>
+        <div>What It Pushes Further</div>
+      </div>
+      <div class="mapping-row">
+        <div class="mapping-col project-name">1 · Dashboard Factory</div>
+        <div class="mapping-col">Enterprise Dashboard Design System (Figma) + Figma MCP</div>
+        <div class="mapping-col">Automates hi-fi wireframes + ad-hoc dashboards for business users and BI engineers</div>
+      </div>
+      <div class="mapping-row">
+        <div class="mapping-col project-name">2 · Narrative Generator</div>
+        <div class="mapping-col">Marketing Weekly, ACV/GRR Weekly, Balanced Scorecard QBR, CX OKR QBR</div>
+        <div class="mapping-col">PDF dashboard → polished stakeholder slide deck with AI insights</div>
+      </div>
+      <div class="mapping-row">
+        <div class="mapping-col project-name">3 · Anomaly Alerting</div>
+        <div class="mapping-col">Pulse SSOT (NAI/NC2/NCI), RevOps SSOT, CX OKR</div>
+        <div class="mapping-col">AI root-cause narration on Gold-layer KPIs using correlation analysis</div>
+      </div>
+      <div class="mapping-row">
+        <div class="mapping-col project-name">4 · Sprint Intelligence</div>
+        <div class="mapping-col">Jira SSOT Data Portal + Project Progress / Velocity Dashboards</div>
+        <div class="mapping-col">Auto-curated Monday sprint-review brief with AI recommendations</div>
+      </div>
+      <div class="mapping-row">
+        <div class="mapping-col project-name">5 · Pipeline Self-Healer</div>
+        <div class="mapping-col">All SSOT pipelines (Pulse, Jira, RevOps, Fabric)</div>
+        <div class="mapping-col">AI-diagnosed and auto-healed PySpark Medallion failures</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="projects">
+    <div class="section-header">
+      <div class="section-eyebrow">Part C · The Five</div>
+      <h2 class="section-title">Project Showcase</h2>
+      <p class="section-desc">Each project ships as a Vercel-deployed interactive demo with pre-generated AI responses streamed via Vercel AI SDK.</p>
+    </div>
+
+    <div class="projects-grid" id="projects-grid">
+      <!-- rendered by JS -->
+    </div>
+  </section>
+
+  <section class="section" id="decisions">
+    <div class="section-header">
+      <div class="section-eyebrow">Part D · Locked</div>
+      <h2 class="section-title">Final Decisions</h2>
+      <p class="section-desc">All architectural and operational decisions confirmed. Source of truth for build.</p>
+    </div>
+
+    <div class="decisions-grid" id="decisions-grid">
+      <!-- rendered by JS -->
+    </div>
+  </section>
+
+  <section class="section" id="architecture">
+    <div class="section-header">
+      <div class="section-eyebrow">Part E · Structure</div>
+      <h2 class="section-title">Repository Architecture</h2>
+      <p class="section-desc">pnpm workspaces + turborepo monorepo deployed to Vercel. Shared design system consumed by all 5 apps.</p>
+    </div>
+
+    <div class="code-block"><span class="highlight">ai-portfolio/</span>                           <span class="comment">Root of rishigundla/ai-portfolio</span>
+├── <span class="keyword">packages/</span>
+│   ├── design-system/                  <span class="comment">Extracted from portfolio-site</span>
+│   │   ├── src/
+│   │   │   ├── tokens/                 <span class="comment">CSS variables (colors, typography, motion)</span>
+│   │   │   ├── primitives/             <span class="comment">shadcn-themed (Button, Dialog, Card)</span>
+│   │   │   ├── components/             <span class="comment">KpiCard, ChartCard, AiNarrativeBlock</span>
+│   │   │   └── motion/                 <span class="comment">Framer Motion variants</span>
+│   │   ├── package.json
+│   │   └── tailwind.config.ts
+│   └── ai-core/
+│       ├── src/
+│       │   ├── replay.ts               <span class="comment">streamText wrapper (chunks fixture JSON)</span>
+│       │   ├── generate.ts             <span class="comment">Dev-only: Anthropic SDK for fixture generation</span>
+│       │   ├── prompts/                <span class="comment">Reusable prompt templates</span>
+│       │   └── types/                  <span class="comment">Fixture, Scenario, StreamConfig types</span>
+│       └── package.json
+├── <span class="keyword">apps/</span>
+│   ├── design-system-docs/             <span class="comment">Week 1 · Component showcase</span>
+│   ├── dashboard-factory/              <span class="comment">Project 1</span>
+│   ├── narrative-generator/            <span class="comment">Project 2</span>
+│   ├── sprint-intelligence/            <span class="comment">Project 4</span>
+│   ├── anomaly-alerting/               <span class="comment">Project 3</span>
+│   └── pipeline-healer/                <span class="comment">Project 5</span>
+├── <span class="keyword">fixtures/</span>                           <span class="comment">Pre-generated AI responses</span>
+├── <span class="keyword">docs/</span>
+│   ├── master-plan.md                  <span class="comment">This plan (canonical)</span>
+│   └── case-studies/                   <span class="comment">MDX for portfolio-site</span>
+├── <span class="keyword">scripts/</span>
+│   └── sync-deployed.ts                <span class="comment">Automation: portfolio + resume sync</span>
+├── <span class="keyword">.github/workflows/</span>
+│   └── sync-portfolio.yml
+├── pnpm-workspace.yaml
+├── turbo.json
+└── README.md</div>
+  </section>
+
+  <section class="section" id="plan">
+    <div class="section-header">
+      <div class="section-eyebrow">Part F · 14-Week Plan</div>
+      <h2 class="section-title">Day-by-Day Implementation</h2>
+      <p class="section-desc">98 days across 5 phases. Click a phase to expand weeks, click a week to expand days. Tick tasks as you complete them.</p>
+    </div>
+
+    <div class="plan-container" id="plan-container">
+      <!-- rendered by JS -->
+    </div>
+  </section>
+
+  <section class="section" id="automation">
+    <div class="section-header">
+      <div class="section-eyebrow">Part G · Automation</div>
+      <h2 class="section-title">Portfolio + Resume Sync</h2>
+      <p class="section-desc">When a project deploys, a GitHub Action updates the portfolio-site and resume-builder repos automatically via pull requests.</p>
+    </div>
+
+    <div class="flow-container">
+      <div class="flow-steps">
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <div class="flow-content">
+            <h4>Project merges to main</h4>
+            <p>Populate <span class="mono hl-accent">apps/&lt;project&gt;/portfolio.meta.json</span> with <span class="mono hl-accent">deployedAt</span> field. Commit to main branch of <span class="mono">rishigundla/ai-portfolio</span>.</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <div class="flow-content">
+            <h4>Vercel deploys successfully</h4>
+            <p>Deployment completion triggers the GitHub Action <span class="mono hl-accent">.github/workflows/sync-portfolio.yml</span>.</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">3</div>
+          <div class="flow-content">
+            <h4>Sync script runs</h4>
+            <p><span class="mono hl-accent">scripts/sync-deployed.ts</span> reads all <span class="mono">portfolio.meta.json</span> files. Authenticates to target repos via PAT.</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <div class="flow-content">
+            <h4>Two pull requests open</h4>
+            <p>PR on <span class="mono hl-accent">rishigundla/portfolio-site</span>: adds project card + case study MDX. PR on <span class="mono hl-accent">rishigundla/resume-builder</span>: adds bullet to all prompt files.</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">5</div>
+          <div class="flow-content">
+            <h4>Slack notification + manual review</h4>
+            <p>Both PR URLs posted to Slack. Review changes, merge PRs. Portfolio auto-redeploys; resume PDF regenerated via ATS optimizer.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="reference">
+    <div class="section-header">
+      <div class="section-eyebrow">Part H · Reference</div>
+      <h2 class="section-title">Skills + MCPs + Anchors</h2>
+      <p class="section-desc">Tools leveraged across the build, plus Nutanix project anchors used for interview storytelling.</p>
+    </div>
+
+    <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px; color: var(--text-primary);">Vercel Skills</h3>
+    <div class="tag-row" style="margin-bottom: 32px;">
+      <span class="tag accent">vercel:ai-sdk</span>
+      <span class="tag accent">vercel:nextjs</span>
+      <span class="tag accent">vercel:vercel-functions</span>
+      <span class="tag accent">vercel:vercel-storage</span>
+      <span class="tag accent">vercel:runtime-cache</span>
+      <span class="tag accent">vercel:chat-sdk</span>
+      <span class="tag accent">vercel:shadcn</span>
+      <span class="tag accent">vercel:deploy</span>
+      <span class="tag accent">vercel:bootstrap</span>
+    </div>
+
+    <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px; color: var(--text-primary);">Design + Frontend Skills</h3>
+    <div class="tag-row" style="margin-bottom: 32px;">
+      <span class="tag">design-system-starter</span>
+      <span class="tag">frontend-design</span>
+      <span class="tag">elegant-design</span>
+      <span class="tag">react-dev</span>
+      <span class="tag">browser-qa</span>
+      <span class="tag">claude-api</span>
+      <span class="tag">humanizer</span>
+      <span class="tag">professional-communication</span>
+      <span class="tag">pptx</span>
+    </div>
+
+    <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px; color: var(--text-primary);">MCPs in Use</h3>
+    <div class="tag-row" style="margin-bottom: 32px;">
+      <span class="tag accent">GitHub MCP</span>
+      <span class="tag accent">Figma MCP</span>
+    </div>
+
+    <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px; color: var(--text-primary);">Nutanix Project Anchors</h3>
+    <div class="tag-row">
+      <span class="tag">Enterprise Dashboard Design System</span>
+      <span class="tag">Pulse SSOT (NAI · NC2 · NCI)</span>
+      <span class="tag">Jira SSOT</span>
+      <span class="tag">RevOps Sales SSOT</span>
+      <span class="tag">Balanced Scorecard 50+ KPIs</span>
+      <span class="tag">Microsoft Fabric (Marketing · Procurement)</span>
+      <span class="tag">CX OKR Dashboard</span>
+    </div>
+  </section>
+
+  <section class="section" id="next">
+    <div class="section-header">
+      <div class="section-eyebrow">Part I · Execution</div>
+      <h2 class="section-title">Next Actions</h2>
+      <p class="section-desc">What to do right now to get Phase 1 Day 1 underway.</p>
+    </div>
+
+    <div class="flow-container">
+      <div class="flow-steps">
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <div class="flow-content">
+            <h4>Install pnpm globally</h4>
+            <p><span class="mono hl-accent">npm install -g pnpm</span></p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <div class="flow-content">
+            <h4>Create GitHub repo</h4>
+            <p>Public repo <span class="mono hl-accent">rishigundla/ai-portfolio</span> via GitHub MCP.</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">3</div>
+          <div class="flow-content">
+            <h4>Scaffold monorepo locally</h4>
+            <p>At <span class="mono hl-accent">C:\Users\Rishi\Documents\ai-portfolio</span>. Use <span class="mono">pnpm dlx create-turbo@latest</span>.</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <div class="flow-content">
+            <h4>Configure + commit + push</h4>
+            <p>pnpm-workspace.yaml, turbo.json, tsconfig, .gitignore, Prettier, ESLint. Initial commit to main, push to GitHub.</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">5</div>
+          <div class="flow-content">
+            <h4>Verify</h4>
+            <p>GitHub shows scaffolded structure. Local <span class="mono">pnpm dev</span> runs.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Master plan <span class="mono">v3.0</span> · Last updated <span class="mono" id="footer-date">2026-04-24</span> · Rishikesh Gundla · Senior BI Engineer @ Nutanix</p>
+    <p style="margin-top: 8px;">Canonical source: <span class="mono">ai-portfolio-projects-master.md</span> · This HTML is a visual mirror updated in lockstep.</p>
+  </footer>
+
+  <script>
+    // ============================================================
+    // PLAN DATA — single source for both MD and HTML rendering
+    // ============================================================
+    const planData = {
+      currentStatus: {
+        phase: "Phase 1 — Project 1 (Dashboard Factory)",
+        week: "Week 1 of 14",
+        day: "Day 1 (not yet started)",
+        progress: { done: 0, total: 98 },
+        status: "Pre-flight — ready to kick off Week 1 Day 1",
+        nextAction: "Install pnpm, create GitHub repo rishigundla/ai-portfolio, scaffold monorepo",
+        blockers: "None"
+      },
+
+      phases: [
+        { id: 0, name: "Pre-flight Setup", weeks: "—", totalDays: 5, done: 0, status: "not-started", code: "P0" },
+        { id: 1, name: "Project 1 · Dashboard Factory", weeks: "1-4", totalDays: 28, done: 0, status: "not-started", code: "P1" },
+        { id: 2, name: "Project 2 · Narrative Generator", weeks: "5-6", totalDays: 14, done: 0, status: "not-started", code: "P2" },
+        { id: 3, name: "Project 4 · Sprint Intelligence", weeks: "7-8", totalDays: 14, done: 0, status: "not-started", code: "P3" },
+        { id: 4, name: "Project 3 · Anomaly Alerting", weeks: "9-11", totalDays: 21, done: 0, status: "not-started", code: "P4" },
+        { id: 5, name: "Project 5 · Pipeline Self-Healer", weeks: "12-14", totalDays: 21, done: 0, status: "not-started", code: "P5" }
+      ],
+
+      activity: [
+        {
+          date: "2026-04-24",
+          title: "Plan finalized (v3)",
+          desc: "Locked all 5 projects, final architecture (Vercel + pre-generated fixtures), 14-week build sequence, GitHub repo name, monorepo tool (pnpm + turborepo), deployment strategy, automation design.",
+          next: "Week 1 Day 1 — install pnpm, create GitHub repo, scaffold monorepo"
+        }
+      ],
+
+      projects: [
+        {
+          num: "01",
+          title: "Instant Analytics Dashboard Factory",
+          pitch: "Gallery of curated sample datasets. Pick one, watch Claude profile it via streaming animation, get a fully designed interactive dashboard. Plus power-user wireframe mode for hi-fi mockups.",
+          scope: "4 weeks · Phase 1 · Weeks 1-4",
+          demoItems: [
+            "6 curated sample datasets (RevOps, Marketing, Pulse, Supply Chain, Financial, Customer)",
+            "Pre-generated profiling + dashboard config per dataset",
+            "3 wireframe templates (Executive, Operational, Exploratory)"
+          ],
+          stackItems: ["Next.js 16", "Vercel", "Recharts", "@react-pdf/renderer"],
+          tags: ["AI", "Design System", "React", "Claude"]
+        },
+        {
+          num: "02",
+          title: "Dashboard-to-Deck Narrative Generator",
+          pitch: "Gallery of sample dashboards. Pick one, see PDF preview, watch Claude generate narrative, download polished PPTX ready for the stakeholder meeting.",
+          scope: "2 weeks · Phase 2 · Weeks 5-6",
+          demoItems: [
+            "4-6 sample dashboards (ACV/GRR Weekly, Marketing Weekly, Balanced Scorecard, CX OKR)",
+            "Pre-generated narrative + talking points per dashboard",
+            "Pre-generated PPTX files in Vercel Blob"
+          ],
+          stackItems: ["Next.js 16", "pptxgenjs", "pdfjs-dist", "Vercel Blob"],
+          tags: ["AI", "PDF", "Slide Gen", "Claude"]
+        },
+        {
+          num: "03",
+          title: "Smart Metric Anomaly Alerting",
+          pitch: "Dashboard of synthetic Pulse / RevOps / CX historical data. Gallery of curated anomaly scenarios. Click one → streaming AI root cause explanation with correlation analysis.",
+          scope: "3 weeks · Phase 4 · Weeks 9-11",
+          demoItems: [
+            "Historical data for NAI/NC2/NCI Pulse, RevOps, CX",
+            "6-8 curated anomaly scenarios with pre-generated RCAs",
+            "Simulated MLflow-style trace view"
+          ],
+          stackItems: ["Next.js 16", "Recharts", "Vercel KV"],
+          tags: ["AI", "Observability", "RCA", "Claude"]
+        },
+        {
+          num: "04",
+          title: "AI Sprint Intelligence Dashboard",
+          pitch: "Dropdown for synthetic sprints. Pick one → dashboard populates with team + individual KPIs → streaming AI meeting brief appears with workload rebalancing recommendations.",
+          scope: "2 weeks · Phase 3 · Weeks 7-8",
+          demoItems: [
+            "3-4 synthetic sprint weeks of Jira-SSOT-style data",
+            "Pre-generated AI meeting briefs per sprint",
+            "Burndown, velocity, cycle time, scope creep, carryover"
+          ],
+          stackItems: ["Next.js 16", "Static JSON", "Recharts"],
+          tags: ["AI", "Jira", "Sprint Analytics", "Claude"]
+        },
+        {
+          num: "05",
+          title: "AI Pipeline Debugger & Self-Healer",
+          pitch: "Gallery of curated PySpark Medallion failures. Pick one → streaming diagnosis → generated PySpark patch → mock Slack approve / reject UI.",
+          scope: "3 weeks · Phase 5 · Weeks 12-14",
+          demoItems: [
+            "8 failure scenarios based on real Nutanix Q14 + Q17 stories",
+            "Pre-generated diagnoses + PySpark patches",
+            "Mock Slack approval UI with interactive buttons",
+            "MTTR trend chart, incident history timeline"
+          ],
+          stackItems: ["Next.js 16", "Shiki", "Mock Slack UI"],
+          tags: ["AI", "PySpark", "Data Eng", "Databricks", "Claude"]
+        }
+      ],
+
+      decisions: [
+        { label: "Design System", q: "Source of design tokens", a: "Extracted from portfolio-site tokens (teal #2dd4bf, Space Grotesk, JetBrains Mono, Source Serif 4, dark theme). Packaged as @rishi/design-system." },
+        { label: "Repo", q: "GitHub repository", a: "Single public monorepo rishigundla/ai-portfolio." },
+        { label: "Monorepo Tool", q: "Package + build tooling", a: "pnpm workspaces + turborepo. First-class Vercel integration, 3x faster installs, per-package build caching." },
+        { label: "Demo Data", q: "What data populates demos", a: "Anonymised Nutanix-style synthetic fixtures. Matches real domain patterns." },
+        { label: "Deployment", q: "Where projects are hosted", a: "All 5 on Vercel. Unified deploy, design, click-to-try experience." },
+        { label: "Runtime AI", q: "How AI responds in production", a: "Pre-generated JSON fixtures replayed via Vercel AI SDK streamText. No runtime API calls." },
+        { label: "Dev AI", q: "How fixtures are generated", a: "Claude Code (covered by Claude Max — zero API cost). Manual curation guarantees best-quality responses." },
+        { label: "Cost", q: "Monthly spend", a: "$0 ongoing. Vercel Hobby + Claude Max (existing) cover everything." },
+        { label: "Domains", q: "Custom domain or Vercel URLs", a: "Vercel-generated URLs. Zero DNS setup required." },
+        { label: "Video Demos", q: "Per-project walkthrough", a: "Yes — 90-120s Loom per project, embedded in case-study pages." },
+        { label: "Showcase", q: "How projects are visible", a: "Triple integration: monorepo + portfolio-site cards + case-study pages + resume bullet." },
+        { label: "Automation", q: "How portfolio + resume stay fresh", a: "GitHub Action fires on deploy → opens PRs on portfolio-site and resume-builder. Manual review and merge as safety net." }
+      ],
+
+      // Full 14-week day-by-day plan
+      weeksPlan: [
+        // ========== PHASE 0 ==========
+        {
+          phase: 0,
+          week: 0,
+          name: "Pre-flight Setup",
+          goal: "Tooling installed, GitHub repo created, ready to scaffold",
+          days: [
+            { num: "P0.1", weekday: "One-time", name: "Install pnpm", tasks: ["Install pnpm globally: npm install -g pnpm", "Verify pnpm version"] },
+            { num: "P0.2", weekday: "One-time", name: "Create GitHub repo", tasks: ["Create public repo rishigundla/ai-portfolio via GitHub MCP", "Set description + README"] },
+            { num: "P0.3", weekday: "One-time", name: "Verify tooling", tasks: ["Confirm Node 24+, npm, git ready (already verified)"] }
+          ]
+        },
+
+        // ========== PHASE 1 — PROJECT 1 ==========
+        {
+          phase: 1,
+          week: 1,
+          name: "Week 1 — Monorepo Foundation + Design System",
+          goal: "Design system package extracted and deployed as showcase site",
+          days: [
+            { num: "W1.D1", weekday: "Mon", name: "Monorepo Scaffolding", tasks: ["Install pnpm globally", "Create GitHub repo rishigundla/ai-portfolio via MCP", "Create local directory at Documents/ai-portfolio", "Scaffold with pnpm dlx create-turbo@latest . --skip-install", "Clean out default apps from starter", "Configure pnpm-workspace.yaml, turbo.json, root package.json", "Add .gitignore, .prettierrc, .eslintrc.json, root tsconfig.json", "Run pnpm install", "Initial commit + push to GitHub", "Copy master plan to docs/master-plan.md in repo"] },
+            { num: "W1.D2", weekday: "Tue", name: "Extract Portfolio-Site Tokens", tasks: ["Create packages/design-system/ with package.json + tsconfig", "Reference portfolio-site tailwind.config.js tokens", "Create src/tokens/colors.css (accent, base scale, surface, text)", "Create src/tokens/typography.css (Space Grotesk, JetBrains Mono, Source Serif 4)", "Create src/tokens/spacing.css, motion.css, shadows.css", "Configure Tailwind v4 in packages/design-system/tailwind.config.ts", "Export tokens barrel via src/tokens/index.ts"] },
+            { num: "W1.D3", weekday: "Wed", name: "Install shadcn Primitives", tasks: ["Run pnpm dlx shadcn@latest init in design-system", "Install Button, Dialog, Tabs, Tooltip, Popover, Card, Input, Select", "Install Toast, Command, Combobox, Badge, Avatar", "Theme all primitives to match token system", "Visual-test each primitive with teal accent and Space Grotesk"] },
+            { num: "W1.D4", weekday: "Thu", name: "AI-Specific Components", tasks: ["Build KpiCard (value, delta, sparkline, states)", "Build ChartCard (Recharts wrapper with title, legend, states)", "Build AiNarrativeBlock (streaming markdown with cursor)", "Build FilterBar (date range, segment, dimension)", "Build DataGrid (sortable, filterable, paginated)", "Export Framer Motion variants (fadeIn, slideUp, pulseGlow, float, gridFlow)"] },
+            { num: "W1.D5", weekday: "Fri", name: "Design System Showcase App", tasks: ["Create apps/design-system-docs/ as Next.js 16 project", "Install @rishi/design-system from workspace", "Create page per component showing all variants", "Deploy to Vercel and note URL", "Add README with install + usage instructions"] },
+            { num: "W1.D6", weekday: "Sat", name: "Build ai-core Package", tasks: ["Create packages/ai-core/ with package.json + tsconfig", "Install ai (Vercel AI SDK) and @anthropic-ai/sdk", "Build src/replay.ts (chunks fixture JSON at ~40 tokens/sec)", "Build src/generate.ts (Anthropic SDK client for dev-time generation)", "Define types: Fixture, Scenario, StreamConfig, AiNarrative", "Test with a fixture — verify streaming works"] },
+            { num: "W1.D7", weekday: "Sun", name: "Week 1 Polish", tasks: ["README per package (design-system, ai-core)", "Update monorepo root README with architecture diagram", "Fix any visual bugs in design-system-docs", "Tag Week 1 complete"] }
+          ],
+          deliverables: ["Monorepo live on GitHub", "@rishi/design-system + @rishi/ai-core working", "design-system-docs site deployed on Vercel"]
+        },
+        {
+          phase: 1,
+          week: 2,
+          name: "Week 2 — Project 1 Core: Gallery + Profiling Animation",
+          goal: "User picks sample dataset → watches streaming Claude profiling animation",
+          days: [
+            { num: "W2.D1", weekday: "Mon", name: "App Scaffolding", tasks: ["Create apps/dashboard-factory/ as Next.js 16 App Router", "Install @rishi/design-system + @rishi/ai-core", "Tailwind config extends design system", "Root layout with dark theme", "Landing page with hero + Browse CTA"] },
+            { num: "W2.D2", weekday: "Tue", name: "Sample Dataset Fixtures", tasks: ["Create fixtures/dashboard-factory/datasets/ directory", "Build revops-sales.json (50 rows)", "Build marketing-campaigns.json", "Build pulse-telemetry.json", "Build supply-chain.json", "Build financial-complaints.json", "Build customer-demographics.json", "Add metadata per dataset (domain, color token, thumbnail)"] },
+            { num: "W2.D3", weekday: "Wed", name: "Dataset Gallery UI", tasks: ["Build / route with gallery grid of 6 cards", "Card shows: thumbnail, title, domain badge, row count, tags", "Hover state (lift + glow)", "Click to select → navigate to /generate/[slug]"] },
+            { num: "W2.D4", weekday: "Thu", name: "Streaming Profiling Page", tasks: ["Build /generate/[slug] route", "Top: dataset preview (first 10 rows)", "Middle: Analyzing your data with Claude streaming panel", "Wire @rishi/ai-core replay to stream profiling fixture", "Progress indicators per step (Column → Domain → KPI → Chart)", "Generate Dashboard button appears on completion"] },
+            { num: "W2.D5", weekday: "Fri", name: "Generate Profiling Fixtures", tasks: ["Use Claude Code to generate profiling.json per dataset", "Each fixture has column types, domain, KPI recommendations, chart recommendations", "Save to fixtures/dashboard-factory/{slug}/profiling.json", "Verify all 6 stream correctly"] },
+            { num: "W2.D6", weekday: "Sat", name: "State + Navigation", tasks: ["Zustand store for selected dataset + profiling result", "Navigation guards", "Back button flow", "URL state serialization for shareable links"] },
+            { num: "W2.D7", weekday: "Sun", name: "Responsive Polish", tasks: ["Test at 320px, 480px, 768px, 1024px, 1440px, 1920px", "Mobile hamburger nav + touch targets", "Tag Week 2 complete"] }
+          ],
+          deliverables: ["Dashboard Factory app scaffolded", "6 working pick dataset → profiling flows", "Streaming animation validated"]
+        },
+        {
+          phase: 1,
+          week: 3,
+          name: "Week 3 — Project 1 Dashboard Rendering",
+          goal: "Full interactive dashboard with filters, drill-downs, PDF export, wireframe mode",
+          days: [
+            { num: "W3.D1", weekday: "Mon", name: "Dashboard Layout Generator", tasks: ["Build /dashboard/[slug] route", "Read profiling.json to determine KPIs + charts", "Render KpiCard components per recommended KPI", "Render ChartCard containers per recommended chart", "12-col responsive grid layout"] },
+            { num: "W3.D2", weekday: "Tue", name: "Chart Rendering", tasks: ["Integrate Recharts (or Tremor)", "Support bar, line, donut, heatmap, scatter", "Theme all charts to design system tokens", "Wire actual dataset rows to chart data"] },
+            { num: "W3.D3", weekday: "Wed", name: "Filters + Interactivity", tasks: ["FilterBar on dashboard: date range, segment, dimension", "Filters apply reactively to all KPIs + charts", "Click a chart → drill-down modal", "Empty state when no data"] },
+            { num: "W3.D4", weekday: "Thu", name: "PDF Export", tasks: ["Install @react-pdf/renderer", "Build branded PDF template matching design system", "Export PDF button downloads dashboard", "Include KPI values + chart images + footer"] },
+            { num: "W3.D5", weekday: "Fri", name: "Wireframe Mode", tasks: ["Build /wireframe/[template] route", "Gallery with 3 templates: Executive, Operational, Exploratory", "Each template shows static Figma-style mockup", "Download as PNG or PDF"] },
+            { num: "W3.D6", weekday: "Sat", name: "States + Error Handling", tasks: ["Skeleton loaders for dashboard", "Empty state for no data match", "Error boundary for Recharts failures", "Toast notifications for user actions"] },
+            { num: "W3.D7", weekday: "Sun", name: "End-to-End QA", tasks: ["Test all 6 datasets through full flow", "Test all filters", "Test wireframe templates", "Fix bugs", "Tag Week 3 complete"] }
+          ],
+          deliverables: ["All 6 datasets render as full interactive dashboards", "Filters, drill-downs, PDF export working", "Wireframe mode with 3 templates", "Mobile responsive"]
+        },
+        {
+          phase: 1,
+          week: 4,
+          name: "Week 4 — Project 1 Polish, Deploy, Automation Setup",
+          goal: "Live on production, Loom published, automation infrastructure deployed",
+          days: [
+            { num: "W4.D1", weekday: "Mon", name: "Production Polish", tasks: ["Lighthouse audit (target 90+)", "SEO meta tags + Open Graph images", "Favicon", "404 + error pages", "Social preview image"] },
+            { num: "W4.D2", weekday: "Tue", name: "Production Deploy", tasks: ["Create Vercel project ai-dashboard-factory", "Configure turborepo build settings", "Deploy to production", "Smoke test all 6 flows on prod URL", "Author apps/dashboard-factory/portfolio.meta.json"] },
+            { num: "W4.D3", weekday: "Wed", name: "Loom Video", tasks: ["Write 90s script", "Record at 1440px on clean browser", "Edit: trim, captions, end card", "Upload YouTube unlisted", "Update portfolio.meta.json with loomUrl"] },
+            { num: "W4.D4", weekday: "Thu", name: "Case Study Page", tasks: ["Create docs/case-studies/dashboard-factory.mdx", "Write hero, problem, approach, tech stack, impact sections", "Write Production Architecture Mermaid diagram", "Write Demo Architecture Mermaid diagram", "Add Loom embed, live link, GitHub link"] },
+            { num: "W4.D5", weekday: "Fri", name: "Automation Infrastructure", tasks: ["Push rishigundla/resume-builder to GitHub via MCP", "Generate GitHub PAT with repo scope", "Add PORTFOLIO_SYNC_PAT secret", "Build scripts/sync-deployed.ts", "Build .github/workflows/sync-portfolio.yml", "Dry-run sync locally"] },
+            { num: "W4.D6", weekday: "Sat", name: "Live Automation Run", tasks: ["Trigger sync-portfolio workflow manually", "Verify PR opens on portfolio-site", "Verify PR opens on resume-builder", "Review + merge both PRs", "Portfolio-site auto-redeploys", "Regenerate resume PDF"] },
+            { num: "W4.D7", weekday: "Sun", name: "Phase 1 Wrap", tasks: ["Buffer day — fix bugs", "Update master plan with Phase 1 lessons", "Tag Phase 1 complete", "Review Phase 2 Week 5 plan"] }
+          ],
+          deliverables: ["Project 1 fully live", "90s Loom published", "Case study page on portfolio-site", "Automation working for future projects", "Portfolio card + resume bullet added"]
+        },
+
+        // ========== PHASE 2 — PROJECT 2 ==========
+        {
+          phase: 2,
+          week: 5,
+          name: "Week 5 — Project 2 Core Build",
+          goal: "User picks sample dashboard → streaming narrative → downloads PPTX",
+          days: [
+            { num: "W5.D1", weekday: "Mon", name: "App Scaffold", tasks: ["Create apps/narrative-generator/ Next.js 16", "Install design-system + ai-core", "Landing page with Browse sample dashboards CTA"] },
+            { num: "W5.D2", weekday: "Tue", name: "Sample Dashboard Fixtures", tasks: ["Create fixtures/narrative-generator/ directory", "Build acv-grr-weekly.json", "Build marketing-weekly.json", "Build balanced-scorecard.json (flagship)", "Build cx-okr-quarterly.json", "Include PDF preview image + KPIs per fixture"] },
+            { num: "W5.D3", weekday: "Wed", name: "Gallery + PDF Preview", tasks: ["Gallery grid with 4 dashboard cards", "Click → /generate/[slug]", "Left panel: PDF preview via pdfjs-dist", "Right panel: narrative placeholder"] },
+            { num: "W5.D4", weekday: "Thu", name: "Generate Narrative Fixtures", tasks: ["Use Claude Code to generate narrative JSON per dashboard", "Each: exec summary, per-KPI narratives, risks, opportunities, talking points", "Save to fixtures/narrative-generator/{slug}/narrative.json"] },
+            { num: "W5.D5", weekday: "Fri", name: "Streaming Narrative Panel", tasks: ["Build right-panel streaming display", "Wire ai-core replay to stream narrative", "Progress indicators: Parsing → Extracting → Generating → Talking Points"] },
+            { num: "W5.D6", weekday: "Sat", name: "Slide Deck Generation", tasks: ["Install pptxgenjs", "Write slide template matching design system", "Pre-generate PPTX for each dashboard", "Upload to Vercel Blob"] },
+            { num: "W5.D7", weekday: "Sun", name: "Download Flow", tasks: ["Download Deck button fetches from Vercel Blob", "Thumbnail preview of deck", "Simulated delivery UI: Email, Slack, Drive"] }
+          ],
+          deliverables: ["Gallery + streaming narrative for all 4 dashboards", "Pre-generated PPTX in Vercel Blob", "Download flow working"]
+        },
+        {
+          phase: 2,
+          week: 6,
+          name: "Week 6 — Project 2 Polish + Deploy",
+          goal: "Project 2 live, automation fires for Project 2",
+          days: [
+            { num: "W6.D1", weekday: "Mon", name: "Delivery Simulation", tasks: ["Mock Send to Slack success toast", "Mock Email delivery", "Mock Save to Drive"] },
+            { num: "W6.D2", weekday: "Tue", name: "States + Error Handling", tasks: ["Skeleton loaders for PDF preview", "Error boundary for PDF failures", "Toast notifications"] },
+            { num: "W6.D3", weekday: "Wed", name: "Responsive Polish", tasks: ["Test all breakpoints", "Mobile: collapse PDF below narrative", "Fix layout bugs"] },
+            { num: "W6.D4", weekday: "Thu", name: "Lighthouse + SEO", tasks: ["90+ Lighthouse audit", "Meta tags + Open Graph", "Social preview image"] },
+            { num: "W6.D5", weekday: "Fri", name: "Deploy + Loom", tasks: ["Vercel production deploy", "Author portfolio.meta.json", "Record 90s Loom"] },
+            { num: "W6.D6", weekday: "Sat", name: "Case Study + Automation", tasks: ["Write case study MDX", "Commit portfolio.meta.json with deployedAt → triggers automation", "Review + merge PRs"] },
+            { num: "W6.D7", weekday: "Sun", name: "Phase 2 Wrap", tasks: ["Buffer day", "Lessons learned", "Prep Phase 3"] }
+          ],
+          deliverables: ["Project 2 live", "Loom + case study published", "Portfolio + resume updated"]
+        },
+
+        // ========== PHASE 3 — PROJECT 4 ==========
+        {
+          phase: 3,
+          week: 7,
+          name: "Week 7 — Project 4 Core Build",
+          goal: "User picks synthetic sprint → KPIs + streaming meeting brief",
+          days: [
+            { num: "W7.D1", weekday: "Mon", name: "App Scaffold + Sprint Data", tasks: ["Create apps/sprint-intelligence/", "Author 4 synthetic sprint JSONs", "Each: 20-30 tickets, status history, 8 engineers"] },
+            { num: "W7.D2", weekday: "Tue", name: "Sprint Selector + Shell", tasks: ["Dropdown to select sprint (42/43/44/45)", "Dashboard shell: brief panel (top), KPIs (middle), tabs (bottom)"] },
+            { num: "W7.D3", weekday: "Wed", name: "Team-Level KPIs", tasks: ["Sprint Burndown chart", "Velocity vs 4-sprint baseline", "Status Distribution donut", "Blocked Tickets count + aging"] },
+            { num: "W7.D4", weekday: "Thu", name: "More KPIs + Trends", tasks: ["Cycle Time trend line", "Throughput per week", "Scope Creep tracker", "Carryover Rate"] },
+            { num: "W7.D5", weekday: "Fri", name: "Individual Deep-Dive Tabs", tasks: ["Tab per engineer", "Workload Score (weighted priority)", "Completion Rate", "Personal vs team cycle time", "Review bottleneck"] },
+            { num: "W7.D6", weekday: "Sat", name: "Generate Meeting Brief Fixtures", tasks: ["Use Claude Code to generate brief per sprint", "Each: exec summary, highlights, watch list, recommendations, talking points"] },
+            { num: "W7.D7", weekday: "Sun", name: "Streaming Brief Panel", tasks: ["Top panel streams brief on sprint load", "Regenerate button to replay streaming"] }
+          ],
+          deliverables: ["4 sprints with full KPI breakdowns + AI briefs"]
+        },
+        {
+          phase: 3,
+          week: 8,
+          name: "Week 8 — Project 4 Polish + Deploy",
+          goal: "Project 4 live, automation fires",
+          days: [
+            { num: "W8.D1", weekday: "Mon", name: "Interactions + Drill-Downs", tasks: ["Click engineer name → filter to that person", "Click blocker → show blocker history"] },
+            { num: "W8.D2", weekday: "Tue", name: "Responsive Polish", tasks: ["Breakpoint testing", "Mobile: collapse deep-dive tabs to accordion"] },
+            { num: "W8.D3", weekday: "Wed", name: "States + Errors", tasks: ["Skeleton states", "Error boundaries"] },
+            { num: "W8.D4", weekday: "Thu", name: "Lighthouse + SEO", tasks: ["90+ audit"] },
+            { num: "W8.D5", weekday: "Fri", name: "Deploy + Loom", tasks: ["Vercel production deploy", "portfolio.meta.json", "Record 90s Loom"] },
+            { num: "W8.D6", weekday: "Sat", name: "Case Study + Automation", tasks: ["Write case study MDX", "Trigger automation, merge PRs"] },
+            { num: "W8.D7", weekday: "Sun", name: "Phase 3 Wrap", tasks: ["Buffer", "Lessons learned", "Prep Phase 4"] }
+          ],
+          deliverables: ["Project 4 live", "Loom + case study", "Automation fires"]
+        },
+
+        // ========== PHASE 4 — PROJECT 3 ==========
+        {
+          phase: 4,
+          week: 9,
+          name: "Week 9 — Project 3 Core Build",
+          goal: "Synthetic historical data + anomaly gallery + streaming RCA",
+          days: [
+            { num: "W9.D1", weekday: "Mon", name: "App Scaffold + Historical Data", tasks: ["Create apps/anomaly-alerting/", "Author NAI Pulse historical data", "Author NC2 Pulse data", "Author NCI Pulse data", "Author RevOps historical data", "Author CX historical data"] },
+            { num: "W9.D2", weekday: "Tue", name: "Dashboard with Time-Series", tasks: ["Dashboard route with time-series per KPI", "30-day rolling mean bands overlaid", "Date range selector"] },
+            { num: "W9.D3", weekday: "Wed", name: "Anomaly Scenario Gallery", tasks: ["Gallery with 6-8 curated anomalies", "Each card: metric, deviation, Z-score, domain", "Click → /scenario/[slug]"] },
+            { num: "W9.D4", weekday: "Thu", name: "Baseline Visualization", tasks: ["Expected vs actual chart per anomaly", "Highlight deviation point", "Related-metric time-series alongside"] },
+            { num: "W9.D5", weekday: "Fri", name: "Generate RCA Fixtures", tasks: ["Use Claude Code per scenario", "Each: hypothesis, correlation, confidence, action"] },
+            { num: "W9.D6", weekday: "Sat", name: "Streaming RCA Display", tasks: ["Right panel streams RCA", "Confidence badge (high/medium/low)", "Suggested Action card"] },
+            { num: "W9.D7", weekday: "Sun", name: "Alert List + Severity", tasks: ["Sidebar with recent alerts", "SEV1/SEV2/SEV3 routing", "Timestamp + ack state"] }
+          ],
+          deliverables: ["Historical dashboard + 6-8 working scenarios"]
+        },
+        {
+          phase: 4,
+          week: 10,
+          name: "Week 10 — Project 3 Expanded Features",
+          goal: "Richer visualizations + simulated infrastructure views",
+          days: [
+            { num: "W10.D1", weekday: "Mon", name: "Confidence Score UI", tasks: ["Visual gauge 0-100%", "Breakdown: how calculated", "Risk-tolerance slider"] },
+            { num: "W10.D2", weekday: "Tue", name: "Recommended Action Flow", tasks: ["Run Playbook button", "Mock action execution", "Action history log"] },
+            { num: "W10.D3", weekday: "Wed", name: "Historical Archive", tasks: ["Table of past anomalies with status", "Filter by category, severity, date"] },
+            { num: "W10.D4", weekday: "Thu", name: "Simulated Deployment Log", tasks: ["Mock deployments timeline", "Correlation between deploys and anomalies"] },
+            { num: "W10.D5", weekday: "Fri", name: "MLflow-Style Trace View", tasks: ["Per-RCA trace: inputs → reasoning → output", "Simulated MLflow aesthetic"] },
+            { num: "W10.D6", weekday: "Sat", name: "Architecture Diagrams", tasks: ["Production Mermaid (Databricks + UC + MLflow)", "Demo Mermaid (Vercel + JSON)"] },
+            { num: "W10.D7", weekday: "Sun", name: "Mobile Responsive", tasks: ["Breakpoint polish"] }
+          ],
+          deliverables: ["Rich anomaly exploration UX", "All simulated infrastructure views"]
+        },
+        {
+          phase: 4,
+          week: 11,
+          name: "Week 11 — Project 3 Polish + Deploy",
+          goal: "Project 3 live, automation fires",
+          days: [
+            { num: "W11.D1", weekday: "Mon", name: "Lighthouse + SEO", tasks: ["90+ audit", "Meta tags"] },
+            { num: "W11.D2", weekday: "Tue", name: "Deploy", tasks: ["Vercel production", "portfolio.meta.json"] },
+            { num: "W11.D3", weekday: "Wed", name: "Loom", tasks: ["Record 90s video"] },
+            { num: "W11.D4", weekday: "Thu", name: "Case Study", tasks: ["MDX with both architecture diagrams"] },
+            { num: "W11.D5", weekday: "Fri", name: "Automation Sync", tasks: ["Trigger workflow", "Review + merge PRs"] },
+            { num: "W11.D6", weekday: "Sat", name: "Documentation", tasks: ["App README", "Add to monorepo README"] },
+            { num: "W11.D7", weekday: "Sun", name: "Phase 4 Wrap", tasks: ["Buffer", "Lessons", "Prep Phase 5"] }
+          ],
+          deliverables: ["Project 3 live", "Loom + case study", "Automation fires"]
+        },
+
+        // ========== PHASE 5 — PROJECT 5 ==========
+        {
+          phase: 5,
+          week: 12,
+          name: "Week 12 — Project 5 Core Build",
+          goal: "Failure gallery + streaming diagnosis + PySpark patch display",
+          days: [
+            { num: "W12.D1", weekday: "Mon", name: "App Scaffold + Scenarios", tasks: ["Create apps/pipeline-healer/", "SCHEMA_DRIFT (Informatica rename — Q14)", "NULL_EXPLOSION", "DATA_SKEW (partition imbalance — Q17)", "TYPE_MISMATCH", "RESOURCE_LIMIT (OOM)", "LOGIC_ERROR", "DEPENDENCY_FAIL", "FILE_CORRUPT"] },
+            { num: "W12.D2", weekday: "Tue", name: "Scenario Gallery", tasks: ["Gallery with 8 scenario cards", "Card shows category, pipeline, timestamp, severity", "Click → /scenario/[slug]"] },
+            { num: "W12.D3", weekday: "Wed", name: "Failure Detail View", tasks: ["Mock Spark driver logs (highlighted)", "Failing notebook code snippet", "Run history last 10 runs"] },
+            { num: "W12.D4", weekday: "Thu", name: "Schema Diff Viz", tasks: ["Visual diff of schema (today vs last successful)", "Added/removed/renamed/type-changed highlighted"] },
+            { num: "W12.D5", weekday: "Fri", name: "Generate Diagnosis Fixtures", tasks: ["Use Claude Code per scenario", "Each: root cause, PySpark patch, confidence, risk"] },
+            { num: "W12.D6", weekday: "Sat", name: "Streaming Diagnosis Panel", tasks: ["Stream diagnosis text", "Category badge", "Confidence score display"] },
+            { num: "W12.D7", weekday: "Sun", name: "PySpark Patch Display", tasks: ["Syntax-highlighted code with Shiki", "Before/after diff view", "Copy to clipboard"] }
+          ],
+          deliverables: ["8 scenarios with full diagnosis + patch flows"]
+        },
+        {
+          phase: 5,
+          week: 13,
+          name: "Week 13 — Project 5 Interactive Demo Features",
+          goal: "Simulated approval flow + historical dashboards",
+          days: [
+            { num: "W13.D1", weekday: "Mon", name: "Sample Validation UI", tasks: ["Run Sample Test button simulates 100-row patch", "Progress indicator", "Success/failure result"] },
+            { num: "W13.D2", weekday: "Tue", name: "Mock Slack Approval", tasks: ["Slack-styled message preview", "Approve / Reject / Escalate buttons", "Simulated response"] },
+            { num: "W13.D3", weekday: "Wed", name: "Incident History Timeline", tasks: ["Table of past incidents", "Filter by category, pipeline, auto-healed", "Click to view details"] },
+            { num: "W13.D4", weekday: "Thu", name: "MTTR Trend Chart", tasks: ["Weekly MTTR line chart", "Auto-heal rate % over time", "Manual vs auto resolution comparison"] },
+            { num: "W13.D5", weekday: "Fri", name: "Architecture Diagrams", tasks: ["Production Mermaid (Databricks Agent Bricks + MLflow)", "Demo Mermaid (Vercel + JSON)"] },
+            { num: "W13.D6", weekday: "Sat", name: "Per-Category Breakdown", tasks: ["Dashboard tab with category frequency", "Most common root causes per pipeline"] },
+            { num: "W13.D7", weekday: "Sun", name: "Mobile Responsive", tasks: ["Breakpoint polish"] }
+          ],
+          deliverables: ["Complete interactive demo experience", "All simulated infrastructure views"]
+        },
+        {
+          phase: 5,
+          week: 14,
+          name: "Week 14 — Project 5 Polish + Portfolio Wrap",
+          goal: "Project 5 live, all 5 projects polished, final portfolio review",
+          days: [
+            { num: "W14.D1", weekday: "Mon", name: "Lighthouse + SEO", tasks: ["90+ audit"] },
+            { num: "W14.D2", weekday: "Tue", name: "Deploy", tasks: ["Vercel production", "portfolio.meta.json"] },
+            { num: "W14.D3", weekday: "Wed", name: "Loom", tasks: ["Record 90s video"] },
+            { num: "W14.D4", weekday: "Thu", name: "Case Study + Automation", tasks: ["MDX", "Trigger sync, merge PRs"] },
+            { num: "W14.D5", weekday: "Fri", name: "Final Portfolio Review", tasks: ["Click-test all 5 deployed apps", "Verify all cards on portfolio-site", "Verify resume PDF reflects 5 projects"] },
+            { num: "W14.D6", weekday: "Sat", name: "Monorepo Documentation", tasks: ["Update root README — all 5 live", "Portfolio overview video (optional 3-min tour)", "LinkedIn post draft"] },
+            { num: "W14.D7", weekday: "Sun", name: "Retrospective", tasks: ["Lessons learned document", "Plan next chapter (blog posts, talks)", "Tag Phase 5 complete — portfolio shipped"] }
+          ],
+          deliverables: ["All 5 AI projects live on Vercel", "Portfolio-site has 5 new cards", "Resume has new Personal Projects category", "Monorepo publicly showcases the whole system"]
+        }
+      ]
+    };
+
+    // ============================================================
+    // RENDERING
+    // ============================================================
+    const STORAGE_KEY = 'ai-portfolio-progress-v3';
+
+    function loadProgress() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      } catch { return {}; }
+    }
+
+    function saveProgress(state) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function taskId(weekNum, dayNum, taskIdx) {
+      return `${weekNum}-${dayNum}-${taskIdx}`;
+    }
+
+    // Compute current progress from checkbox state
+    function computeProgress() {
+      const progress = loadProgress();
+      const totals = { total: 0, done: 0 };
+      const perPhase = {};
+      let currentDay = null;
+
+      planData.weeksPlan.forEach(wk => {
+        if (!perPhase[wk.phase]) perPhase[wk.phase] = { total: 0, done: 0 };
+        wk.days.forEach(day => {
+          const dayTotal = day.tasks.length;
+          let dayDone = 0;
+          day.tasks.forEach((_, idx) => {
+            const id = taskId(wk.week, day.num, idx);
+            if (progress[id]) dayDone++;
+          });
+          totals.total += dayTotal;
+          totals.done += dayDone;
+          perPhase[wk.phase].total += dayTotal;
+          perPhase[wk.phase].done += dayDone;
+          if (!currentDay && dayDone < dayTotal) {
+            currentDay = { phase: wk.phase, week: wk.week, day: day.num, dayName: day.name };
+          }
+        });
+      });
+
+      return { totals, perPhase, currentDay };
+    }
+
+    // RENDER: Hero Stats
+    function renderHero() {
+      const { totals, currentDay } = computeProgress();
+      const pct = totals.total > 0 ? Math.round((totals.done / totals.total) * 100) : 0;
+      const phaseName = currentDay ? `Phase ${currentDay.phase}` : "Complete";
+      const weekName = currentDay ? `Week ${currentDay.week}` : "Done";
+      const dayName = currentDay ? currentDay.day : "—";
+
+      document.getElementById('hero-stats').innerHTML = `
+        <div class="stat-card">
+          <div class="stat-label">Current Phase</div>
+          <div class="stat-value">${phaseName}</div>
+          <div class="stat-meta">${currentDay ? planData.phases[currentDay.phase].name : "All phases complete"}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Current Week</div>
+          <div class="stat-value">${weekName}</div>
+          <div class="stat-meta">${currentDay ? dayName : "All weeks complete"}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Tasks Complete</div>
+          <div class="stat-value">${totals.done} / ${totals.total}</div>
+          <div class="stat-meta">${pct}% overall progress</div>
+        </div>
+      `;
+    }
+
+    // RENDER: Phase Grid (status overview)
+    function renderPhaseGrid() {
+      const { perPhase, currentDay } = computeProgress();
+      const container = document.getElementById('phase-grid');
+      container.innerHTML = planData.phases.map(phase => {
+        const pp = perPhase[phase.id] || { total: phase.totalDays, done: 0 };
+        const pct = pp.total > 0 ? Math.round((pp.done / pp.total) * 100) : 0;
+        const isActive = currentDay && currentDay.phase === phase.id;
+        let status = 'not-started';
+        let statusLabel = 'Not Started';
+        if (pp.done === pp.total && pp.total > 0) {
+          status = 'completed'; statusLabel = 'Completed';
+        } else if (pp.done > 0 || isActive) {
+          status = 'in-progress'; statusLabel = 'In Progress';
+        }
+
+        return `
+          <div class="phase-card ${isActive ? 'active' : ''}">
+            <div class="phase-card-header">
+              <span class="phase-num">${phase.code}</span>
+              <span class="phase-status ${status}">${statusLabel}</span>
+            </div>
+            <div class="phase-title">${phase.name}</div>
+            <div class="phase-meta">Weeks ${phase.weeks} · ${phase.totalDays} days</div>
+            <div class="progress-track">
+              <div class="progress-fill" style="width: ${pct}%"></div>
+            </div>
+            <div class="progress-count">
+              <span>${pp.done} / ${pp.total} tasks</span>
+              <span>${pct}%</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // RENDER: Status Table
+    function renderStatusTable() {
+      const { totals, currentDay } = computeProgress();
+      const s = planData.currentStatus;
+      const phaseDisplay = currentDay ? planData.phases[currentDay.phase].name : "All phases complete";
+      const weekDisplay = currentDay ? `Week ${currentDay.week} of 14` : "All weeks complete";
+      const dayDisplay = currentDay ? `${currentDay.day} — ${currentDay.dayName}` : "—";
+
+      document.getElementById('status-table').innerHTML = `
+        <div class="status-row"><span class="status-row-key">Current Phase</span><span class="status-row-value accent">${phaseDisplay}</span></div>
+        <div class="status-row"><span class="status-row-key">Current Week</span><span class="status-row-value">${weekDisplay}</span></div>
+        <div class="status-row"><span class="status-row-key">Current Day</span><span class="status-row-value">${dayDisplay}</span></div>
+        <div class="status-row"><span class="status-row-key">Overall Progress</span><span class="status-row-value">${totals.done} / ${totals.total} tasks (${totals.total > 0 ? Math.round(totals.done/totals.total*100) : 0}%)</span></div>
+        <div class="status-row"><span class="status-row-key">Status</span><span class="status-row-value">${s.status}</span></div>
+        <div class="status-row"><span class="status-row-key">Next Action</span><span class="status-row-value">${s.nextAction}</span></div>
+        <div class="status-row"><span class="status-row-key">Blockers</span><span class="status-row-value">${s.blockers}</span></div>
+      `;
+    }
+
+    // RENDER: Activity Log
+    function renderActivity() {
+      document.getElementById('activity-list').innerHTML = planData.activity.map(item => `
+        <div class="activity-item">
+          <div class="activity-meta">
+            <span class="activity-date">${item.date}</span>
+          </div>
+          <div class="activity-title">${item.title}</div>
+          <div class="activity-desc">${item.desc}</div>
+          ${item.next ? `<div class="activity-next"><strong>Next:</strong> ${item.next}</div>` : ''}
+        </div>
+      `).join('');
+    }
+
+    // RENDER: Projects Grid
+    function renderProjects() {
+      document.getElementById('projects-grid').innerHTML = planData.projects.map(p => `
+        <div class="project-card">
+          <div class="project-header">
+            <div class="project-num">${p.num}</div>
+            <div>
+              <div class="project-title">${p.title}</div>
+              <div class="project-scope">${p.scope}</div>
+            </div>
+          </div>
+          <div class="project-pitch">${p.pitch}</div>
+          <div class="project-section">
+            <div class="project-section-label">Demo Scope</div>
+            <ul class="project-list">
+              ${p.demoItems.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+          </div>
+          <div class="project-section">
+            <div class="project-section-label">Stack</div>
+            <div class="tag-row">
+              ${p.stackItems.map(t => `<span class="tag">${t}</span>`).join('')}
+            </div>
+          </div>
+          <div class="tag-row">
+            ${p.tags.map(t => `<span class="tag accent">${t}</span>`).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // RENDER: Decisions Grid
+    function renderDecisions() {
+      document.getElementById('decisions-grid').innerHTML = planData.decisions.map(d => `
+        <div class="decision-card">
+          <div class="decision-label">${d.label}</div>
+          <div class="decision-question">${d.q}</div>
+          <div class="decision-answer">${d.a}</div>
+        </div>
+      `).join('');
+    }
+
+    // RENDER: Plan (phases → weeks → days → tasks)
+    function renderPlan() {
+      const progress = loadProgress();
+      const { currentDay } = computeProgress();
+      const container = document.getElementById('plan-container');
+
+      // Group weeks by phase
+      const byPhase = {};
+      planData.weeksPlan.forEach(wk => {
+        if (!byPhase[wk.phase]) byPhase[wk.phase] = [];
+        byPhase[wk.phase].push(wk);
+      });
+
+      container.innerHTML = Object.keys(byPhase).map(phaseId => {
+        const phaseInfo = planData.phases[parseInt(phaseId)];
+        const weeks = byPhase[phaseId];
+        const isCurrentPhase = currentDay && currentDay.phase == phaseId;
+        const expanded = isCurrentPhase || phaseId == 0 || phaseId == 1;
+
+        let phaseTotalTasks = 0, phaseDoneTasks = 0;
+        weeks.forEach(w => w.days.forEach(d => {
+          phaseTotalTasks += d.tasks.length;
+          d.tasks.forEach((_, idx) => {
+            if (progress[taskId(w.week, d.num, idx)]) phaseDoneTasks++;
+          });
+        }));
+
+        const weeksHTML = weeks.map(wk => {
+          const isCurrentWeek = currentDay && currentDay.phase == phaseId && currentDay.week === wk.week;
+          const weekExpanded = isCurrentWeek || wk.week === 1 || wk.week === 0;
+
+          let weekTotalTasks = 0, weekDoneTasks = 0;
+          wk.days.forEach(d => {
+            weekTotalTasks += d.tasks.length;
+            d.tasks.forEach((_, idx) => {
+              if (progress[taskId(wk.week, d.num, idx)]) weekDoneTasks++;
+            });
+          });
+
+          const daysHTML = wk.days.map(day => {
+            const dayTotal = day.tasks.length;
+            let dayDone = 0;
+            day.tasks.forEach((_, idx) => {
+              if (progress[taskId(wk.week, day.num, idx)]) dayDone++;
+            });
+            let dayStatus = 'not-started', dayStatusLabel = 'To Do';
+            if (dayDone === dayTotal && dayTotal > 0) { dayStatus = 'completed'; dayStatusLabel = 'Done'; }
+            else if (dayDone > 0) { dayStatus = 'in-progress'; dayStatusLabel = 'In Progress'; }
+
+            return `
+              <div class="day-card ${dayStatus}">
+                <div class="day-header">
+                  <span class="day-num">${day.num} · ${day.weekday}</span>
+                  <span class="day-badge ${dayStatus}">${dayStatusLabel}</span>
+                </div>
+                <div class="day-title">${day.name}</div>
+                <ul class="task-list">
+                  ${day.tasks.map((task, idx) => {
+                    const id = taskId(wk.week, day.num, idx);
+                    const checked = progress[id] ? 'checked' : '';
+                    return `
+                      <li class="task-item ${checked}" data-task-id="${id}">
+                        <span class="task-checkbox"></span>
+                        <span class="task-text">${task}</span>
+                      </li>
+                    `;
+                  }).join('')}
+                </ul>
+              </div>
+            `;
+          }).join('');
+
+          return `
+            <div class="week-block ${weekExpanded ? 'expanded' : ''}">
+              <div class="week-header" onclick="toggleWeek(this)">
+                <div class="week-title-wrap">
+                  <span class="week-label">Week ${wk.week}</span>
+                  <span class="week-name">${wk.name.replace(/^Week \d+ — /, '')}</span>
+                </div>
+                <div style="display:flex; gap:16px; align-items:center;">
+                  <span class="mono" style="font-size: 12px; color: var(--text-muted);">${weekDoneTasks} / ${weekTotalTasks}</span>
+                  <span class="chevron">▶</span>
+                </div>
+              </div>
+              <div class="week-goal">Goal: ${wk.goal}</div>
+              <div class="week-body">
+                <div class="days-grid">${daysHTML}</div>
+                ${wk.deliverables ? `
+                  <div class="week-deliverables">
+                    <div class="week-deliverables-label">Week Deliverables</div>
+                    <ul>
+                      ${wk.deliverables.map(d => `<li>${d}</li>`).join('')}
+                    </ul>
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        return `
+          <div class="phase-block ${expanded ? 'expanded' : ''} ${isCurrentPhase ? 'active' : ''}">
+            <div class="phase-block-header" onclick="togglePhase(this)">
+              <div class="phase-block-title">
+                <span class="phase-block-num">${phaseInfo.code}</span>
+                <span class="phase-block-name">${phaseInfo.name}</span>
+              </div>
+              <div class="phase-block-meta">
+                <span>${phaseDoneTasks} / ${phaseTotalTasks}</span>
+                <span class="chevron">▶</span>
+              </div>
+            </div>
+            <div class="phase-block-body">
+              ${weeksHTML}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Wire up task checkboxes
+      document.querySelectorAll('.task-item').forEach(el => {
+        el.addEventListener('click', e => {
+          e.stopPropagation();
+          const id = el.dataset.taskId;
+          const state = loadProgress();
+          state[id] = !state[id];
+          saveProgress(state);
+          el.classList.toggle('checked');
+          // Re-render summaries
+          renderHero();
+          renderPhaseGrid();
+          renderStatusTable();
+          updatePhaseSummaries();
+        });
+      });
+    }
+
+    function updatePhaseSummaries() {
+      // Minor refresh of counts in accordion headers
+      const progress = loadProgress();
+      document.querySelectorAll('.phase-block').forEach(block => {
+        // Skip — renderPlan re-renders fully on toggle, keep simple
+      });
+    }
+
+    window.togglePhase = function(headerEl) {
+      headerEl.parentElement.classList.toggle('expanded');
+    };
+
+    window.toggleWeek = function(headerEl) {
+      headerEl.parentElement.classList.toggle('expanded');
+    };
+
+    // INIT
+    renderHero();
+    renderPhaseGrid();
+    renderStatusTable();
+    renderActivity();
+    renderProjects();
+    renderDecisions();
+    renderPlan();
+
+    // Footer date
+    document.getElementById('footer-date').textContent = new Date().toISOString().slice(0, 10);
+  </script>
+</body>
+</html>

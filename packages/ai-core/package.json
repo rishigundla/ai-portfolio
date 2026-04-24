@@ -1,0 +1,19 @@
+{
+  "name": "@rishi/ai-core",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Shared AI utilities for the AI Portfolio monorepo. Streaming replay, prompt templates, and types used across all apps.",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./replay": "./src/replay.ts",
+    "./generate": "./src/generate.ts",
+    "./types": "./src/types/index.ts"
+  },
+  "scripts": {
+    "lint": "eslint src",
+    "check-types": "tsc --noEmit"
+  }
+}

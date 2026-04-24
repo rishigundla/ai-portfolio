@@ -1,159 +1,86 @@
-# Turborepo starter
+# AI Portfolio
 
-This Turborepo starter is maintained by the Turborepo core team.
+> Five AI-native portfolio projects anchored to real Nutanix SaaS Data Team work.
+> Built with Next.js 16, deployed on Vercel, designed to complete the Senior BI Engineer → Data / Analytics Engineer transition.
 
-## Using this example
+**Author**: Rishikesh Gundla ([rishikeshgundla.com](https://rishikeshgundla.com))
+**Status**: Phase 1 · Week 1 · Day 1 — Foundation
+**Build Plan**: [docs/master-plan.md](./docs/master-plan.md) · [docs/plan.html](./docs/plan.html) (rich interactive view)
 
-Run the following command:
+---
 
-```sh
-npx create-turbo@latest
+## The Five Projects
+
+| # | Project | Status | Live Demo |
+|---|---------|--------|-----------|
+| 1 | **Instant Analytics Dashboard Factory** | Not Started | — |
+| 2 | **Dashboard-to-Deck Narrative Generator** | Not Started | — |
+| 3 | **Smart Metric Anomaly Alerting** | Not Started | — |
+| 4 | **AI Sprint Intelligence Dashboard** | Not Started | — |
+| 5 | **AI Pipeline Debugger & Self-Healer** | Not Started | — |
+
+Each project is a standalone Next.js app in [`apps/`](./apps/) with its own README, case study, and 90-second Loom video.
+
+---
+
+## Architecture
+
+- **Monorepo**: pnpm workspaces + turborepo
+- **Apps**: Next.js 16 App Router, Vercel AI SDK for streaming simulation
+- **Shared packages**:
+  - `packages/design-system` — tokens, primitives, AI components
+  - `packages/ai-core` — streaming replay + fixture generation utilities
+- **Data**: Pre-generated JSON fixtures replayed via `streamText` (no runtime Claude API calls)
+- **Deployment**: Vercel per app · $0 monthly runtime cost
+
+See [docs/master-plan.md](./docs/master-plan.md) for the full 14-week day-by-day build plan.
+
+---
+
+## Repository Structure
+
+```
+ai-portfolio/
+├── apps/                           Each AI project as a standalone Next.js app
+├── packages/
+│   ├── design-system/              @rishi/design-system — tokens + components
+│   ├── ai-core/                    @rishi/ai-core — streaming replay
+│   ├── eslint-config/              Shared lint config
+│   └── typescript-config/          Shared tsconfig bases
+├── fixtures/                       Pre-generated AI responses per project
+├── docs/
+│   ├── master-plan.md              Canonical 14-week build plan
+│   ├── plan.html                   Rich interactive view of the plan
+│   └── case-studies/               MDX case studies per project
+├── scripts/                        Portfolio + resume sync automation
+└── .github/workflows/              GitHub Actions (sync, deploy verification)
 ```
 
-## What's inside?
+---
 
-This Turborepo includes the following packages/apps:
+## Development
 
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo build
+```bash
+pnpm install              # install workspace dependencies
+pnpm dev                  # run all apps in dev mode
+pnpm build                # build all apps + packages
+pnpm lint                 # lint across workspaces
+pnpm format               # prettier write all files
+pnpm check-types          # tsc --noEmit across workspaces
 ```
 
-Without global `turbo`, use your package manager:
+---
 
-```sh
-cd my-turborepo
-npx turbo build
-pnpm dlx turbo build
-pnpm exec turbo build
-```
+## Portfolio + Resume Automation
 
-You can build a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
+When a project ships with `portfolio.meta.json#deployedAt` populated, GitHub Actions opens PRs on:
+- [`rishigundla/portfolio-site`](https://github.com/rishigundla/portfolio-site) — new project card + case study MDX
+- [`rishigundla/resume-builder`](https://github.com/rishigundla/resume-builder) — new bullet under AI Projects category
 
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
+See [Part G of the master plan](./docs/master-plan.md) for details.
 
-```sh
-turbo build --filter=docs
-```
+---
 
-Without global `turbo`:
+## License
 
-```sh
-npx turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo dev
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo dev
-pnpm exec turbo dev
-pnpm exec turbo dev
-```
-
-You can develop a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo dev --filter=web
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo login
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo login
-pnpm exec turbo login
-pnpm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo link
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo link
-pnpm exec turbo link
-pnpm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
-- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
+MIT — feel free to learn from the patterns. The architecture and design system are a reference for building AI-native portfolio projects.
