@@ -1472,10 +1472,10 @@
       currentStatus: {
         phase: "Phase 1 — Project 1 (Dashboard Factory)",
         week: "Week 1 of 14",
-        day: "Week 2 · Day 11 (Thu) — Streaming Profiling Page",
-        progress: { done: 64, total: 98 },
-        status: "Day 3 gallery shipped. /datasets renders 6 domain-tinted cards from the manifest at build time. Static HTML, 164 B page weight. Click → /generate/[slug] (built next).",
-        nextAction: "Week 2 Day 4: Build /generate/[slug] — dataset preview + streaming Claude profiling animation using replayFixture from ai-core, with progress steps for Column / Domain / KPI / Chart.",
+        day: "Week 2 · Day 12 (Fri) — Profiling Fixtures",
+        progress: { done: 70, total: 98 },
+        status: "Day 4 streaming profiling page live for all 6 datasets. replayFixture from ai-core wired into a real product surface. 11 static pages, 56.3 kB + 162 kB First Load JS on /generate/[slug].",
+        nextAction: "Week 2 Day 5: Replace buildPlaceholderFixture with 6 hand-curated profiling fixtures. Use Claude Code (Max plan, $0). Save to fixtures/dashboard-factory/profiling/<slug>.json.",
         blockers: "None"
       },
 
@@ -1508,7 +1508,9 @@
         "2-W2.D2-0", "2-W2.D2-1", "2-W2.D2-2", "2-W2.D2-3", "2-W2.D2-4",
         "2-W2.D2-5", "2-W2.D2-6", "2-W2.D2-7",
         // Phase 1 · Week 2 · Day 3 (4 tasks — gallery route + cards + hover + Link)
-        "2-W2.D3-0", "2-W2.D3-1", "2-W2.D3-2", "2-W2.D3-3"
+        "2-W2.D3-0", "2-W2.D3-1", "2-W2.D3-2", "2-W2.D3-3",
+        // Phase 1 · Week 2 · Day 4 (6 tasks — route, preview, panel, replay wiring, progress steps, CTA)
+        "2-W2.D4-0", "2-W2.D4-1", "2-W2.D4-2", "2-W2.D4-3", "2-W2.D4-4", "2-W2.D4-5"
       ],
 
       phases: [
@@ -1521,6 +1523,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-04-25",
+          title: "Week 2 Day 4 — /generate/[slug] streaming profiling shipped",
+          desc: "Built the first real AI surface in dashboard-factory. Server component pre-renders all 6 routes via generateStaticParams, then for each: shows header strip with icon + counts, dataset preview using DataGrid (10 rows, formatted cells), and a streaming panel using replayFixture from @rishi/ai-core. The panel auto-starts on mount, watches streamed text for '## ' heading markers to advance progress through 4 steps (Column / Domain / KPI / Chart), shows AiNarrativeBlock with blink cursor, presents Cancel / Replay / Generate-dashboard CTAs as appropriate. AbortController + useEffect cleanup prevents orphan streams on navigation. Build break + fix in same commit: added 'use client' to AiNarrativeBlock + KpiCard + FilterBar + DataGrid + 10 Radix-based primitives so they import cleanly into server components. Pure components (Card, Badge, Button, Input, ChartCard) stay server-renderable. Build: 11 static pages, /generate/[slug] at 56.3 kB + 162 kB First Load JS. Commit 7855cb7 pushed.",
+          next: "Week 2 Day 5 — Hand-curate 6 profiling fixtures via Claude Code, replace placeholder generator"
+        },
         {
           date: "2026-04-25",
           title: "Week 2 Day 3 — /datasets gallery shipped",

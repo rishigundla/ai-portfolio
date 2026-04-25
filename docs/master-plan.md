@@ -17,10 +17,10 @@
 |-------|-------|
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
-| **Current Day** | Week 2 · Day 11 (Thu) — Streaming Profiling Page |
-| **Overall Progress** | 64 tasks of 98 complete · Phase 0 ✓ · Week 1 ✓ · Week 2 Days 1-3 ✓ |
-| **Status** | Day 3 gallery shipped. `/datasets` renders 6 domain-tinted cards consuming the manifest at build time. Static HTML, 164 B page weight on top of 102 kB shared. Click → `/generate/[slug]` (404 until Day 4). |
-| **Next Action** | Week 2 Day 4: Build `/generate/[slug]` route. Top: dataset preview (first 10 rows of full JSON). Middle: streaming "Analyzing your data with Claude..." panel using `replayFixture` from ai-core. Progress steps: Column → Domain → KPI → Chart. "Generate Dashboard" button on completion. |
+| **Current Day** | Week 2 · Day 12 (Fri) — Profiling Fixtures |
+| **Overall Progress** | 70 tasks of 98 complete · Phase 0 ✓ · Week 1 ✓ · Week 2 Days 1-4 ✓ |
+| **Status** | Day 4 streaming profiling page live for all 6 datasets. `replayFixture` from ai-core is now wired into a real product surface, not just the showcase. 11 static pages, /generate/[slug] at 56.3 kB + 162 kB First Load JS. |
+| **Next Action** | Week 2 Day 5: Replace `buildPlaceholderFixture` with hand-curated profiling fixtures per slug. Author 6 JSON files at `fixtures/dashboard-factory/profiling/<slug>.json` using Claude Code (no API cost). Each fixture references real column names from its dataset and gives domain-specific analysis. |
 | **Blockers** | None |
 
 ### Phase Progress Overview
@@ -41,6 +41,21 @@
 ## Recent Activity Log
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
+
+### 2026-04-25 · Week 2 Day 4 — /generate/[slug] streaming profiling
+- Built the first real AI surface in the portfolio (the design-system-docs streaming demo doesn't count — this is a customer-facing page)
+- 5 new files in `apps/dashboard-factory/`:
+  - `lib/full-datasets.ts` — static-imports all 6 dataset JSONs (webpack tree-shakes per route), exports ColumnSchema + FullDataset types, `formatCell()` utility for $/%/ms/dates, `getFullDataset()` lookup
+  - `lib/profiling.ts` — `buildPlaceholderFixture()` generates domain-aware text from dataset metadata (Day 5 will replace with hand-curated fixtures). Heading markers (`## Column Classification`, `## Domain Inference`, `## Recommended KPIs`, `## Recommended Charts`) exported as constants so the streaming UI can watch for them.
+  - `app/generate/[slug]/page.tsx` — server component with `generateStaticParams` to pre-render all 6 routes. Header strip with icon + row/column counts, dataset preview, streaming panel.
+  - `app/generate/[slug]/_dataset-preview.tsx` — client wrapper around DataGrid (needed because column `render` functions can't cross the RSC server-to-client boundary)
+  - `app/generate/[slug]/_streaming-panel.tsx` — client component using `replayFixture` from `@rishi/ai-core`. Auto-starts on mount, watches streamed text for heading markers to advance progress steps, shows AiNarrativeBlock with blink cursor, "Generate dashboard" CTA on completion. Cancel + Replay buttons. AbortController with useEffect cleanup.
+- **Build break + fix in same commit**: design-system components/primitives that use React hooks needed `'use client'` directives so they work when imported from server components. Added to: AiNarrativeBlock, KpiCard, FilterBar, DataGrid (composed components) and Dialog, Tabs, Tooltip, Popover, Select, Toast, Command, Combobox, Avatar, Label (Radix primitives). Card, Badge, Button, Input, ChartCard stay server-renderable (pure forwardRef, no client-only features).
+- **Important architectural learning**: the design system needed a precise client/server split. Marking everything `'use client'` would force the entire subtree into the client bundle, even when used in a server component. Marking only what truly needs it keeps Server Component Lookup Table costs near zero for the pure components. Standard shadcn convention.
+- Build: 11 static pages generated, `/generate/[slug]` at **56.3 kB + 162 kB First Load JS** (full dataset JSON inlined + react-markdown + DataGrid + StreamingPanel)
+- Commit `7855cb7` pushed to main; Vercel will auto-deploy when dashboard-factory is connected as a project
+- **Context for Day 12 (Fri)**: Authoring 6 hand-curated profiling fixtures using Claude Code (zero API cost). Each fixture must follow the same 4-heading structure (`## Column Classification`, `## Domain Inference`, `## Recommended KPIs`, `## Recommended Charts`) so the StreamingPanel's progress UI continues to work. Reference real column names from the dataset (e.g. for revops-sales reference `acv_usd`, `segment`, `product_line`). Replace `buildPlaceholderFixture` import with a per-slug fixture loader.
+- **Next**: Week 2 Day 5 — Profiling fixtures
 
 ### 2026-04-25 · Week 2 Day 3 — /datasets gallery built
 - Created `apps/dashboard-factory/lib/datasets.ts` — typed manifest reader with 3 responsibilities:
@@ -694,15 +709,21 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 - The full dataset JSON loads only when a user clicks into a card on Day 4 — the gallery uses just the manifest summary
 - Build size to watch: Day 4 will pull in `replayFixture` from ai-core + DataGrid component from design-system; expect ~30-50 kB increase on the /generate route
 
-#### Day 4 (Thu) · Streaming Profiling Page
-- [ ] Build `/generate/[slug]` route
-- [ ] Top: dataset preview (first 10 rows in DataGrid)
-- [ ] Middle: "Analyzing your data with Claude..." streaming panel
-- [ ] Wire up `@rishi/ai-core` replay to stream profiling fixture
-- [ ] Progress indicators per step: Column Classification → Domain Inference → KPI Recommendation → Chart Recommendation
-- [ ] "Generate Dashboard" button appears when streaming completes
+#### Day 4 (Thu) · Streaming Profiling Page — COMPLETED 2026-04-25
+- [x] Built `/generate/[slug]` route with `generateStaticParams` pre-rendering all 6 datasets
+- [x] Top: dataset preview using DataGrid (10 rows, ID columns in monospace, measures right-aligned, formatted cells via `formatCell()` utility)
+- [x] Middle: "Claude is analyzing..." streaming panel that auto-starts on mount
+- [x] Wired up `@rishi/ai-core` `replayFixture` with AbortController cleanup pattern
+- [x] Progress indicators per step (4 steps with 'pending' / 'active' / 'done' states + check icons), advances by watching streamed text for `## ` heading markers
+- [x] "Generate dashboard" CTA appears on completion, links to `/dashboard/[slug]` (404 until Week 3)
 
-**Context for Next Session**: _(fill in after completion)_
+**Context for Next Session (Day 12)**:
+- Placeholder fixture generator at `lib/profiling.ts` produces working text but doesn't reference actual column names. Day 5 replaces it with hand-curated per-slug fixtures.
+- Heading markers are exported constants (`HEADING_COLUMN_CLASSIFICATION`, etc.) — Day 5 fixtures must keep the same 4 headings so the StreamingPanel's progress UI continues to work
+- Authoring strategy: open each dataset's full JSON, ask Claude Code (via Max plan, $0 cost) to write profiling output that references real column names + spotted patterns (e.g. for `pulse-telemetry` mention CUST-2847's health_score decline 96→82)
+- Save to `fixtures/dashboard-factory/profiling/<slug>.json` matching the Fixture shape from `@rishi/ai-core` (id, text, metadata)
+- Update `lib/profiling.ts` to add `getProfilingFixture(slug)` function that imports from the new location, falling back to placeholder if missing
+- **Architectural note**: this Day's `'use client'` audit on design-system primitives is permanent. All future apps inherit the correct client/server boundaries automatically.
 
 #### Day 5 (Fri) · Generate Profiling Fixtures
 - [ ] Use Claude Code to generate `profiling.json` for each of 6 datasets
