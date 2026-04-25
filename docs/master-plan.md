@@ -17,10 +17,10 @@
 |-------|-------|
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
-| **Current Day** | Week 2 · Day 12 (Fri) — Profiling Fixtures |
-| **Overall Progress** | 70 tasks of 98 complete · Phase 0 ✓ · Week 1 ✓ · Week 2 Days 1-4 ✓ |
-| **Status** | Day 4 streaming profiling page live for all 6 datasets. `replayFixture` from ai-core is now wired into a real product surface, not just the showcase. 11 static pages, /generate/[slug] at 56.3 kB + 162 kB First Load JS. |
-| **Next Action** | Week 2 Day 5: Replace `buildPlaceholderFixture` with hand-curated profiling fixtures per slug. Author 6 JSON files at `fixtures/dashboard-factory/profiling/<slug>.json` using Claude Code (no API cost). Each fixture references real column names from its dataset and gives domain-specific analysis. |
+| **Current Day** | Week 2 · Day 13 (Sat) — State + Navigation |
+| **Overall Progress** | 74 tasks of 98 complete · Phase 0 ✓ · Week 1 ✓ · Week 2 Days 1-5 ✓ |
+| **Status** | Day 5 profiling fixtures shipped. All 6 datasets stream curated AI text that references real column names + observed patterns. `getProfilingFixture(slug, dataset)` loader handles curated-or-fallback. |
+| **Next Action** | Week 2 Day 6: Add Zustand state management for the selected-dataset/profiling-result flow + URL state serialization. Currently each route loads independently from JSON — Zustand caches across navigation and supports shareable links. |
 | **Blockers** | None |
 
 ### Phase Progress Overview
@@ -41,6 +41,26 @@
 ## Recent Activity Log
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
+
+### 2026-04-25 · Week 2 Day 5 — Profiling fixtures hand-curated
+- Authored 6 profiling fixtures at `fixtures/dashboard-factory/profiling/<slug>.json`, each in the `Fixture` shape from `@rishi/ai-core` (id, text with markdown, metadata)
+- Every fixture references its dataset's real columns by name (backticked) and calls out **at least one specific pattern** visible in the underlying rows:
+  - `revops-sales` → Polaris Defense $1.24M deal (DL-26-0013) + NAMER-Direct vs APAC-Partner channel asymmetry
+  - `marketing-campaigns` → MKT-Q2-021 Q2 Re-Engagement Email at 612% ROI + Display low-CTR pattern + spend-weighted CPA distinction
+  - `pulse-telemetry` → **CUST-2847 health_score decline 96→82** (the anomaly story baked into the Day 2 dataset, now surfaced as the AI's headline insight)
+  - `supply-chain` → Aurora Storage Co. as reliability anchor + Voltaic Systems delays (PO-26-1051, 1059, 1074)
+  - `financial-complaints` → CMP-26-04022 38-day Postal Mail outlier + fraud-vs-mortgage resolution-time asymmetry
+  - `customer-demographics` → Polaris Defense $8.42M LTV + SMB-Retail-Files churn cluster
+- All 6 fixtures follow the 4-heading structure (`## Column Classification` / `Domain Inference` / `Recommended KPIs` / `Recommended Charts`) so StreamingPanel's progress UI continues working unchanged
+- Each fixture is 2870-3278 chars (~48-55 sec at 60 cps streaming — substantial enough to feel real, with Replay button if the user wants to re-watch)
+- `lib/profiling.ts` updated with `getProfilingFixture(slug, dataset)` — returns curated fixture when present, falls back to placeholder if missing. Static-imports keep webpack tree-shaking per route.
+- `app/generate/[slug]/page.tsx` swapped `buildPlaceholderFixture` import for `getProfilingFixture`
+- Build validated: same 11 static pages, `/generate/[slug]` still **56.3 kB + 162 kB First Load JS** — webpack confirmed tree-shaking each profiling fixture into its own route bundle
+- Validation script confirmed all 4 required headings present in all 6 fixtures
+- Commit `ac8ea1b` pushed to main; Vercel auto-redeploys design-system-docs (dashboard-factory still pending Vercel project setup)
+- **Why hand-curated matters**: a recruiter clicking through `/generate/pulse-telemetry` will read text that names a specific customer (CUST-2847) and a specific anomaly (health_score 96→82). The AI output looks like it actually read the data. That's the curation work that elevates "demo" to "this person understands their domain."
+- **Context for Day 13 (Sat)**: Per the master plan, Day 6 sets up Zustand state management + URL serialization. The page currently re-loads the JSON on every navigation; Zustand will cache across page transitions and support shareable links like `/dashboard/revops-sales?profiled=true`. Also wire up navigation guards so users can't reach `/dashboard/[slug]` (Week 3) without coming through `/generate` first.
+- **Next**: Week 2 Day 6 — State management + navigation
 
 ### 2026-04-25 · Week 2 Day 4 — /generate/[slug] streaming profiling
 - Built the first real AI surface in the portfolio (the design-system-docs streaming demo doesn't count — this is a customer-facing page)
@@ -725,13 +745,17 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 - Update `lib/profiling.ts` to add `getProfilingFixture(slug)` function that imports from the new location, falling back to placeholder if missing
 - **Architectural note**: this Day's `'use client'` audit on design-system primitives is permanent. All future apps inherit the correct client/server boundaries automatically.
 
-#### Day 5 (Fri) · Generate Profiling Fixtures
-- [ ] Use Claude Code to generate `profiling.json` for each of 6 datasets
-- [ ] Each fixture includes: column types, domain, 4-6 recommended KPIs, 3-5 recommended charts, color token, streaming narrative text
-- [ ] Save to `fixtures/dashboard-factory/{slug}/profiling.json`
-- [ ] Verify all 6 stream correctly in the profiling page
+#### Day 5 (Fri) · Generate Profiling Fixtures — COMPLETED 2026-04-25
+- [x] Hand-curated 6 profiling fixtures via Claude Code (zero API cost via Max plan)
+- [x] Each fixture references real column names + calls out specific patterns from the dataset (e.g. CUST-2847 health_score decline, Polaris Defense $1.24M deal, Voltaic Systems delays)
+- [x] Saved to `fixtures/dashboard-factory/profiling/<slug>.json` (one directory level cleaner than the originally-planned `<slug>/profiling.json`)
+- [x] All 6 verified: validation script confirmed 4 required heading markers present, JSON parses clean, build size unchanged (webpack tree-shakes per route)
 
-**Context for Next Session**: _(fill in after completion)_
+**Context for Next Session (Day 13)**:
+- `getProfilingFixture(slug, dataset)` is the right loader pattern for adding new fixtures — drop a JSON in `fixtures/dashboard-factory/profiling/`, add to the static-import map in `lib/profiling.ts`, done
+- Each fixture is ~3000 chars = ~50 sec stream at 60 cps. Replay button is essential for letting users re-watch
+- Day 6 wires Zustand for client-side state caching + URL serialization. The current architecture works without it (each route re-loads from JSON), but Zustand prevents redundant re-streaming when users back-navigate from /dashboard/[slug] to /generate/[slug]
+- Also Day 6: navigation guards. Users shouldn't be able to land on `/dashboard/[slug]` (Week 3) without having profiled first. Track `profilingComplete` in Zustand, block the route if false.
 
 #### Day 6 (Sat) · State Management + Navigation
 - [ ] Set up Zustand store for selected dataset + profiling result

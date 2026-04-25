@@ -1472,10 +1472,10 @@
       currentStatus: {
         phase: "Phase 1 — Project 1 (Dashboard Factory)",
         week: "Week 1 of 14",
-        day: "Week 2 · Day 12 (Fri) — Profiling Fixtures",
-        progress: { done: 70, total: 98 },
-        status: "Day 4 streaming profiling page live for all 6 datasets. replayFixture from ai-core wired into a real product surface. 11 static pages, 56.3 kB + 162 kB First Load JS on /generate/[slug].",
-        nextAction: "Week 2 Day 5: Replace buildPlaceholderFixture with 6 hand-curated profiling fixtures. Use Claude Code (Max plan, $0). Save to fixtures/dashboard-factory/profiling/<slug>.json.",
+        day: "Week 2 · Day 13 (Sat) — State + Navigation",
+        progress: { done: 74, total: 98 },
+        status: "Day 5 profiling fixtures shipped. All 6 datasets stream curated AI text that names real columns + observed patterns (e.g. CUST-2847 health_score decline). Loader handles curated-or-fallback.",
+        nextAction: "Week 2 Day 6: Add Zustand state management for selected-dataset/profiling-result + URL state serialization + navigation guards (so /dashboard/[slug] can't be reached without profiling first).",
         blockers: "None"
       },
 
@@ -1510,7 +1510,9 @@
         // Phase 1 · Week 2 · Day 3 (4 tasks — gallery route + cards + hover + Link)
         "2-W2.D3-0", "2-W2.D3-1", "2-W2.D3-2", "2-W2.D3-3",
         // Phase 1 · Week 2 · Day 4 (6 tasks — route, preview, panel, replay wiring, progress steps, CTA)
-        "2-W2.D4-0", "2-W2.D4-1", "2-W2.D4-2", "2-W2.D4-3", "2-W2.D4-4", "2-W2.D4-5"
+        "2-W2.D4-0", "2-W2.D4-1", "2-W2.D4-2", "2-W2.D4-3", "2-W2.D4-4", "2-W2.D4-5",
+        // Phase 1 · Week 2 · Day 5 (4 tasks — generate fixtures, save, validate, integrate)
+        "2-W2.D5-0", "2-W2.D5-1", "2-W2.D5-2", "2-W2.D5-3"
       ],
 
       phases: [
@@ -1523,6 +1525,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-04-25",
+          title: "Week 2 Day 5 — 6 hand-curated profiling fixtures shipped",
+          desc: "Authored 6 profiling fixtures at fixtures/dashboard-factory/profiling/. Each one references the dataset's actual column names (backticked) and at least one specific pattern visible in the data. revops-sales calls out Polaris Defense $1.24M deal and the NAMER-Direct vs APAC-Partner channel asymmetry. marketing-campaigns calls out MKT-Q2-021 Q2 Re-Engagement Email at 612% ROI. pulse-telemetry surfaces the CUST-2847 health_score decline 96→82 — the anomaly story baked into Day 2's dataset, now the AI's headline insight. supply-chain calls out Aurora Storage Co. as reliability anchor and Voltaic Systems delays. financial-complaints names the 38-day Postal Mail outlier. customer-demographics calls out Polaris Defense ($8.42M LTV) and the SMB-Retail-Files churn cluster. All fixtures follow the 4-heading structure so StreamingPanel progress UI works unchanged. lib/profiling.ts now has getProfilingFixture(slug, dataset) — curated-or-fallback. Build validated: same 11 pages, /generate/[slug] still 56.3 kB + 162 kB First Load JS (webpack tree-shakes per route). Commit ac8ea1b pushed.",
+          next: "Week 2 Day 6 — Zustand state + URL serialization + navigation guards"
+        },
         {
           date: "2026-04-25",
           title: "Week 2 Day 4 — /generate/[slug] streaming profiling shipped",
