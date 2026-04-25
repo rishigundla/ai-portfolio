@@ -1,3 +1,5 @@
+'use client'
+
 import * as React from 'react'
 import { Calendar, Filter, Search, X } from 'lucide-react'
 import { Input } from '../primitives/input'

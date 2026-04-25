@@ -1,3 +1,5 @@
+'use client'
+
 import * as React from 'react'
 import { ChevronUp, ChevronDown, ChevronsUpDown, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '../primitives/button'
