@@ -1472,10 +1472,10 @@
       currentStatus: {
         phase: "Phase 1 — Project 1 (Dashboard Factory)",
         week: "Week 1 of 14",
-        day: "Week 2 · Day 10 (Wed) — Dataset Gallery UI",
-        progress: { done: 60, total: 98 },
-        status: "Day 2 fixtures shipped. 6 datasets, 230 rows, 74 typed schema columns, manifest + README. Each fixture has typed schema (id / dimension / measure / time) and a distinct color token.",
-        nextAction: "Week 2 Day 3: Build /datasets gallery — read index.json manifest, render 6 cards (thumbnail, title, tagline, domain badge, row count), navigate to /generate/[slug] on click.",
+        day: "Week 2 · Day 11 (Thu) — Streaming Profiling Page",
+        progress: { done: 64, total: 98 },
+        status: "Day 3 gallery shipped. /datasets renders 6 domain-tinted cards from the manifest at build time. Static HTML, 164 B page weight. Click → /generate/[slug] (built next).",
+        nextAction: "Week 2 Day 4: Build /generate/[slug] — dataset preview + streaming Claude profiling animation using replayFixture from ai-core, with progress steps for Column / Domain / KPI / Chart.",
         blockers: "None"
       },
 
@@ -1506,7 +1506,9 @@
         "2-W2.D1-0", "2-W2.D1-1", "2-W2.D1-2", "2-W2.D1-3", "2-W2.D1-4",
         // Phase 1 · Week 2 · Day 2 (8 tasks — 6 dataset JSONs + manifest entry + metadata)
         "2-W2.D2-0", "2-W2.D2-1", "2-W2.D2-2", "2-W2.D2-3", "2-W2.D2-4",
-        "2-W2.D2-5", "2-W2.D2-6", "2-W2.D2-7"
+        "2-W2.D2-5", "2-W2.D2-6", "2-W2.D2-7",
+        // Phase 1 · Week 2 · Day 3 (4 tasks — gallery route + cards + hover + Link)
+        "2-W2.D3-0", "2-W2.D3-1", "2-W2.D3-2", "2-W2.D3-3"
       ],
 
       phases: [
@@ -1519,6 +1521,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-04-25",
+          title: "Week 2 Day 3 — /datasets gallery shipped",
+          desc: "Built lib/datasets.ts (typed manifest reader with build-time JSON import + icon resolver + static Tailwind class map for color tokens — class names are literals so JIT detects them, no production purging). Built app/_components/Section.tsx (reusable header pattern). Built app/datasets/page.tsx — server component, 1/2/3-col responsive grid of 6 domain-tinted cards. Each card has gradient thumbnail with Lucide icon + dot pattern overlay, domain badge, row count, title (hover: accent), tagline, and 'Profile this dataset →' CTA. Hover lifts card with shadow-card-hover + accent border. Tailwind config now scans lib/ folder. Build clean: 5 static pages, /datasets at 164 B + 106 kB First Load JS — same baseline as /, manifest import added zero runtime overhead. Commit ed8840d pushed.",
+          next: "Week 2 Day 4 — /generate/[slug] route with streaming Claude profiling animation"
+        },
         {
           date: "2026-04-25",
           title: "Week 2 Day 2 — 6 dataset fixtures shipped",

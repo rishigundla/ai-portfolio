@@ -17,10 +17,10 @@
 |-------|-------|
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
-| **Current Day** | Week 2 · Day 10 (Wed) — Dataset Gallery UI |
-| **Overall Progress** | 60 tasks of 98 complete · Phase 0 ✓ · Week 1 ✓ · Week 2 Days 1-2 ✓ |
-| **Status** | Day 2 fixtures shipped. 6 datasets, 230 rows, 74 schema columns, manifest + README. Each fixture is realistic Nutanix-style anonymised data with typed schema (id / dimension / measure / time). |
-| **Next Action** | Week 2 Day 3: Build the dataset gallery at `/datasets` route — read `fixtures/dashboard-factory/datasets/index.json`, render 6 cards (thumbnail, title, tagline, domain badge, row count), navigate to `/generate/[slug]` on click. |
+| **Current Day** | Week 2 · Day 11 (Thu) — Streaming Profiling Page |
+| **Overall Progress** | 64 tasks of 98 complete · Phase 0 ✓ · Week 1 ✓ · Week 2 Days 1-3 ✓ |
+| **Status** | Day 3 gallery shipped. `/datasets` renders 6 domain-tinted cards consuming the manifest at build time. Static HTML, 164 B page weight on top of 102 kB shared. Click → `/generate/[slug]` (404 until Day 4). |
+| **Next Action** | Week 2 Day 4: Build `/generate/[slug]` route. Top: dataset preview (first 10 rows of full JSON). Middle: streaming "Analyzing your data with Claude..." panel using `replayFixture` from ai-core. Progress steps: Column → Domain → KPI → Chart. "Generate Dashboard" button on completion. |
 | **Blockers** | None |
 
 ### Phase Progress Overview
@@ -41,6 +41,25 @@
 ## Recent Activity Log
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
+
+### 2026-04-25 · Week 2 Day 3 — /datasets gallery built
+- Created `apps/dashboard-factory/lib/datasets.ts` — typed manifest reader with 3 responsibilities:
+  1. Imports `fixtures/dashboard-factory/datasets/index.json` at build time (Webpack inlines the JSON, no runtime `fs` calls)
+  2. `getDatasetIcon(name)` — string → Lucide icon component map (TrendingUp, Megaphone, Activity, Truck, FileWarning, Users)
+  3. `getColorClasses(token)` — domain color token → static Tailwind class map. **All class names are literal strings** so JIT can detect them; dynamic interpolation like `` `bg-${color}-500` `` would purge in production
+- Created `apps/dashboard-factory/app/_components/Section.tsx` — reusable header pattern (eyebrow + title + description). Mirrors design-system-docs for consistency.
+- Created `apps/dashboard-factory/app/datasets/page.tsx` — server component, server-renders the gallery to static HTML:
+  - Back link to home at top
+  - Section header: "Step 1 of 3 · Pick a dataset" + "Six curated samples to choose from"
+  - 1/2/3-col responsive grid (mobile / tablet / desktop)
+  - Each card: domain-tinted gradient thumbnail (color matches the fixture's `colorToken`) with the dataset icon at center, dot pattern overlay; body shows domain badge + row count, title (turns accent on hover), tagline, "Profile this dataset →" CTA
+  - Hover state: -0.5 translateY + accent border + card-hover shadow
+  - Footer note about the upload-disabled-for-demo design (managing visitor expectations)
+- Updated `tailwind.config.ts` content array to include `./lib/**/*.{ts,tsx}` so the color class map is scanned
+- Build clean: 5 static pages now, `/datasets` at 164 B + 106 kB First Load JS — same baseline as `/`. The manifest import added zero runtime overhead.
+- Commit `ed8840d` pushed to main; Vercel will auto-deploy if dashboard-factory project is connected (still pending user setup)
+- **Context for Day 11 (Thu)**: Build `/generate/[slug]` — the streaming profiling page. Two sections: dataset preview (first 10 rows from the full JSON, rendered as a DataGrid from design-system) and a streaming panel that uses `replayFixture` to animate a Claude profiling output. Profiling fixtures don't exist yet — they're authored on Day 5. For Day 4, use a temporary inline fixture so the streaming UX is testable end-to-end before Day 5 fills in the real content.
+- **Next**: Week 2 Day 4 — Streaming profiling page
 
 ### 2026-04-25 · Week 2 Day 2 — 6 dataset fixtures authored
 - Created `fixtures/dashboard-factory/datasets/` with 6 JSON files + manifest:
@@ -663,13 +682,17 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 - Day 3 reads ONLY `index.json` (the manifest) for the gallery — full dataset JSON loads on click in Day 4
 - Use `Card` from `@rishi/design-system/primitives` and `Badge` for the domain tag
 
-#### Day 3 (Wed) · Dataset Gallery UI
-- [ ] Build `/` route with gallery grid (6 cards)
-- [ ] Card shows: thumbnail, title, domain badge, row count, tags
-- [ ] Hover state (lift + glow)
-- [ ] Click to select → navigate to `/generate/[slug]`
+#### Day 3 (Wed) · Dataset Gallery UI — COMPLETED 2026-04-25
+- [x] Built `/datasets` route (chose `/datasets` instead of `/` since `/` is the marketing landing) with 6-card responsive grid (1 col mobile, 2 col tablet, 3 col desktop)
+- [x] Card shows: domain-tinted gradient thumbnail with Lucide icon, domain badge, row count, title (hover: turns accent), tagline, "Profile this dataset →" CTA
+- [x] Hover state: -0.5 translateY + accent border + card-hover shadow
+- [x] Click navigates to `/generate/[slug]` via Next.js Link (404 until Day 4 builds the route)
 
-**Context for Next Session**: _(fill in after completion)_
+**Context for Next Session (Day 11)**:
+- Manifest reader at `lib/datasets.ts` is reusable — Day 4's `/generate/[slug]` route imports `getDataset(id)`, `getDatasetIcon`, `getColorClasses` from the same module
+- For Day 4 streaming demo: use an inline fixture (or temporary stub) since real profiling fixtures don't exist until Day 5
+- The full dataset JSON loads only when a user clicks into a card on Day 4 — the gallery uses just the manifest summary
+- Build size to watch: Day 4 will pull in `replayFixture` from ai-core + DataGrid component from design-system; expect ~30-50 kB increase on the /generate route
 
 #### Day 4 (Thu) · Streaming Profiling Page
 - [ ] Build `/generate/[slug]` route
