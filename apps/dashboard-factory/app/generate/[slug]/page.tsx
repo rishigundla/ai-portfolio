@@ -4,7 +4,7 @@ import { ArrowLeft } from 'lucide-react'
 import { Section } from '../../_components/Section'
 import { datasets, getDataset, getDatasetIcon, getColorClasses } from '@/lib/datasets'
 import { getFullDataset } from '@/lib/full-datasets'
-import { buildPlaceholderFixture } from '@/lib/profiling'
+import { getProfilingFixture } from '@/lib/profiling'
 import { StreamingPanel } from './_streaming-panel'
 import { DatasetPreview } from './_dataset-preview'
 
@@ -36,9 +36,9 @@ export default async function GeneratePage({ params }: PageProps) {
   const Icon = getDatasetIcon(summary.icon)
   const colors = getColorClasses(summary.colorToken)
 
-  // Build the placeholder fixture on the server. Day 5 will replace
-  // buildPlaceholderFixture with a per-slug curated fixture loader.
-  const fixture = buildPlaceholderFixture(fullDataset)
+  // Curated profiling fixture if available, else generated placeholder.
+  // All 6 datasets have curated fixtures as of Day 5.
+  const fixture = getProfilingFixture(slug, fullDataset)
 
   return (
     <>

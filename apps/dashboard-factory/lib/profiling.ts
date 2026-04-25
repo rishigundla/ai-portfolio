@@ -1,17 +1,55 @@
 /**
- * Placeholder profiling text generator.
+ * Profiling fixture loader and placeholder text generator.
  *
- * Day 4 uses this to feed the streaming demo with domain-aware but
- * dynamically-generated text. Day 5 will replace this with hand-curated
- * fixtures stored at fixtures/dashboard-factory/profiling/<slug>.json.
+ * Primary path: each dataset has a hand-curated profiling fixture at
+ * fixtures/dashboard-factory/profiling/<slug>.json (authored Day 5 via
+ * Claude Code, referencing real column names + observed patterns).
  *
- * The structure (4 markdown sections with `## ` headings) is what the
- * client streaming panel watches for to advance progress steps. Day 5
- * fixtures must keep the same heading pattern so the progress UI still works.
+ * Fallback path: if a slug doesn't yet have a curated fixture (e.g. when
+ * adding a new dataset), buildPlaceholderFixture() generates a domain-aware
+ * stub from the dataset metadata so the streaming panel still works.
+ *
+ * The 4-heading structure (## Column Classification / Domain Inference /
+ * Recommended KPIs / Recommended Charts) is what the client streaming
+ * panel watches for to advance progress steps. Both curated and placeholder
+ * fixtures must follow it.
  */
 
 import type { Fixture } from '@rishi/ai-core'
 import type { FullDataset } from './full-datasets'
+
+// Curated fixtures imported statically so webpack tree-shakes per route.
+import revopsSalesProfiling from '../../../fixtures/dashboard-factory/profiling/revops-sales.json'
+import marketingCampaignsProfiling from '../../../fixtures/dashboard-factory/profiling/marketing-campaigns.json'
+import pulseTelemetryProfiling from '../../../fixtures/dashboard-factory/profiling/pulse-telemetry.json'
+import supplyChainProfiling from '../../../fixtures/dashboard-factory/profiling/supply-chain.json'
+import financialComplaintsProfiling from '../../../fixtures/dashboard-factory/profiling/financial-complaints.json'
+import customerDemographicsProfiling from '../../../fixtures/dashboard-factory/profiling/customer-demographics.json'
+
+const CURATED_FIXTURES: Record<string, Fixture> = {
+  'revops-sales': revopsSalesProfiling as Fixture,
+  'marketing-campaigns': marketingCampaignsProfiling as Fixture,
+  'pulse-telemetry': pulseTelemetryProfiling as Fixture,
+  'supply-chain': supplyChainProfiling as Fixture,
+  'financial-complaints': financialComplaintsProfiling as Fixture,
+  'customer-demographics': customerDemographicsProfiling as Fixture,
+}
+
+/**
+ * Returns the curated profiling fixture for a slug, or undefined if none exists.
+ * Use as the primary path; pair with buildPlaceholderFixture() for fallback.
+ */
+export function getCuratedProfilingFixture(slug: string): Fixture | undefined {
+  return CURATED_FIXTURES[slug]
+}
+
+/**
+ * Convenience: curated fixture if available, else placeholder generated from dataset.
+ * This is the function /generate/[slug]/page.tsx should call.
+ */
+export function getProfilingFixture(slug: string, dataset: FullDataset): Fixture {
+  return getCuratedProfilingFixture(slug) ?? buildPlaceholderFixture(dataset)
+}
 
 // Heading markers — the streaming UI watches for these to advance progress steps.
 // Keep these in sync with PROFILING_STEPS in the streaming panel.
