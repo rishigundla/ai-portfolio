@@ -6,6 +6,7 @@ const config: Config = {
   darkMode: 'class',
   content: [
     './app/**/*.{ts,tsx}',
+    './lib/**/*.{ts,tsx}',
     // Include design-system source so its Tailwind classes are emitted
     '../../packages/design-system/src/**/*.{ts,tsx}',
   ],
