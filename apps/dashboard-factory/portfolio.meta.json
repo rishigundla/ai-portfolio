@@ -1,0 +1,22 @@
+{
+  "slug": "dashboard-factory",
+  "title": "Instant Analytics Dashboard Factory",
+  "category": "AI",
+  "tags": ["AI", "Dashboards", "React", "Next.js", "Claude"],
+  "description": "Pick a curated sample dataset, watch Claude profile it via streaming animation, get a fully designed interactive dashboard. Two modes: ad-hoc analysis for business users, hi-fi wireframes for BI engineers.",
+  "thumbnail": "/projects/ai-dashboard-factory.png",
+  "liveUrl": "",
+  "githubUrl": "https://github.com/rishigundla/ai-portfolio/tree/main/apps/dashboard-factory",
+  "caseStudyUrl": "",
+  "loomUrl": "",
+  "deployedAt": null,
+  "resumeBullet": {
+    "category": "AI-Powered Analytics & Data Engineering Projects",
+    "text": "Architected an AI-powered dashboard factory on Next.js + Vercel — applies a unified design-token system across 6 business domains with streaming AI profiling, automatic KPI / chart recommendation, and Figma-exportable hi-fi wireframes. Reduces ad-hoc dashboard turnaround from days to minutes."
+  },
+  "portfolioCard": {
+    "problem": "Dashboard creation follows a slow cycle: stakeholder shares raw data, BI engineer profiles it manually, designs wireframe in Figma, gets alignment, then builds in Tableau or Power BI. Ad-hoc requests get deprioritised. Power users spend days wireframing before stakeholder discovery sessions.",
+    "approach": "An AI-powered factory with two modes. (1) Ad-hoc mode for business users: pick a sample dataset, AI profiles columns and recommends KPIs / charts via streaming explanation, fully designed interactive dashboard renders with filters and PDF export. (2) Wireframe mode for BI engineers: pick a layout template, get a clickable hi-fi mockup, export to Figma for stakeholder discovery.",
+    "impact": "Ad-hoc dashboard turnaround drops from days to minutes. BI engineers save 3-4 days of wireframing per project. The unified design system means every output looks like it came from a professional BI team."
+  }
+}

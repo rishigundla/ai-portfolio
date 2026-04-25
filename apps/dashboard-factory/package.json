@@ -1,0 +1,31 @@
+{
+  "name": "dashboard-factory",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Project 1 — Instant Analytics Dashboard Factory. Pick a sample dataset, watch Claude profile it, get a fully designed interactive dashboard.",
+  "scripts": {
+    "dev": "next dev -p 3002",
+    "build": "next build",
+    "start": "next start -p 3002",
+    "lint": "next lint",
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@rishi/ai-core": "workspace:*",
+    "@rishi/design-system": "workspace:*",
+    "lucide-react": "^0.469.0",
+    "next": "^15.1.6",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^22.10.5",
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.9.2"
+  }
+}
