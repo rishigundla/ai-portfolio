@@ -17,10 +17,10 @@
 |-------|-------|
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
-| **Current Day** | Week 2 · Day 8 (Mon) — Project 1 App Scaffolding |
-| **Overall Progress** | 47 tasks of 98 complete · Phase 0 ✓ · **Week 1 COMPLETE** |
-| **Status** | **Week 1 shipped.** Monorepo + design-system (tokens + 14 primitives + 5 AI components + motion) + ai-core streaming infrastructure live. Design-system-docs deployed to Vercel and verified post-ai-core refactor. All READMEs current. |
-| **Next Action** | Week 2 Day 1: Scaffold `apps/dashboard-factory/` — Next.js 16 App Router, install design-system + ai-core, root layout with dark theme, hero + "Browse sample datasets" CTA. |
+| **Current Day** | Week 2 · Day 9 (Tue) — Sample Dataset Fixtures |
+| **Overall Progress** | 52 tasks of 98 complete · Phase 0 ✓ · Week 1 ✓ · Week 2 Day 1 ✓ |
+| **Status** | Project 1 scaffolded. `apps/dashboard-factory/` live in monorepo with hero + two persona cards + how-it-works section. Build clean (106 kB First Load JS). Pushed to GitHub. |
+| **Next Action** | Week 2 Day 2: Author 6 sample dataset JSON fixtures in `fixtures/dashboard-factory/datasets/` (RevOps Sales, Marketing Campaigns, Pulse Telemetry, Supply Chain, Financial Complaints, Customer Demographics) with metadata for thumbnail / domain / color token. |
 | **Blockers** | None |
 
 ### Phase Progress Overview
@@ -41,6 +41,20 @@
 ## Recent Activity Log
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
+
+### 2026-04-25 · Week 2 Day 1 — Project 1 (dashboard-factory) scaffolded
+- Created `apps/dashboard-factory/` mirroring the design-system-docs setup pattern (the foundation pays off — Day 1 of the new app took ~30 mins instead of a full day)
+- 13 files: package.json (workspace deps on design-system + ai-core, port 3002), tsconfig (extends nextjs base), next.config.mjs (transpilePackages for both shared packages), tailwind.config.ts (presets [@rishi/design-system/tailwind.config]), postcss.config.js, next-env.d.ts, .gitignore, app/layout.tsx, app/_components/Nav.tsx (gradient "DF" logo mark + "Project 01" badge), app/globals.css, app/page.tsx, portfolio.meta.json, README.md
+- **Landing page composition**:
+  - Hero: eyebrow chip "Project 01 · Instant Analytics", title "Dashboards in **minutes**, not days." (with gradient on the word "minutes"), subtitle, two CTAs (Browse sample datasets → /datasets, Try wireframe mode → /wireframe)
+  - Two persona cards stacked side-by-side: "Ad-hoc dashboard mode" (Business User) with the VP/CSV/Monday quote pulled from the master plan, "Hi-fi wireframe mode" (BI Engineer) with the discovery-session quote — both quotes rendered in serif italic with accent left-border
+  - "How it works" section with 3 numbered step cards (Pick / Profile / Get dashboard)
+- Footer pulls in the rishikeshgundla.com personal site link plus the monorepo
+- Build: 4 static pages, **/ at 106 kB First Load JS** — exact match to design-system-docs baseline (no extra deps pulled in for Day 1)
+- Typecheck clean, build clean
+- Commit `aaf597b` pushed to main
+- **Context for Day 9 (Tue)**: Authoring the 6 sample dataset fixtures in `fixtures/dashboard-factory/datasets/`. Each fixture is a JSON file with: 50 sample rows (realistic Nutanix-style anonymised data), metadata (display name, domain, recommended color token, row count, thumbnail path placeholder), schema description. These are CONSUMED by the gallery UI (Day 3) and profiling animation (Day 4). Generate using Faker patterns + manual curation for realism — not Anthropic API.
+- **Next**: Week 2 Day 2 — Sample dataset fixtures
 
 ### 2026-04-24 · Day 7 complete — Week 1 WRAPPED
 - Verified post-refactor deploy at https://ai-portfolio-design-system-docs.vercel.app/components — all 5 component sections render, "Simulate Claude streaming" button live, `replayFixture` from ai-core working in production
@@ -599,14 +613,19 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 
 **Week goal**: User picks a sample dataset, watches streaming Claude "profiling" animation.
 
-#### Day 1 (Mon) · App Scaffolding
-- [ ] Create `apps/dashboard-factory/` as Next.js 16 App Router project
-- [ ] Install `@rishi/design-system` + `@rishi/ai-core` from workspace
-- [ ] Tailwind config extends design system
-- [ ] Root layout with dark theme
-- [ ] Landing page with hero and "Browse sample datasets" CTA
+#### Day 1 (Mon) · App Scaffolding — COMPLETED 2026-04-25
+- [x] Created `apps/dashboard-factory/` as Next.js 15.1 App Router (port 3002)
+- [x] Installed `@rishi/design-system` + `@rishi/ai-core` as workspace deps; `lucide-react` as direct dep
+- [x] Tailwind config extends `@rishi/design-system/tailwind.config` preset
+- [x] Root layout with dark theme, sticky Nav (DF logo mark + Project 01 badge), brand-aware footer
+- [x] Landing page with hero (gradient "minutes" word), two persona cards (serif italic quotes pulled from master plan), three-step "How it works" section, dual CTAs to /datasets + /wireframe
 
-**Context for Next Session**: _(fill in after completion)_
+**Context for Next Session (Day 9)**:
+- App scaffolded at port 3002; build clean (106 kB First Load JS, matches design-system-docs baseline)
+- portfolio.meta.json scaffolded with full resumeBullet + portfolioCard ready for Week 4 sync automation; `deployedAt: null` until first deploy
+- Day 2 (Tue) authors 6 sample dataset JSON fixtures — see `fixtures/dashboard-factory/datasets/` schema in next day's plan
+- Routes /datasets and /wireframe link from the landing CTAs but don't exist yet (built Days 3 + 5)
+- Local dev: `pnpm dev --filter dashboard-factory` opens on http://localhost:3002
 
 #### Day 2 (Tue) · Sample Dataset Fixtures
 - [ ] Create `fixtures/dashboard-factory/datasets/` with 6 sample JSON files:

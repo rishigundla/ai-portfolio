@@ -1472,10 +1472,10 @@
       currentStatus: {
         phase: "Phase 1 — Project 1 (Dashboard Factory)",
         week: "Week 1 of 14",
-        day: "Week 2 · Day 8 (Mon) — Project 1 App Scaffolding",
-        progress: { done: 47, total: 98 },
-        status: "WEEK 1 COMPLETE. Monorepo + design-system + ai-core + live deploy + all READMEs shipped. Foundation done; next 7 weeks build 5 AI apps on top.",
-        nextAction: "Week 2 Day 1: Scaffold apps/dashboard-factory/ as Next.js 16 App Router, install design-system + ai-core, landing page with Browse sample datasets CTA.",
+        day: "Week 2 · Day 9 (Tue) — Sample Dataset Fixtures",
+        progress: { done: 52, total: 98 },
+        status: "Project 1 scaffolded. apps/dashboard-factory/ live in monorepo with hero + two persona cards + how-it-works section. Build clean (106 kB First Load JS).",
+        nextAction: "Week 2 Day 2: Author 6 sample dataset JSON fixtures in fixtures/dashboard-factory/datasets/ (RevOps Sales, Marketing Campaigns, Pulse Telemetry, Supply Chain, Financial Complaints, Customer Demographics).",
         blockers: "None"
       },
 
@@ -1501,7 +1501,9 @@
         // Phase 1 · Week 1 · Day 6 (6 tasks — package+tsconfig, deps, replay, generate, types, test-fixture)
         "1-W1.D6-0", "1-W1.D6-1", "1-W1.D6-2", "1-W1.D6-3", "1-W1.D6-4", "1-W1.D6-5",
         // Phase 1 · Week 1 · Day 7 (4 tasks — package READMEs, root README, visual QA, tag week complete)
-        "1-W1.D7-0", "1-W1.D7-1", "1-W1.D7-2", "1-W1.D7-3"
+        "1-W1.D7-0", "1-W1.D7-1", "1-W1.D7-2", "1-W1.D7-3",
+        // Phase 1 · Week 2 · Day 1 (5 tasks — scaffold, deps, tailwind, layout, landing page)
+        "2-W2.D1-0", "2-W2.D1-1", "2-W2.D1-2", "2-W2.D1-3", "2-W2.D1-4"
       ],
 
       phases: [
@@ -1514,6 +1516,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-04-25",
+          title: "Week 2 Day 1 — Project 1 scaffolded (dashboard-factory)",
+          desc: "Created apps/dashboard-factory/ as Next.js 15.1 on port 3002, mirroring the design-system-docs setup pattern. 13 files: package.json (workspace deps + lucide-react), tsconfig (extends nextjs base), next.config.mjs (transpilePackages for both shared packages), tailwind.config.ts (presets), layout.tsx with sticky Nav and brand footer, _components/Nav.tsx (DF gradient logo + Project 01 badge), and a polished landing page — hero with gradient 'minutes' word, two persona cards (Business User · BI Engineer) with serif italic quotes pulled directly from the master plan, three-step 'How it works' section, dual CTAs to /datasets and /wireframe. Build clean: 4 static pages, / at 106 kB First Load JS — exact match to design-system-docs baseline confirms no extra dep weight from the new shell. Foundation pays off — Day 1 of new app took ~30 mins instead of a full day. Commit aaf597b pushed.",
+          next: "Week 2 Day 2 — Author 6 sample dataset JSON fixtures in fixtures/dashboard-factory/datasets/"
+        },
         {
           date: "2026-04-24",
           title: "WEEK 1 COMPLETE — Foundation shipped",
