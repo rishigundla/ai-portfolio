@@ -17,10 +17,10 @@
 |-------|-------|
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
-| **Current Day** | Week 2 · Day 9 (Tue) — Sample Dataset Fixtures |
-| **Overall Progress** | 52 tasks of 98 complete · Phase 0 ✓ · Week 1 ✓ · Week 2 Day 1 ✓ |
-| **Status** | Project 1 scaffolded. `apps/dashboard-factory/` live in monorepo with hero + two persona cards + how-it-works section. Build clean (106 kB First Load JS). Pushed to GitHub. |
-| **Next Action** | Week 2 Day 2: Author 6 sample dataset JSON fixtures in `fixtures/dashboard-factory/datasets/` (RevOps Sales, Marketing Campaigns, Pulse Telemetry, Supply Chain, Financial Complaints, Customer Demographics) with metadata for thumbnail / domain / color token. |
+| **Current Day** | Week 2 · Day 10 (Wed) — Dataset Gallery UI |
+| **Overall Progress** | 60 tasks of 98 complete · Phase 0 ✓ · Week 1 ✓ · Week 2 Days 1-2 ✓ |
+| **Status** | Day 2 fixtures shipped. 6 datasets, 230 rows, 74 schema columns, manifest + README. Each fixture is realistic Nutanix-style anonymised data with typed schema (id / dimension / measure / time). |
+| **Next Action** | Week 2 Day 3: Build the dataset gallery at `/datasets` route — read `fixtures/dashboard-factory/datasets/index.json`, render 6 cards (thumbnail, title, tagline, domain badge, row count), navigate to `/generate/[slug]` on click. |
 | **Blockers** | None |
 
 ### Phase Progress Overview
@@ -41,6 +41,24 @@
 ## Recent Activity Log
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
+
+### 2026-04-25 · Week 2 Day 2 — 6 dataset fixtures authored
+- Created `fixtures/dashboard-factory/datasets/` with 6 JSON files + manifest:
+  - `revops-sales.json` (40 rows, 11 cols, accent) — Channel pipeline with NAI/NC2/NCI/Files/Move products, ACV/GRR/segment/region across NAMER/EMEA/APAC/LATAM
+  - `marketing-campaigns.json` (36 rows, 13 cols, purple) — Cross-channel performance (Email / Paid Social / Display / SEM / Webinar / Content) with spend, CTR, CPA, ROI by audience
+  - `pulse-telemetry.json` (42 rows, 13 cols, blue) — Daily product telemetry with intentional latent story: CUST-2847 NAI usage ramps while health_score declines 96→82 over the period (a real product team would notice this scaling concern)
+  - `supply-chain.json` (38 rows, 13 cols, amber) — POs with realistic patterns: Aurora Storage on-time, Voltaic Systems delays, Crystalline Memory partial shipments
+  - `financial-complaints.json` (36 rows, 11 cols, rose) — CFPB-style with realistic distributions: fraud has fastest resolution (3-5 days), mortgage modifications longest (12-38 days), dispute rates differ by channel
+  - `customer-demographics.json` (38 rows, 13 cols, teal) — Customer segmentation by industry / size / region with LTV, CSAT, NPS, status (Active / At Risk / Churned)
+- Authored `index.json` manifest — single line to update when adding a 7th dataset; gallery + downstream code never changes
+- Authored `README.md` for fixtures directory documenting schema column types (id / dimension / measure / time with optional values / unit / aggregation), the consumer days, and add-a-dataset workflow
+- Total: **230 rows** across **74 schema columns** — enough variety for the gallery, profiling, and dashboard rendering days
+- Cross-fixture consistency: Customer IDs in `customer-demographics.json` line up with `pulse-telemetry.json` (CUST-2847, CUST-1923, CUST-3145) so a power user could theoretically join them
+- Each fixture has a distinct `colorToken` (accent / purple / blue / amber / rose / teal) — the dashboard generator will pull the matching token to theme each output, making domains visually distinguishable
+- Validated via Node JSON parse: all 7 files parse cleanly
+- Commit `d58522d` pushed to main
+- **Context for Day 10 (Wed)**: Build the gallery at `/datasets`. Read `fixtures/dashboard-factory/datasets/index.json` (the manifest), render a 6-card grid, each card shows thumbnail / title / tagline / domain badge / row count. Click → navigate to `/generate/[slug]`. Use the existing `Card` primitive from `@rishi/design-system`.
+- **Next**: Week 2 Day 3 — Dataset Gallery UI
 
 ### 2026-04-25 · Week 2 Day 1 — Project 1 (dashboard-factory) scaffolded
 - Created `apps/dashboard-factory/` mirroring the design-system-docs setup pattern (the foundation pays off — Day 1 of the new app took ~30 mins instead of a full day)
@@ -627,17 +645,23 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 - Routes /datasets and /wireframe link from the landing CTAs but don't exist yet (built Days 3 + 5)
 - Local dev: `pnpm dev --filter dashboard-factory` opens on http://localhost:3002
 
-#### Day 2 (Tue) · Sample Dataset Fixtures
-- [ ] Create `fixtures/dashboard-factory/datasets/` with 6 sample JSON files:
-  - [ ] `revops-sales.json` (50 rows, ACV/GRR/segment/region pattern)
-  - [ ] `marketing-campaigns.json` (campaign/channel/spend/ROI)
-  - [ ] `pulse-telemetry.json` (NAI/NC2/NCI-style product telemetry)
-  - [ ] `supply-chain.json`
-  - [ ] `financial-complaints.json`
-  - [ ] `customer-demographics.json`
-- [ ] Each dataset has metadata: name, domain, suggested color token, row count, thumbnail path
+#### Day 2 (Tue) · Sample Dataset Fixtures — COMPLETED 2026-04-25
+- [x] Created `fixtures/dashboard-factory/datasets/` with 6 sample JSON files:
+  - [x] `revops-sales.json` (40 rows, 11 cols, accent · ACV/GRR/segment/region across NAI/NC2/NCI/Files/Move)
+  - [x] `marketing-campaigns.json` (36 rows, 13 cols, purple · cross-channel performance with spend/CTR/CPA/ROI)
+  - [x] `pulse-telemetry.json` (42 rows, 13 cols, blue · daily product telemetry with intentional health_score 96→82 ramp story)
+  - [x] `supply-chain.json` (38 rows, 13 cols, amber · POs with realistic delays + partial shipments)
+  - [x] `financial-complaints.json` (36 rows, 11 cols, rose · CFPB-style with realistic resolution-time distributions)
+  - [x] `customer-demographics.json` (38 rows, 13 cols, teal · industry / size / region with LTV / CSAT / NPS / status)
+- [x] Each dataset has metadata: title, tagline, domain, color token, icon name, thumbnail path, row count, **typed schema** with id / dimension / measure / time annotations
+- [x] Bonus: `index.json` manifest + `README.md` for fixtures directory
 
-**Context for Next Session**: _(fill in after completion)_
+**Context for Next Session (Day 10)**:
+- Total: 230 rows across 74 schema columns
+- Each fixture's `metadata.schema` describes column types — downstream rendering doesn't need LLM type inference
+- Customer IDs are consistent across `customer-demographics` and `pulse-telemetry` (CUST-2847, CUST-1923, CUST-3145) for potential joins
+- Day 3 reads ONLY `index.json` (the manifest) for the gallery — full dataset JSON loads on click in Day 4
+- Use `Card` from `@rishi/design-system/primitives` and `Badge` for the domain tag
 
 #### Day 3 (Wed) · Dataset Gallery UI
 - [ ] Build `/` route with gallery grid (6 cards)

@@ -1472,10 +1472,10 @@
       currentStatus: {
         phase: "Phase 1 — Project 1 (Dashboard Factory)",
         week: "Week 1 of 14",
-        day: "Week 2 · Day 9 (Tue) — Sample Dataset Fixtures",
-        progress: { done: 52, total: 98 },
-        status: "Project 1 scaffolded. apps/dashboard-factory/ live in monorepo with hero + two persona cards + how-it-works section. Build clean (106 kB First Load JS).",
-        nextAction: "Week 2 Day 2: Author 6 sample dataset JSON fixtures in fixtures/dashboard-factory/datasets/ (RevOps Sales, Marketing Campaigns, Pulse Telemetry, Supply Chain, Financial Complaints, Customer Demographics).",
+        day: "Week 2 · Day 10 (Wed) — Dataset Gallery UI",
+        progress: { done: 60, total: 98 },
+        status: "Day 2 fixtures shipped. 6 datasets, 230 rows, 74 typed schema columns, manifest + README. Each fixture has typed schema (id / dimension / measure / time) and a distinct color token.",
+        nextAction: "Week 2 Day 3: Build /datasets gallery — read index.json manifest, render 6 cards (thumbnail, title, tagline, domain badge, row count), navigate to /generate/[slug] on click.",
         blockers: "None"
       },
 
@@ -1503,7 +1503,10 @@
         // Phase 1 · Week 1 · Day 7 (4 tasks — package READMEs, root README, visual QA, tag week complete)
         "1-W1.D7-0", "1-W1.D7-1", "1-W1.D7-2", "1-W1.D7-3",
         // Phase 1 · Week 2 · Day 1 (5 tasks — scaffold, deps, tailwind, layout, landing page)
-        "2-W2.D1-0", "2-W2.D1-1", "2-W2.D1-2", "2-W2.D1-3", "2-W2.D1-4"
+        "2-W2.D1-0", "2-W2.D1-1", "2-W2.D1-2", "2-W2.D1-3", "2-W2.D1-4",
+        // Phase 1 · Week 2 · Day 2 (8 tasks — 6 dataset JSONs + manifest entry + metadata)
+        "2-W2.D2-0", "2-W2.D2-1", "2-W2.D2-2", "2-W2.D2-3", "2-W2.D2-4",
+        "2-W2.D2-5", "2-W2.D2-6", "2-W2.D2-7"
       ],
 
       phases: [
@@ -1516,6 +1519,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-04-25",
+          title: "Week 2 Day 2 — 6 dataset fixtures shipped",
+          desc: "Authored fixtures/dashboard-factory/datasets/ with 6 JSON files plus manifest + README. revops-sales (40 rows, accent), marketing-campaigns (36 rows, purple), pulse-telemetry (42 rows, blue with intentional health_score 96→82 story), supply-chain (38 rows, amber), financial-complaints (36 rows, rose), customer-demographics (38 rows, teal). 230 total rows across 74 typed schema columns (id / dimension / measure / time annotations baked in). Customer IDs cross-reference between pulse-telemetry and customer-demographics for potential joins. index.json manifest is the single line to update when adding a 7th dataset. Validated all 7 files via Node JSON parse. Commit d58522d pushed.",
+          next: "Week 2 Day 3 — Build /datasets gallery UI consuming the manifest"
+        },
         {
           date: "2026-04-25",
           title: "Week 2 Day 1 — Project 1 scaffolded (dashboard-factory)",
