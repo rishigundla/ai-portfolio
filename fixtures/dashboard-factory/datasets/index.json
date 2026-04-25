@@ -1,0 +1,66 @@
+{
+  "version": "1.0.0",
+  "generatedAt": "2026-04-25",
+  "datasets": [
+    {
+      "id": "revops-sales",
+      "title": "RevOps Sales SSOT",
+      "tagline": "Channel sales pipeline with ACV, GRR, and segment breakdowns",
+      "domain": "sales",
+      "colorToken": "accent",
+      "icon": "TrendingUp",
+      "rowCount": 40,
+      "thumbnail": "/datasets/revops-sales.png"
+    },
+    {
+      "id": "marketing-campaigns",
+      "title": "Marketing Campaigns",
+      "tagline": "Cross-channel campaign performance with spend, conversion, and ROI",
+      "domain": "marketing",
+      "colorToken": "purple",
+      "icon": "Megaphone",
+      "rowCount": 36,
+      "thumbnail": "/datasets/marketing-campaigns.png"
+    },
+    {
+      "id": "pulse-telemetry",
+      "title": "Pulse Telemetry",
+      "tagline": "Product telemetry across NAI / NC2 / NCI with usage, latency, and health metrics",
+      "domain": "product",
+      "colorToken": "blue",
+      "icon": "Activity",
+      "rowCount": 42,
+      "thumbnail": "/datasets/pulse-telemetry.png"
+    },
+    {
+      "id": "supply-chain",
+      "title": "Supply Chain",
+      "tagline": "Purchase orders, supplier performance, lead times, and fulfillment status",
+      "domain": "operations",
+      "colorToken": "amber",
+      "icon": "Truck",
+      "rowCount": 38,
+      "thumbnail": "/datasets/supply-chain.png"
+    },
+    {
+      "id": "financial-complaints",
+      "title": "Financial Complaints",
+      "tagline": "Consumer complaint analysis with response rates, dispute outcomes, and product breakdowns",
+      "domain": "cx",
+      "colorToken": "rose",
+      "icon": "FileWarning",
+      "rowCount": 36,
+      "thumbnail": "/datasets/financial-complaints.png"
+    },
+    {
+      "id": "customer-demographics",
+      "title": "Customer Demographics",
+      "tagline": "Customer segmentation by industry, size, region, and lifetime value",
+      "domain": "cx",
+      "colorToken": "teal",
+      "icon": "Users",
+      "rowCount": 38,
+      "thumbnail": "/datasets/customer-demographics.png"
+    }
+  ]
+}
