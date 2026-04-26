@@ -1472,10 +1472,10 @@
       currentStatus: {
         phase: "Phase 1 — Project 1 (Dashboard Factory)",
         week: "Week 1 of 14",
-        day: "Week 3 · Day 19 (Fri) — Wireframe Mode",
-        progress: { done: 92, total: 98 },
-        status: "PDF export shipped. Click Export PDF → @react-pdf/renderer dynamic-loads → branded light-theme PDF downloads with current filtered state. Bundle stays at 188 kB + 307 kB First Load JS (only +1 kB from D3 — react-pdf is in async chunks).",
-        nextAction: "Week 3 Day 5: Build /wireframe/[template] route with 3 layout templates (Executive / Operational / Exploratory). Static Figma-style mockups for Persona B (BI engineer) workflow.",
+        day: "Week 3 · Day 20 (Sat) — Empty/Loading/Error States",
+        progress: { done: 96, total: 98 },
+        status: "Wireframe mode shipped. /wireframe gallery + 3 statically-prerendered templates (executive, operational, exploratory) live, all using server-rendered inline SVG charts so the route stays at 245 kB First Load JS. Variant switcher cross-links the templates. Home CTA 'Try wireframe mode' no longer 404s.",
+        nextAction: "Week 3 Day 6: Empty/loading/error states. Skeleton loaders for dashboard, error boundary around Recharts, Toast notifications for user actions. Polish pass on edge cases.",
         blockers: "None"
       },
 
@@ -1524,7 +1524,9 @@
         // Phase 1 · Week 3 · Day 3 (4 tasks — FilterBar, reactive filters, drill-down modal, empty state)
         "3-W3.D3-0", "3-W3.D3-1", "3-W3.D3-2", "3-W3.D3-3",
         // Phase 1 · Week 3 · Day 4 (4 tasks — install, template, button, footer)
-        "3-W3.D4-0", "3-W3.D4-1", "3-W3.D4-2", "3-W3.D4-3"
+        "3-W3.D4-0", "3-W3.D4-1", "3-W3.D4-2", "3-W3.D4-3",
+        // Phase 1 · Week 3 · Day 5 (4 tasks — route, gallery, mockups, download)
+        "3-W3.D5-0", "3-W3.D5-1", "3-W3.D5-2", "3-W3.D5-3"
       ],
 
       phases: [
@@ -1537,6 +1539,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-04-25",
+          title: "Week 3 Day 5 — Wireframe mode shipped",
+          desc: "The home CTA 'Try wireframe mode' no longer 404s. /wireframe shows a gallery of 3 layout archetypes; clicking any card lands on a fully-designed hi-fi mockup. EXECUTIVE (sparse): oversized $148.2M headline KPI in 6xl-9xl gradient text + 10-quarter sparkline + 3 sub-KPI tiles + full-width 12-quarter trend. 'One number + one chart, sized for a CEO meeting room.' OPERATIONAL (dense): live auto-refresh-30s indicator + 6-up KPI strip with inverse-good color semantics for latency/errors/pages/incidents (down is good) + 2x2 chart grid (bars/line/donut/bars) + status footer. 'Control room view for an SRE on-call standup.' EXPLORATORY (medium): 3-col sticky filter rail (search shell + 5-segment checkboxes + 4-dim Group-by chip selector + date range + Save view CTA) + 9-col main with 4-KPI row + cohort retention heatmap + 2-up bottom (industry mix donut + LTV bars). 'Analyst's notebook for an ad-hoc investigation.' KEY DECISION — hand-rolled inline SVG over Recharts: wireframes are static, no resize/tooltip/filter recompute. Recharts is already on /dashboard/[slug] at ~110 kB; a second copy would be wasteful. Inline SVG renders server-side with no 'use client' boundary, so the route ships as RSC HTML at 245 kB First Load JS. Filter rail is purely visual — no state, no event handlers — to keep the 'this is a mockup' mental model. 7 new files: lib/wireframe-templates.ts (metadata + 3 hand-curated demo datasets), app/wireframe/page.tsx (gallery with mini-layout SVG sketches per card), app/wireframe/[template]/page.tsx (dynamic route, all 3 prerendered via generateStaticParams), MockCharts.tsx (4 SVG primitives), 3 layout components. Variant switcher chips on each page cross-link the templates. Build: 21 of 21 pages generated, typecheck clean. Commit 53117d0 pushed.",
+          next: "Week 3 Day 6 — Empty/Loading/Error States (skeleton loaders, Recharts error boundary, Toast notifications, edge case polish)"
+        },
         {
           date: "2026-04-26",
           title: "Week 3 Day 4 — PDF export shipped",

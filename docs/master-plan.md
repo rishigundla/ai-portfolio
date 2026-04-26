@@ -17,10 +17,10 @@
 |-------|-------|
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
-| **Current Day** | Week 3 · Day 19 (Fri) — Wireframe Mode |
-| **Overall Progress** | 92 tasks of 98 complete · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ · Week 3 Days 1-4 ✓ |
-| **Status** | PDF export shipped. Click "Export PDF" → @react-pdf/renderer dynamic-loads → branded light-theme PDF downloads reflecting the current filtered state. /dashboard stays at 188 kB + 307 kB First Load JS (only +1 kB from Day 3 — react-pdf is in an async chunk). |
-| **Next Action** | Week 3 Day 5: Build `/wireframe/[template]` route — gallery of 3 layout templates (Executive / Operational / Exploratory) showing static Figma-style mockups, with PNG/PDF download options. This is Persona B (BI engineer) mode from the master plan. |
+| **Current Day** | Week 3 · Day 20 (Sat) — Empty/Loading/Error States |
+| **Overall Progress** | 96 tasks of 98 complete · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ · Week 3 Days 1-5 ✓ |
+| **Status** | Wireframe mode shipped. `/wireframe` gallery + 3 statically-prerendered templates (`executive`, `operational`, `exploratory`) live, all using server-rendered inline SVG charts so the route stays at 245 kB First Load JS. Variant switcher cross-links the templates. Home CTA "Try wireframe mode" no longer 404s. |
+| **Next Action** | Week 3 Day 6: Empty/loading/error states. Skeleton loaders for dashboard, error boundary around Recharts, Toast notifications for user actions. Polish pass on existing edge cases. |
 | **Blockers** | None |
 
 ### Phase Progress Overview
@@ -41,6 +41,23 @@
 ## Recent Activity Log
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
+
+### 2026-04-25 · Week 3 Day 5 — Wireframe mode
+- The home CTA "Try wireframe mode" no longer 404s. `/wireframe` shows a gallery of 3 layout archetypes; clicking any card lands on a fully-designed hi-fi mockup ready to share with a stakeholder.
+- **Why this exists**: Persona B from the master plan is a BI engineer kicking off a new dashboard project who needs a clickable hi-fi wireframe for Monday's discovery session, but doesn't want to spend a week in Figma first. They pick a layout archetype, share the URL, and use it as the conversation anchor.
+- **3 layout archetypes**:
+  - **Executive** (sparse): oversized $148.2M headline KPI in 6xl-9xl gradient text, 10-quarter sparkline, 3 sub-KPI tiles, full-width 12-quarter trend chart. "1 number + 1 chart, sized for a CEO meeting room."
+  - **Operational** (dense): live "auto-refresh 30s" indicator + 6-up KPI strip with inverse-good color semantics for latency/errors/pages/incidents (down is good) + 2x2 chart grid (bars/line/donut/bars) + status footer. "Control room view for an SRE on-call standup."
+  - **Exploratory** (medium): 3-col sticky filter rail with search/segment checkboxes/Group-by chip selector/date range/Save view CTA + 9-col main with 4-KPI row + cohort retention heatmap + 2-up bottom (industry mix donut + LTV distribution bars). "Analyst's notebook for an ad-hoc investigation."
+- **Key architectural decision — hand-rolled SVG over Recharts**: wireframes are static. No resize observers, no tooltip state, no filter recompute. Recharts is already on the live `/dashboard/[slug]` route at ~110 kB; a second copy would be wasteful. Inline SVG renders server-side with no `'use client'` boundary, so the wireframe route ships as RSC HTML. Visual language (rounded bar tops, sparse gridlines, soft accent fills) matches the live Recharts output so the wireframe reads as a faithful preview rather than a downgrade.
+- **Filter rail is purely visual** — no state, no event handlers. Wiring real interactivity would (a) bloat the bundle, (b) break the "this is a mockup" mental model, (c) require a duplicate filter system that has nothing to do with real data. A wireframe is finished when it can carry a stakeholder conversation, not when it can drive production data.
+- **7 new files**: `lib/wireframe-templates.ts` (metadata + 3 hand-curated demo datasets), `app/wireframe/page.tsx` (gallery), `app/wireframe/[template]/page.tsx` (dynamic route with `generateStaticParams`), `app/wireframe/_components/MockCharts.tsx` (4 SVG primitives — bar/line/donut/heatmap), 3 layout components (Executive/Operational/Exploratory).
+- **Variant switcher**: each template page shows the other 2 templates as chips in the header so stakeholders can flip between archetypes during the discovery conversation without backing out to the gallery.
+- **Mini-layout SVG sketches as gallery thumbnails**: instead of a single icon, each gallery card shows a 240×150 SVG abstraction of the actual layout (sparse hero box for Executive, 6-cell strip + 2x2 grid for Operational, filter rail + heatmap + 2-up for Exploratory). The thumbnail IS the wireframe-of-the-wireframe.
+- **Build**: 3 wireframe routes prerendered (`/wireframe/executive`, `/wireframe/operational`, `/wireframe/exploratory`). 19.5 kB route-specific + 245 kB First Load JS. 21 of 21 pages generated. Typecheck clean.
+- Commit `53117d0` pushed to main
+- **Context for Day 20 (Sat)**: Empty/loading/error states. Skeleton loaders for the dashboard layout while it builds. Error boundary around Recharts in case a malformed dataset reaches the renderer. Toast notifications for user actions (filter cleared, PDF exported). Polish pass on existing edge cases — drill-down dialog with no rows, single-row datasets, all-null dimension columns.
+- **Next**: Week 3 Day 6 — Empty/Loading/Error States
 
 ### 2026-04-26 · Week 3 Day 4 — PDF export
 - Click **"Export PDF"** on the dashboard → @react-pdf/renderer dynamic-loads → a branded PDF downloads reflecting the current filtered state
@@ -944,13 +961,23 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 - Wire up the home CTA `<Link href="/wireframe">` to redirect to a default template (or build a `/wireframe` index page that links to all 3).
 - Optional: PNG/PDF download per template using the same dynamic-import pattern as Day 4.
 
-#### Day 5 (Fri) · Wireframe Mode
-- [ ] Build `/wireframe/[template]` route
-- [ ] Gallery with 3 pre-built templates: Executive, Operational, Exploratory
-- [ ] Each template shows a static Figma-style mockup
-- [ ] Download as PNG or PDF option
+#### Day 5 (Fri) · Wireframe Mode — COMPLETED 2026-04-25
+- [x] Built `/wireframe` gallery (3 cards with mini-layout SVG sketches per template)
+- [x] Built `/wireframe/[template]` dynamic route — all 3 templates (`executive`, `operational`, `exploratory`) prerendered statically via `generateStaticParams`
+- [x] **Executive layout**: oversized headline KPI ($148.2M FY26 Bookings) with 6xl-9xl scale + gradient text + delta chip + 10-quarter sparkline strip + 3 sub-KPI tiles + full-width 12-quarter trend chart
+- [x] **Operational layout**: live indicator strip + 6-up dense KPI strip (Active Clusters / Healthy% / P95 Latency / Errors / Pages / Incidents — with inverse-good color semantics for latency/errors/pages/incidents) + 2x2 chart grid (bars/line/donut/bars) + status footer
+- [x] **Exploratory layout**: 3-col filter rail (search input shell + 5-segment checkbox list + 4-dimension Group-by chip selector + date range dropdown + "Save current view" CTA) + 9-col main with 4-KPI row + full-width cohort heatmap + 2-up bottom (donut + bars)
+- [x] `MockCharts.tsx` — 4 reusable inline-SVG primitives (`MockBarChart`, `MockLineChart`, `MockDonutChart`, `MockCohortHeatmap`) — all server-renderable, no `'use client'`
+- [x] `lib/wireframe-templates.ts` — template metadata (`TEMPLATES` array) + hand-curated demo data per template (`EXECUTIVE_DATA`, `OPERATIONAL_DATA`, `EXPLORATORY_DATA`)
+- [x] Variant switcher on each template page — chip links to the other 2 templates
+- [x] Build: 3 wireframe routes prerendered, 19.5 kB route-specific + 245 kB First Load JS, 21 of 21 pages generated successfully
+- [x] Commit `53117d0` pushed to main
 
-**Context for Next Session**: _(fill in after completion)_
+**Why hand-rolled SVG instead of Recharts**: wireframes are static — no resize observers, no tooltip state, no filter recompute. Recharts is already on the live `/dashboard/[slug]` route at ~110 kB; a wireframe gallery doesn't need a second copy. Inline SVG renders server-side with no client boundary, so the entire wireframe route ships as RSC HTML and the page stays under 250 kB First Load.
+
+**Context for Next Session (Day 20 = Week 3 Day 6)**:
+- Day 6 = empty/loading/error states. Skeleton loaders for the dashboard route while the layout builds. Error boundary around Recharts in case a malformed dataset reaches the renderer. Empty state for "no rows match filters" already exists in `_dashboard-interactive.tsx` — needs visual polish + Toast notifications for user actions like "Filter cleared" / "PDF exported".
+- Lower-priority polish items: loading state on the Generate button when the streaming hasn't started yet; hardening the drill-down dialog when no rows are present; verifying every chart degrades gracefully on weird shapes (e.g., 1-row dataset, all-null dimension column).
 
 #### Day 6 (Sat) · Empty/Loading/Error States
 - [ ] Skeleton loaders for dashboard
