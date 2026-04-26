@@ -17,10 +17,10 @@
 |-------|-------|
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
-| **Current Day** | Week 2 · Day 13 (Sat) — State + Navigation |
-| **Overall Progress** | 74 tasks of 98 complete · Phase 0 ✓ · Week 1 ✓ · Week 2 Days 1-5 ✓ |
-| **Status** | Day 5 profiling fixtures shipped. All 6 datasets stream curated AI text that references real column names + observed patterns. `getProfilingFixture(slug, dataset)` loader handles curated-or-fallback. |
-| **Next Action** | Week 2 Day 6: Add Zustand state management for the selected-dataset/profiling-result flow + URL state serialization. Currently each route loads independently from JSON — Zustand caches across navigation and supports shareable links. |
+| **Current Day** | Week 2 · Day 14 (Sun) — Responsive Polish |
+| **Overall Progress** | 78 tasks of 98 complete · Phase 0 ✓ · Week 1 ✓ · Week 2 Days 1-6 ✓ |
+| **Status** | Day 6 state + guards shipped. Zustand-persist remembers profiled slugs across sessions; the streaming animation skips on return visits. `/dashboard/[slug]` exists with redirect guard. 17 static pages, 6 dashboard routes pre-rendered. |
+| **Next Action** | Week 2 Day 7: Responsive QA across all 4 routes (/, /datasets, /generate/[slug], /dashboard/[slug]). Test 320px through 1920px. Mobile hamburger nav + touch targets. Tag Week 2 complete (only Project 1 core remains: Week 3 = dashboard rendering + filters + PDF export + wireframe mode). |
 | **Blockers** | None |
 
 ### Phase Progress Overview
@@ -41,6 +41,29 @@
 ## Recent Activity Log
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
+
+### 2026-04-26 · Week 2 Day 6 — Zustand state + nav guards + dashboard stub
+- Added `zustand@5.0.2` as dep in `apps/dashboard-factory/`
+- Created `apps/dashboard-factory/lib/store.ts` — tiny store with:
+  - `profilingComplete: Record<slug, boolean>` (the only persisted state)
+  - `markProfilingComplete(slug)` and `resetProfiling(slug)` mutators
+  - Persisted to localStorage via `zustand/middleware/persist`
+  - Exports `useStoreHydrated()` — hook that returns true only AFTER persist finishes loading from localStorage. Components gate UI on hydration to avoid SSR/client mismatch flashes.
+- Updated `app/generate/[slug]/_streaming-panel.tsx`:
+  - Reads `profilingComplete[slug]` from store after hydration
+  - On mount: if user already profiled, render full text immediately and skip the streaming animation
+  - When streaming completes: calls `markProfilingComplete(slug)` so future visits skip the animation
+  - Replay button now resets the slug state and re-streams (clean reset, not just visual)
+- Created `app/dashboard/[slug]/page.tsx` (server component) + `_guard.tsx` (client guard):
+  - `generateStaticParams` pre-renders all 6 slug routes
+  - Server component pulls dataset summary via `getDataset(slug)` and hands to client guard
+  - Guard waits for hydration, redirects to `/generate/[slug]` if `profilingComplete[slug]` is false
+  - On valid access, renders the **Coming-Week-3 stub**: header strip with status pill ("Profiling complete"), explainer card, CTAs (Replay profiling / Try another dataset)
+- **Why the stub matters**: the "Generate dashboard" CTA on `/generate/[slug]` no longer 404s. Recruiters who click through don't hit a broken state. Week 3 ships the actual dashboard rendering into a working frame.
+- Build: **17 static pages** (was 11). `/dashboard/[slug]` at **3.65 kB + 111 kB First Load JS** (light because guard + Zustand are tiny). `/generate/[slug]` grew slightly to 55.9 kB + 163 kB (Zustand bundle ~1 kB). Typecheck clean.
+- Commit `c3827ed` pushed to main
+- **Context for Day 14 (Sun)**: Final Week 2 day. Responsive QA across all 4 routes at 320px, 480px, 768px, 1024px, 1440px, 1920px. Test on mobile (Chrome devtools iPhone 14 emulator), tablet (iPad), desktop. Watch for: hero gradient text wrap on small screens, dataset gallery card stacking, /generate/[slug] header strip wrap, dashboard guard loading state visibility. Tag Week 2 complete and transition to Week 3 (dashboard rendering).
+- **Next**: Week 2 Day 7 — Responsive polish + Week 2 wrap
 
 ### 2026-04-25 · Week 2 Day 5 — Profiling fixtures hand-curated
 - Authored 6 profiling fixtures at `fixtures/dashboard-factory/profiling/<slug>.json`, each in the `Fixture` shape from `@rishi/ai-core` (id, text with markdown, metadata)
@@ -757,13 +780,16 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 - Day 6 wires Zustand for client-side state caching + URL serialization. The current architecture works without it (each route re-loads from JSON), but Zustand prevents redundant re-streaming when users back-navigate from /dashboard/[slug] to /generate/[slug]
 - Also Day 6: navigation guards. Users shouldn't be able to land on `/dashboard/[slug]` (Week 3) without having profiled first. Track `profilingComplete` in Zustand, block the route if false.
 
-#### Day 6 (Sat) · State Management + Navigation
-- [ ] Set up Zustand store for selected dataset + profiling result
-- [ ] Navigation guards (can't access `/dashboard` without profiling result)
-- [ ] Back button flow between pages
-- [ ] URL state serialization for shareable links (`?dataset=revops-sales`)
+#### Day 6 (Sat) · State Management + Navigation — COMPLETED 2026-04-26
+- [x] Set up Zustand store at `lib/store.ts` — `profilingComplete: Record<slug, boolean>` persisted to localStorage. `useStoreHydrated()` hook prevents SSR/client mismatch flashes.
+- [x] Navigation guards — `app/dashboard/[slug]/_guard.tsx` redirects to `/generate/[slug]` if profiling not complete
+- [x] Back button flow — every page has explicit "Back to..." link respecting the natural flow
+- [-] URL state serialization — **deferred**. Slug is already in the path (`/generate/revops-sales` is itself a shareable link). Adding `?profiled=true` would only matter if recruiters share mid-stream URLs, which is unlikely. Skipped to keep scope tight.
 
-**Context for Next Session**: _(fill in after completion)_
+**Context for Next Session (Day 14)**:
+- Day 7 is responsive QA day. Test all 4 routes (`/`, `/datasets`, `/generate/[slug]`, `/dashboard/[slug]`) at 320px / 480px / 768px / 1024px / 1440px / 1920px.
+- Watch for: hero gradient text wrap on small screens, dataset gallery card stacking (1 col mobile / 2 tablet / 3 desktop), `/generate/[slug]` header strip wrap, dashboard guard loading state visibility on slow connections, DataGrid horizontal overflow on narrow viewports.
+- Tag Week 2 complete after the QA pass. Week 3 builds the actual dashboard rendering inside the existing guarded route.
 
 #### Day 7 (Sun) · Responsive Polish
 - [ ] Test gallery at 320px, 480px, 768px, 1024px, 1440px, 1920px
