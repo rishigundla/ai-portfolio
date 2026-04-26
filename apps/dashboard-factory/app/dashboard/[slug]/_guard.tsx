@@ -3,7 +3,7 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, ArrowRight, Construction, Sparkles } from 'lucide-react'
+import { ArrowLeft, RotateCcw, Sparkles } from 'lucide-react'
 import { Section } from '../../_components/Section'
 import { useDashboardStore, useStoreHydrated } from '@/lib/store'
 import {
@@ -11,10 +11,13 @@ import {
   getDatasetIcon,
   getColorClasses,
 } from '@/lib/datasets'
+import type { DashboardLayout } from '@/lib/dashboard-builder'
+import { DashboardView } from './_dashboard-view'
 
 interface DashboardGuardProps {
   slug: string
   dataset: DatasetSummary
+  layout: DashboardLayout
 }
 
 /**
@@ -25,14 +28,13 @@ interface DashboardGuardProps {
  *   1. Waits for Zustand to hydrate from localStorage
  *   2. Reads profilingComplete[slug]
  *   3. Redirects to /generate/[slug] if false
- *   4. Renders the Week-3-coming-soon placeholder if true
+ *   4. Renders the actual dashboard if true
  *
- * Until Week 3 ships the actual dashboard rendering, this page exists
- * primarily to make the "Generate dashboard" CTA on /generate/[slug]
- * link to a real page (no 404) and to validate the navigation guard
- * pattern for Week 3.
+ * As of Week 3 Day 1, the success branch renders an actual dashboard
+ * (KPI strip + chart grid). Day 16 swaps the inline-SVG charts for
+ * Recharts to add interactivity.
  */
-export function DashboardGuard({ slug, dataset }: DashboardGuardProps) {
+export function DashboardGuard({ slug, dataset, layout }: DashboardGuardProps) {
   const router = useRouter()
   const hydrated = useStoreHydrated()
   const profilingComplete = useDashboardStore(
@@ -46,14 +48,11 @@ export function DashboardGuard({ slug, dataset }: DashboardGuardProps) {
     }
   }, [hydrated, profilingComplete, slug, router])
 
-  // While we're loading or about to redirect, show a tasteful loading state
-  // (avoids flashing the "Coming Week 3" placeholder before the redirect fires)
+  // While loading or about to redirect, show a tasteful loading state
+  // so the dashboard doesn't flash before redirect fires
   if (!hydrated || !profilingComplete) {
     return (
-      <Section
-        eyebrow="Loading"
-        title="Checking your progress"
-      >
+      <Section eyebrow="Loading" title="Checking your progress">
         <div className="rounded-xl border border-surface-border bg-surface p-12 text-center">
           <div className="inline-flex items-center gap-2 text-sm text-text-muted">
             <span className="h-2 w-2 rounded-full bg-accent animate-pulse" />
@@ -64,15 +63,17 @@ export function DashboardGuard({ slug, dataset }: DashboardGuardProps) {
     )
   }
 
-  return <ComingSoonStub slug={slug} dataset={dataset} />
+  return <DashboardSuccess slug={slug} dataset={dataset} layout={layout} />
 }
 
-function ComingSoonStub({
+function DashboardSuccess({
   slug,
   dataset,
+  layout,
 }: {
   slug: string
   dataset: DatasetSummary
+  layout: DashboardLayout
 }) {
   const Icon = getDatasetIcon(dataset.icon)
   const colors = getColorClasses(dataset.colorToken)
@@ -96,65 +97,45 @@ function ComingSoonStub({
         description={dataset.tagline}
       >
         {/* Header strip */}
-        <div className="flex items-center gap-4 mb-10 -mt-2">
+        <div className="flex items-center gap-4 mb-8 -mt-2">
           <div
-            className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-xl border ${colors.thumbBorder} ${colors.thumbBg}`}
+            className={`flex h-14 w-14 sm:h-16 sm:w-16 shrink-0 items-center justify-center rounded-xl border ${colors.thumbBorder} ${colors.thumbBg}`}
           >
-            <Icon className={`h-7 w-7 ${colors.iconColor}`} strokeWidth={1.5} />
+            <Icon
+              className={`h-6 w-6 sm:h-7 sm:w-7 ${colors.iconColor}`}
+              strokeWidth={1.5}
+            />
           </div>
-          <div className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-xs">
-            <span className="inline-flex items-center gap-1.5 text-status-completed">
-              <span className="h-1.5 w-1.5 rounded-full bg-status-completed" />
-              Profiling complete
+          <div className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-xs min-w-0">
+            <span className="inline-flex items-center gap-1.5 text-status-completed shrink-0">
+              <span className="h-1.5 w-1.5 rounded-full bg-status-completed animate-pulse" />
+              Live dashboard
             </span>
-            <span className="text-text-muted">
-              ready for dashboard rendering
+            <span className="text-text-muted shrink-0">
+              auto-generated from profiling
             </span>
+          </div>
+          <div className="ml-auto flex items-center gap-2 shrink-0">
+            <Link
+              href={`/generate/${slug}`}
+              className="hidden sm:inline-flex items-center gap-1.5 text-xs text-text-muted hover:text-accent px-3 py-2 rounded-md border border-surface-border hover:border-accent/40 transition-colors"
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              Re-profile
+            </Link>
+            <Link
+              href="/datasets"
+              className="inline-flex items-center gap-1.5 text-xs text-text-muted hover:text-accent px-3 py-2 rounded-md border border-surface-border hover:border-accent/40 transition-colors"
+            >
+              <RotateCcw className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Switch dataset</span>
+              <span className="sm:hidden">Switch</span>
+            </Link>
           </div>
         </div>
 
-        {/* Coming soon card */}
-        <div className="rounded-xl border border-surface-border bg-surface p-8 sm:p-12">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 mb-4 px-3 py-1 rounded-full border border-accent/30 bg-accent/10">
-              <Construction className="h-3.5 w-3.5 text-accent" />
-              <span className="font-mono text-xs uppercase tracking-widest text-accent">
-                Coming Week 3
-              </span>
-            </div>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight mb-4">
-              Dashboard rendering ships next
-            </h2>
-            <p className="text-text-secondary leading-relaxed mb-6">
-              The Claude profiling output you just watched recommends a specific KPI strip + chart
-              composition for this dataset. Week 3 of the build plan implements the renderer that
-              maps those recommendations to live charts using Recharts and the design system's{' '}
-              <code className="text-accent font-mono text-xs">KpiCard</code> +{' '}
-              <code className="text-accent font-mono text-xs">ChartCard</code> components.
-            </p>
-            <p className="text-text-muted leading-relaxed text-sm mb-8">
-              The route exists, the navigation guard works, the design system is ready, and the
-              fixtures are in place. What's coming: dynamic chart rendering, filter wiring, drill-
-              downs, and PDF export. ETA Week 3 (Days 15-21).
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Link
-                href={`/generate/${slug}`}
-                className="inline-flex items-center gap-2 rounded-md border border-surface-border bg-surface hover:bg-surface-hover hover:border-accent/40 px-5 py-2.5 text-sm font-medium text-text-primary transition-all"
-              >
-                <Sparkles className="h-4 w-4" />
-                Replay profiling
-              </Link>
-              <Link
-                href="/datasets"
-                className="inline-flex items-center gap-2 rounded-md bg-accent text-base-900 hover:bg-accent-light px-5 py-2.5 text-sm font-semibold transition-all"
-              >
-                Try another dataset
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </div>
-        </div>
+        {/* Dashboard content */}
+        <DashboardView layout={layout} colors={colors} />
       </Section>
     </>
   )

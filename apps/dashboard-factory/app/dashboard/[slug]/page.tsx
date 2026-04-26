@@ -1,5 +1,7 @@
 import { notFound } from 'next/navigation'
 import { datasets, getDataset } from '@/lib/datasets'
+import { getFullDataset } from '@/lib/full-datasets'
+import { buildDashboardLayout } from '@/lib/dashboard-builder'
 import { DashboardGuard } from './_guard'
 
 // Pre-render every slug at build time
@@ -24,7 +26,13 @@ export async function generateMetadata({ params }: PageProps) {
 export default async function DashboardPage({ params }: PageProps) {
   const { slug } = await params
   const summary = getDataset(slug)
-  if (!summary) notFound()
+  const fullDataset = getFullDataset(slug)
+  if (!summary || !fullDataset) notFound()
 
-  return <DashboardGuard slug={slug} dataset={summary} />
+  // Build the dashboard layout server-side from the dataset rows.
+  // The result is JSON-serializable, so it crosses cleanly into the
+  // client-side guard / view.
+  const layout = buildDashboardLayout(fullDataset)
+
+  return <DashboardGuard slug={slug} dataset={summary} layout={layout} />
 }
