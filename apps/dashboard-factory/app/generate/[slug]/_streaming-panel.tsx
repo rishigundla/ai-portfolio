@@ -121,11 +121,11 @@ export function StreamingPanel({
   return (
     <div className="space-y-6">
       {/* Progress steps */}
-      <div className="rounded-xl border border-surface-border bg-surface p-5">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2 text-sm font-mono uppercase tracking-wider text-text-muted">
-            <Sparkles className="h-4 w-4 text-accent" />
-            <span>{streaming ? 'Claude is analyzing...' : completed ? 'Profiling complete' : 'Ready to profile'}</span>
+      <div className="rounded-xl border border-surface-border bg-surface p-4 sm:p-5">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+          <div className="flex items-center gap-2 text-xs sm:text-sm font-mono uppercase tracking-wider text-text-muted min-w-0">
+            <Sparkles className="h-4 w-4 text-accent shrink-0" />
+            <span className="truncate">{streaming ? 'Claude is analyzing...' : completed ? 'Profiling complete' : 'Ready to profile'}</span>
           </div>
           {streaming && (
             <Button variant="ghost" size="sm" onClick={cancelStream}>
