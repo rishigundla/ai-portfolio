@@ -17,10 +17,10 @@
 |-------|-------|
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
-| **Current Day** | Week 3 · Day 16 (Tue) — Recharts Integration |
-| **Overall Progress** | 82 tasks of 98 complete · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ · Week 3 Day 1 ✓ |
-| **Status** | Live dashboard rendering shipped. `/dashboard/[slug]` now shows real KPIs computed from dataset rows + 3 inline-SVG charts (bar / line / donut). Server builds the layout, client renders. |
-| **Next Action** | Week 3 Day 2: Install Recharts. Swap inline-SVG renderers for Recharts components — same DashboardChartData contract, just nicer renderer with tooltips, hover, and click-to-drill. |
+| **Current Day** | Week 3 · Day 17 (Wed) — Filters + Interactivity |
+| **Overall Progress** | 84 tasks of 98 complete · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ · Week 3 Days 1-2 ✓ |
+| **Status** | Recharts integration shipped. All 3 charts render via Recharts with tooltips, hover, and entry animations. Theme tokens flow through. /dashboard at 152 kB + 267 kB First Load JS (Recharts adds ~110 kB to the route). |
+| **Next Action** | Week 3 Day 3: Wire up FilterBar above the charts. Date range / segment / dimension filters apply reactively to all KPIs + charts. Click-a-bar drill-down modal. Empty state when filters match no rows. |
 | **Blockers** | None |
 
 ### Phase Progress Overview
@@ -41,6 +41,22 @@
 ## Recent Activity Log
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
+
+### 2026-04-26 · Week 3 Day 2 — Recharts integration
+- Installed `recharts@2.15.0` in `apps/dashboard-factory/`
+- Rewrote all 3 chart renderers in `_dashboard-view.tsx` to use Recharts:
+  - **BarChartView** — `<BarChart layout="vertical">` with horizontal bars, accent fill at 75% opacity, rounded right corners. Tooltip cursor highlights row on hover (`rgba(45,212,191,0.08)`).
+  - **LineChartView** — `<AreaChart>` with linear-gradient area (accent 30% → transparent), 2px stroke, dot at each point, larger active-dot on hover, dashed-line tooltip cursor with monotone curve.
+  - **DonutChartView** — `<PieChart>` with `innerRadius="62%"`, 6-color palette via `<Cell>` per slice. Center "{total} total" text rendered as an absolutely-positioned overlay div (`pointer-events-none` so slice hover still fires underneath the text).
+- **Custom `<CustomTooltip>`** matching design tokens — surface-elevated background, surface-border ring, color-dot indicator, mono uppercase label, accent-formatted value with compact M/K notation.
+- `formatChartValue()` for compact axis labels and tooltip values
+- Same `DashboardChartData` discriminated union — only the renderer body changed. `chart-builder.ts` produced data is identical.
+- **Build delta**: `/dashboard/[slug]` grew from 42.4 kB to **152 kB** (route-specific) + **267 kB First Load JS** (was 157 kB). Recharts adds ~110 kB unzipped. Under the 300 kB threshold but the heaviest route in the portfolio.
+- Other routes unchanged (Recharts is route-scoped via Next.js code splitting)
+- Typecheck clean
+- Commit `ba847fb` pushed to main
+- **Context for Day 17 (Wed)**: Wire up `FilterBar` from `@rishi/design-system/components` above the charts. Need to: (1) extract dimension columns + min/max date as filter options, (2) move dashboard layout building from server to client (or use server actions on filter change), (3) implement click-on-bar drill-down modal showing rows matching that bar, (4) empty state when filters match nothing. Probably need to refactor: keep `buildDashboardLayout` as a pure function, but have client call it on filter change with filtered rows.
+- **Next**: Week 3 Day 3 — Filters + interactivity
 
 ### 2026-04-26 · Week 3 Day 1 — Live dashboard rendering shipped
 - Replaced the Coming-Week-3 stub at `/dashboard/[slug]` with an actual rendered dashboard
@@ -859,13 +875,18 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 - Theme alignment: Recharts accepts a `stroke` / `fill` prop on each shape — pass our token-based colors via the existing `ColorClassSet`
 - Don't forget to add `'use client'` to the new chart wrapper if Recharts components need it (most do due to ResponsiveContainer)
 
-#### Day 2 (Tue) · Chart Rendering
-- [ ] Integrate Recharts (or Tremor)
-- [ ] Support bar, line, donut, heatmap, scatter chart types
-- [ ] Theme all charts to design-system tokens
-- [ ] Wire actual dataset rows to chart data
+#### Day 2 (Tue) · Chart Rendering — COMPLETED 2026-04-26
+- [x] Integrated Recharts 2.15 (chose Recharts over Tremor — Recharts is more flexible for the donut center-text overlay we needed)
+- [x] Support bar, line, donut chart types out of the gate. Heatmap + scatter deferred — not used by any of the 6 datasets' layouts. Can add when a 7th dataset needs them.
+- [x] All charts themed to design-system tokens via CSS variables (accent fills, surface-border gridlines, text-muted axis labels, surface-elevated tooltip background)
+- [x] Charts wired to real dataset rows via the `DashboardChartData` contract from `lib/dashboard-builder.ts` — server aggregates, client renders
 
-**Context for Next Session**: _(fill in after completion)_
+**Context for Next Session (Day 17 = Week 3 Day 3)**:
+- Day 3 wires `FilterBar` from `@rishi/design-system/components` above the chart grid. Filters apply reactively to KPIs + charts.
+- Refactor needed: `buildDashboardLayout(dataset)` currently runs once on the server with all rows. To support filters, move the layout building to a client-side function that takes `(dataset, filters)` and returns the new `DashboardLayout` whenever filters change. Pure function, fast on 50-row fixtures.
+- Filter inputs: date range (from `time` column min/max), one dimension dropdown ("All segments" vs specific values), search box across `id` columns.
+- Drill-down modal: click a bar → opens `<Dialog>` with rows filtered to that bar's category. Use `<Dialog>` from design-system primitives.
+- Empty state: when filtered rows == 0, swap chart content for `EmptyChart` with a "Clear filters" button.
 
 #### Day 3 (Wed) · Filters + Interactivity
 - [ ] FilterBar on dashboard: date range, segment, dimension

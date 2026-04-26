@@ -1472,10 +1472,10 @@
       currentStatus: {
         phase: "Phase 1 — Project 1 (Dashboard Factory)",
         week: "Week 1 of 14",
-        day: "Week 3 · Day 16 (Tue) — Recharts Integration",
-        progress: { done: 82, total: 98 },
-        status: "Week 3 Day 1 shipped. Live dashboard rendering at /dashboard/[slug] with computed KPIs + 3 inline-SVG charts (bar/line/donut). Server builds layout from schema, client renders.",
-        nextAction: "Week 3 Day 2: Install Recharts. Swap inline-SVG renderers for Recharts components — same DashboardChartData contract, just nicer renderer with tooltips + hover + animations.",
+        day: "Week 3 · Day 17 (Wed) — Filters + Interactivity",
+        progress: { done: 84, total: 98 },
+        status: "Recharts integration shipped. All 3 charts have tooltips, hover, animations. Theme tokens flow through. /dashboard at 152 kB + 267 kB First Load JS (Recharts adds ~110 kB to the route).",
+        nextAction: "Week 3 Day 3: Wire up FilterBar above charts. Date range / dimension / search filters apply reactively. Click-a-bar drill-down modal. Empty state when no matches.",
         blockers: "None"
       },
 
@@ -1518,7 +1518,9 @@
         // Phase 1 · Week 2 · Day 7 (3 tasks — gallery + profiling code audit, nav fix, Week 2 tag complete)
         "2-W2.D7-0", "2-W2.D7-1", "2-W2.D7-2",
         // Phase 1 · Week 3 · Day 1 (5 tasks — route, profiling read, KpiCard, ChartCard, 12-col grid)
-        "3-W3.D1-0", "3-W3.D1-1", "3-W3.D1-2", "3-W3.D1-3", "3-W3.D1-4"
+        "3-W3.D1-0", "3-W3.D1-1", "3-W3.D1-2", "3-W3.D1-3", "3-W3.D1-4",
+        // Phase 1 · Week 3 · Day 2 (4 tasks — install, types, theme, wire data)
+        "3-W3.D2-0", "3-W3.D2-1", "3-W3.D2-2", "3-W3.D2-3"
       ],
 
       phases: [
@@ -1531,6 +1533,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-04-26",
+          title: "Week 3 Day 2 — Recharts integration",
+          desc: "Installed recharts 2.15. Rewrote all 3 chart renderers in _dashboard-view.tsx: BarChartView uses <BarChart layout='vertical'> with horizontal bars + accent fill at 75% + rounded right corners. LineChartView uses <AreaChart> with linear-gradient (accent 30%→0%) + 2px stroke + dot per point + larger active-dot on hover + dashed cursor. DonutChartView uses <PieChart> with innerRadius='62%' + 6-color palette via <Cell> + absolutely-positioned center text overlay (pointer-events-none so slice hover still fires). Custom <CustomTooltip> matches design tokens (surface-elevated bg, mono uppercase label, accent-formatted value with compact M/K notation). Same DashboardChartData discriminated union — only the renderer changed. Build delta: /dashboard/[slug] grew from 42.4 kB to 152 kB + 267 kB First Load JS (Recharts ~110 kB). Other routes unchanged. Commit ba847fb pushed.",
+          next: "Week 3 Day 3 — Filters + interactivity (FilterBar wired, drill-down modal, empty state)"
+        },
         {
           date: "2026-04-26",
           title: "Week 3 Day 1 — Live dashboard rendering shipped",
