@@ -17,10 +17,10 @@
 |-------|-------|
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
-| **Current Day** | Week 3 · Day 18 (Thu) — PDF Export |
-| **Overall Progress** | 88 tasks of 98 complete · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ · Week 3 Days 1-3 ✓ |
-| **Status** | Filters + drill-down shipped. Search / segment / date range apply reactively to KPIs + charts. Click any bar or donut slice opens a drill-down dialog with matching rows. Empty state when no matches. /dashboard at 187 kB + 306 kB First Load JS. |
-| **Next Action** | Week 3 Day 4: PDF export. Install `@react-pdf/renderer`. Build a branded PDF template matching the design system; generate from the current filtered state; expose via "Export PDF" button on the dashboard. |
+| **Current Day** | Week 3 · Day 19 (Fri) — Wireframe Mode |
+| **Overall Progress** | 92 tasks of 98 complete · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ · Week 3 Days 1-4 ✓ |
+| **Status** | PDF export shipped. Click "Export PDF" → @react-pdf/renderer dynamic-loads → branded light-theme PDF downloads reflecting the current filtered state. /dashboard stays at 188 kB + 307 kB First Load JS (only +1 kB from Day 3 — react-pdf is in an async chunk). |
+| **Next Action** | Week 3 Day 5: Build `/wireframe/[template]` route — gallery of 3 layout templates (Executive / Operational / Exploratory) showing static Figma-style mockups, with PNG/PDF download options. This is Persona B (BI engineer) mode from the master plan. |
 | **Blockers** | None |
 
 ### Phase Progress Overview
@@ -41,6 +41,19 @@
 ## Recent Activity Log
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
+
+### 2026-04-26 · Week 3 Day 4 — PDF export
+- Click **"Export PDF"** on the dashboard → @react-pdf/renderer dynamic-loads → a branded PDF downloads reflecting the current filtered state
+- **Dynamic-import strategy**: `@react-pdf/renderer` is ~200 kB gzipped. Loading it eagerly would push the route over 500 kB First Load JS. Solution: Promise.all-import the renderer + the local pdf-document.tsx ONLY when the user clicks Export. First click takes ~500ms longer (chunk fetch); subsequent clicks are instant. Route's First Load JS stays at **307 kB** (was 306 kB before — only +1 kB).
+- **`lib/pdf-document.tsx`** — `<DashboardPdf>` Document component using `@react-pdf/renderer`'s `<Page>` `<View>` `<Text>` primitives. Tailwind doesn't work in PDF context, so I rebuilt the brand identity via `StyleSheet.create()` using the same token values:
+  - **Light theme**: white background, dark text, teal accent at `#14b8a6` (darker variant for white-bg contrast). Recipients usually print or share via email — light is the universal default.
+  - **Document structure**: Header (eyebrow with domain + dataset title + tagline + meta row with timestamp/filter summary/row counts) → "Key metrics" 2-col KPI grid with bordered cards → bar chart as ranked horizontal-bar list → donut chart as legend list with color swatches + percentages → line chart as period-over-period list → fixed footer (brand line + page X/Y).
+- **`_dashboard-interactive.tsx` updates**: Export PDF button next to filter count summary. Click handler does `Promise.all([import('@react-pdf/renderer'), import('@/lib/pdf-document')])`, then `pdf().toBlob()`, then `URL.createObjectURL` + programmatic `<a download>` click. Loading state shows spinner while generating. Filename: `{slug}-dashboard-{YYYY-MM-DD}.pdf`. Disabled when filtered rows = 0.
+- The PDF reflects whatever the user is currently looking at: search query, segment filter, date range — all encoded in the meta row at the top of the PDF as "Filters {search: "polaris" · Segment: Enterprise}". Recipient knows exactly what slice was exported.
+- Build: `/dashboard/[slug]` at **188 kB + 307 kB First Load JS** (was 187 + 306). Other routes unchanged. Typecheck clean.
+- Commit `6b7be71` pushed to main
+- **Context for Day 19 (Fri)**: Build `/wireframe/[template]` route — Persona B from the master plan. Goal: a BI engineer can pick from 3 layout templates (Executive / Operational / Exploratory) and see a static Figma-style mockup as a clickable hi-fi wireframe. Each template shows different layout patterns — Executive is "headline KPI + 1 big chart", Operational is "dense KPI strip + 4 charts in 2x2", Exploratory is "filter rail + free-form 12-col grid". Use the existing primitives + token system. PNG/PDF download options. This route is linked from the home page CTA "Try wireframe mode" and currently 404s.
+- **Next**: Week 3 Day 5 — Wireframe mode
 
 ### 2026-04-26 · Week 3 Day 3 — Filters + drill-down
 - The dashboard at `/dashboard/[slug]` is now **fully interactive**. Recruiters can search, segment, and re-slice every dataset live.
@@ -918,13 +931,18 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 - Generate via `pdf(MyDocument).toBlob()`, then trigger download via `URL.createObjectURL(blob)`.
 - Wire to "Export PDF" button on the dashboard header strip (next to "Switch dataset"). Pass current `filteredRows` + `filters` so the export reflects what the user is looking at.
 
-#### Day 4 (Thu) · PDF Export
-- [ ] Install `@react-pdf/renderer`
-- [ ] Build branded PDF template matching design system
-- [ ] "Export PDF" button downloads the dashboard
-- [ ] Include KPI values + chart images + footer with dataset name + date
+#### Day 4 (Thu) · PDF Export — COMPLETED 2026-04-26
+- [x] Installed `@react-pdf/renderer@4.1.6` (compatible with React 19)
+- [x] Built `lib/pdf-document.tsx` — branded light-theme PDF using StyleSheet.create with the same token VALUES (`#14b8a6` accent darker variant for white bg). Header / KPI grid / bar list / donut summary / line list / fixed footer with page numbers.
+- [x] "Export PDF" button next to filter count summary, dynamic-imports the renderer + pdf-document ONLY when clicked, downloads as `{slug}-dashboard-{YYYY-MM-DD}.pdf`
+- [x] Footer with dataset attribution + page numbers; KPI values + bar/donut/line summaries; meta row encodes the active filters so recipients know exactly which slice was exported
 
-**Context for Next Session**: _(fill in after completion)_
+**Context for Next Session (Day 19 = Week 3 Day 5)**:
+- Day 5 = wireframe mode (Persona B from master plan). Build `/wireframe/[template]` with 3 layout templates: Executive (headline KPI + 1 big chart), Operational (dense KPI strip + 4 charts in 2×2), Exploratory (filter rail + free-form 12-col grid).
+- Each template is a static Figma-style mockup using design-system primitives + token system. No real data — placeholder chart shapes ARE the point (it's a hi-fi wireframe, not a working dashboard).
+- Reuse the SVG renderer code from Day 1 (the bar/line/donut SVG components I deleted) for the static mockups, since they don't need interactivity.
+- Wire up the home CTA `<Link href="/wireframe">` to redirect to a default template (or build a `/wireframe` index page that links to all 3).
+- Optional: PNG/PDF download per template using the same dynamic-import pattern as Day 4.
 
 #### Day 5 (Fri) · Wireframe Mode
 - [ ] Build `/wireframe/[template]` route

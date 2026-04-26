@@ -1472,10 +1472,10 @@
       currentStatus: {
         phase: "Phase 1 — Project 1 (Dashboard Factory)",
         week: "Week 1 of 14",
-        day: "Week 3 · Day 18 (Thu) — PDF Export",
-        progress: { done: 88, total: 98 },
-        status: "Filters + drill-down shipped. Search / segment / date range apply reactively. Click any bar or donut slice opens a dialog with matching rows. Empty state on no matches. /dashboard at 187 kB + 306 kB First Load JS.",
-        nextAction: "Week 3 Day 4: PDF export. Install @react-pdf/renderer, build branded PDF template, generate from current filtered state, expose via Export PDF button.",
+        day: "Week 3 · Day 19 (Fri) — Wireframe Mode",
+        progress: { done: 92, total: 98 },
+        status: "PDF export shipped. Click Export PDF → @react-pdf/renderer dynamic-loads → branded light-theme PDF downloads with current filtered state. Bundle stays at 188 kB + 307 kB First Load JS (only +1 kB from D3 — react-pdf is in async chunks).",
+        nextAction: "Week 3 Day 5: Build /wireframe/[template] route with 3 layout templates (Executive / Operational / Exploratory). Static Figma-style mockups for Persona B (BI engineer) workflow.",
         blockers: "None"
       },
 
@@ -1522,7 +1522,9 @@
         // Phase 1 · Week 3 · Day 2 (4 tasks — install, types, theme, wire data)
         "3-W3.D2-0", "3-W3.D2-1", "3-W3.D2-2", "3-W3.D2-3",
         // Phase 1 · Week 3 · Day 3 (4 tasks — FilterBar, reactive filters, drill-down modal, empty state)
-        "3-W3.D3-0", "3-W3.D3-1", "3-W3.D3-2", "3-W3.D3-3"
+        "3-W3.D3-0", "3-W3.D3-1", "3-W3.D3-2", "3-W3.D3-3",
+        // Phase 1 · Week 3 · Day 4 (4 tasks — install, template, button, footer)
+        "3-W3.D4-0", "3-W3.D4-1", "3-W3.D4-2", "3-W3.D4-3"
       ],
 
       phases: [
@@ -1535,6 +1537,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-04-26",
+          title: "Week 3 Day 4 — PDF export shipped",
+          desc: "The dashboard now exports to a branded PDF reflecting the current filtered state. @react-pdf/renderer (~200 kB gzipped) dynamic-loads via Promise.all-import only when the Export PDF button is clicked — main bundle stays at 188 kB + 307 kB First Load JS (only +1 kB from Day 3). lib/pdf-document.tsx defines a <DashboardPdf> component using @react-pdf's <Page>/<View>/<Text> primitives with a LIGHT-theme palette (#14b8a6 darker accent for white-bg contrast, white background, dark text — recipients usually print or share). Document tree: header (eyebrow + title + tagline + meta row with timestamp/filters/row counts) → KPI 2-col grid with bordered cards → bar list with horizontal fills → donut summary with color swatches + percentages → line list of period values → fixed footer with brand line + page numbers. Filename: {slug}-dashboard-{YYYY-MM-DD}.pdf. Disabled when filtered rows = 0; spinner during generation. Commit 6b7be71 pushed.",
+          next: "Week 3 Day 5 — /wireframe/[template] with Executive / Operational / Exploratory layouts"
+        },
         {
           date: "2026-04-26",
           title: "Week 3 Day 3 — Filters + drill-down shipped",
