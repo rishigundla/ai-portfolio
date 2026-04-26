@@ -16,6 +16,7 @@ import {
   HEADING_KPI_RECOMMENDATIONS,
   HEADING_CHART_RECOMMENDATIONS,
 } from '@/lib/profiling'
+import { useDashboardStore, useStoreHydrated } from '@/lib/store'
 
 interface StreamingPanelProps {
   fixture: Fixture
@@ -42,6 +43,13 @@ export function StreamingPanel({
   const [streaming, setStreaming] = React.useState(false)
   const [completed, setCompleted] = React.useState(false)
   const abortRef = React.useRef<AbortController | null>(null)
+
+  const hydrated = useStoreHydrated()
+  const alreadyProfiled = useDashboardStore(
+    (s) => s.profilingComplete[datasetSlug] ?? false,
+  )
+  const markProfilingComplete = useDashboardStore((s) => s.markProfilingComplete)
+  const resetProfiling = useDashboardStore((s) => s.resetProfiling)
 
   // Compute step statuses from the streamed text + streaming flag
   const stepStatuses = React.useMemo<StepStatus[]>(() => {
@@ -77,24 +85,38 @@ export function StreamingPanel({
         setStreamedText(chunk)
       }
       setCompleted(true)
+      markProfilingComplete(datasetSlug)
     } catch (err) {
       if (!(err instanceof ReplayAbortedError)) throw err
     } finally {
       if (!ac.signal.aborted) setStreaming(false)
     }
-  }, [fixture, charsPerSecond])
+  }, [fixture, charsPerSecond, datasetSlug, markProfilingComplete])
 
   const cancelStream = React.useCallback(() => {
     abortRef.current?.abort()
     setStreaming(false)
   }, [])
 
-  // Auto-start once on mount
+  const handleReplay = React.useCallback(() => {
+    resetProfiling(datasetSlug)
+    startStream()
+  }, [datasetSlug, resetProfiling, startStream])
+
+  // Auto-start once Zustand has hydrated.
+  // If the user already profiled this slug in a prior session, render the
+  // full text immediately and skip the animation.
   React.useEffect(() => {
+    if (!hydrated) return
+    if (alreadyProfiled) {
+      setStreamedText(fixture.text)
+      setCompleted(true)
+      return
+    }
     startStream()
     return () => abortRef.current?.abort()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [hydrated])
 
   return (
     <div className="space-y-6">
@@ -111,7 +133,7 @@ export function StreamingPanel({
             </Button>
           )}
           {completed && (
-            <Button variant="ghost" size="sm" onClick={startStream}>
+            <Button variant="ghost" size="sm" onClick={handleReplay}>
               <RotateCcw className="h-3.5 w-3.5" />
               Replay
             </Button>
@@ -148,7 +170,7 @@ export function StreamingPanel({
             <ArrowRight className="h-4 w-4" />
           </Link>
           <span className="text-xs text-text-muted">
-            Coming Week 3 · The route exists; the dashboard rendering ships next.
+            Coming Week 3 · The route is wired; the dashboard rendering ships next.
           </span>
         </div>
       )}
