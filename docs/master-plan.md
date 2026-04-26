@@ -17,10 +17,10 @@
 |-------|-------|
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
-| **Current Day** | Week 3 · Day 17 (Wed) — Filters + Interactivity |
-| **Overall Progress** | 84 tasks of 98 complete · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ · Week 3 Days 1-2 ✓ |
-| **Status** | Recharts integration shipped. All 3 charts render via Recharts with tooltips, hover, and entry animations. Theme tokens flow through. /dashboard at 152 kB + 267 kB First Load JS (Recharts adds ~110 kB to the route). |
-| **Next Action** | Week 3 Day 3: Wire up FilterBar above the charts. Date range / segment / dimension filters apply reactively to all KPIs + charts. Click-a-bar drill-down modal. Empty state when filters match no rows. |
+| **Current Day** | Week 3 · Day 18 (Thu) — PDF Export |
+| **Overall Progress** | 88 tasks of 98 complete · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ · Week 3 Days 1-3 ✓ |
+| **Status** | Filters + drill-down shipped. Search / segment / date range apply reactively to KPIs + charts. Click any bar or donut slice opens a drill-down dialog with matching rows. Empty state when no matches. /dashboard at 187 kB + 306 kB First Load JS. |
+| **Next Action** | Week 3 Day 4: PDF export. Install `@react-pdf/renderer`. Build a branded PDF template matching the design system; generate from the current filtered state; expose via "Export PDF" button on the dashboard. |
 | **Blockers** | None |
 
 ### Phase Progress Overview
@@ -41,6 +41,24 @@
 ## Recent Activity Log
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
+
+### 2026-04-26 · Week 3 Day 3 — Filters + drill-down
+- The dashboard at `/dashboard/[slug]` is now **fully interactive**. Recruiters can search, segment, and re-slice every dataset live.
+- **Architecture shift**: server now passes the full dataset (rows + schema) to the client. Client wrapper holds filter state and recomputes the layout via the existing pure `buildDashboardLayout()` whenever filters change. Sub-millisecond on the 30-50 row fixtures.
+- **3 new files**:
+  - `lib/filters.ts` — `DashboardFilters` type + `applyFilters()` + `computeMaxDate()` + `uniqueDimensionValues()`. Date range options (`all` / `recent-30` / `recent-90`) are **relative to the dataset's max date** (not today) so portfolio datasets spanning 2020-2026 always show data.
+  - `app/dashboard/[slug]/_dashboard-interactive.tsx` — client wrapper holding filter + drill-down state. FilterBar with Search / primary-dimension Select / DateRange / Clear sub-components. EmptyFilterState card when no rows match.
+  - `app/dashboard/[slug]/_drilldown-table.tsx` — thin DataGrid wrapper for the drill-down dialog (different defaults from `/generate/[slug]`'s preview).
+- **3 updated files**:
+  - `lib/dashboard-builder.ts`: signature changed from `buildDashboardLayout(dataset)` to `buildDashboardLayout(rows, schema)`. `DashboardChartData` bar + donut variants now carry `dimensionKey` + `dimensionLabel` so click-to-drill knows which column to filter on.
+  - `_dashboard-view.tsx`: added `onBarClick` / `onDonutClick` props. Bar's Recharts onClick callback uses the new dimensionKey/dimensionLabel. Donut click also fires from legend rows (excluding the synthetic "Other" bucket which has no source rows). `cursor: 'pointer'` when handler is wired.
+  - `_guard.tsx` + `page.tsx`: now pass `fullDataset` (not pre-built layout) since the layout is now built client-side per filter change.
+- **Drill-down UX**: click any bar or donut slice → opens a `<Dialog>` with matching rows in the `DrilldownTable`. Title format: "{Dimension}: {Value}" + "{N} row(s) match this segment". Dialog overflow scrolls vertically when many rows.
+- **Empty state**: when filters match 0 rows, the dashboard view is replaced by an `<EmptyFilterState>` card with an "Inbox" icon, friendly copy, and a "Clear all filters" button.
+- **Build**: `/dashboard/[slug]` grew from **152 kB → 187 kB** route-specific (was 267 kB First Load JS, now **306 kB**). Added 39 kB for Dialog primitive + filter logic + drill-down. Slightly over the 300 kB mental ceiling, but expected for a fully-interactive analytics app with charts. Other routes unchanged. Typecheck clean.
+- Commit `aef4f0c` pushed to main
+- **Context for Day 18 (Thu)**: PDF export. Install `@react-pdf/renderer`. Define a branded PDF Document template matching the design system tokens (accent, surface, mono fonts) using react-pdf's `<Page>` `<View>` `<Text>` `<Image>` primitives. Generate the PDF from the current filtered state — KPI strip + bar chart (rendered via Recharts to PNG, then embedded), or simpler approach: generate a text-summary PDF with KPI numbers and a small bar list. Expose via an "Export PDF" button on the dashboard header strip. Use `@react-pdf/renderer`'s `pdf()` function which returns a Blob, then trigger a download.
+- **Next**: Week 3 Day 4 — PDF export
 
 ### 2026-04-26 · Week 3 Day 2 — Recharts integration
 - Installed `recharts@2.15.0` in `apps/dashboard-factory/`
@@ -888,13 +906,17 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 - Drill-down modal: click a bar → opens `<Dialog>` with rows filtered to that bar's category. Use `<Dialog>` from design-system primitives.
 - Empty state: when filtered rows == 0, swap chart content for `EmptyChart` with a "Clear filters" button.
 
-#### Day 3 (Wed) · Filters + Interactivity
-- [ ] FilterBar on dashboard: date range, segment, dimension
-- [ ] Filters apply reactively to all KPIs + charts
-- [ ] Click a chart → drill-down modal with detail
-- [ ] Empty state when filters match no data
+#### Day 3 (Wed) · Filters + Interactivity — COMPLETED 2026-04-26
+- [x] FilterBar on dashboard with Search / Segment-dimension Select / DateRange / Clear sub-components from `@rishi/design-system/components`
+- [x] Filters recompute the dashboard layout reactively via `useMemo` — KPIs and charts both update on every filter change
+- [x] Click any **bar OR donut slice** → opens `<Dialog>` drill-down with rows matching that segment (donut legend rows are also clickable; "Other" bucket excluded since it has no source rows)
+- [x] Empty state card with `Inbox` icon + "Clear all filters" button when filters match 0 rows
 
-**Context for Next Session**: _(fill in after completion)_
+**Context for Next Session (Day 18 = Week 3 Day 4)**:
+- Day 4 = PDF export. Install `@react-pdf/renderer` (compatible with React 19).
+- Approach: build a server-side React component tree using `<Document>` `<Page>` `<View>` `<Text>` primitives that mirrors the dashboard layout (header + KPI strip + bar list + chart-as-summary). Don't try to embed Recharts SVGs directly — they don't translate well to PDF. Instead render a textual chart summary or use react-pdf's primitive `<Svg>` shapes.
+- Generate via `pdf(MyDocument).toBlob()`, then trigger download via `URL.createObjectURL(blob)`.
+- Wire to "Export PDF" button on the dashboard header strip (next to "Switch dataset"). Pass current `filteredRows` + `filters` so the export reflects what the user is looking at.
 
 #### Day 4 (Thu) · PDF Export
 - [ ] Install `@react-pdf/renderer`

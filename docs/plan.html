@@ -1472,10 +1472,10 @@
       currentStatus: {
         phase: "Phase 1 — Project 1 (Dashboard Factory)",
         week: "Week 1 of 14",
-        day: "Week 3 · Day 17 (Wed) — Filters + Interactivity",
-        progress: { done: 84, total: 98 },
-        status: "Recharts integration shipped. All 3 charts have tooltips, hover, animations. Theme tokens flow through. /dashboard at 152 kB + 267 kB First Load JS (Recharts adds ~110 kB to the route).",
-        nextAction: "Week 3 Day 3: Wire up FilterBar above charts. Date range / dimension / search filters apply reactively. Click-a-bar drill-down modal. Empty state when no matches.",
+        day: "Week 3 · Day 18 (Thu) — PDF Export",
+        progress: { done: 88, total: 98 },
+        status: "Filters + drill-down shipped. Search / segment / date range apply reactively. Click any bar or donut slice opens a dialog with matching rows. Empty state on no matches. /dashboard at 187 kB + 306 kB First Load JS.",
+        nextAction: "Week 3 Day 4: PDF export. Install @react-pdf/renderer, build branded PDF template, generate from current filtered state, expose via Export PDF button.",
         blockers: "None"
       },
 
@@ -1520,7 +1520,9 @@
         // Phase 1 · Week 3 · Day 1 (5 tasks — route, profiling read, KpiCard, ChartCard, 12-col grid)
         "3-W3.D1-0", "3-W3.D1-1", "3-W3.D1-2", "3-W3.D1-3", "3-W3.D1-4",
         // Phase 1 · Week 3 · Day 2 (4 tasks — install, types, theme, wire data)
-        "3-W3.D2-0", "3-W3.D2-1", "3-W3.D2-2", "3-W3.D2-3"
+        "3-W3.D2-0", "3-W3.D2-1", "3-W3.D2-2", "3-W3.D2-3",
+        // Phase 1 · Week 3 · Day 3 (4 tasks — FilterBar, reactive filters, drill-down modal, empty state)
+        "3-W3.D3-0", "3-W3.D3-1", "3-W3.D3-2", "3-W3.D3-3"
       ],
 
       phases: [
@@ -1533,6 +1535,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-04-26",
+          title: "Week 3 Day 3 — Filters + drill-down shipped",
+          desc: "The dashboard at /dashboard/[slug] is now fully interactive. Server passes the full dataset to a client wrapper (DashboardInteractive) that holds filter state and recomputes the layout via the existing pure buildDashboardLayout() whenever filters change — sub-millisecond on the 30-50 row fixtures. New: lib/filters.ts with applyFilters() + computeMaxDate() + uniqueDimensionValues(); date range options are RELATIVE TO THE DATASET'S MAX DATE not today's date. _dashboard-interactive.tsx wraps the view with FilterBar (Search / primary-dimension Select / DateRange / Clear) + drilldown Dialog state. _drilldown-table.tsx is a compact DataGrid wrapper. Updated dashboard-builder.ts: signature now takes (rows, schema) instead of full dataset; bar + donut chart data carries dimensionKey + dimensionLabel for drill-down. _dashboard-view.tsx accepts onBarClick/onDonutClick — Recharts onClick on Bar fires it; donut also clickable from legend rows (excluding the synthetic 'Other' bucket). Empty state card with Inbox icon when filters match 0 rows. Build: /dashboard/[slug] grew from 152 kB to 187 kB First Load JS 306 kB (was 267 kB) — Dialog primitive + filter logic adds 39 kB. Commit aef4f0c pushed.",
+          next: "Week 3 Day 4 — PDF export via @react-pdf/renderer"
+        },
         {
           date: "2026-04-26",
           title: "Week 3 Day 2 — Recharts integration",
