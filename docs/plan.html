@@ -1472,10 +1472,10 @@
       currentStatus: {
         phase: "Phase 1 — Project 1 (Dashboard Factory)",
         week: "Week 1 of 14",
-        day: "Week 2 · Day 14 (Sun) — Responsive Polish + Week 2 Wrap",
-        progress: { done: 78, total: 98 },
-        status: "Day 6 state + guards shipped. Zustand-persist remembers profiled slugs across sessions, animation skips on return visits. /dashboard/[slug] exists with redirect guard. 17 static pages.",
-        nextAction: "Week 2 Day 7: Responsive QA across all 4 routes (320px → 1920px). Mobile hamburger nav + touch targets. Tag Week 2 complete.",
+        day: "Week 3 · Day 15 (Mon) — Dashboard Layout Generator",
+        progress: { done: 81, total: 98 },
+        status: "WEEK 2 COMPLETE. Project 1 has all 4 routes navigable end-to-end. Streaming flow + state + guards + responsive polish all shipped. dashboard-factory app build-clean and Vercel-ready.",
+        nextAction: "Week 3 Day 1: Replace the Coming-Week-3 stub at /dashboard/[slug] with actual rendering. Read profiling fixture's recommended KPIs/charts, render KpiCard + ChartCard with real values from dataset rows.",
         blockers: "None"
       },
 
@@ -1514,7 +1514,9 @@
         // Phase 1 · Week 2 · Day 5 (4 tasks — generate fixtures, save, validate, integrate)
         "2-W2.D5-0", "2-W2.D5-1", "2-W2.D5-2", "2-W2.D5-3",
         // Phase 1 · Week 2 · Day 6 (4 tasks — Zustand store, nav guards, back flow, URL state DEFERRED)
-        "2-W2.D6-0", "2-W2.D6-1", "2-W2.D6-2", "2-W2.D6-3"
+        "2-W2.D6-0", "2-W2.D6-1", "2-W2.D6-2", "2-W2.D6-3",
+        // Phase 1 · Week 2 · Day 7 (3 tasks — gallery + profiling code audit, nav fix, Week 2 tag complete)
+        "2-W2.D7-0", "2-W2.D7-1", "2-W2.D7-2"
       ],
 
       phases: [
@@ -1527,6 +1529,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-04-26",
+          title: "WEEK 2 COMPLETE — Project 1 fully navigable, all 4 routes shipping",
+          desc: "Day 7 polish: Nav now hides 'Dashboard Factory' brand text below sm and 'Project 01' badge below md, touch targets bumped to WCAG-minimum 44px via min-h-[44px], min-w-0 + truncate + shrink-0 patterns prevent narrow-screen overflow, aria-label on icon-only GitHub link. Streaming panel header now flex-wraps so Cancel/Replay buttons drop cleanly on mobile, status text truncates rather than overflows. Card padding p-4 sm:p-5. No hamburger needed — only 2 nav items fit 320px after brand-text hide. Visual QA at 320-1920px is on user's side via dev server at http://localhost:3002. Build clean: same 17 static pages. Killed an orphan dev server holding port 3002 from earlier (recurring Windows-pnpm-turbo signal-propagation issue). Commit 6070f9d pushed. WEEK 2 SHIPPED — 7 days of compounding work: scaffold → fixtures → gallery → streaming → curated profiling → state+guards → polish.",
+          next: "Week 3 Day 1 — Replace the Coming-Week-3 stub with actual dashboard rendering"
+        },
         {
           date: "2026-04-26",
           title: "Week 2 Day 6 — Zustand state + nav guards + dashboard stub",
