@@ -11,6 +11,7 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@react-pdf/renderer": "^4.1.6",
     "@rishi/ai-core": "workspace:*",
     "@rishi/design-system": "workspace:*",
     "lucide-react": "^0.469.0",

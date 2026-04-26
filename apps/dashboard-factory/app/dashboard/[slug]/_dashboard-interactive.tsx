@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { Inbox, X } from 'lucide-react'
+import { Download, Inbox, Loader2, X } from 'lucide-react'
 import { FilterBar } from '@rishi/design-system/components'
 import {
   Dialog,
@@ -121,6 +121,54 @@ export function DashboardInteractive({
     })
   }, [primaryDimension])
 
+  // PDF export — dynamic-import @react-pdf/renderer + lib/pdf-document
+  // only when the user clicks Export, so the ~200 kB renderer bundle
+  // stays out of the route's First Load JS.
+  const [isExporting, setIsExporting] = React.useState(false)
+  const exportPdf = React.useCallback(async () => {
+    setIsExporting(true)
+    try {
+      const [{ pdf }, { DashboardPdf }] = await Promise.all([
+        import('@react-pdf/renderer'),
+        import('@/lib/pdf-document'),
+      ])
+      const blob = await pdf(
+        <DashboardPdf
+          datasetTitle={metadata.title}
+          datasetTagline={metadata.tagline}
+          datasetDomain={metadata.domain}
+          layout={layout}
+          filters={filters}
+          filterSegmentLabel={primaryDimension?.label}
+          totalRows={rows.length}
+          filteredRowCount={filteredRows.length}
+          generatedAt={new Date()}
+        />,
+      ).toBlob()
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      const dateStamp = new Date().toISOString().split('T')[0]
+      link.download = `${fullDataset.id}-dashboard-${dateStamp}.pdf`
+      link.click()
+      URL.revokeObjectURL(url)
+    } catch (err) {
+      console.error('PDF export failed', err)
+    } finally {
+      setIsExporting(false)
+    }
+  }, [
+    metadata.title,
+    metadata.tagline,
+    metadata.domain,
+    layout,
+    filters,
+    primaryDimension,
+    rows.length,
+    filteredRows.length,
+    fullDataset.id,
+  ])
+
   return (
     <div className="space-y-6">
       {/* Filter bar */}
@@ -156,17 +204,30 @@ export function DashboardInteractive({
         {isFiltered && <FilterBar.Clear onClear={clearFilters} />}
       </FilterBar>
 
-      {/* Filtered count summary */}
-      <div className="flex items-center justify-between text-xs font-mono text-text-muted">
-        <span>
+      {/* Filtered count summary + export button */}
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <span className="text-xs font-mono text-text-muted">
           Showing <span className="text-accent">{filteredRows.length}</span> of{' '}
           <span className="text-text-secondary">{rows.length}</span> rows
+          {isFiltered && (
+            <span className="hidden sm:inline ml-3 text-text-muted">
+              · Click any bar or slice to drill into matching records
+            </span>
+          )}
         </span>
-        {isFiltered && (
-          <span className="text-text-muted">
-            Click any bar or slice to drill into matching records
-          </span>
-        )}
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={exportPdf}
+          disabled={isExporting || filteredRows.length === 0}
+        >
+          {isExporting ? (
+            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+          ) : (
+            <Download className="h-3.5 w-3.5" />
+          )}
+          {isExporting ? 'Generating...' : 'Export PDF'}
+        </Button>
       </div>
 
       {/* Empty state OR dashboard */}
