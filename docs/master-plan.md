@@ -17,10 +17,10 @@
 |-------|-------|
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
-| **Current Day** | Week 3 · Day 15 (Mon) — Dashboard Layout Generator |
-| **Overall Progress** | 81 tasks of 98 complete · Phase 0 ✓ · Week 1 ✓ · **Week 2 COMPLETE** |
-| **Status** | **Week 2 shipped.** Project 1 has all 4 routes navigable end-to-end. Full streaming flow with Zustand-persist + guards. Hand-curated profiling fixtures reference real patterns. Responsive code-level polish done; visual QA at 320-1920px is on the user's side via the running dev server. 17 static pages, dashboard-factory app build-clean and Vercel-ready. |
-| **Next Action** | Week 3 Day 1: Replace the Coming-Week-3 stub at `/dashboard/[slug]` with actual rendering. Read profiling fixture's recommended KPIs/charts, render KpiCard + ChartCard components from `@rishi/design-system` with real values computed from the dataset rows. |
+| **Current Day** | Week 3 · Day 16 (Tue) — Recharts Integration |
+| **Overall Progress** | 82 tasks of 98 complete · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ · Week 3 Day 1 ✓ |
+| **Status** | Live dashboard rendering shipped. `/dashboard/[slug]` now shows real KPIs computed from dataset rows + 3 inline-SVG charts (bar / line / donut). Server builds the layout, client renders. |
+| **Next Action** | Week 3 Day 2: Install Recharts. Swap inline-SVG renderers for Recharts components — same DashboardChartData contract, just nicer renderer with tooltips, hover, and click-to-drill. |
 | **Blockers** | None |
 
 ### Phase Progress Overview
@@ -41,6 +41,25 @@
 ## Recent Activity Log
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
+
+### 2026-04-26 · Week 3 Day 1 — Live dashboard rendering shipped
+- Replaced the Coming-Week-3 stub at `/dashboard/[slug]` with an actual rendered dashboard
+- **Architecture**: server-side `buildDashboardLayout(dataset)` walks the schema and computes everything (KPIs from measure columns honoring sum/avg aggregation hints, bar chart from top measure × primary dimension, line chart from measure × time bucketed across the range, donut from count distribution of secondary dimension with auto-Other rollup). Result is JSON-serializable so it crosses cleanly into the client `<DashboardView>`. Day 16 swaps SVG → Recharts; the data shape stays identical.
+- **3 new files** in `apps/dashboard-factory/`:
+  - `lib/format.ts` — `formatKpiValue()` (compact `$14.8M`/`14.8K`/`97.2%`) + `bucketSparkline()` for KpiCard sparklines
+  - `lib/dashboard-builder.ts` — pure server-side layout generator + `DashboardLayout`/`DashboardKpi`/`DashboardChartData` types
+  - `app/dashboard/[slug]/_dashboard-view.tsx` — client component with KPI strip + 12-col chart grid (primary bar gets 7-of-12, secondary chart 5-of-12) + 3 SVG renderers (`BarChartSvg`, `LineChartSvg`, `DonutChartSvg`)
+- **2 updated files**:
+  - `page.tsx` — loads full dataset, calls `buildDashboardLayout()`, passes layout to guard
+  - `_guard.tsx` — success branch swaps stub for `<DashboardSuccess>`. New header strip with "Live dashboard" status pulse + Re-profile / Switch dataset CTAs
+- **The renderers are deliberately polished** for static SVG:
+  - Bar chart: horizontal bars with right-aligned values, accent-colored fills at 70% opacity
+  - Line chart: gradient-filled area (accent at 30% → transparent), 2px stroke, endpoint dots, dashed gridlines, x-axis labels
+  - Donut chart: proportional arc paths with `{total} total` centered, 6-color palette legend (accent + Tailwind purple-400/blue-400/amber-400/rose-400/emerald-400) for slice differentiation
+- **Build delta**: `/dashboard/[slug]` grew from 3.65 kB (stub) to **42.4 kB + 157 kB First Load JS** — full dataset JSON inlined per route + KpiCard + ChartCard + the 3 SVG renderers. All 6 dataset routes pre-render. Typecheck clean.
+- Commit `25e9599` pushed to main
+- **Context for Day 16 (Tue)**: Install Recharts. Swap each SVG renderer for the equivalent Recharts component — `BarChartSvg` → Recharts `<BarChart>`, `LineChartSvg` → Recharts `<LineChart>`, `DonutChartSvg` → Recharts `<PieChart>` with `innerRadius`. The `DashboardChartData` type stays identical, only `<ChartRenderer>` switches. Bonus: tooltip hover, click-to-highlight, smooth animations on enter.
+- **Next**: Week 3 Day 2 — Recharts integration
 
 ### 2026-04-26 · Week 2 Day 7 — Responsive polish + WEEK 2 WRAPPED
 - **Code-level responsive fixes** to dashboard-factory (visual QA at 320-1920px is on the user's side via the running dev server at http://localhost:3002):
@@ -826,14 +845,19 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 
 **Week goal**: Full interactive dashboard with filters, drill-downs, PDF export, wireframe mode.
 
-#### Day 1 (Mon) · Dashboard Layout Generator
-- [ ] Build `/dashboard/[slug]` route
-- [ ] Read profiling.json to determine which KPIs + charts to render
-- [ ] Render KpiCard components for each recommended KPI
-- [ ] Render ChartCard containers for each recommended chart
-- [ ] 12-col responsive grid layout
+#### Day 1 (Mon) · Dashboard Layout Generator — COMPLETED 2026-04-26
+- [x] `/dashboard/[slug]` route now renders an actual dashboard (was a Coming-Week-3 stub from Week 2)
+- [x] Layout derived from the **dataset schema** (not parsed from profiling text — schema's typed annotations are reliable; markdown parsing is fragile). KPIs from measure columns honoring sum/avg aggregation hints. Charts: bar (top measure × primary dimension), line (measure × time bucketed), donut (count distribution by secondary dimension).
+- [x] KPI strip renders 4 `KpiCard` components from `@rishi/design-system` with computed values + sparklines
+- [x] 3 `ChartCard` containers render with inline-SVG previews of the actual aggregated data (Day 2 swaps SVG → Recharts)
+- [x] 12-col responsive grid: KPIs at 1/2/4 col responsive; charts at 1-col mobile, 7-of-12 + 5-of-12 split for primary + secondary on desktop
 
-**Context for Next Session**: _(fill in after completion)_
+**Context for Next Session (Day 16 = Week 3 Day 2)**:
+- The `DashboardChartData` type contract is **the integration boundary** for Day 2. SVG renderers consume it today; Recharts consumes it tomorrow. Same prop shape, only the `<ChartRenderer>` switch changes.
+- Install plan: `pnpm add recharts` in `apps/dashboard-factory/`. Recharts 2.x supports React 19.
+- Recharts components needed: `<BarChart>`, `<LineChart>`, `<PieChart>` (with `innerRadius` for the donut), `<XAxis>`, `<YAxis>`, `<Tooltip>`, `<ResponsiveContainer>`, `<Bar>`, `<Line>`, `<Pie>`, `<Cell>`
+- Theme alignment: Recharts accepts a `stroke` / `fill` prop on each shape — pass our token-based colors via the existing `ColorClassSet`
+- Don't forget to add `'use client'` to the new chart wrapper if Recharts components need it (most do due to ResponsiveContainer)
 
 #### Day 2 (Tue) · Chart Rendering
 - [ ] Integrate Recharts (or Tremor)

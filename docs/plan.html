@@ -1472,10 +1472,10 @@
       currentStatus: {
         phase: "Phase 1 — Project 1 (Dashboard Factory)",
         week: "Week 1 of 14",
-        day: "Week 3 · Day 15 (Mon) — Dashboard Layout Generator",
-        progress: { done: 81, total: 98 },
-        status: "WEEK 2 COMPLETE. Project 1 has all 4 routes navigable end-to-end. Streaming flow + state + guards + responsive polish all shipped. dashboard-factory app build-clean and Vercel-ready.",
-        nextAction: "Week 3 Day 1: Replace the Coming-Week-3 stub at /dashboard/[slug] with actual rendering. Read profiling fixture's recommended KPIs/charts, render KpiCard + ChartCard with real values from dataset rows.",
+        day: "Week 3 · Day 16 (Tue) — Recharts Integration",
+        progress: { done: 82, total: 98 },
+        status: "Week 3 Day 1 shipped. Live dashboard rendering at /dashboard/[slug] with computed KPIs + 3 inline-SVG charts (bar/line/donut). Server builds layout from schema, client renders.",
+        nextAction: "Week 3 Day 2: Install Recharts. Swap inline-SVG renderers for Recharts components — same DashboardChartData contract, just nicer renderer with tooltips + hover + animations.",
         blockers: "None"
       },
 
@@ -1516,7 +1516,9 @@
         // Phase 1 · Week 2 · Day 6 (4 tasks — Zustand store, nav guards, back flow, URL state DEFERRED)
         "2-W2.D6-0", "2-W2.D6-1", "2-W2.D6-2", "2-W2.D6-3",
         // Phase 1 · Week 2 · Day 7 (3 tasks — gallery + profiling code audit, nav fix, Week 2 tag complete)
-        "2-W2.D7-0", "2-W2.D7-1", "2-W2.D7-2"
+        "2-W2.D7-0", "2-W2.D7-1", "2-W2.D7-2",
+        // Phase 1 · Week 3 · Day 1 (5 tasks — route, profiling read, KpiCard, ChartCard, 12-col grid)
+        "3-W3.D1-0", "3-W3.D1-1", "3-W3.D1-2", "3-W3.D1-3", "3-W3.D1-4"
       ],
 
       phases: [
@@ -1529,6 +1531,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-04-26",
+          title: "Week 3 Day 1 — Live dashboard rendering shipped",
+          desc: "Replaced the Coming-Week-3 stub at /dashboard/[slug] with an actual rendered dashboard. Server-side buildDashboardLayout(dataset) walks the schema and computes KPIs (top 4 measures honoring sum/avg aggregation) + 3 charts (bar = top measure × primary dimension, line = measure × time bucketed across the range, donut = count distribution by secondary dimension with auto-Other rollup). Layout is JSON-serializable so it crosses cleanly into the client <DashboardView>. 3 SVG renderers ship today: BarChartSvg with horizontal bars + right-aligned values, LineChartSvg with gradient-filled area + endpoint dots + dashed gridlines, DonutChartSvg with proportional arcs + center {total} + 6-color palette legend. Day 16 swaps SVG → Recharts; data shape stays identical. Build: 17 static pages still, /dashboard/[slug] grew from 3.65 kB stub to 42.4 kB + 157 kB First Load JS — full dataset JSON inlined per route + chart renderers. Commit 25e9599 pushed.",
+          next: "Week 3 Day 2 — Install Recharts, swap inline-SVG renderers for Recharts components"
+        },
         {
           date: "2026-04-26",
           title: "WEEK 2 COMPLETE — Project 1 fully navigable, all 4 routes shipping",
