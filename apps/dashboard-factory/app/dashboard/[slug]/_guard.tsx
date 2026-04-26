@@ -11,13 +11,13 @@ import {
   getDatasetIcon,
   getColorClasses,
 } from '@/lib/datasets'
-import type { DashboardLayout } from '@/lib/dashboard-builder'
-import { DashboardView } from './_dashboard-view'
+import type { FullDataset } from '@/lib/full-datasets'
+import { DashboardInteractive } from './_dashboard-interactive'
 
 interface DashboardGuardProps {
   slug: string
   dataset: DatasetSummary
-  layout: DashboardLayout
+  fullDataset: FullDataset
 }
 
 /**
@@ -34,7 +34,7 @@ interface DashboardGuardProps {
  * (KPI strip + chart grid). Day 16 swaps the inline-SVG charts for
  * Recharts to add interactivity.
  */
-export function DashboardGuard({ slug, dataset, layout }: DashboardGuardProps) {
+export function DashboardGuard({ slug, dataset, fullDataset }: DashboardGuardProps) {
   const router = useRouter()
   const hydrated = useStoreHydrated()
   const profilingComplete = useDashboardStore(
@@ -63,17 +63,17 @@ export function DashboardGuard({ slug, dataset, layout }: DashboardGuardProps) {
     )
   }
 
-  return <DashboardSuccess slug={slug} dataset={dataset} layout={layout} />
+  return <DashboardSuccess slug={slug} dataset={dataset} fullDataset={fullDataset} />
 }
 
 function DashboardSuccess({
   slug,
   dataset,
-  layout,
+  fullDataset,
 }: {
   slug: string
   dataset: DatasetSummary
-  layout: DashboardLayout
+  fullDataset: FullDataset
 }) {
   const Icon = getDatasetIcon(dataset.icon)
   const colors = getColorClasses(dataset.colorToken)
@@ -134,8 +134,8 @@ function DashboardSuccess({
           </div>
         </div>
 
-        {/* Dashboard content */}
-        <DashboardView layout={layout} colors={colors} />
+        {/* Dashboard content — interactive wrapper handles filters + drill-down */}
+        <DashboardInteractive fullDataset={fullDataset} colors={colors} />
       </Section>
     </>
   )

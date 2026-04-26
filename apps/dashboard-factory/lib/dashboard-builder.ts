@@ -1,10 +1,6 @@
 /**
- * Server-side dashboard layout generator.
- *
- * Given a fully-loaded dataset, derives the KPI strip and chart grid by
- * walking the schema (NOT by parsing AI profiling text). The resulting
- * DashboardLayout is JSON-serializable so it can cross the RSC server-to-
- * client boundary into <DashboardView>.
+ * Dashboard layout generator. Pure functions over rows + schema — runs on
+ * server (initial render) and client (filter changes).
  *
  * The schema's typed annotations (id / dimension / measure / time) plus
  * aggregation hints (sum / avg) are sufficient to choose:
@@ -12,9 +8,12 @@
  *   - Which dimension powers a bar chart
  *   - Whether a line chart over time is feasible
  *   - Which categorical dimension is best for a donut
+ *
+ * Bar and donut chart data carries `dimensionKey` so click-to-drill knows
+ * which column to filter on.
  */
 
-import type { ColumnSchema, FullDataset } from './full-datasets'
+import type { ColumnSchema } from './full-datasets'
 import { bucketSparkline, formatKpiValue } from './format'
 
 // ============================================================
@@ -33,9 +32,23 @@ export interface DashboardKpi {
 }
 
 export type DashboardChartData =
-  | { type: 'bar'; bars: Array<{ label: string; value: number }>; max: number }
+  | {
+      type: 'bar'
+      bars: Array<{ label: string; value: number }>
+      max: number
+      /** Schema column whose values became the bar labels — used by drill-down. */
+      dimensionKey: string
+      /** Human-readable dimension label, used in drill-down dialog title. */
+      dimensionLabel: string
+    }
   | { type: 'line'; points: Array<{ label: string; value: number }>; max: number }
-  | { type: 'donut'; slices: Array<{ label: string; value: number; pct: number }>; total: number }
+  | {
+      type: 'donut'
+      slices: Array<{ label: string; value: number; pct: number }>
+      total: number
+      dimensionKey: string
+      dimensionLabel: string
+    }
 
 export interface DashboardChart {
   id: string
@@ -57,12 +70,19 @@ const TOP_N_BARS = 6
 const TOP_N_DONUT = 5
 const LINE_BUCKETS = 8
 
-export function buildDashboardLayout(dataset: FullDataset): DashboardLayout {
-  const { rows, metadata } = dataset
-  const cols = metadata.schema
-  const measures = cols.filter((c) => c.type === 'measure')
-  const dimensions = cols.filter((c) => c.type === 'dimension')
-  const times = cols.filter((c) => c.type === 'time')
+/**
+ * Build a complete DashboardLayout from a set of rows + the schema.
+ *
+ * Runs on the server initially (page load) and on the client whenever
+ * filters change (in the dashboard interactive wrapper).
+ */
+export function buildDashboardLayout(
+  rows: Record<string, unknown>[],
+  schema: ColumnSchema[],
+): DashboardLayout {
+  const measures = schema.filter((c) => c.type === 'measure')
+  const dimensions = schema.filter((c) => c.type === 'dimension')
+  const times = schema.filter((c) => c.type === 'time')
 
   const kpis = buildKpis(rows, measures)
   const charts: DashboardChart[] = []
@@ -81,7 +101,6 @@ export function buildDashboardLayout(dataset: FullDataset): DashboardLayout {
   if (dimensions[1]) {
     charts.push(buildDonutChart(rows, dimensions[1]))
   } else if (dimensions[0]) {
-    // Fallback to primary dimension if there isn't a secondary one
     charts.push(buildDonutChart(rows, dimensions[0]))
   }
 
@@ -153,6 +172,8 @@ function buildBarChart(
       type: 'bar',
       bars: sorted.map(([label, value]) => ({ label, value })),
       max,
+      dimensionKey: dimension.name,
+      dimensionLabel: dimension.label,
     },
   }
 }
@@ -224,7 +245,6 @@ function buildDonutChart(
     .sort(([, a], [, b]) => b - a)
     .slice(0, TOP_N_DONUT)
 
-  // If the top N covers <100%, group the rest as "Other"
   const topTotal = sorted.reduce((s, [, v]) => s + v, 0)
   const slices = sorted.map(([label, value]) => ({
     label,
@@ -248,6 +268,8 @@ function buildDonutChart(
       type: 'donut',
       slices,
       total,
+      dimensionKey: dimension.name,
+      dimensionLabel: dimension.label,
     },
   }
 }

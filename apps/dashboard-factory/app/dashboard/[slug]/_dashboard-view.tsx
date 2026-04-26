@@ -28,16 +28,24 @@ interface DashboardViewProps {
   layout: DashboardLayout
   /** Color classes from the dataset's colorToken — used to theme charts. */
   colors: ColorClassSet
+  /** Bar/donut click handlers — open the drill-down dialog on the parent. */
+  onBarClick?: (dimensionKey: string, dimensionLabel: string, label: string) => void
+  onDonutClick?: (dimensionKey: string, dimensionLabel: string, label: string) => void
 }
 
 /**
  * The actual dashboard rendering. Server-built layout, client-rendered.
  *
  * As of Week 3 Day 2, charts are powered by Recharts (was inline SVG on
- * Day 1). The DashboardChartData prop contract stays identical — only the
- * renderer swapped. Tooltips, hover, and smooth entry animations are free.
+ * Day 1). Day 3 added click-to-drill on bar + donut charts via the
+ * onBarClick / onDonutClick props.
  */
-export function DashboardView({ layout, colors }: DashboardViewProps) {
+export function DashboardView({
+  layout,
+  colors,
+  onBarClick,
+  onDonutClick,
+}: DashboardViewProps) {
   return (
     <div className="space-y-6">
       {/* KPI strip */}
@@ -58,14 +66,19 @@ export function DashboardView({ layout, colors }: DashboardViewProps) {
         {layout.charts.map((chart, i) => (
           <div key={chart.id} className={chartGridSpan(i, layout.charts.length)}>
             <ChartCard title={chart.title} subtitle={chart.subtitle}>
-              <ChartRenderer chart={chart} colors={colors} />
+              <ChartRenderer
+                chart={chart}
+                colors={colors}
+                onBarClick={onBarClick}
+                onDonutClick={onDonutClick}
+              />
             </ChartCard>
           </div>
         ))}
       </div>
 
       <p className="text-xs text-text-muted font-mono mt-4">
-        Charts powered by Recharts · hover for tooltips · server-side aggregation from the dataset rows
+        Charts powered by Recharts · hover for tooltips · click bars or slices to drill into matching rows
       </p>
     </div>
   )
@@ -139,17 +152,23 @@ function CustomTooltip({ active, payload, label }: TooltipProps<number, string>)
 function ChartRenderer({
   chart,
   colors,
+  onBarClick,
+  onDonutClick,
 }: {
   chart: DashboardChart
   colors: ColorClassSet
+  onBarClick?: (dimensionKey: string, dimensionLabel: string, label: string) => void
+  onDonutClick?: (dimensionKey: string, dimensionLabel: string, label: string) => void
 }) {
   switch (chart.data.type) {
     case 'bar':
-      return <BarChartView data={chart.data} colors={colors} />
+      return <BarChartView data={chart.data} colors={colors} onBarClick={onBarClick} />
     case 'line':
       return <LineChartView data={chart.data} colors={colors} />
     case 'donut':
-      return <DonutChartView data={chart.data} colors={colors} />
+      return (
+        <DonutChartView data={chart.data} colors={colors} onDonutClick={onDonutClick} />
+      )
   }
 }
 
@@ -160,13 +179,16 @@ function ChartRenderer({
 function BarChartView({
   data,
   colors: _colors,
+  onBarClick,
 }: {
   data: Extract<DashboardChartData, { type: 'bar' }>
   colors: ColorClassSet
+  onBarClick?: (dimensionKey: string, dimensionLabel: string, label: string) => void
 }) {
   if (data.bars.length === 0) {
     return <EmptyChart message="No data" />
   }
+  const isClickable = !!onBarClick
   return (
     <div className="w-full h-full min-h-[240px]">
       <ResponsiveContainer width="100%" height="100%">
@@ -204,6 +226,12 @@ function BarChartView({
             fill="var(--color-accent)"
             fillOpacity={0.75}
             radius={[0, 4, 4, 0]}
+            cursor={isClickable ? 'pointer' : undefined}
+            onClick={(payload: { label?: string }) => {
+              if (onBarClick && payload?.label) {
+                onBarClick(data.dimensionKey, data.dimensionLabel, payload.label)
+              }
+            }}
           />
         </BarChart>
       </ResponsiveContainer>
@@ -282,12 +310,20 @@ function LineChartView({
 function DonutChartView({
   data,
   colors: _colors,
+  onDonutClick,
 }: {
   data: Extract<DashboardChartData, { type: 'donut' }>
   colors: ColorClassSet
+  onDonutClick?: (dimensionKey: string, dimensionLabel: string, label: string) => void
 }) {
   if (data.slices.length === 0 || data.total === 0) {
     return <EmptyChart message="No distribution data" />
+  }
+  const isClickable = !!onDonutClick
+  const triggerSlice = (label: string) => {
+    // Don't drill into the synthetic "Other" bucket (no source rows match it)
+    if (!onDonutClick || label === 'Other') return
+    onDonutClick(data.dimensionKey, data.dimensionLabel, label)
   }
   return (
     <div className="w-full h-full flex items-center gap-4">
@@ -304,6 +340,10 @@ function DonutChartView({
               paddingAngle={1}
               strokeWidth={0}
               isAnimationActive
+              cursor={isClickable ? 'pointer' : undefined}
+              onClick={(payload: { label?: string }) => {
+                if (payload?.label) triggerSlice(payload.label)
+              }}
             >
               {data.slices.map((_, i) => (
                 <Cell
@@ -327,22 +367,29 @@ function DonutChartView({
         </div>
       </div>
 
-      {/* Legend */}
+      {/* Legend — also clickable */}
       <ul className="flex-1 flex flex-col gap-1.5 text-sm min-w-0">
-        {data.slices.map((slice, i) => (
-          <li key={slice.label} className="flex items-center gap-2 min-w-0">
-            <span
-              className="h-2 w-2 rounded-full shrink-0"
-              style={{ backgroundColor: PALETTE[i % PALETTE.length] }}
-            />
-            <span className="flex-1 truncate text-text-secondary text-xs sm:text-sm">
-              {slice.label}
-            </span>
-            <span className="font-mono text-xs text-text-muted shrink-0">
-              {slice.pct.toFixed(0)}%
-            </span>
-          </li>
-        ))}
+        {data.slices.map((slice, i) => {
+          const clickableLegend = isClickable && slice.label !== 'Other'
+          return (
+            <li
+              key={slice.label}
+              className={`flex items-center gap-2 min-w-0 ${clickableLegend ? 'cursor-pointer hover:text-text-primary' : ''}`}
+              onClick={() => clickableLegend && triggerSlice(slice.label)}
+            >
+              <span
+                className="h-2 w-2 rounded-full shrink-0"
+                style={{ backgroundColor: PALETTE[i % PALETTE.length] }}
+              />
+              <span className="flex-1 truncate text-text-secondary text-xs sm:text-sm">
+                {slice.label}
+              </span>
+              <span className="font-mono text-xs text-text-muted shrink-0">
+                {slice.pct.toFixed(0)}%
+              </span>
+            </li>
+          )
+        })}
       </ul>
     </div>
   )

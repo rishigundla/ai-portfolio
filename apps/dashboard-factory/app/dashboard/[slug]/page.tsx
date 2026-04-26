@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation'
 import { datasets, getDataset } from '@/lib/datasets'
 import { getFullDataset } from '@/lib/full-datasets'
-import { buildDashboardLayout } from '@/lib/dashboard-builder'
 import { DashboardGuard } from './_guard'
 
 // Pre-render every slug at build time
@@ -29,10 +28,9 @@ export default async function DashboardPage({ params }: PageProps) {
   const fullDataset = getFullDataset(slug)
   if (!summary || !fullDataset) notFound()
 
-  // Build the dashboard layout server-side from the dataset rows.
-  // The result is JSON-serializable, so it crosses cleanly into the
-  // client-side guard / view.
-  const layout = buildDashboardLayout(fullDataset)
-
-  return <DashboardGuard slug={slug} dataset={summary} layout={layout} />
+  // Pass the full dataset to the client guard. The interactive wrapper
+  // recomputes the dashboard layout from filtered rows whenever filters
+  // change. Pure-function builder (lib/dashboard-builder.ts) makes this
+  // cheap on 30-50 row fixtures.
+  return <DashboardGuard slug={slug} dataset={summary} fullDataset={fullDataset} />
 }
