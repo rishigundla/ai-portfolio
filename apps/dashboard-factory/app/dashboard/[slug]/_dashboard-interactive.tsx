@@ -25,6 +25,7 @@ import { buildDashboardLayout } from '@/lib/dashboard-builder'
 import { DashboardView } from './_dashboard-view'
 import { DrilldownTable } from './_drilldown-table'
 import type { ColorClassSet } from '@/lib/datasets'
+import { toast } from '@/lib/toast-store'
 
 interface DashboardInteractiveProps {
   fullDataset: FullDataset
@@ -119,6 +120,7 @@ export function DashboardInteractive({
       ...EMPTY_FILTERS,
       segmentKey: primaryDimension?.name ?? null,
     })
+    toast.info('Filters cleared', 'Showing all rows')
   }, [primaryDimension])
 
   // PDF export — dynamic-import @react-pdf/renderer + lib/pdf-document
@@ -149,11 +151,17 @@ export function DashboardInteractive({
       const link = document.createElement('a')
       link.href = url
       const dateStamp = new Date().toISOString().split('T')[0]
-      link.download = `${fullDataset.id}-dashboard-${dateStamp}.pdf`
+      const filename = `${fullDataset.id}-dashboard-${dateStamp}.pdf`
+      link.download = filename
       link.click()
       URL.revokeObjectURL(url)
+      toast.success('PDF exported', filename)
     } catch (err) {
       console.error('PDF export failed', err)
+      toast.error(
+        'PDF export failed',
+        err instanceof Error ? err.message : 'Unknown error',
+      )
     } finally {
       setIsExporting(false)
     }

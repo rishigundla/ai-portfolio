@@ -23,6 +23,7 @@ import type {
   DashboardLayout,
 } from '@/lib/dashboard-builder'
 import type { ColorClassSet } from '@/lib/datasets'
+import { ChartErrorBoundary } from './_chart-error-boundary'
 
 interface DashboardViewProps {
   layout: DashboardLayout
@@ -66,12 +67,14 @@ export function DashboardView({
         {layout.charts.map((chart, i) => (
           <div key={chart.id} className={chartGridSpan(i, layout.charts.length)}>
             <ChartCard title={chart.title} subtitle={chart.subtitle}>
-              <ChartRenderer
-                chart={chart}
-                colors={colors}
-                onBarClick={onBarClick}
-                onDonutClick={onDonutClick}
-              />
+              <ChartErrorBoundary chartKind={chart.data.type}>
+                <ChartRenderer
+                  chart={chart}
+                  colors={colors}
+                  onBarClick={onBarClick}
+                  onDonutClick={onDonutClick}
+                />
+              </ChartErrorBoundary>
             </ChartCard>
           </div>
         ))}
