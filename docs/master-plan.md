@@ -17,10 +17,10 @@
 |-------|-------|
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
-| **Current Day** | Week 4 · Day 1 (Mon) — Production Polish |
-| **Overall Progress** | 105 tasks of 105 complete · **Week 3 ✓ tagged `week-3-complete`** · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ |
-| **Status** | Week 3 closed. End-to-end QA via Playwright surfaced 3 bugs (Recharts 0×0 chart rendering, naive pluralization "opportunitys", drill-down dialog close button scrolling off-screen) — all fixed and verified. All 6 datasets render cleanly with 0 console errors. All 3 wireframe templates pass at 375/768/1440 breakpoints. Tag `week-3-complete` pushed. |
-| **Next Action** | Week 4 Day 1: Production polish. Lighthouse audit (target 90+ on all 4 categories), SEO meta tags + Open Graph images, favicon (currently 404), 404/error pages, social preview. |
+| **Current Day** | Week 4 · Day 1 (Mon) — Production Polish (in progress, 3 of 5 tasks done) |
+| **Overall Progress** | 108 tasks of 110 complete · Week 3 ✓ · Day 1 partial · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ |
+| **Status** | SEO metadata + 404/error pages shipped. Root layout now has metadataBase / keywords / authors / openGraph (siteName, locale, url) / Twitter card / robots / formatDetection / themeColor + colorScheme via viewport export. Skip-to-content a11y link added. Branded `not-found.tsx` (Home / Datasets / Wireframe re-entry cards), `error.tsx` (Try-again + Back-home with error.digest reference), `global-error.tsx` (self-contained, inline styles, can't rely on globals.css). Favicon + OpenGraph image scheduled to ship via remote agent at 09:00 IST tomorrow as a separate PR. Lighthouse audit deferred to Day 2 (needs deployed production URL). |
+| **Next Action** | Week 4 Day 2: Production deploy. Create Vercel project `ai-dashboard-factory`, configure turborepo build settings, deploy to production, smoke-test all 6 dataset flows on the live URL, author `apps/dashboard-factory/portfolio.meta.json` with liveUrl. Then run actual Lighthouse audit on the deployed build (the Day 1 deferred task). |
 | **Blockers** | None |
 
 ### Phase Progress Overview
@@ -41,6 +41,25 @@
 ## Recent Activity Log
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
+
+### 2026-04-27 · Week 4 Day 1 (partial) — SEO metadata + 404/error pages
+- Three of the five Day 1 polish tasks shipped in-session. Favicon + OpenGraph image scheduled to land tomorrow morning via remote agent (`trig_0137DKtjApb6tmmuxGgDwR4n`, fires 2026-04-28T03:30:00Z = 09:00 IST). Lighthouse audit deferred to Day 2 because dev mode penalises minification / source maps / dev overlay scripts — only a deployed production build gives a meaningful score.
+- **Root layout metadata expanded** in `apps/dashboard-factory/app/layout.tsx`:
+  - `metadataBase` resolves from `NEXT_PUBLIC_SITE_URL` → `VERCEL_URL` → planned production hostname `https://ai-dashboard-factory.vercel.app`. Means OG tags get absolute URLs without code changes when Day 2 ships the Vercel deploy.
+  - Title uses template form `'%s · Dashboard Factory'` so child routes append automatically.
+  - Added: keywords (11 portfolio-relevant terms), authors + creator, robots block with explicit `index/follow` and a separate googleBot block (`max-image-preview: large`, `max-snippet: -1`), openGraph (siteName, locale, url), twitter card (`summary_large_image`), formatDetection (no auto-link telephone/email/address).
+  - **Viewport export** with `themeColor: '#0a0e1a'` (mobile chrome browser tints to brand color), `colorScheme: 'dark'`, mobile `initialScale: 1`.
+- **Skip-to-content link** in body — visually hidden by `sr-only`, becomes visible on keyboard focus via `focus:not-sr-only`. Anchored at `<main id="main-content">`. Standard a11y pattern that earns Lighthouse points without polluting the design.
+- **Three error-state pages**:
+  - `app/not-found.tsx`: branded 404 with the same card pattern as the dataset gallery, three re-entry routes (Home / Datasets / Wireframe). `robots: { index: false, follow: true }` so search engines don't index error pages but still crawl outbound links. Quoted apostrophes via `&apos;` to keep React happy.
+  - `app/error.tsx`: route-level boundary. Try-again button calls Next.js's `reset()` to re-render the failed segment without a full reload. Back-to-home as escape hatch. Surfaces `error.digest` (the stable hash Next.js attaches) as a reference code so users can share something concrete with us without leaking the stack trace itself.
+  - `app/global-error.tsx`: last-resort boundary. Catches errors in the root layout itself (e.g., metadata function blew up, font import failed at runtime). Self-contained `<html>/<body>` with **inline styles only** — globals.css and Tailwind classes can NOT be relied on here because the layout that loaded them just failed. Inline styles use the same brand hex values to stay on-brand even when CSS is gone.
+- **Why scoped per-chart not page-level for the error boundary** (recap from Day 6): the per-chart boundaries handle Recharts data-shape failures. The new `error.tsx` handles broader rendering failures — together they form a graceful degradation chain: chart fails → tile shows fallback; route segment fails → `error.tsx` takes the route over but rest of app survives; root fails → `global-error.tsx` keeps the app branded even with no layout.
+- **Build**: 21 of 21 pages still prerendered. `/_not-found` registered as static at 128 B / 103 kB First Load JS. Other routes unchanged.
+- **Commit**: `a802f2c` pushed to main.
+- **Context for Day 2 (Tue)**: Production deploy. Create Vercel project `ai-dashboard-factory`, configure turborepo monorepo build (`pnpm install --frozen-lockfile && pnpm --filter dashboard-factory build`, output `apps/dashboard-factory/.next`), point at `main` branch. Deploy. Smoke-test all 6 datasets on production URL (the chart fix from Day 7 should hold). Author `apps/dashboard-factory/portfolio.meta.json` with the live URL. Then run Lighthouse on the deployed build aiming for 90+ on all 4 categories.
+- **Note**: Day 1 PR from remote agent will land tomorrow morning (favicon + OG). Merge that BEFORE Day 2 deploy so the Vercel build picks up both pieces in the same release.
+- **Next**: Week 4 Day 2 — Production Deploy
 
 ### 2026-04-27 · Week 3 Day 7 — End-to-end QA + Week 3 close
 - **Driven via Playwright against the local dev server**. Walked all 6 dataset flows (gallery → profiling → dashboard → filters → drill-down → PDF), all 3 wireframe templates including variant switcher, and all 3 responsive breakpoints (375 mobile / 768 tablet / 1440 desktop). Captured screenshots for the case study evidence trail.
@@ -1049,14 +1068,20 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 
 **Week goal**: Live on production, Loom published, automation infrastructure deployed.
 
-#### Day 1 (Mon) · Production Polish
-- [ ] Lighthouse audit (target 90+ on Performance, Accessibility, Best Practices, SEO)
-- [ ] SEO meta tags + Open Graph images
-- [ ] Favicon
-- [ ] 404 + error pages
-- [ ] Social preview image
+#### Day 1 (Mon) · Production Polish — IN PROGRESS 2026-04-27 (3 of 5 done)
+- [~] Lighthouse audit — DEFERRED to Day 2 (needs deployed production URL; dev mode penalises minification / source maps / dev overlay)
+- [x] SEO meta tags — root layout extended with metadataBase, keywords, authors, openGraph (siteName/locale/url), twitter card, robots, formatDetection, viewport (themeColor + colorScheme)
+- [~] Favicon — scheduled to ship via remote agent at 09:00 IST 2026-04-28 (`trig_0137DKtjApb6tmmuxGgDwR4n`)
+- [x] 404 + error pages — `app/not-found.tsx` (branded with 3 re-entry cards + `robots: noindex`), `app/error.tsx` (route-level, `reset()` + `error.digest`), `app/global-error.tsx` (last-resort, inline styles, can't rely on globals.css)
+- [~] Social preview image (Open Graph) — scheduled to ship with the favicon PR via remote agent
+- [x] Skip-to-content a11y link added (focus-revealed, anchored at `<main id="main-content">`)
 
-**Context for Next Session**: _(fill in after completion)_
+**Context for Next Session (Week 4 Day 2)**:
+- Day 2 = production deploy. Create Vercel project `ai-dashboard-factory`, configure turborepo build (`pnpm install --frozen-lockfile && pnpm --filter dashboard-factory build`), point at main branch. Deploy.
+- **Important**: Merge the remote agent's `polish/favicon-og` PR BEFORE Day 2 deploy so Vercel's first build includes favicon + OG image.
+- Then smoke-test all 6 dataset flows on the production URL — the Day 7 chart-rendering fix should hold in prod.
+- Author `apps/dashboard-factory/portfolio.meta.json` with the live URL + deployedAt.
+- Then run actual Lighthouse audit on the deployed build (the deferred Day 1 task), iterate on findings until 90+ on all 4 categories.
 
 #### Day 2 (Tue) · Production Deploy
 - [ ] Create Vercel project `ai-dashboard-factory`
