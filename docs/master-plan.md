@@ -17,10 +17,10 @@
 |-------|-------|
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
-| **Current Day** | Week 3 · Day 20 (Sat) — Empty/Loading/Error States |
-| **Overall Progress** | 96 tasks of 98 complete · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ · Week 3 Days 1-5 ✓ |
-| **Status** | Wireframe mode shipped. `/wireframe` gallery + 3 statically-prerendered templates (`executive`, `operational`, `exploratory`) live, all using server-rendered inline SVG charts so the route stays at 245 kB First Load JS. Variant switcher cross-links the templates. Home CTA "Try wireframe mode" no longer 404s. |
-| **Next Action** | Week 3 Day 6: Empty/loading/error states. Skeleton loaders for dashboard, error boundary around Recharts, Toast notifications for user actions. Polish pass on existing edge cases. |
+| **Current Day** | Week 3 · Day 21 (Sun) — End-to-End QA |
+| **Overall Progress** | 100 tasks of 105 complete (Project 1 weeks 1-3 budget) · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ · Week 3 Days 1-6 ✓ |
+| **Status** | Quality-of-life pass shipped. `loading.tsx` skeleton mirrors the dashboard layout for instant route transitions. Per-chart error boundary quarantines render failures so one bad chart doesn't break the page. Tiny Zustand toast queue routes filter-clear / PDF-success / PDF-failure events through Radix Toast with auto-dismiss. /dashboard at 307 kB First Load JS (+2 kB), 21 of 21 pages prerendered. |
+| **Next Action** | Week 3 Day 7: End-to-end QA. Walk all 6 datasets through the full flow (gallery → profiling → dashboard → filters → drill-down → PDF), test all wireframe templates, smoke-test responsive at the 6 breakpoints, fix any bugs uncovered, tag Week 3 complete. |
 | **Blockers** | None |
 
 ### Phase Progress Overview
@@ -42,7 +42,24 @@
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
 
-### 2026-04-25 · Week 3 Day 5 — Wireframe mode
+### 2026-04-27 · Week 3 Day 6 — Empty/loading/error states
+- Quality-of-life pass that none of users will notice when things work but ALL of them would notice if it were missing. Bedside manner, not marketing surface.
+- **`loading.tsx`** for `/dashboard/[slug]`: Next.js 15 auto-wraps this in a Suspense boundary at the route level. Mirrors the live layout shape (header skeleton + filter bar skeleton + counter row + 4-up KPI strip with mini-card skeletons + 2x2 chart grid with bar-skeleton bodies) so the transition feels like a paint refresh rather than a destination change. Server work streams in around it.
+- **`_chart-error-boundary.tsx`**: class-based React error boundary (functional `useErrorBoundary` still hasn't shipped to React 19 stable) **scoped per chart** rather than at the page level. If one chart's data is malformed (NaN values, empty bars array, Recharts internal layout failure), only that tile shows the AlertTriangle fallback panel; the other 3 charts on the dashboard stay live. Has a "Retry render" button that calls `setState({error: null})` to clear without a full reload.
+- **Tiny toast system** powered by Zustand:
+  - `lib/toast-store.ts` — in-memory queue with imperative shortcuts: `toast.success(title, description?)`, `toast.error(...)`, `toast.info(...)`. Auto-dismiss durations: 4s default, 6s for errors. Each entry gets a stable random ID; Radix's `onOpenChange(false)` triggers store removal.
+  - `app/_components/Toaster.tsx` — bridges the store to Radix Toast primitives. Variant-mapped icons (CheckCircle2 / AlertCircle / AlertTriangle / Info). Mounted once in the root layout.
+- **3 toast wires in `_dashboard-interactive.tsx`**:
+  - Filter clear → `toast.info('Filters cleared', 'Showing all rows')`
+  - PDF success → `toast.success('PDF exported', filename)`
+  - PDF failure → `toast.error('PDF export failed', err.message)` (replaces the silent `console.error` that was there before)
+- **Drill-down empty case**: already handled. `DrilldownTable` passes `emptyMessage="No matching rows"` to the DataGrid, so clicking a slice that filters down to 0 rows renders gracefully without an additional toast (avoids alert fatigue when the user can already see the empty state).
+- **Why scoped per-chart not page-level for the error boundary**: the failure modes here are localized to data shape — NaN in one column, an empty `bars` array on a filter that ate the dimension, etc. A page-level boundary would replace the entire dashboard with a single error card; scoped boundaries preserve the working charts so the user can still get value from what's working AND see what failed.
+- **Build**: `/dashboard/[slug]` grew from 305 kB → **307 kB First Load JS** (+2 kB for the error boundary class + Zustand toast store + Radix Toast import in the layout). Other routes unchanged. Typecheck clean. 21 of 21 pages still prerendered. Commit `c931626` pushed.
+- **Context for Day 21 (Sun)**: end-to-end QA. Walk all 6 datasets through the full flow: gallery → profiling stream → dashboard → search/segment/date filters → drill-down on bar + donut → PDF export. Then walk each wireframe template + the variant switcher. Check responsive at 320 / 480 / 768 / 1024 / 1440 / 1920. Fix any bugs uncovered. Tag Week 3 complete.
+- **Next**: Week 3 Day 7 — End-to-End QA + Week 3 close
+
+### 2026-04-26 · Week 3 Day 5 — Wireframe mode
 - The home CTA "Try wireframe mode" no longer 404s. `/wireframe` shows a gallery of 3 layout archetypes; clicking any card lands on a fully-designed hi-fi mockup ready to share with a stakeholder.
 - **Why this exists**: Persona B from the master plan is a BI engineer kicking off a new dashboard project who needs a clickable hi-fi wireframe for Monday's discovery session, but doesn't want to spend a week in Figma first. They pick a layout archetype, share the URL, and use it as the conversation anchor.
 - **3 layout archetypes**:
@@ -961,7 +978,7 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 - Wire up the home CTA `<Link href="/wireframe">` to redirect to a default template (or build a `/wireframe` index page that links to all 3).
 - Optional: PNG/PDF download per template using the same dynamic-import pattern as Day 4.
 
-#### Day 5 (Fri) · Wireframe Mode — COMPLETED 2026-04-25
+#### Day 5 (Fri) · Wireframe Mode — COMPLETED 2026-04-26
 - [x] Built `/wireframe` gallery (3 cards with mini-layout SVG sketches per template)
 - [x] Built `/wireframe/[template]` dynamic route — all 3 templates (`executive`, `operational`, `exploratory`) prerendered statically via `generateStaticParams`
 - [x] **Executive layout**: oversized headline KPI ($148.2M FY26 Bookings) with 6xl-9xl scale + gradient text + delta chip + 10-quarter sparkline strip + 3 sub-KPI tiles + full-width 12-quarter trend chart
@@ -979,13 +996,18 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 - Day 6 = empty/loading/error states. Skeleton loaders for the dashboard route while the layout builds. Error boundary around Recharts in case a malformed dataset reaches the renderer. Empty state for "no rows match filters" already exists in `_dashboard-interactive.tsx` — needs visual polish + Toast notifications for user actions like "Filter cleared" / "PDF exported".
 - Lower-priority polish items: loading state on the Generate button when the streaming hasn't started yet; hardening the drill-down dialog when no rows are present; verifying every chart degrades gracefully on weird shapes (e.g., 1-row dataset, all-null dimension column).
 
-#### Day 6 (Sat) · Empty/Loading/Error States
-- [ ] Skeleton loaders for dashboard
-- [ ] Empty state for no data match
-- [ ] Error boundary for Recharts failures
-- [ ] Toast notifications for user actions
+#### Day 6 (Sat) · Empty/Loading/Error States — COMPLETED 2026-04-27
+- [x] `loading.tsx` route-level Suspense skeleton mirrors the dashboard layout (header / filter bar / counter row / 4-up KPI strip / 2x2 chart grid with bar-skeleton bodies)
+- [x] Empty state for no-data-match: `EmptyFilterState` card with Inbox icon already shipped Day 3; drill-down dialog inherits `emptyMessage="No matching rows"` from DataGrid for the 0-rows-in-segment case
+- [x] `_chart-error-boundary.tsx` class-based per-chart React error boundary; one bad chart's render failure doesn't break the other tiles. AlertTriangle fallback + "Retry render" button to clear error state.
+- [x] Toast notifications via Zustand-backed queue (`lib/toast-store.ts` + `app/_components/Toaster.tsx`) wired to Radix Toast in the root layout. Three trigger points: filter clear (info), PDF success (success), PDF failure (error). Auto-dismiss 4s default, 6s for errors.
 
-**Context for Next Session**: _(fill in after completion)_
+**Context for Next Session (Day 21 = Week 3 Day 7)**:
+- End-to-end QA day. Walk every dataset through the full flow and document any bugs.
+- Test the 3 wireframe templates including the variant switcher chip cross-links.
+- Smoke-test responsive at 320 / 480 / 768 / 1024 / 1440 / 1920 px (the same breakpoints from Week 2 Day 7's responsive pass).
+- Tag Week 3 complete in commit log.
+- Week 3 deliverables checklist (top of Week 3 section): all 6 datasets render full interactive dashboards ✓, filters/drill-downs/PDF working ✓, wireframe mode with 3 templates ✓, mobile responsive — verify in QA.
 
 #### Day 7 (Sun) · End-to-End QA
 - [ ] Test all 6 datasets through: gallery → profiling → dashboard → PDF

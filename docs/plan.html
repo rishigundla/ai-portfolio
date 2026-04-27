@@ -1472,10 +1472,10 @@
       currentStatus: {
         phase: "Phase 1 — Project 1 (Dashboard Factory)",
         week: "Week 1 of 14",
-        day: "Week 3 · Day 20 (Sat) — Empty/Loading/Error States",
-        progress: { done: 96, total: 98 },
-        status: "Wireframe mode shipped. /wireframe gallery + 3 statically-prerendered templates (executive, operational, exploratory) live, all using server-rendered inline SVG charts so the route stays at 245 kB First Load JS. Variant switcher cross-links the templates. Home CTA 'Try wireframe mode' no longer 404s.",
-        nextAction: "Week 3 Day 6: Empty/loading/error states. Skeleton loaders for dashboard, error boundary around Recharts, Toast notifications for user actions. Polish pass on edge cases.",
+        day: "Week 3 · Day 21 (Sun) — End-to-End QA",
+        progress: { done: 100, total: 105 },
+        status: "Quality-of-life pass shipped. loading.tsx skeleton mirrors the dashboard layout for instant route transitions. Per-chart React error boundary quarantines render failures so one bad chart doesn't break the page. Tiny Zustand toast queue routes filter-clear / PDF-success / PDF-failure events through Radix Toast with auto-dismiss. /dashboard at 307 kB First Load JS (+2 kB), 21 of 21 pages prerendered.",
+        nextAction: "Week 3 Day 7: End-to-end QA. Walk all 6 datasets through gallery → profiling → dashboard → filters → drill-down → PDF. Test all wireframe templates including variant switcher. Smoke-test responsive at 6 breakpoints. Fix bugs. Tag Week 3 complete.",
         blockers: "None"
       },
 
@@ -1526,7 +1526,9 @@
         // Phase 1 · Week 3 · Day 4 (4 tasks — install, template, button, footer)
         "3-W3.D4-0", "3-W3.D4-1", "3-W3.D4-2", "3-W3.D4-3",
         // Phase 1 · Week 3 · Day 5 (4 tasks — route, gallery, mockups, download)
-        "3-W3.D5-0", "3-W3.D5-1", "3-W3.D5-2", "3-W3.D5-3"
+        "3-W3.D5-0", "3-W3.D5-1", "3-W3.D5-2", "3-W3.D5-3",
+        // Phase 1 · Week 3 · Day 6 (4 tasks — skeletons, empty state, error boundary, toasts)
+        "3-W3.D6-0", "3-W3.D6-1", "3-W3.D6-2", "3-W3.D6-3"
       ],
 
       phases: [
@@ -1540,7 +1542,13 @@
 
       activity: [
         {
-          date: "2026-04-25",
+          date: "2026-04-27",
+          title: "Week 3 Day 6 — Empty/loading/error states shipped",
+          desc: "Quality-of-life pass that none of users will notice when things work but ALL of them would notice if it were missing. Bedside manner, not marketing surface. loading.tsx for /dashboard/[slug]: Next.js 15 auto-wraps the file in a Suspense boundary at the route level. Mirrors the live layout shape (header skeleton + filter bar + counter row + 4-up KPI strip + 2x2 chart grid with bar-skeleton bodies) so the transition feels like a paint refresh rather than a destination change. _chart-error-boundary.tsx: class-based React error boundary (functional useErrorBoundary still hasn't shipped to React 19 stable) SCOPED PER CHART rather than at page level. If one chart's data is malformed, only that tile shows the AlertTriangle fallback; the other 3 charts on the dashboard stay live. Has a 'Retry render' button that clears error state without a full reload. Tiny toast system powered by Zustand: lib/toast-store.ts is an in-memory queue with imperative shortcuts (toast.success, toast.error, toast.info); Toaster.tsx bridges the store to Radix Toast primitives, mounted once in the root layout. Auto-dismiss 4s default, 6s for errors. THREE toast wires in _dashboard-interactive.tsx: filter clear → info toast 'Filters cleared / Showing all rows', PDF success → success toast with filename, PDF failure → error toast with err.message (replacing the silent console.error). DrilldownTable already passes emptyMessage='No matching rows' to DataGrid so 0-row drill-downs render gracefully without an additional toast (avoids alert fatigue). Why scoped per-chart not page-level: failure modes are localized to data shape (NaN in a column, empty bars array on a filter that ate the dimension); a page-level boundary would replace the whole dashboard with one error card, scoped boundaries preserve the working charts. Build: /dashboard/[slug] grew 305 kB → 307 kB First Load JS (+2 kB for the boundary class + Zustand store + Radix Toast import). 21 of 21 pages still prerendered. Commit c931626 pushed.",
+          next: "Week 3 Day 7 — End-to-End QA + Week 3 close (walk all 6 datasets through full flow, test wireframe templates + variant switcher, smoke responsive at 320/480/768/1024/1440/1920, fix any bugs, tag Week 3 complete)"
+        },
+        {
+          date: "2026-04-26",
           title: "Week 3 Day 5 — Wireframe mode shipped",
           desc: "The home CTA 'Try wireframe mode' no longer 404s. /wireframe shows a gallery of 3 layout archetypes; clicking any card lands on a fully-designed hi-fi mockup. EXECUTIVE (sparse): oversized $148.2M headline KPI in 6xl-9xl gradient text + 10-quarter sparkline + 3 sub-KPI tiles + full-width 12-quarter trend. 'One number + one chart, sized for a CEO meeting room.' OPERATIONAL (dense): live auto-refresh-30s indicator + 6-up KPI strip with inverse-good color semantics for latency/errors/pages/incidents (down is good) + 2x2 chart grid (bars/line/donut/bars) + status footer. 'Control room view for an SRE on-call standup.' EXPLORATORY (medium): 3-col sticky filter rail (search shell + 5-segment checkboxes + 4-dim Group-by chip selector + date range + Save view CTA) + 9-col main with 4-KPI row + cohort retention heatmap + 2-up bottom (industry mix donut + LTV bars). 'Analyst's notebook for an ad-hoc investigation.' KEY DECISION — hand-rolled inline SVG over Recharts: wireframes are static, no resize/tooltip/filter recompute. Recharts is already on /dashboard/[slug] at ~110 kB; a second copy would be wasteful. Inline SVG renders server-side with no 'use client' boundary, so the route ships as RSC HTML at 245 kB First Load JS. Filter rail is purely visual — no state, no event handlers — to keep the 'this is a mockup' mental model. 7 new files: lib/wireframe-templates.ts (metadata + 3 hand-curated demo datasets), app/wireframe/page.tsx (gallery with mini-layout SVG sketches per card), app/wireframe/[template]/page.tsx (dynamic route, all 3 prerendered via generateStaticParams), MockCharts.tsx (4 SVG primitives), 3 layout components. Variant switcher chips on each page cross-link the templates. Build: 21 of 21 pages generated, typecheck clean. Commit 53117d0 pushed.",
           next: "Week 3 Day 6 — Empty/Loading/Error States (skeleton loaders, Recharts error boundary, Toast notifications, edge case polish)"
