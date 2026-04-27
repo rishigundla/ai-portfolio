@@ -193,7 +193,7 @@ function BarChartView({
   }
   const isClickable = !!onBarClick
   return (
-    <div className="w-full h-full min-h-[240px]">
+    <div className="w-full h-[280px]">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={data.bars}
@@ -253,7 +253,7 @@ function LineChartView({
     return <EmptyChart message="No time-series data" />
   }
   return (
-    <div className="w-full h-full min-h-[240px]">
+    <div className="w-full h-[280px]">
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart
           data={data.points}

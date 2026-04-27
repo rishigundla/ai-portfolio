@@ -72,7 +72,7 @@ export function DashboardInteractive({
     if (!primaryDimension) return []
     const values = uniqueDimensionValues(rows, primaryDimension.name)
     return [
-      { value: 'all', label: `All ${primaryDimension.label.toLowerCase()}s` },
+      { value: 'all', label: `All ${pluralize(primaryDimension.label.toLowerCase())}` },
       ...values.map((v) => ({ value: v, label: v })),
     ]
   }, [rows, primaryDimension])
@@ -257,14 +257,14 @@ export function DashboardInteractive({
           if (!open) setDrilldown(null)
         }}
       >
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="max-w-3xl max-h-[90vh] flex flex-col">
           {drilldown && (
             <>
               <DialogHeader>
                 <DialogTitle>{drilldown.title}</DialogTitle>
                 <DialogDescription>{drilldown.description}</DialogDescription>
               </DialogHeader>
-              <div className="mt-2 max-h-[60vh] overflow-auto">
+              <div className="mt-2 flex-1 min-h-0 overflow-auto">
                 <DrilldownTable rows={drilldown.rows} schema={schema} />
               </div>
             </>
@@ -273,6 +273,19 @@ export function DashboardInteractive({
       </Dialog>
     </div>
   )
+}
+
+// ============================================================
+// Pluralization — handles the common cases the segment filter encounters.
+// Opportunity → opportunities (consonant + y → ies)
+// Status → statuses (s/x/z/ch/sh → es)
+// Campaign → campaigns (default + s)
+// ============================================================
+
+function pluralize(word: string): string {
+  if (/[^aeiou]y$/.test(word)) return word.slice(0, -1) + 'ies'
+  if (/(s|x|z|ch|sh)$/.test(word)) return word + 'es'
+  return word + 's'
 }
 
 // ============================================================

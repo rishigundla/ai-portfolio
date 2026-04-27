@@ -43,13 +43,20 @@ export const ChartCard = React.forwardRef<HTMLDivElement, ChartCardProps>(
           </div>
         )}
 
-        {/* Body */}
-        <div className="flex-1 min-h-[160px] flex items-center justify-center">
+        {/* Body — when ready, stretch the child so ResponsiveContainer can
+            measure non-zero width/height. For loading/empty/error fallbacks,
+            center them inside the body. */}
+        <div
+          className={cn(
+            'flex-1 min-h-[160px]',
+            state === 'ready' ? 'flex flex-col' : 'flex items-center justify-center',
+          )}
+        >
           {state === 'loading' && <ChartSkeleton />}
           {state === 'empty' && <EmptyChart message={emptyMessage || 'No data for this view'} />}
           {state === 'error' && <ErrorChart message={errorMessage || 'Chart failed to render'} />}
           {state === 'ready' && (
-            <div className="w-full h-full">
+            <div className="flex-1 min-h-[200px] w-full">
               {children}
             </div>
           )}
