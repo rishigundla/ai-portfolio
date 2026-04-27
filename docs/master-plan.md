@@ -17,10 +17,10 @@
 |-------|-------|
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
-| **Current Day** | Week 3 · Day 21 (Sun) — End-to-End QA |
-| **Overall Progress** | 100 tasks of 105 complete (Project 1 weeks 1-3 budget) · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ · Week 3 Days 1-6 ✓ |
-| **Status** | Quality-of-life pass shipped. `loading.tsx` skeleton mirrors the dashboard layout for instant route transitions. Per-chart error boundary quarantines render failures so one bad chart doesn't break the page. Tiny Zustand toast queue routes filter-clear / PDF-success / PDF-failure events through Radix Toast with auto-dismiss. /dashboard at 307 kB First Load JS (+2 kB), 21 of 21 pages prerendered. |
-| **Next Action** | Week 3 Day 7: End-to-end QA. Walk all 6 datasets through the full flow (gallery → profiling → dashboard → filters → drill-down → PDF), test all wireframe templates, smoke-test responsive at the 6 breakpoints, fix any bugs uncovered, tag Week 3 complete. |
+| **Current Day** | Week 4 · Day 1 (Mon) — Production Polish |
+| **Overall Progress** | 105 tasks of 105 complete · **Week 3 ✓ tagged `week-3-complete`** · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ |
+| **Status** | Week 3 closed. End-to-end QA via Playwright surfaced 3 bugs (Recharts 0×0 chart rendering, naive pluralization "opportunitys", drill-down dialog close button scrolling off-screen) — all fixed and verified. All 6 datasets render cleanly with 0 console errors. All 3 wireframe templates pass at 375/768/1440 breakpoints. Tag `week-3-complete` pushed. |
+| **Next Action** | Week 4 Day 1: Production polish. Lighthouse audit (target 90+ on all 4 categories), SEO meta tags + Open Graph images, favicon (currently 404), 404/error pages, social preview. |
 | **Blockers** | None |
 
 ### Phase Progress Overview
@@ -41,6 +41,27 @@
 ## Recent Activity Log
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
+
+### 2026-04-27 · Week 3 Day 7 — End-to-end QA + Week 3 close
+- **Driven via Playwright against the local dev server**. Walked all 6 dataset flows (gallery → profiling → dashboard → filters → drill-down → PDF), all 3 wireframe templates including variant switcher, and all 3 responsive breakpoints (375 mobile / 768 tablet / 1440 desktop). Captured screenshots for the case study evidence trail.
+- **Three bugs surfaced on the very first dashboard, all fixed**:
+  1. **Recharts 0×0 — bar and line charts rendering as empty boxes**. Recharts ResponsiveContainer reported `width(0) and height(0)` warnings even though the parent card was clearly tall. Root cause: nested flex with percentage heights — `h-full` on a child of `flex items-center justify-center` does not resolve to the parent's height because `align-items: center` collapses the child to its content height (zero, since Recharts had nothing to measure to start with). Donut chart escaped because it used explicit `w-32 h-32`. Fixed by switching the chart wrappers from `h-full` to explicit `h-[280px]`. Also tightened `ChartCard` body so the ready-state child stretches via `flex-col` rather than being centered.
+  2. **Naive pluralization** — segment filter showed `All opportunitys` / `All companys` for any dimension label ending in 'y'. Replaced `${label.toLowerCase()}s` with a tiny `pluralize()` helper that handles consonant+y → ies and s/x/z/ch/sh → es. Now correctly shows `All opportunities` / `All companies` / `All campaigns` / `All skus` / `All products`.
+  3. **Drill-down dialog close button scrolls off-screen** — when clicking a segment with 19+ rows, `DialogContent` had no height cap and the inner table's `max-h-[60vh]` scrolled inside while the dialog itself extended below the viewport, pushing the close button off-screen. Constrained `DialogContent` to `max-h-[90vh] flex flex-col` and changed the inner region to `flex-1 min-h-0 overflow-auto`. Close button now stays anchored at the top regardless of row count. Escape key still works.
+- **What was already correct**:
+  - Navigation guard correctly redirected `/dashboard/marketing-campaigns` to `/generate/marketing-campaigns` for unprofiled datasets — exactly the Week 2 Day 6 design intent
+  - Filter clear → info toast, PDF export → download + success toast (Day 6 wires confirmed live)
+  - Drill-down filter math: clicking Enterprise legend item gave 19 rows, all correctly filtered to Segment="Enterprise"
+  - All 6 dataset domains render correct KPI counts (revops/marketing/pulse/supply/customer have 4-up KPIs; financial-complaints has 1 because schema has only 1 measure column)
+  - All 3 wireframe templates render with correct color tokens (executive teal, operational amber, exploratory purple), variant switcher chips theme to other templates' colors
+  - Inverse-good color semantics work in operational layout: latency/errors/pages/incidents all show green when ↓
+- **Pre-existing items deferred to Week 4**:
+  - `/favicon.ico` 404 (already on Week 4 Day 1 task list)
+  - At 375 mobile, the "Re-profile / Switch dataset" action row truncates slightly (acceptable, not blocking)
+- **Build**: 21 of 21 pages prerendered, `/dashboard/[slug]` at 121 kB + 307 kB First Load JS (no change from Day 6 since fixes are localized). Typecheck clean.
+- **Commits**: `ed2622a` (fixes) pushed to main. **Tag `week-3-complete` created and pushed** with the 7-day summary.
+- **Context for Week 4 Day 1 (Mon)**: Production polish. Lighthouse audit aiming for 90+ on Performance/Accessibility/Best Practices/SEO. SEO meta tags + Open Graph images. Favicon. 404/error pages. Social preview image.
+- **Next**: Week 4 Day 1 — Production Polish
 
 ### 2026-04-27 · Week 3 Day 6 — Empty/loading/error states
 - Quality-of-life pass that none of users will notice when things work but ALL of them would notice if it were missing. Bedside manner, not marketing surface.
@@ -1009,18 +1030,18 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 - Tag Week 3 complete in commit log.
 - Week 3 deliverables checklist (top of Week 3 section): all 6 datasets render full interactive dashboards ✓, filters/drill-downs/PDF working ✓, wireframe mode with 3 templates ✓, mobile responsive — verify in QA.
 
-#### Day 7 (Sun) · End-to-End QA
-- [ ] Test all 6 datasets through: gallery → profiling → dashboard → PDF
-- [ ] Test all filters
-- [ ] Test wireframe templates
-- [ ] Fix bugs discovered
-- [ ] Tag Week 3 complete
+#### Day 7 (Sun) · End-to-End QA — COMPLETED 2026-04-27
+- [x] Tested all 6 datasets via Playwright (gallery → profiling → dashboard → filters → drill-down → PDF) — 0 console errors after fixes
+- [x] Tested filters: search, segment select, date range, clear; drill-down dialog with 19-row table; PDF export with success toast
+- [x] Tested all 3 wireframe templates (executive / operational / exploratory) + variant switcher chips
+- [x] Fixed 3 bugs uncovered: Recharts 0×0 chart rendering, naive pluralization (`opportunitys` → `opportunities`), drill-down dialog close button scrolling off-screen
+- [x] **Tag `week-3-complete` created and pushed** with 7-day summary
 
-**Week 3 Deliverables**:
-- All 6 datasets render as full interactive dashboards
-- Filters, drill-downs, PDF export working
-- Wireframe mode with 3 templates
-- Mobile responsive
+**Week 3 Deliverables — all met**:
+- ✓ All 6 datasets render as full interactive dashboards
+- ✓ Filters, drill-downs, PDF export working (0 console errors after Day 7 fixes)
+- ✓ Wireframe mode with 3 templates + variant switcher
+- ✓ Mobile responsive — smoke-tested at 375 (mobile) / 768 (tablet) / 1440 (desktop)
 
 ---
 
