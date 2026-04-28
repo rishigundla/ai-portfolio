@@ -19,7 +19,7 @@
 | **Current Week** | Week 1 of 14 |
 | **Current Day** | Week 4 · Day 3 (Wed) — Loom Video |
 | **Overall Progress** | 115 tasks of 115 complete · **Production live at https://ai-portfolio-dashboard-factory.vercel.app** · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ · Week 3 ✓ · Week 4 Days 1-2 ✓ |
-| **Status** | Day 2 closed. Vercel project `ai-portfolio-dashboard-factory` deployed from main, all 6 dashboards + 3 wireframes verified clean on production (0 console errors), 4 issues found and fixed during QA (doubled title suffix, color contrast on text-muted, heading-order skip on home + AiNarrativeBlock, color-only footer links). Final Lighthouse: home 100/100/100/100, /generate 100/98/100/100 — all 4 categories above 90 target across every audited route. portfolio.meta.json now has live URL + deployedAt. |
+| **Status** | Day 2 closed + post-deploy hotfix. Vercel project deployed; all 6 dashboards + 3 wireframes verified clean (0 console errors). Lighthouse: home 100/100/100/100, /generate 100/98/100/100. **Post-deploy fix**: user caught that profiling fixtures promised 5 KPIs + 4 charts but dashboards rendered 2-4 KPIs + 3 charts. Extended builder to synthesize derived KPIs (Total {entity} / Top {dim} / distinct counts) + added 4th chart slot (secondary bar). Verified across revops, financial-complaints, customer-demographics — all now show 5 KPIs + 4 charts. Side-effect: primary bar chart on revops promoted from "ACV by Opportunity" (40 unique values, no real aggregation) to "ACV by Segment" (3 segments, meaningful aggregation), matching the fixture narrative. |
 | **Next Action** | Week 4 Day 3: Loom video. Write 90s script (problem → gallery → profiling → dashboard → PDF export → outro), record on clean browser at 1440px, edit, upload to YouTube unlisted, copy embed URL, update `portfolio.meta.json` with `loomUrl`. |
 | **Blockers** | None |
 
@@ -41,6 +41,31 @@
 ## Recent Activity Log
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
+
+### 2026-04-28 · Week 4 Day 2 (post-deploy hotfix) — KPI + chart count parity with profiling fixtures
+- **User caught a real gap**: profiling fixture text on RevOps Sales SSOT promised 5 KPIs (Total ACV / Avg GRR / Active deal count / Win rate / Top product) + 4 charts, but the dashboard rendered only 2 KPIs + 3 charts. Audited all 6 datasets — same pattern every time, fixtures consistently promise 5+4 and the builder produced fewer.
+- **Root cause**: `lib/dashboard-builder.ts` derived KPIs strictly from schema-typed `measure` columns (capped at 4) and produced exactly 3 charts (bar + line + donut). Datasets with 1-2 measures fell short. The profiling fixtures are hand-curated *narrative* — they describe what an analyst would recommend, not what the schema-driven builder materialized. Narrative-vs-implementation drift.
+- **Fix in `dashboard-builder.ts`** — extends builder to synthesize derived metrics + a 4th chart:
+  - **KPIs target 5**: schema measures (sum/avg per `aggregation` hint) up to 5, then fill from a priority list of derived KPIs:
+    1. `Total {entity}` — row count, entity name from id-column label (`'Deal ID' → 'Total Deals'`)
+    2. `Top {primary dimension}` — modal value by primary measure (`'Top Segment: Enterprise'`)
+    3. `{primary dimension}s` — distinct count of primary dim (`'Segments: 3'`)
+    4. `{secondary dimension}s` — distinct count of secondary dim if still under 5
+  - **Charts target 4**: primary bar, trend line, donut, secondary bar (primary measure × tertiary useful dim).
+  - **"Useful dimension" filter** skips columns whose distinct-value count equals row count (e.g. `opportunity_name` with 40 unique values across 40 rows). Stops "Top {dim}" from being meaningless and silently fixes the chart-quality regression where the primary bar was rendering 40 individual deal names as 6 bars (each = one row's value, no aggregation).
+- **Side-effect that's actually an improvement**: revops-sales' primary bar promoted from "ACV by Opportunity" (40 individual deals) to "ACV by Segment" (3 segments, real aggregation) — exactly what the curated profiling fixture recommends ("ACV by region, stacked by channel … makes the asymmetry pop"). Chart insight quality lifted alongside the count fix.
+- **Other changes**:
+  - `lib/format.ts`: added `pluralize()` and `formatInteger()` exports for shared use across dashboard-builder + segment filter (was duplicated privately in `_dashboard-interactive.tsx`).
+  - `_dashboard-view.tsx`: KPI grid switches to `lg:grid-cols-5` when count is 5 (else 4). Sm-breakpoint also bumps to `grid-cols-3` for 5-KPI dashboards so they wrap as 3+2 rather than the awkward 2+2+1.
+  - `_dashboard-interactive.tsx`: drops local `pluralize`, imports the shared one.
+  - `_streaming-panel.tsx`: counter text updated from "3 charts" to "5-KPI strip + 4 charts".
+- **Verified live on production via Playwright**:
+  - **revops-sales** (2 measures → 5 KPIs): ACV $14.4M · GRR % 93.9% · Total Deals 40 · Top Segment Enterprise · Segments 3. Charts: ACV by Segment · ACV trend · Distribution by Region · ACV by Channel.
+  - **financial-complaints** (1 measure, worst case → 5 KPIs): Days to Resolve 12 days · Total Complaints 36 · Top Product Mortgage · Products 6 · Issue Types 7. Charts: Days to Resolve by Product · trend · Distribution by Issue Type · Days to Resolve by State.
+  - **customer-demographics** (3 measures → 5 KPIs): Lifetime Value $76.1M · CSAT 85.8 · NPS 49 · Total Customers 38 · Top Segment Enterprise. Charts: Lifetime Value by Segment · trend · Distribution by Industry · Lifetime Value by Size.
+- **Build clean** — typecheck passes, all 25 pages still prerender.
+- **Commits**: `8b55bc6` (builder fix), `f901c13` (counter text), `5b271d7` (KPI grid responsive).
+- **Lesson for Project 2 onwards**: when fixtures contain *prescriptive* content (Recommended KPIs, Recommended Charts), the dashboard-builder needs a corresponding extraction layer or the user feels lied to. Either the builder honors the fixture or the fixture stops promising. Day 7 QA's "0 console errors" pass missed this because the bug was semantic (count mismatch) not technical.
 
 ### 2026-04-28 · Week 4 Day 2 — Production Deploy + Lighthouse to 90+
 - **Live at https://ai-portfolio-dashboard-factory.vercel.app**. Vercel project deployed from main, autodetected Next.js, build target `apps/dashboard-factory` with `pnpm install --frozen-lockfile` at workspace root. First production deploy + 4 follow-up patch deploys completed in the same session.
