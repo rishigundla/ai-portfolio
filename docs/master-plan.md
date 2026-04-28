@@ -17,9 +17,9 @@
 |-------|-------|
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
-| **Current Day** | Week 4 · Day 1 (Mon) — Production Polish (in progress, 3 of 5 tasks done) |
-| **Overall Progress** | 108 tasks of 110 complete · Week 3 ✓ · Day 1 partial · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ |
-| **Status** | SEO metadata + 404/error pages shipped. Root layout now has metadataBase / keywords / authors / openGraph (siteName, locale, url) / Twitter card / robots / formatDetection / themeColor + colorScheme via viewport export. Skip-to-content a11y link added. Branded `not-found.tsx` (Home / Datasets / Wireframe re-entry cards), `error.tsx` (Try-again + Back-home with error.digest reference), `global-error.tsx` (self-contained, inline styles, can't rely on globals.css). Favicon + OpenGraph image scheduled to ship via remote agent at 09:00 IST tomorrow as a separate PR. Lighthouse audit deferred to Day 2 (needs deployed production URL). |
+| **Current Day** | Week 4 · Day 2 (Tue) — Production Deploy |
+| **Overall Progress** | 110 tasks of 110 complete (4 of 5 Day 1 + scheduled remote agent debugged) · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ · Week 3 ✓ · Week 4 Day 1 ✓ (Lighthouse deferred to Day 2 by design) |
+| **Status** | Day 1 closed. Favicon + Open Graph image done in-session after the scheduled remote agent fired but failed silently (sandbox had no GitHub credentials → push failed with no PR). Code-side Lighthouse prep complete. Production-ready meta tags / OG image / favicon / 404+error pages / a11y skip link / 25 of 25 pages prerendered with 0 console errors. |
 | **Next Action** | Week 4 Day 2: Production deploy. Create Vercel project `ai-dashboard-factory`, configure turborepo build settings, deploy to production, smoke-test all 6 dataset flows on the live URL, author `apps/dashboard-factory/portfolio.meta.json` with liveUrl. Then run actual Lighthouse audit on the deployed build (the Day 1 deferred task). |
 | **Blockers** | None |
 
@@ -41,6 +41,25 @@
 ## Recent Activity Log
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
+
+### 2026-04-28 · Week 4 Day 1 (close) — Favicon + OG image + remote-agent post-mortem
+- **Day 1 closed**, 4 of 5 tasks done in code; Lighthouse audit explicitly deferred to Day 2 because dev mode penalises minification / source maps / dev overlay scripts and only a deployed production build gives a meaningful score.
+- **Originally scoped for the scheduled remote agent** (`trig_0137DKtjApb6tmmuxGgDwR4n`) which fired at 03:30:05 UTC = 09:00:05 IST as expected. But by 10:36 IST no PR existed and no `polish/favicon-og` branch was on origin. Diagnosis: routine config attached **no MCP connectors and no GitHub credentials**, only `[Bash, Read, Write, Edit, Glob, Grep]` allowed tools. Sandbox could clone over HTTPS (read-only is fine for public repos) and run the file work + `pnpm build`, but `git push origin polish/favicon-og` requires write auth which the sandbox didn't have. Push failed silently. With `persist_session: false`, even the session output was gone by the time we investigated. **Lesson**: any remote routine that needs to *modify a repo* must have either GitHub MCP attached or explicit write credentials provisioned in the routine's secret store. Read-only research routines are fine without.
+- **Did the work in-session instead**, ~30 minutes total:
+  - **`app/icon.tsx`**: 32×32 favicon via next/og's `ImageResponse`. Teal gradient (`#2dd4bf` → `#14b8a6`) with dark `#0a0a0f` "DF" letterform, mirrors the Nav DF mark. PNG generated at build time so the source stays inspectable as JSX (no opaque binary in git).
+  - **`app/apple-icon.tsx`**: 180×180 iOS variant of the same design.
+  - **`app/_lib/og-renderer.tsx`**: shared 1200×630 ImageResponse renderer. Fetches Space Grotesk Bold from Google Fonts at build time with graceful system-sans fallback if fetch fails. Brand spec inlined (background `#0a0a0f`, hero gradient `#5eead4` → `#2dd4bf`, body `#cbd5e1`, muted footer `#94a3b8`) because next/og has no stylesheet context.
+  - **`app/opengraph-image.tsx`** + **`app/twitter-image.tsx`**: thin entrypoints declaring inline configs (runtime, size, contentType, alt) and importing the shared renderer. **Key Next.js gotcha**: convention-file static analyzer cannot follow re-exports of `runtime`/`size` — only the `default` export is safely re-exportable. First version of twitter-image used `export { runtime } from './opengraph-image'` and Next.js silently dropped it with a build warning. Fixed by extracting renderer to `_lib` and declaring configs in each entrypoint.
+- **Verified via Playwright on production build** (`next start -p 3002`):
+  - `/icon` renders 32×32 teal-gradient DF mark
+  - `/opengraph-image` renders 1200×630 with Space Grotesk Bold loaded (gradient title visible, brand mark + wordmark, subtitle, dual footer with live status + project tag)
+  - Home page `<head>` contains `og:image`, `twitter:image`, `apple-touch-icon`, `<link rel="icon">` all wired as absolute URLs from `metadataBase`, with cache-busting query strings added by Next.js
+  - **0 console errors** — Day 7's `/favicon.ico` 404 is fully resolved
+- **Build**: 25 of 25 pages prerendered (was 21, +4 image routes). Each image route 139 B / 103 kB First Load. `/dashboard/[slug]` unchanged at 307 kB.
+- **Commit**: `5bf0458` pushed to main.
+- **Routine cleanup**: `trig_0137DKtjApb6tmmuxGgDwR4n` already auto-disabled (`enabled: false`, `ended_reason: "run_once_fired"`) so no action needed there. Manage future routines at https://claude.ai/code/routines if the user wants to delete it from the list.
+- **Context for Day 2 (Tue evening)**: Production deploy. Create Vercel project `ai-dashboard-factory` from the existing GitHub repo, configure turborepo build (`pnpm install --frozen-lockfile && pnpm --filter dashboard-factory build`, output `apps/dashboard-factory/.next`), point at `main`. Deploy. Smoke-test all 6 datasets + 3 wireframes on the production URL. Author `apps/dashboard-factory/portfolio.meta.json` with the live URL + deployedAt. Then run actual Lighthouse on the deployed build, iterate findings until 90+ on all 4 categories.
+- **Next**: Week 4 Day 2 — Production Deploy
 
 ### 2026-04-27 · Week 4 Day 1 (partial) — SEO metadata + 404/error pages
 - Three of the five Day 1 polish tasks shipped in-session. Favicon + OpenGraph image scheduled to land tomorrow morning via remote agent (`trig_0137DKtjApb6tmmuxGgDwR4n`, fires 2026-04-28T03:30:00Z = 09:00 IST). Lighthouse audit deferred to Day 2 because dev mode penalises minification / source maps / dev overlay scripts — only a deployed production build gives a meaningful score.
@@ -1068,13 +1087,14 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 
 **Week goal**: Live on production, Loom published, automation infrastructure deployed.
 
-#### Day 1 (Mon) · Production Polish — IN PROGRESS 2026-04-27 (3 of 5 done)
-- [~] Lighthouse audit — DEFERRED to Day 2 (needs deployed production URL; dev mode penalises minification / source maps / dev overlay)
+#### Day 1 (Mon-Tue) · Production Polish — COMPLETED 2026-04-28 (4 of 5; Lighthouse Day 2 by design)
+- [~] Lighthouse audit — DEFERRED to Day 2 by design (needs deployed production URL; dev mode penalises minification / source maps / dev overlay). Code-side prep done.
 - [x] SEO meta tags — root layout extended with metadataBase, keywords, authors, openGraph (siteName/locale/url), twitter card, robots, formatDetection, viewport (themeColor + colorScheme)
-- [~] Favicon — scheduled to ship via remote agent at 09:00 IST 2026-04-28 (`trig_0137DKtjApb6tmmuxGgDwR4n`)
+- [x] Favicon — `app/icon.tsx` (32×32) + `app/apple-icon.tsx` (180×180) via next/og ImageResponse, teal gradient + dark DF mark mirroring Nav. Closes the Day 7 `/favicon.ico` 404.
 - [x] 404 + error pages — `app/not-found.tsx` (branded with 3 re-entry cards + `robots: noindex`), `app/error.tsx` (route-level, `reset()` + `error.digest`), `app/global-error.tsx` (last-resort, inline styles, can't rely on globals.css)
-- [~] Social preview image (Open Graph) — scheduled to ship with the favicon PR via remote agent
+- [x] Social preview image — `app/opengraph-image.tsx` + `app/twitter-image.tsx` at 1200×630, brand-styled with Space Grotesk Bold, shared renderer in `app/_lib/og-renderer.tsx`. Verified via Playwright.
 - [x] Skip-to-content a11y link added (focus-revealed, anchored at `<main id="main-content">`)
+- [x] **Bonus**: documented remote-agent failure mode + diagnosis (sandbox needs MCP/credentials for write-back operations; routine `trig_0137DKtjApb6tmmuxGgDwR4n` fired but couldn't push)
 
 **Context for Next Session (Week 4 Day 2)**:
 - Day 2 = production deploy. Create Vercel project `ai-dashboard-factory`, configure turborepo build (`pnpm install --frozen-lockfile && pnpm --filter dashboard-factory build`), point at main branch. Deploy.
