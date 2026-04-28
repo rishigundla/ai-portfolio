@@ -18,7 +18,7 @@
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
 | **Current Day** | Week 4 · Day 4 (Thu) — PDF visual fidelity |
-| **Overall Progress** | 119 tasks of ~150 complete · **Production live at https://ai-portfolio-dashboard-factory.vercel.app** · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ · Week 3 ✓ · Week 4 Days 1-3 ✓ |
+| **Overall Progress** | 120 tasks of ~150 complete · **Production live at https://ai-portfolio-dashboard-factory.vercel.app** · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ · Week 3 ✓ · Week 4 Days 1-3 ✓ |
 | **Status** | W4.D3 closed. Items 2 + 5 + 6 + 7 shipped. "For Developers" rename across 4 sites. Click-to-drill chip on bar + donut chart cards. NAI/NC2/NCI → Atlas/Orion/Vega across 6 datasets + 4 profiling fixtures + wireframe mock data + design-system-docs examples + READMEs. "Nutanix" string removed from all user-facing copy. Dashes (em, en, hyphen-with-spaces) removed from user-visible text. 4 SVG/math-heavy files reverted after the dash-cleanup regex damaged JS arithmetic; they had no user-visible dashes worth fixing anyway. Build clean, 25 of 25 pages prerendered. |
 | **Next Action** | Week 4 Day 4: PDF visual fidelity. Switch PDF export from text-summary to canvas-based capture using html2canvas + jsPDF so the PDF looks pixel-identical to the dashboard on screen (Recharts visuals + brand colors + typography). Preserve filter-aware behavior. Test on all 6 datasets. |
 | **Blockers** | None |
@@ -1151,8 +1151,8 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 
 **Week goal**: Live on production, Loom published, automation infrastructure deployed.
 
-#### Day 1 (Mon-Tue) · Production Polish — COMPLETED 2026-04-28 (4 of 5; Lighthouse Day 2 by design)
-- [~] Lighthouse audit — DEFERRED to Day 2 by design (needs deployed production URL; dev mode penalises minification / source maps / dev overlay). Code-side prep done.
+#### Day 1 (Mon-Tue) · Production Polish — COMPLETED 2026-04-28 (5 of 5)
+- [x] Lighthouse audit — Ran on Day 2 against the deployed build (dev mode would have penalised minification / source maps / dev overlay). Home 100/100/100/100, /generate 100/98/100/100. Code-side prep happened on Day 1; the actual audit ran once production was up.
 - [x] SEO meta tags — root layout extended with metadataBase, keywords, authors, openGraph (siteName/locale/url), twitter card, robots, formatDetection, viewport (themeColor + colorScheme)
 - [x] Favicon — `app/icon.tsx` (32×32) + `app/apple-icon.tsx` (180×180) via next/og ImageResponse, teal gradient + dark DF mark mirroring Nav. Closes the Day 7 `/favicon.ico` 404.
 - [x] 404 + error pages — `app/not-found.tsx` (branded with 3 re-entry cards + `robots: noindex`), `app/error.tsx` (route-level, `reset()` + `error.digest`), `app/global-error.tsx` (last-resort, inline styles, can't rely on globals.css)
