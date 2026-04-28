@@ -25,6 +25,7 @@ import { buildDashboardLayout } from '@/lib/dashboard-builder'
 import { DashboardView } from './_dashboard-view'
 import { DrilldownTable } from './_drilldown-table'
 import type { ColorClassSet } from '@/lib/datasets'
+import { pluralize } from '@/lib/format'
 import { toast } from '@/lib/toast-store'
 
 interface DashboardInteractiveProps {
@@ -273,19 +274,6 @@ export function DashboardInteractive({
       </Dialog>
     </div>
   )
-}
-
-// ============================================================
-// Pluralization — handles the common cases the segment filter encounters.
-// Opportunity → opportunities (consonant + y → ies)
-// Status → statuses (s/x/z/ch/sh → es)
-// Campaign → campaigns (default + s)
-// ============================================================
-
-function pluralize(word: string): string {
-  if (/[^aeiou]y$/.test(word)) return word.slice(0, -1) + 'ies'
-  if (/(s|x|z|ch|sh)$/.test(word)) return word + 'es'
-  return word + 's'
 }
 
 // ============================================================

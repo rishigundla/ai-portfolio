@@ -49,8 +49,9 @@ export function DashboardView({
 }: DashboardViewProps) {
   return (
     <div className="space-y-6">
-      {/* KPI strip */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* KPI strip — 5-up on lg when we have 5 KPIs, else 4-up. Below lg
+          stays 1- or 2-up. Keeps 5-KPI dashboards from looking unbalanced. */}
+      <div className={`grid grid-cols-1 sm:grid-cols-2 ${layout.kpis.length === 5 ? 'lg:grid-cols-5' : 'lg:grid-cols-4'} gap-4`}>
         {layout.kpis.map((kpi, i) => (
           <KpiCard
             key={`${kpi.label}-${i}`}

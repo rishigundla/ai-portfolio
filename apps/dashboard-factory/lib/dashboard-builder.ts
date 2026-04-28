@@ -14,7 +14,7 @@
  */
 
 import type { ColumnSchema } from './full-datasets'
-import { bucketSparkline, formatKpiValue } from './format'
+import { bucketSparkline, formatInteger, formatKpiValue, pluralize } from './format'
 
 // ============================================================
 // Types
@@ -69,12 +69,20 @@ export interface DashboardLayout {
 const TOP_N_BARS = 6
 const TOP_N_DONUT = 5
 const LINE_BUCKETS = 8
+const TARGET_KPI_COUNT = 5
 
 /**
  * Build a complete DashboardLayout from a set of rows + the schema.
  *
  * Runs on the server initially (page load) and on the client whenever
  * filters change (in the dashboard interactive wrapper).
+ *
+ * KPIs target a count of {@link TARGET_KPI_COUNT}: schema measures first,
+ * then derived KPIs (total record count, top dim value, distinct dim count)
+ * fill any remaining slots so a dataset with only 1-2 measures still gets a
+ * full strip — matching what the curated profiling fixtures promise.
+ *
+ * Charts target 4 slots: primary bar, trend line, donut, secondary bar.
  */
 export function buildDashboardLayout(
   rows: Record<string, unknown>[],
@@ -83,13 +91,22 @@ export function buildDashboardLayout(
   const measures = schema.filter((c) => c.type === 'measure')
   const dimensions = schema.filter((c) => c.type === 'dimension')
   const times = schema.filter((c) => c.type === 'time')
+  const idColumn = schema.find((c) => c.type === 'id')
 
-  const kpis = buildKpis(rows, measures)
+  // Skip dimensions whose distinct value count equals row count — those are
+  // typically free-text identifiers (e.g. opportunity_name) where "Top
+  // segment" or "Distinct count" is meaningless. Keeps derived KPIs useful.
+  const usefulDimensions = dimensions.filter((d) => {
+    const distinct = new Set(rows.map((r) => r[d.name])).size
+    return distinct > 1 && distinct < rows.length
+  })
+
+  const kpis = buildKpis(rows, measures, usefulDimensions, idColumn)
   const charts: DashboardChart[] = []
 
-  // Primary bar: top measure × primary dimension
-  if (measures[0] && dimensions[0]) {
-    charts.push(buildBarChart(rows, measures[0], dimensions[0]))
+  // Primary bar: top measure × primary useful dimension
+  if (measures[0] && usefulDimensions[0]) {
+    charts.push(buildBarChart(rows, measures[0], usefulDimensions[0], 'primary-bar'))
   }
 
   // Trend line: top measure × time (if time column exists)
@@ -97,11 +114,19 @@ export function buildDashboardLayout(
     charts.push(buildLineChart(rows, measures[0], times[0]))
   }
 
-  // Donut: distribution by secondary dimension (count)
-  if (dimensions[1]) {
-    charts.push(buildDonutChart(rows, dimensions[1]))
-  } else if (dimensions[0]) {
-    charts.push(buildDonutChart(rows, dimensions[0]))
+  // Donut: distribution by secondary useful dimension (falls back to primary)
+  const donutDim = usefulDimensions[1] ?? usefulDimensions[0]
+  if (donutDim) {
+    charts.push(buildDonutChart(rows, donutDim))
+  }
+
+  // Secondary bar: top measure × tertiary useful dimension (different from
+  // the primary bar). Keeps the 4-chart promise — fixtures consistently
+  // recommend a 4th view that isn't a simple table.
+  if (measures[0] && usefulDimensions[2]) {
+    charts.push(buildBarChart(rows, measures[0], usefulDimensions[2], 'secondary-bar'))
+  } else if (measures[0] && usefulDimensions[1] && donutDim !== usefulDimensions[1]) {
+    charts.push(buildBarChart(rows, measures[0], usefulDimensions[1], 'secondary-bar'))
   }
 
   return { kpis, charts }
@@ -111,8 +136,14 @@ export function buildDashboardLayout(
 // Internals
 // ============================================================
 
-function buildKpis(rows: Record<string, unknown>[], measures: ColumnSchema[]): DashboardKpi[] {
-  return measures.slice(0, 4).map((measure) => {
+function buildKpis(
+  rows: Record<string, unknown>[],
+  measures: ColumnSchema[],
+  dimensions: ColumnSchema[],
+  idColumn: ColumnSchema | undefined,
+): DashboardKpi[] {
+  // 1. Schema measures (sum or avg per the schema's aggregation hint).
+  const measureKpis: DashboardKpi[] = measures.slice(0, TARGET_KPI_COUNT).map((measure) => {
     const values = rows
       .map((r) => r[measure.name])
       .filter((v): v is number => typeof v === 'number')
@@ -130,12 +161,79 @@ function buildKpis(rows: Record<string, unknown>[], measures: ColumnSchema[]): D
       sparkline: bucketSparkline(values, 8),
     }
   })
+
+  if (measureKpis.length >= TARGET_KPI_COUNT) {
+    return measureKpis
+  }
+
+  // 2. Fill remaining slots with derived KPIs in priority order.
+  const derived: DashboardKpi[] = []
+
+  // Total record count, labeled by entity (e.g. id "Deal ID" → "Total Deals").
+  if (idColumn) {
+    const entity = idColumn.label.replace(/ (ID|Number)$/i, '').trim()
+    derived.push({
+      label: `Total ${pluralize(entity)}`,
+      value: formatInteger(rows.length),
+      rawValue: rows.length,
+    })
+  }
+
+  // Top value of primary dimension by primary measure.
+  if (measures[0] && dimensions[0]) {
+    const measure = measures[0]
+    const dim = dimensions[0]
+    const buckets = new Map<string, number>()
+    for (const row of rows) {
+      const k = String(row[dim.name] ?? 'Unknown')
+      const v = row[measure.name]
+      if (typeof v !== 'number') continue
+      buckets.set(k, (buckets.get(k) ?? 0) + v)
+    }
+    const top = [...buckets.entries()].sort(([, a], [, b]) => b - a)[0]
+    if (top) {
+      derived.push({
+        label: `Top ${dim.label}`,
+        value: top[0],
+        rawValue: top[1],
+      })
+    }
+  }
+
+  // Distinct count of primary dimension ("Segments: 3", "Industries: 6").
+  if (dimensions[0]) {
+    const dim = dimensions[0]
+    const distinct = new Set(
+      rows.map((r) => String(r[dim.name] ?? '')).filter((v) => v !== ''),
+    ).size
+    derived.push({
+      label: pluralize(dim.label),
+      value: formatInteger(distinct),
+      rawValue: distinct,
+    })
+  }
+
+  // Distinct count of secondary dimension if we still need slots.
+  if (dimensions[1]) {
+    const dim = dimensions[1]
+    const distinct = new Set(
+      rows.map((r) => String(r[dim.name] ?? '')).filter((v) => v !== ''),
+    ).size
+    derived.push({
+      label: pluralize(dim.label),
+      value: formatInteger(distinct),
+      rawValue: distinct,
+    })
+  }
+
+  return [...measureKpis, ...derived].slice(0, TARGET_KPI_COUNT)
 }
 
 function buildBarChart(
   rows: Record<string, unknown>[],
   measure: ColumnSchema,
   dimension: ColumnSchema,
+  id: string = 'primary-bar',
 ): DashboardChart {
   const buckets = new Map<string, number>()
   for (const row of rows) {
@@ -165,7 +263,7 @@ function buildBarChart(
   const max = sorted[0]?.[1] ?? 0
 
   return {
-    id: 'primary-bar',
+    id,
     title: `${measure.label} by ${dimension.label}`,
     subtitle: `Top ${sorted.length} categories${measure.aggregation === 'avg' ? ' · average' : ' · total'}`,
     data: {

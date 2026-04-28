@@ -28,6 +28,27 @@ const integer = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 0,
 })
 
+/** Format an integer for display ("1,247" not "1247"). */
+export function formatInteger(n: number): string {
+  return integer.format(n)
+}
+
+/**
+ * Pluralize an English word using a small set of rules covering the cases
+ * the dashboard segment filter + derived KPI labels actually encounter.
+ *   consonant + y → ies   (Opportunity → opportunities, Industry → industries)
+ *   s/x/z/ch/sh   → es    (Status → statuses, Watch → watches)
+ *   default       → s     (Campaign → campaigns, Segment → segments)
+ *
+ * Operates on the raw casing of the input so "Segment" → "Segments" stays
+ * title-cased; lowercase usage in the segment filter keeps lowercase output.
+ */
+export function pluralize(word: string): string {
+  if (/[^aeiouAEIOU]y$/.test(word)) return word.slice(0, -1) + 'ies'
+  if (/(s|x|z|ch|sh|S|X|Z|Ch|Sh)$/.test(word)) return word + 'es'
+  return word + 's'
+}
+
 /**
  * Format a number for headline display in a KpiCard.
  * Heuristic: use compact notation ($1.2M, 14.8K) for large values;
