@@ -1532,11 +1532,13 @@
         // Phase 1 · Week 3 · Day 7 (5 tasks — datasets QA, filters, wireframes, bug fixes, tag)
         "3-W3.D7-0", "3-W3.D7-1", "3-W3.D7-2", "3-W3.D7-3", "3-W3.D7-4",
         // Phase 1 · Week 4 · Day 1 (4 of 5 done — SEO meta, favicon, 404/error, OG; Lighthouse Day 2 by design)
-        "1-W4.D1-1", "1-W4.D1-2", "1-W4.D1-3", "1-W4.D1-4",
+        // Note: Week 4 IDs use prefix "4-" (matches taskId format ${wk.week}-${day.num}-${idx});
+        // earlier "1-W4.X-Y" entries silently never matched weeksPlan and were dead.
+        "4-W4.D1-1", "4-W4.D1-2", "4-W4.D1-3", "4-W4.D1-4",
         // Phase 1 · Week 4 · Day 2 (5 tasks — Vercel project, build settings, deploy, smoke test, portfolio.meta.json)
-        "1-W4.D2-0", "1-W4.D2-1", "1-W4.D2-2", "1-W4.D2-3", "1-W4.D2-4",
+        "4-W4.D2-0", "4-W4.D2-1", "4-W4.D2-2", "4-W4.D2-3", "4-W4.D2-4",
         // Phase 1 · Week 4 · Day 3 (4 tasks — For Developers rename, drill chip, product code rename, dash cleanup)
-        "1-W4.D3-0", "1-W4.D3-1", "1-W4.D3-2", "1-W4.D3-3"
+        "4-W4.D3-0", "4-W4.D3-1", "4-W4.D3-2", "4-W4.D3-3"
       ],
 
       phases: [
@@ -2103,27 +2105,35 @@
     }
 
     // RENDER: Hero Stats
+    // Same authoritative-currentStatus pattern as renderStatusTable.
     function renderHero() {
       const { totals, currentDay } = computeProgress();
-      const pct = totals.total > 0 ? Math.round((totals.done / totals.total) * 100) : 0;
-      const phaseName = currentDay ? `Phase ${currentDay.phase}` : "Complete";
-      const weekName = currentDay ? `Week ${currentDay.week}` : "Done";
-      const dayName = currentDay ? currentDay.day : "—";
+      const s = planData.currentStatus;
+      const progressDone = (s.progress && s.progress.done != null) ? s.progress.done : totals.done;
+      const progressTotal = (s.progress && s.progress.total != null) ? s.progress.total : totals.total;
+      const pct = progressTotal > 0 ? Math.round((progressDone / progressTotal) * 100) : 0;
+
+      const phaseValue = s.phase ? s.phase.split(' ')[0] + ' ' + (s.phase.split(' ')[1] || '') : (currentDay ? `Phase ${currentDay.phase}` : "Complete");
+      const phaseMeta = s.phase || (currentDay ? planData.phases[currentDay.phase].name : "All phases complete");
+      // Derive the displayed week from currentStatus.day (e.g. "Week 4 · Day 4 (Thu) ...") so the hero card matches the actual current day, not the stale top-level "Week 1 of 14" field.
+      const weekFromDay = s.day && s.day.match(/Week\s+(\d+)/i);
+      const weekValue = weekFromDay ? `Week ${weekFromDay[1]}` : (s.week ? s.week.split(' of ')[0] : (currentDay ? `Week ${currentDay.week}` : "Done"));
+      const weekMeta = s.day || (currentDay ? currentDay.day : "—");
 
       document.getElementById('hero-stats').innerHTML = `
         <div class="stat-card">
           <div class="stat-label">Current Phase</div>
-          <div class="stat-value">${phaseName}</div>
-          <div class="stat-meta">${currentDay ? planData.phases[currentDay.phase].name : "All phases complete"}</div>
+          <div class="stat-value">${phaseValue}</div>
+          <div class="stat-meta">${phaseMeta}</div>
         </div>
         <div class="stat-card">
           <div class="stat-label">Current Week</div>
-          <div class="stat-value">${weekName}</div>
-          <div class="stat-meta">${currentDay ? dayName : "All weeks complete"}</div>
+          <div class="stat-value">${weekValue}</div>
+          <div class="stat-meta">${weekMeta}</div>
         </div>
         <div class="stat-card">
           <div class="stat-label">Tasks Complete</div>
-          <div class="stat-value">${totals.done} / ${totals.total}</div>
+          <div class="stat-value">${progressDone} / ${progressTotal}</div>
           <div class="stat-meta">${pct}% overall progress</div>
         </div>
       `;
@@ -2166,18 +2176,25 @@
     }
 
     // RENDER: Status Table
+    // currentStatus values from planData take precedence over computed values.
+    // computeProgress can drift when completedTasks IDs don't match weeksPlan
+    // (e.g. a task ID prefix bug). Keeping the maintained currentStatus
+    // authoritative means the user always sees what the data file says.
     function renderStatusTable() {
       const { totals, currentDay } = computeProgress();
       const s = planData.currentStatus;
-      const phaseDisplay = currentDay ? planData.phases[currentDay.phase].name : "All phases complete";
-      const weekDisplay = currentDay ? `Week ${currentDay.week} of 14` : "All weeks complete";
-      const dayDisplay = currentDay ? `${currentDay.day} — ${currentDay.dayName}` : "—";
+      const phaseDisplay = s.phase || (currentDay ? planData.phases[currentDay.phase].name : "All phases complete");
+      const weekDisplay = s.week || (currentDay ? `Week ${currentDay.week} of 14` : "All weeks complete");
+      const dayDisplay = s.day || (currentDay ? `${currentDay.day} — ${currentDay.dayName}` : "—");
+      const progressDone = (s.progress && s.progress.done != null) ? s.progress.done : totals.done;
+      const progressTotal = (s.progress && s.progress.total != null) ? s.progress.total : totals.total;
+      const progressPct = progressTotal > 0 ? Math.round(progressDone/progressTotal*100) : 0;
 
       document.getElementById('status-table').innerHTML = `
         <div class="status-row"><span class="status-row-key">Current Phase</span><span class="status-row-value accent">${phaseDisplay}</span></div>
         <div class="status-row"><span class="status-row-key">Current Week</span><span class="status-row-value">${weekDisplay}</span></div>
         <div class="status-row"><span class="status-row-key">Current Day</span><span class="status-row-value">${dayDisplay}</span></div>
-        <div class="status-row"><span class="status-row-key">Overall Progress</span><span class="status-row-value">${totals.done} / ${totals.total} tasks (${totals.total > 0 ? Math.round(totals.done/totals.total*100) : 0}%)</span></div>
+        <div class="status-row"><span class="status-row-key">Overall Progress</span><span class="status-row-value">${progressDone} / ${progressTotal} tasks (${progressPct}%)</span></div>
         <div class="status-row"><span class="status-row-key">Status</span><span class="status-row-value">${s.status}</span></div>
         <div class="status-row"><span class="status-row-key">Next Action</span><span class="status-row-value">${s.nextAction}</span></div>
         <div class="status-row"><span class="status-row-key">Blockers</span><span class="status-row-value">${s.blockers}</span></div>
