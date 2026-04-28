@@ -170,7 +170,7 @@ export function StreamingPanel({
             <ArrowRight className="h-4 w-4" />
           </Link>
           <span className="text-xs text-text-muted">
-            KPI strip + 3 charts + filters + drill-downs + PDF export.
+            5-KPI strip + 4 charts + filters + drill-downs + PDF export.
           </span>
         </div>
       )}
