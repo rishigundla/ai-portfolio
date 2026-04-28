@@ -35,7 +35,7 @@ export default function ErrorPage({ error, reset }: ErrorProps) {
           We hit a bump.
         </h1>
         <p className="mt-6 text-lg text-text-secondary max-w-xl">
-          Something unexpected happened while loading this page. The rest of the app is fine — try
+          Something unexpected happened while loading this page. The rest of the app is fine, try
           re-rendering this section, or head back home if the issue persists.
         </p>
 

@@ -38,7 +38,7 @@ type Row = { name: string; category: string; revenue: number; delta: number }
 const SAMPLE_ROWS: Row[] = [
   { name: 'RevOps Sales SSOT', category: 'Sales', revenue: 14_800_000, delta: 12.4 },
   { name: 'Marketing Campaigns', category: 'Marketing', revenue: 2_300_000, delta: 8.1 },
-  { name: 'Pulse NAI Telemetry', category: 'Product', revenue: 0, delta: 0 },
+  { name: 'Pulse Atlas Telemetry', category: 'Product', revenue: 0, delta: 0 },
   { name: 'Supply Chain', category: 'Operations', revenue: 5_700_000, delta: -3.2 },
   { name: 'Financial Complaints', category: 'CX', revenue: 0, delta: 0 },
   { name: 'Customer Demographics', category: 'CX', revenue: 0, delta: 0 },

@@ -32,7 +32,7 @@ Pick a layout template (Executive / Operational / Exploratory), get a fully desi
 
 1. **RevOps Sales** — ACV / GRR / segment / region (50 rows)
 2. **Marketing Campaigns** — campaign / channel / spend / ROI
-3. **Pulse Telemetry** — NAI/NC2/NCI-style product telemetry
+3. **Pulse Telemetry** — Atlas/Orion/Vega product telemetry
 4. **Supply Chain**
 5. **Financial Complaints**
 6. **Customer Demographics**

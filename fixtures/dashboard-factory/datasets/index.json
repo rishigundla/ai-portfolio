@@ -25,7 +25,7 @@
     {
       "id": "pulse-telemetry",
       "title": "Pulse Telemetry",
-      "tagline": "Product telemetry across NAI / NC2 / NCI with usage, latency, and health metrics",
+      "tagline": "Product telemetry across Atlas / Orion / Vega with usage, latency, and health metrics",
       "domain": "product",
       "colorToken": "blue",
       "icon": "Activity",

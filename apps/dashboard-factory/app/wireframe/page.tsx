@@ -7,7 +7,7 @@ import { Section } from '../_components/Section'
 export const metadata = {
   title: 'Wireframe templates',
   description:
-    'Three layout archetypes — Executive, Operational, Exploratory — for BI engineers running a discovery session. Pick a template, get a clickable hi-fi mockup.',
+    'Three layout archetypes (Executive, Operational, Exploratory) for developers running a discovery session. Pick a template, get a clickable hi-fi mockup.',
 }
 
 export default function WireframeGalleryPage() {
@@ -25,9 +25,9 @@ export default function WireframeGalleryPage() {
       </div>
 
       <Section
-        eyebrow="For BI engineers · Discovery mode"
+        eyebrow="For Developers · Discovery mode"
         title="Pick a layout archetype"
-        description="Three patterns that cover most enterprise dashboard requests. Use these as a starting point for the discovery conversation — share the URL, refine in Figma, then build with confidence."
+        description="Three patterns that cover most enterprise dashboard requests. Use these as a starting point for the discovery conversation. Share the URL, refine in Figma, then build with confidence."
       >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {TEMPLATES.map((template) => {
@@ -80,7 +80,7 @@ export default function WireframeGalleryPage() {
 
         <p className="mt-12 max-w-2xl text-sm text-text-muted leading-relaxed">
           These wireframes use hand-curated demo data so the layouts read true.
-          The same components ship in the live <code className="text-accent font-mono text-xs">/dashboard/[slug]</code> route — what you see here is exactly the visual language stakeholders will get in production.
+          The same components ship in the live <code className="text-accent font-mono text-xs">/dashboard/[slug]</code> route. What you see here is exactly the visual language stakeholders will get in production.
         </p>
       </Section>
     </>

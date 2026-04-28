@@ -33,7 +33,7 @@ export default function NotFound() {
         </h1>
         <p className="mt-6 text-lg text-text-secondary max-w-xl">
           The page you were looking for has moved, was renamed, or never existed. Pick a working
-          entry point below — the rest of Dashboard Factory is still here.
+          entry point below, the rest of Dashboard Factory is still here.
         </p>
       </div>
 

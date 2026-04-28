@@ -20,7 +20,7 @@ export default function HomePage() {
           </h1>
           <p className="mt-6 max-w-2xl text-lg sm:text-xl text-text-secondary leading-relaxed">
             Pick a sample dataset. Watch Claude profile it. Get a fully designed,
-            interactive dashboard following a unified design system — ready to share with
+            interactive dashboard following a unified design system, ready to share with
             stakeholders or refine into a hi-fi wireframe.
           </p>
           <div className="mt-10 flex flex-wrap gap-3">
@@ -51,11 +51,11 @@ export default function HomePage() {
             badgeAccent="accent"
             title="Ad-hoc dashboard mode"
             quote="My VP wants Q3 vs Q2 regional sales for Monday's leadership meeting. I have a CSV. I don't want to file a BI ticket."
-            description="Pick from 6 curated sample datasets, watch the AI profile your data and recommend KPIs, get an interactive dashboard with filters, drill-downs, and PDF export — all in under a minute."
+            description="Pick from 6 curated sample datasets, watch the AI profile your data and recommend KPIs, get an interactive dashboard with filters, drill-downs, and PDF export, all in under a minute."
           />
           <PersonaCard
             href="/wireframe"
-            badge="For BI engineers"
+            badge="For Developers"
             badgeAccent="muted"
             title="Hi-fi wireframe mode"
             quote="I'm kicking off a new CX dashboard project. I need a clickable hi-fi mockup for Monday's discovery session, but I don't want to spend a week in Figma first."

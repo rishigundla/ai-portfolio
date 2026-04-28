@@ -58,9 +58,9 @@ The `schema` array describes each column so the gallery + profiling can render c
 
 These fixtures are **anonymised but realistic**. Patterns chosen deliberately:
 
-- **Nutanix-style products** (NAI, NC2, NCI, Files, Move) appear in RevOps + Pulse datasets — recognizable to anyone who has worked in modern cloud infrastructure.
+- **Anonymized product codes** (Atlas, Orion, Vega, Files, Move) appear in RevOps + Pulse datasets, modelled on enterprise infrastructure SKUs.
 - **Segment / Region distributions** match enterprise SaaS norms (~60% NAMER, ~25% EMEA, ~10% APAC, ~5% LATAM).
-- **Pulse telemetry** shows a realistic story: customer CUST-2847 (Acme Corp) ramps NAI usage week-over-week, with health_score gradually declining from 96 → 82 as load increases. This is what a real product team would see right before scaling concerns.
+- **Pulse telemetry** shows a realistic story: customer CUST-2847 (Acme Corp) ramps Atlas usage week-over-week, with health_score gradually declining from 96 → 82 as load increases. This is what a real product team would see right before scaling concerns.
 - **Financial complaints** mix products + outcomes the way real CFPB-style data does — Mortgage / Credit Card / Banking lead by volume, fraud complaints have fastest resolution times, mortgage modifications have longest.
 
 ## Consumers

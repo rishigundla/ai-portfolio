@@ -134,7 +134,7 @@ function DashboardSuccess({
           </div>
         </div>
 
-        {/* Dashboard content — interactive wrapper handles filters + drill-down */}
+        {/* Dashboard content, interactive wrapper handles filters + drill-down */}
         <DashboardInteractive fullDataset={fullDataset} colors={colors} />
       </Section>
     </>

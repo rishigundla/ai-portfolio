@@ -45,7 +45,7 @@ import { Download, Zap } from 'lucide-react'
 const comboboxOptions = [
   { value: 'revops-sales', label: 'RevOps Sales SSOT' },
   { value: 'marketing', label: 'Marketing Campaigns' },
-  { value: 'pulse-nai', label: 'Pulse Telemetry · NAI' },
+  { value: 'pulse-atlas', label: 'Pulse Telemetry · Atlas' },
   { value: 'supply', label: 'Supply Chain' },
 ]
 

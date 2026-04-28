@@ -26,7 +26,7 @@ export default function DatasetsPage() {
       <Section
         eyebrow="Step 1 of 3 · Pick a dataset"
         title="Six curated samples to choose from"
-        description="Each is anonymised but follows realistic patterns from enterprise data work — Nutanix-style products, distribution by region, and the kind of edge cases real BI teams encounter. Click any card to watch Claude profile it."
+        description="Each is anonymised but follows realistic patterns from enterprise data work. Anonymized product codes, distribution by region, and the kind of edge cases real BI teams encounter. Click any card to watch Claude profile it."
       >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {datasets.map((dataset) => {
@@ -78,7 +78,7 @@ export default function DatasetsPage() {
         <p className="mt-12 max-w-2xl text-sm text-text-muted leading-relaxed">
           Want to use your own data? Real-data upload is in the production design but disabled in
           this portfolio demo to keep the experience fast and reliable. The architecture supports
-          it — every fixture in this gallery follows the same schema your CSV would.
+          it, every fixture in this gallery follows the same schema your CSV would.
         </p>
       </Section>
     </>

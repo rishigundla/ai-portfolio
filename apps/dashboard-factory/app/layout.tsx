@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     template: '%s · Dashboard Factory',
   },
   description:
-    'Pick a sample dataset, watch Claude profile it, get a fully designed interactive dashboard. Built for business users needing ad-hoc analysis and BI engineers prototyping high-fidelity wireframes.',
+    'Pick a sample dataset, watch Claude profile it, get a fully designed interactive dashboard. Built for business users needing ad-hoc analysis and developers prototyping high-fidelity wireframes.',
   keywords: [
     'dashboard',
     'AI',

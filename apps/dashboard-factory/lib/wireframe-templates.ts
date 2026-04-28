@@ -128,9 +128,9 @@ export const OPERATIONAL_DATA = {
 
   byProduct: {
     bars: [
-      { label: 'NCI', value: 1840 },
-      { label: 'NC2', value: 1240 },
-      { label: 'NAI', value: 880 },
+      { label: 'Vega', value: 1840 },
+      { label: 'Orion', value: 1240 },
+      { label: 'Atlas', value: 880 },
       { label: 'Files', value: 420 },
       { label: 'Move', value: 180 },
     ],

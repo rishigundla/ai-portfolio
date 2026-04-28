@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: PageProps) {
   if (!summary) return { title: 'Not found' }
   return {
     title: `Dashboard · ${summary.title}`,
-    description: `Interactive dashboard for the ${summary.title} dataset — KPIs, charts, filters, drill-downs.`,
+    description: `Interactive dashboard for the ${summary.title} dataset, KPIs, charts, filters, drill-downs.`,
   }
 }
 

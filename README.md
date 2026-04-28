@@ -1,6 +1,6 @@
 # AI Portfolio
 
-> Five AI-native portfolio projects anchored to real Nutanix SaaS Data Team work.
+> Five AI-native portfolio projects anchored to real enterprise SaaS data work.
 > Built on Next.js + Vercel with a shared design system. Designed to complete the Senior BI Engineer → Data / Analytics Engineer transition.
 
 **Author**: Rishikesh Gundla — [rishikeshgundla.com](https://rishikeshgundla.com)

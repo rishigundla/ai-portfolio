@@ -60,7 +60,7 @@ export function StreamingPanel({
       const seenThisStep = streamedText.includes(step.marker)
       const nextStep = STEPS[i + 1]
       const seenNextStep = nextStep ? streamedText.includes(nextStep.marker) : completed
-      if (seenThisStep && (seenNextStep || (i === STEPS.length - 1 && completed))) return 'done'
+      if (seenThisStep && (seenNextStep || (i === STEPS.length, 1 && completed))) return 'done'
       if (seenThisStep) return 'active'
       // First step is "active" while we haven't yet rendered any heading (initial delay)
       if (i === 0 && streaming && !seenThisStep) return 'active'

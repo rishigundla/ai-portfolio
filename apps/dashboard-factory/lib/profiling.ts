@@ -85,7 +85,7 @@ export function buildPlaceholderProfilingText(dataset: FullDataset): string {
 
 I scanned **${rows.length} rows** across **${cols.length} columns** in your **${metadata.title}** dataset. Here's what I found:
 
-- **${ids.length}** identifier column${ids.length === 1 ? '' : 's'} (${ids.map((c) => `\`${c.name}\``).join(', ') || '—'})
+- **${ids.length}** identifier column${ids.length === 1 ? '' : 's'} (${ids.map((c) => `\`${c.name}\``).join(', ') || ', '})
 - **${dims.length}** dimension column${dims.length === 1 ? '' : 's'} for grouping (${keyDims}${dims.length > 3 ? ', and more' : ''})
 - **${measures.length}** measure column${measures.length === 1 ? '' : 's'} for aggregation (${topMeasures}${measures.length > 4 ? ', and more' : ''})
 - **${times.length}** time column${times.length === 1 ? '' : 's'} for trend analysis
@@ -94,7 +94,7 @@ ${HEADING_DOMAIN_INFERENCE}
 
 This looks like **${domainLabel}** dataset. The combination of ${keyDims || 'these dimensions'} alongside ${topMeasures || 'these measures'} is a strong signal that the natural unit of analysis is the ${ids[0]?.label.toLowerCase() ?? 'record'}.
 
-For dashboards, this means the audience is most likely **${getAudience(metadata.domain)}** — and the questions they'll want answered are around **${getQuestions(metadata.domain)}**.
+For dashboards, this means the audience is most likely **${getAudience(metadata.domain)}**, and the questions they'll want answered are around **${getQuestions(metadata.domain)}**.
 
 ${HEADING_KPI_RECOMMENDATIONS}
 
@@ -105,7 +105,7 @@ ${measures
   .map((m, i) => {
     const pre = ['Total', 'Average', 'Top-performing', 'Distribution of', 'Trend in'][i] ?? 'Total'
     const agg = m.aggregation === 'avg' ? 'average' : m.aggregation === 'sum' ? 'total' : (m.aggregation ?? 'sum')
-    return `- **${pre} ${m.label.toLowerCase()}** — ${agg}${dims[0] ? ` by \`${dims[0].label}\`` : ''}`
+    return `- **${pre} ${m.label.toLowerCase()}**, ${agg}${dims[0] ? ` by \`${dims[0].label}\`` : ''}`
   })
   .join('\n')}
 
@@ -115,7 +115,7 @@ ${HEADING_CHART_RECOMMENDATIONS}
 
 For this layout I recommend four chart types:
 
-1. **KPI cards** at the top for the headline measures — ${topMeasures}
+1. **KPI cards** at the top for the headline measures, ${topMeasures}
 2. **Bar chart** comparing ${measures[0]?.label.toLowerCase() ?? 'a key measure'} by \`${dims[0]?.label ?? 'dimension'}\`
 3. **Line chart** over time using ${times[0] ? `\`${times[0].label}\`` : 'the time column'} to spot trends
 4. **Donut chart** showing the distribution of \`${dims[1]?.label ?? dims[0]?.label ?? 'a categorical dimension'}\`

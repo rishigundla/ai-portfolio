@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { MousePointerClick } from 'lucide-react'
 import {
   Area,
   AreaChart,
@@ -49,7 +50,7 @@ export function DashboardView({
 }: DashboardViewProps) {
   return (
     <div className="space-y-6">
-      {/* KPI strip — responsive shape depends on count. 5-up on lg, then
+      {/* KPI strip, responsive shape depends on count. 5-up on lg, then
           stepping down through 3+2 (sm), then 1-up (mobile). The 3-col sm
           breakpoint matters: with 2-up at sm, 5 KPIs would render 2+2+1,
           leaving the last card orphaned. 3-up at sm gives 3+2 which feels
@@ -66,28 +67,58 @@ export function DashboardView({
         ))}
       </div>
 
-      {/* Charts grid — primary bar gets 7-of-12 on lg, secondary gets 5-of-12 */}
+      {/* Charts grid. Primary bar gets 7-of-12 on lg, secondary gets 5-of-12.
+          Drill chip appears in the actions slot for bar + donut charts so the
+          clickable affordance is visible at the chart level (not buried in a
+          footer line). Line chart has no drill behavior, so no chip. */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-        {layout.charts.map((chart, i) => (
-          <div key={chart.id} className={chartGridSpan(i, layout.charts.length)}>
-            <ChartCard title={chart.title} subtitle={chart.subtitle}>
-              <ChartErrorBoundary chartKind={chart.data.type}>
-                <ChartRenderer
-                  chart={chart}
-                  colors={colors}
-                  onBarClick={onBarClick}
-                  onDonutClick={onDonutClick}
-                />
-              </ChartErrorBoundary>
-            </ChartCard>
-          </div>
-        ))}
+        {layout.charts.map((chart, i) => {
+          const drillable =
+            (chart.data.type === 'bar' && !!onBarClick) ||
+            (chart.data.type === 'donut' && !!onDonutClick)
+          return (
+            <div key={chart.id} className={chartGridSpan(i, layout.charts.length)}>
+              <ChartCard
+                title={chart.title}
+                subtitle={chart.subtitle}
+                actions={drillable ? <DrillChip /> : undefined}
+              >
+                <ChartErrorBoundary chartKind={chart.data.type}>
+                  <ChartRenderer
+                    chart={chart}
+                    colors={colors}
+                    onBarClick={onBarClick}
+                    onDonutClick={onDonutClick}
+                  />
+                </ChartErrorBoundary>
+              </ChartCard>
+            </div>
+          )
+        })}
       </div>
 
       <p className="text-xs text-text-muted font-mono mt-4">
-        Charts powered by Recharts · hover for tooltips · click bars or slices to drill into matching rows
+        Charts powered by Recharts. Hover for tooltips.
       </p>
     </div>
+  )
+}
+
+// ============================================================
+// Drill affordance — small chip in the ChartCard actions slot
+// signals that bars or slices are clickable. Visible at chart level
+// rather than only in a hover-cursor or page footer hint.
+// ============================================================
+
+function DrillChip() {
+  return (
+    <span
+      className="inline-flex items-center gap-1 rounded-full border border-accent/30 bg-accent/10 px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider text-accent"
+      aria-label="Click bars or slices to drill in"
+    >
+      <MousePointerClick className="h-3 w-3" aria-hidden="true" />
+      Click to drill in
+    </span>
   )
 }
 
@@ -363,7 +394,7 @@ function DonutChartView({
             <Tooltip content={<CustomTooltip />} />
           </PieChart>
         </ResponsiveContainer>
-        {/* Center text overlay — pointer-events-none so slice hover still works */}
+        {/* Center text overlay, pointer-events-none so slice hover still works */}
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
           <div className="font-display text-2xl font-semibold text-text-primary leading-none">
             {data.total}
@@ -374,7 +405,7 @@ function DonutChartView({
         </div>
       </div>
 
-      {/* Legend — also clickable */}
+      {/* Legend, also clickable */}
       <ul className="flex-1 flex flex-col gap-1.5 text-sm min-w-0">
         {data.slices.map((slice, i) => {
           const clickableLegend = isClickable && slice.label !== 'Other'

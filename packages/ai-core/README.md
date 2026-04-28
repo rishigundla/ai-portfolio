@@ -124,12 +124,12 @@ import * as fs from 'node:fs/promises'
 
 const scenario = {
   id: 'emea-firmware-drop',
-  title: 'EMEA NC2 feature_adoption_rate drop',
+  title: 'EMEA Orion feature_adoption_rate drop',
 }
 
 const fixture = await generateFixture(
   scenario,
-  `Metric: NC2 feature_adoption_rate\nEMEA, dropped 14% yesterday...`,
+  `Metric: Orion feature_adoption_rate\nEMEA, dropped 14% yesterday...`,
   { system: ANOMALY_RCA_SYSTEM, cacheSystemPrompt: true }
 )
 

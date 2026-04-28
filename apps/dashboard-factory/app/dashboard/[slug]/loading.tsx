@@ -32,7 +32,7 @@ export default function DashboardLoading() {
         <div className="h-9 w-32 bg-surface-border rounded-md animate-pulse" />
       </div>
 
-      {/* KPI strip skeleton — 4 up */}
+      {/* KPI strip skeleton, 4 up */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {Array.from({ length: 4 }).map((_, i) => (
           <div
@@ -46,7 +46,7 @@ export default function DashboardLoading() {
         ))}
       </div>
 
-      {/* Chart grid skeleton — 2x2 */}
+      {/* Chart grid skeleton, 2x2 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {Array.from({ length: 4 }).map((_, i) => (
           <ChartSkeleton key={i} />
