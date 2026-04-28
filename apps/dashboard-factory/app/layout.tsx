@@ -4,13 +4,15 @@ import { Toaster } from './_components/Toaster'
 import './globals.css'
 
 // Resolved at build time. NEXT_PUBLIC_SITE_URL takes precedence so a custom
-// domain works on Day 2 without code changes. VERCEL_URL is auto-injected on
-// preview + production builds. Falls back to the planned production hostname.
+// domain works without code changes. VERCEL_URL is auto-injected on preview +
+// production builds. Falls back to the planned production hostname (which
+// follows the existing portfolio convention `ai-portfolio-{slug}.vercel.app`,
+// matching the deployed `ai-portfolio-design-system-docs.vercel.app`).
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL
   ? process.env.NEXT_PUBLIC_SITE_URL
   : process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
-    : 'https://ai-dashboard-factory.vercel.app'
+    : 'https://ai-portfolio-dashboard-factory.vercel.app'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
