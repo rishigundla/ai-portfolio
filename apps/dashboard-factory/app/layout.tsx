@@ -96,7 +96,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               href="https://github.com/rishigundla/ai-portfolio"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-accent hover:text-accent-light"
+              className="text-accent hover:text-accent-light underline underline-offset-4 decoration-accent/40 hover:decoration-accent"
             >
               ai-portfolio
             </a>{' '}
@@ -105,7 +105,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               href="https://rishikeshgundla.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-accent hover:text-accent-light"
+              className="text-accent hover:text-accent-light underline underline-offset-4 decoration-accent/40 hover:decoration-accent"
             >
               Rishikesh Gundla
             </a>

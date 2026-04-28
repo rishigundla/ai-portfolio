@@ -25,10 +25,13 @@
   --color-surface-elevated: #1a1a25;
   --color-card-bg: rgba(22, 22, 30, 0.6);
 
-  /* Text */
+  /* Text — values pass WCAG AA contrast (4.5:1) against the lightest card
+     surface (#1e1e28). text-muted previously failed at #6b7280 (~3.8:1) and
+     was lifted to slate-400 #94a3b8 (~6.4:1) on 2026-04-28 during the
+     Lighthouse audit pass. */
   --color-text-primary: #ffffff;
   --color-text-secondary: #9ca3af;
-  --color-text-muted: #6b7280;
+  --color-text-muted: #94a3b8;
   --color-text-dim: #4b5563;
 
   /* Status — used across AI apps for progress, alerts, severity */

@@ -123,9 +123,9 @@ function PersonaCard({
       >
         {badge}
       </div>
-      <h3 className="mt-4 font-display text-xl lg:text-2xl font-semibold tracking-tight">
+      <h2 className="mt-4 font-display text-xl lg:text-2xl font-semibold tracking-tight">
         {title}
-      </h3>
+      </h2>
       <blockquote className="mt-4 pl-4 border-l-2 border-accent/40 font-serif italic text-text-secondary leading-relaxed">
         {quote}
       </blockquote>
