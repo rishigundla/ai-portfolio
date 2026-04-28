@@ -5,7 +5,7 @@ import { getColorClasses } from '@/lib/datasets'
 import { Section } from '../_components/Section'
 
 export const metadata = {
-  title: 'Wireframe templates · Dashboard Factory',
+  title: 'Wireframe templates',
   description:
     'Three layout archetypes — Executive, Operational, Exploratory — for BI engineers running a discovery session. Pick a template, get a clickable hi-fi mockup.',
 }

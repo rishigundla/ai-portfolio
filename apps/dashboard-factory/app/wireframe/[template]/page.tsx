@@ -22,9 +22,9 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps) {
   const { template } = await params
   const t = getTemplate(template)
-  if (!t) return { title: 'Not found · Dashboard Factory' }
+  if (!t) return { title: 'Not found' }
   return {
-    title: `${t.title} wireframe · Dashboard Factory`,
+    title: `${t.title} wireframe`,
     description: `${t.tagline} ${t.audience}.`,
   }
 }

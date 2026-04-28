@@ -20,9 +20,9 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params
   const summary = getDataset(slug)
-  if (!summary) return { title: 'Not found · Dashboard Factory' }
+  if (!summary) return { title: 'Not found' }
   return {
-    title: `Profiling · ${summary.title} · Dashboard Factory`,
+    title: `Profiling · ${summary.title}`,
     description: `Watch Claude profile the ${summary.title} dataset and recommend KPIs and charts before building the dashboard.`,
   }
 }

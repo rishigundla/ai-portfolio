@@ -4,7 +4,7 @@ import { datasets, getDatasetIcon, getColorClasses } from '@/lib/datasets'
 import { Section } from '../_components/Section'
 
 export const metadata = {
-  title: 'Sample datasets · Dashboard Factory',
+  title: 'Sample datasets',
   description:
     'Six curated sample datasets across sales, marketing, product telemetry, operations, and customer experience domains. Pick one to start.',
 }
