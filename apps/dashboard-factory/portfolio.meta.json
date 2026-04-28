@@ -5,11 +5,11 @@
   "tags": ["AI", "Dashboards", "React", "Next.js", "Claude"],
   "description": "Pick a curated sample dataset, watch Claude profile it via streaming animation, get a fully designed interactive dashboard. Two modes: ad-hoc analysis for business users, hi-fi wireframes for BI engineers.",
   "thumbnail": "/projects/ai-dashboard-factory.png",
-  "liveUrl": "",
+  "liveUrl": "https://ai-portfolio-dashboard-factory.vercel.app",
   "githubUrl": "https://github.com/rishigundla/ai-portfolio/tree/main/apps/dashboard-factory",
   "caseStudyUrl": "",
   "loomUrl": "",
-  "deployedAt": null,
+  "deployedAt": "2026-04-28",
   "resumeBullet": {
     "category": "AI-Powered Analytics & Data Engineering Projects",
     "text": "Architected an AI-powered dashboard factory on Next.js + Vercel — applies a unified design-token system across 6 business domains with streaming AI profiling, automatic KPI / chart recommendation, and Figma-exportable hi-fi wireframes. Reduces ad-hoc dashboard turnaround from days to minutes."
