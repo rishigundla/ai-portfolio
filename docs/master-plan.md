@@ -17,10 +17,10 @@
 |-------|-------|
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
-| **Current Day** | Week 4 · Day 3 (Wed) — Loom Video |
-| **Overall Progress** | 115 tasks of 115 complete · **Production live at https://ai-portfolio-dashboard-factory.vercel.app** · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ · Week 3 ✓ · Week 4 Days 1-2 ✓ |
-| **Status** | Day 2 closed + post-deploy hotfix. Vercel project deployed; all 6 dashboards + 3 wireframes verified clean (0 console errors). Lighthouse: home 100/100/100/100, /generate 100/98/100/100. **Post-deploy fix**: user caught that profiling fixtures promised 5 KPIs + 4 charts but dashboards rendered 2-4 KPIs + 3 charts. Extended builder to synthesize derived KPIs (Total {entity} / Top {dim} / distinct counts) + added 4th chart slot (secondary bar). Verified across revops, financial-complaints, customer-demographics — all now show 5 KPIs + 4 charts. Side-effect: primary bar chart on revops promoted from "ACV by Opportunity" (40 unique values, no real aggregation) to "ACV by Segment" (3 segments, meaningful aggregation), matching the fixture narrative. |
-| **Next Action** | Week 4 Day 3: Loom video. Write 90s script (problem → gallery → profiling → dashboard → PDF export → outro), record on clean browser at 1440px, edit, upload to YouTube unlisted, copy embed URL, update `portfolio.meta.json` with `loomUrl`. |
+| **Current Day** | Week 4 · Day 3 (Wed) — Copy + UX cleanup |
+| **Overall Progress** | 115 tasks of ~150 complete · **Production live at https://ai-portfolio-dashboard-factory.vercel.app** · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ · Week 3 ✓ · Week 4 Days 1-2 ✓ |
+| **Status** | Day 2 + post-deploy hotfix shipped. **Plan revised**: user requested 8 polish/enrichment items before Loom. Phase 1 timeline slips ~5 days (closes May 11 instead of May 4). Inserted 5 new days into Week 4 + 4 new days into Week 5: copy cleanup → PDF visual fidelity → theme + particle → dashboard depth (growth %, new charts) → per-domain layouts → 6 new wireframe datasets → wireframe profiling fixtures → data-driven wireframe engine → Export-to-Figma demo. Loom shifts to W5.D5. Project 2 starts Week 6. Worth the slip — ships portfolio-quality bar instead of templated bar. |
+| **Next Action** | Week 4 Day 3: Copy + UX cleanup. Item 7 (For Developers rename) · Item 5 (click-to-drill chip on charts) · Item 6 Option B (rename NAI/NC2/NCI → Atlas/Orion/Vega + regen affected dataset rows) · Item 2 (remove all dash variants from copy + profiling fixtures). |
 | **Blockers** | None |
 
 ### Phase Progress Overview
@@ -1160,26 +1160,109 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 - [x] **Bonus**: Lighthouse run + iterated to all-green. Home 100/100/100/100, /generate 100/98/100/100. Fixed 4 issues found during the deploy: doubled title suffix, color contrast on text-muted, heading order, color-only links.
 
 **Context for Next Session (Week 4 Day 3)**:
-- Day 3 = Loom video. 90-second script: problem framing (10s) → datasets gallery (15s) → profiling stream animation (20s) → dashboard interactivity + drill-down (30s) → PDF export (10s) → outro with link (5s).
-- Record on clean Chrome window at 1440px viewport. Edit (trim, captions, end card). Upload to YouTube unlisted, copy embed URL, update `portfolio.meta.json` with `loomUrl`, commit + push.
+- Plan revised 2026-04-28: 8 polish/enrichment items inserted before Loom. Phase 1 closes ~May 11 instead of May 4.
+- Day 3 = Copy + UX cleanup. Quick-win batch.
 
-#### Day 3 (Wed) · Loom Video
+#### Day 3 (Wed) · Copy + UX cleanup
+- [ ] **Item 7** Rename "For BI engineers" → "For Developers" (home persona card)
+- [ ] **Item 5** Click-to-drill chip on bar + donut ChartCards (uses `actions` slot, signals interactivity)
+- [ ] **Item 6 Option B** Rename product codes NAI/NC2/NCI → Atlas/Orion/Vega across dataset rows + profiling fixtures + any UI references; sweep for "Nutanix" string and remove
+- [ ] **Item 2** Remove all dash variants (em-dash —, en-dash –, hyphen-with-spaces - ) from copy + profiling fixtures; rephrase to keep voice
+
+**Context for Next Session**: _(fill in after completion)_
+
+#### Day 4 (Thu) · PDF visual fidelity
+- [ ] **Item 3** Switch PDF export from text-summary to canvas-based capture using html2canvas + jsPDF
+- [ ] PDF must look pixel-identical to dashboard as rendered in browser (including Recharts visuals, brand colors, typography)
+- [ ] Preserve filter-aware behavior (PDF reflects current filtered view)
+- [ ] Verify file size + render time stays reasonable
+- [ ] Test on all 6 datasets
+
+**Context for Next Session**: _(fill in after completion)_
+
+#### Day 5 (Fri) · Theme toggle + particle background
+- [ ] **Item 1 part A** Study portfolio-site source at `C:\Users\Rishi\Documents\portfolio-site` — extract particle-canvas + theme-toggle implementation
+- [ ] Build shared `<ParticleBackground />` component in `@rishi/design-system` (the teal accent particles)
+- [ ] Build shared `<ThemeToggle />` primitive in `@rishi/design-system` (sun/moon icon, Zustand-persisted)
+- [ ] Wire both into dashboard-factory app layout
+- [ ] Wire both into design-system-docs app layout (consistency across portfolio)
+- [ ] Light-mode QA pass: every route, every component, contrast checks
+- [ ] Re-run Lighthouse in light mode, ensure 90+ holds
+
+**Context for Next Session**: _(fill in after completion)_
+
+#### Day 6 (Sat) · Dashboard depth (growth %, new charts, more filters)
+- [ ] **Item 4 part A** Generate synthetic period-over-period data per dataset (so growth % is meaningful)
+- [ ] Add growth % delta to each KPI on dashboard
+- [ ] Add 2 new chart types — heatmap (cohort/matrix views), scatter (quadrant analysis)
+- [ ] Add multi-select filter primitive to FilterBar
+- [ ] Add date-range (between-dates) filter primitive to FilterBar
+- [ ] Verify across 2-3 datasets
+
+**Context for Next Session**: _(fill in after completion)_
+
+#### Day 7 (Sun) · Dashboard uniqueness (per-domain layouts)
+- [ ] **Item 4 part B** Per-domain layout configs — each of the 6 dashboards uses different chart mix:
+  - RevOps: pipeline funnel + win-rate ring + region-channel matrix
+  - Marketing: ROI quadrant scatter + funnel + channel CPA bars
+  - Pulse: latency heatmap + health histogram + cluster size mix
+  - Supply: fulfillment scorecard + supplier scatter + lead-time distribution
+  - Financial: resolution-time distribution + state breakdown + dispute funnel
+  - Customer: cohort retention matrix + LTV scatter + segment quadrant
+- [ ] Enhanced drill-down (multi-tab dialog: rows | summary stats | distribution)
+- [ ] Expandable rows in DrilldownTable
+- [ ] Cross-dataset QA at 1440px
+
+**Context for Next Session**: _(fill in after completion)_
+
+---
+
+### Week 5 — Wireframe reframe + Loom + Case Study + Automation (revised)
+
+**Week goal**: Reframe wireframe mode as dataset-driven (parallel to ad-hoc mode), then ship Loom + case study + automation.
+
+#### Day 1 (Mon May 4) · 6 new wireframe-mode datasets
+- [ ] Design schemas for 6 new sample datasets in different verticals (don't overlap with ad-hoc mode):
+  1. Manufacturing — production-line throughput
+  2. Real estate — brokerage pipeline
+  3. Healthcare — clinic operations
+  4. Education — course enrollment + retention
+  5. SaaS Subscription Analytics — MRR/churn/expansion
+  6. Logistics — fleet utilization
+- [ ] Author 30-50 row JSON for each
+- [ ] Add to `fixtures/dashboard-factory/datasets/` index
+
+#### Day 2 (Tue May 5) · 6 new profiling fixtures (the heavy content lift)
+- [ ] Hand-curate 6 profiling fixtures (~3KB each) describing what wireframe to generate from each dataset
+- [ ] Reference real columns + observed patterns
+- [ ] AI narrative voice consistent with existing 6 fixtures (without dashes per Day 3 rule)
+- [ ] Each fixture recommends KPIs + chart layouts the wireframe engine will materialize
+
+#### Day 3 (Wed May 6) · Data-driven wireframe template engine
+- [ ] Refactor wireframe rendering to be schema-driven (not hardcoded)
+- [ ] One engine renders any dataset's structure as a wireframe
+- [ ] Replace existing 3 hardcoded templates (Executive/Operational/Exploratory) with the engine
+- [ ] Old template aesthetic preserved as one of 3 layout density modes
+
+#### Day 4 (Thu May 7) · Export-to-Figma demo + final QA
+- [ ] "Export to Figma" CTA on each generated wireframe
+- [ ] Click → "Future state" page showing how Figma MCP + Claude would convert to Figma file
+- [ ] Acknowledge manual-Figma reality with honest framing
+- [ ] Final cross-mode QA (ad-hoc + wireframe parallel structure)
+
+#### Day 5 (Fri May 8) · Loom Video
 - [ ] Write 90-second script: problem (10s) → gallery (15s) → profiling (20s) → dashboard (30s) → PDF export (10s) → outro (5s)
-- [ ] Record on clean browser at 1440px
+- [ ] Record on clean browser at 1440px (light mode + dark mode toggle visible)
 - [ ] Edit: trim, add captions, end card
 - [ ] Upload to YouTube unlisted + copy embed URL
 - [ ] Update `portfolio.meta.json` with loomUrl
 
-**Context for Next Session**: _(fill in after completion)_
-
-#### Day 4 (Thu) · Case Study Page
+#### Day 6 (Sat May 9) · Case Study Page
 - [ ] Create `docs/case-studies/dashboard-factory.mdx`
 - [ ] Sections: hero, problem, approach, architecture (Production vs Demo diagrams), tech stack, impact, Loom embed, live link, GitHub link
 - [ ] Write Mermaid architecture diagrams
 
-**Context for Next Session**: _(fill in after completion)_
-
-#### Day 5 (Fri) · Automation Infrastructure
+#### Day 7 (Sun May 10) · Automation Infrastructure
 - [ ] Push `rishigundla/resume-builder` to GitHub (via GitHub MCP)
 - [ ] Generate GitHub PAT with `repo` scope
 - [ ] Add PAT as secret `PORTFOLIO_SYNC_PAT` in ai-portfolio repo
@@ -1189,7 +1272,11 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 
 **Context for Next Session**: _(fill in after completion)_
 
-#### Day 6 (Sat) · Live Automation Run
+---
+
+### Week 6 — Phase 1 close (revised)
+
+#### Day 1 (Mon May 11) · Live Automation Run
 - [ ] Trigger sync-portfolio workflow manually
 - [ ] Verify PR opens on `rishigundla/portfolio-site` with new project card
 - [ ] Verify PR opens on `rishigundla/resume-builder` with new bullet
@@ -1197,16 +1284,18 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 - [ ] Portfolio-site auto-redeploys with new card
 - [ ] Regenerate resume PDF via existing ATS optimizer workflow
 
-**Context for Next Session**: _(fill in after completion)_
-
-#### Day 7 (Sun) · Phase 1 Wrap
+#### Day 2 (Tue May 12) · Phase 1 Wrap
 - [ ] Buffer day — fix any bugs found post-deploy
-- [ ] Update master plan with Phase 1 lessons learned
+- [ ] Update master plan with Phase 1 lessons learned (including the fixture-promise audit step for future projects)
 - [ ] Tag Phase 1 complete
-- [ ] Review Phase 2 (Project 2) Week 5 plan
+- [ ] Review Phase 2 (Project 2 Narrative Generator) plan
 
-**Week 4 Deliverables**:
-- Project 1 fully live at `ai-dashboard-factory.vercel.app`
+**Phase 1 Deliverables (revised)**:
+- Project 1 fully live at `ai-portfolio-dashboard-factory.vercel.app`
+- 6 ad-hoc dashboards with per-domain layouts, growth %, multi-chart-type variety
+- 6 wireframe-mode datasets (different verticals from ad-hoc) with AI profiling and Export-to-Figma demo
+- Light/dark theme toggle + particle background across all portfolio apps
+- Visual-fidelity PDF export
 - 90s Loom video published
 - Case study page on portfolio-site
 - Automation scripts working for future projects
@@ -1214,7 +1303,7 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 
 ---
 
-## Phase 2 — Project 2 · Narrative Generator (Weeks 5-6)
+## Phase 2 — Project 2 · Narrative Generator (Weeks 7-8, was Weeks 5-6)
 
 ### Week 5 — Project 2 Core Build
 
