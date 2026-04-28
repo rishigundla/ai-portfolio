@@ -17,10 +17,10 @@
 |-------|-------|
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
-| **Current Day** | Week 4 · Day 3 (Wed) — Copy + UX cleanup |
-| **Overall Progress** | 115 tasks of ~150 complete · **Production live at https://ai-portfolio-dashboard-factory.vercel.app** · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ · Week 3 ✓ · Week 4 Days 1-2 ✓ |
-| **Status** | Day 2 + post-deploy hotfix shipped. **Plan revised**: user requested 8 polish/enrichment items before Loom. Phase 1 timeline slips ~5 days (closes May 11 instead of May 4). Inserted 5 new days into Week 4 + 4 new days into Week 5: copy cleanup → PDF visual fidelity → theme + particle → dashboard depth (growth %, new charts) → per-domain layouts → 6 new wireframe datasets → wireframe profiling fixtures → data-driven wireframe engine → Export-to-Figma demo. Loom shifts to W5.D5. Project 2 starts Week 6. Worth the slip — ships portfolio-quality bar instead of templated bar. |
-| **Next Action** | Week 4 Day 3: Copy + UX cleanup. Item 7 (For Developers rename) · Item 5 (click-to-drill chip on charts) · Item 6 Option B (rename NAI/NC2/NCI → Atlas/Orion/Vega + regen affected dataset rows) · Item 2 (remove all dash variants from copy + profiling fixtures). |
+| **Current Day** | Week 4 · Day 4 (Thu) — PDF visual fidelity |
+| **Overall Progress** | 119 tasks of ~150 complete · **Production live at https://ai-portfolio-dashboard-factory.vercel.app** · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ · Week 3 ✓ · Week 4 Days 1-3 ✓ |
+| **Status** | W4.D3 closed. Items 2 + 5 + 6 + 7 shipped. "For Developers" rename across 4 sites. Click-to-drill chip on bar + donut chart cards. NAI/NC2/NCI → Atlas/Orion/Vega across 6 datasets + 4 profiling fixtures + wireframe mock data + design-system-docs examples + READMEs. "Nutanix" string removed from all user-facing copy. Dashes (em, en, hyphen-with-spaces) removed from user-visible text. 4 SVG/math-heavy files reverted after the dash-cleanup regex damaged JS arithmetic; they had no user-visible dashes worth fixing anyway. Build clean, 25 of 25 pages prerendered. |
+| **Next Action** | Week 4 Day 4: PDF visual fidelity. Switch PDF export from text-summary to canvas-based capture using html2canvas + jsPDF so the PDF looks pixel-identical to the dashboard on screen (Recharts visuals + brand colors + typography). Preserve filter-aware behavior. Test on all 6 datasets. |
 | **Blockers** | None |
 
 ### Phase Progress Overview
@@ -41,6 +41,22 @@
 ## Recent Activity Log
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
+
+### 2026-04-28 · Week 4 Day 3 — Copy + UX cleanup (Items 2, 5, 6, 7)
+- **Plan revised earlier today**: user batch of 8 polish items inserted before Loom. Phase 1 timeline slips ~5 days (closes May 11). W4.D3 = first of 5 new polish/enrichment days.
+- **Item 7 — For Developers rename** across 4 sites: home persona card badge ('For BI engineers' → 'For Developers'), wireframe page eyebrow, layout description copy, page metadata.
+- **Item 5 — Click-to-drill chip** on bar + donut chart cards. New `<DrillChip />` component with `MousePointerClick` icon + 'Click to drill in' text. Passed via ChartCard's `actions` slot only when a click handler is wired (line charts have no chip — no drill behavior). Footer hint trimmed to 'Charts powered by Recharts. Hover for tooltips.'
+- **Item 6 (Option B) — Product code rename + Nutanix removal**:
+  - NAI → Atlas, NC2 → Orion, NCI → Vega across all 6 dataset row JSONs (deal_name / campaign_name / product_line / primary_product values), 4 profiling fixtures' AI narrative text, `lib/wireframe-templates.ts` mock byProduct bars, design-system-docs example tables, dashboard-factory + ai-core READMEs.
+  - 'Nutanix' string removed from user-facing copy: marketing campaign 'Search Brand — Nutanix Cloud' → 'Search Brand Campaign'; datasets page description 'Nutanix-style' → 'Anonymized'; repo READMEs anonymized to 'enterprise SaaS data work'.
+  - Plan files (`docs/master-plan.md`, `docs/plan.html`) keep Nutanix references as historical project context — those are private project docs, not user-facing.
+- **Item 2 — Dash cleanup** in user-visible text:
+  - Em-dashes (—), en-dashes (–), and hyphen-with-spaces (- ) removed from: all 6 profiling fixtures (the AI narrative shown to users during streaming), 5 dataset JSONs (deal/campaign names with em-dashes), home page hero + persona descriptions, datasets gallery copy, wireframe page hero + footer hint, error.tsx + not-found.tsx error copy, dashboard route metadata description, fallback profiling-text builder in lib/profiling.ts.
+  - Replacement strategy: ' — ' / ' – ' / ' - ' between words → ', ' (treating dashes as parenthetical pauses).
+- **Bug + recovery during dash cleanup**: my regex `(\w) - (\w) → (\w), (\w)` correctly hit em-dash substitutes but ALSO matched real JS arithmetic like `points.length - 1`, turning it into `points.length, 1` (syntactically valid TypeScript comma operator, semantically broken). Build broke; caught via `tsc --noEmit` (3 files, 5 errors). Recovery: `git checkout HEAD -- file1 file2 file3 file4` reverted the corrupted SVG/math-heavy files (MockCharts, ExecutiveLayout, ExploratoryLayout, wireframe page sketches), then re-applied Item 7 + Item 2 changes manually to wireframe/page.tsx. Total cleanup time ~5 min thanks to git's cheap revert. **Lesson**: bulk text-replace across whole TSX files is unsafe when patterns can match code. Constrain to JSON content fields, JSX text nodes, or markdown.
+- **Build**: 25 of 25 pages still prerendered. Typecheck clean. Commit `fb4aba1` pushed (31 files, +249/-218).
+- **Context for W4.D4 (Thu)**: PDF visual fidelity. The current PDF is a structured text-summary (correct per Day 4 design but not what user wants). Switch to html2canvas + jsPDF: capture the actual rendered dashboard DOM (with Recharts visuals + brand colors + typography), convert to PNG, embed in PDF. Preserve filter-aware behavior. Test on all 6 datasets. Watch file size + render time.
+- **Next**: Week 4 Day 4 — PDF visual fidelity
 
 ### 2026-04-28 · Week 4 Day 2 (post-deploy hotfix) — KPI + chart count parity with profiling fixtures
 - **User caught a real gap**: profiling fixture text on RevOps Sales SSOT promised 5 KPIs (Total ACV / Avg GRR / Active deal count / Win rate / Top product) + 4 charts, but the dashboard rendered only 2 KPIs + 3 charts. Audited all 6 datasets — same pattern every time, fixtures consistently promise 5+4 and the builder produced fewer.
@@ -1163,13 +1179,15 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 - Plan revised 2026-04-28: 8 polish/enrichment items inserted before Loom. Phase 1 closes ~May 11 instead of May 4.
 - Day 3 = Copy + UX cleanup. Quick-win batch.
 
-#### Day 3 (Wed) · Copy + UX cleanup
-- [ ] **Item 7** Rename "For BI engineers" → "For Developers" (home persona card)
-- [ ] **Item 5** Click-to-drill chip on bar + donut ChartCards (uses `actions` slot, signals interactivity)
-- [ ] **Item 6 Option B** Rename product codes NAI/NC2/NCI → Atlas/Orion/Vega across dataset rows + profiling fixtures + any UI references; sweep for "Nutanix" string and remove
-- [ ] **Item 2** Remove all dash variants (em-dash —, en-dash –, hyphen-with-spaces - ) from copy + profiling fixtures; rephrase to keep voice
+#### Day 3 (Wed) · Copy + UX cleanup — COMPLETED 2026-04-28
+- [x] **Item 7** Rename "For BI engineers" → "For Developers" (4 sites: home persona, wireframe eyebrow + description, page metadata)
+- [x] **Item 5** Click-to-drill chip on bar + donut ChartCards (`<DrillChip />` with MousePointerClick icon + "Click to drill in" text in `actions` slot when handlers present)
+- [x] **Item 6 Option B** NAI/NC2/NCI → Atlas/Orion/Vega across 6 datasets + 4 profiling fixtures + wireframe mock data + design-system-docs examples + READMEs. "Nutanix" string removed from user-facing copy.
+- [x] **Item 2** Em/en/hyphen-with-spaces dashes removed from user-visible text in 6 profiling fixtures + 5 dataset JSONs + home/datasets/wireframe/error/dashboard pages + fallback profiling-text builder. SVG/math-heavy files reverted (no user-visible dashes worth fixing) after a regex caused build break.
 
-**Context for Next Session**: _(fill in after completion)_
+**Context for Next Session (Week 4 Day 4)**:
+- Day 4 = PDF visual fidelity. Switch from text-summary PDF to canvas-based capture (html2canvas + jsPDF) so PDF looks pixel-identical to dashboard on screen.
+- Preserve filter-aware behavior + test on all 6 datasets + verify file size and render time stay reasonable.
 
 #### Day 4 (Thu) · PDF visual fidelity
 - [ ] **Item 3** Switch PDF export from text-summary to canvas-based capture using html2canvas + jsPDF
