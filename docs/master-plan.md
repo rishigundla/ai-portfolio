@@ -17,10 +17,10 @@
 |-------|-------|
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
-| **Current Day** | Week 4 · Day 2 (Tue) — Production Deploy |
-| **Overall Progress** | 110 tasks of 110 complete (4 of 5 Day 1 + scheduled remote agent debugged) · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ · Week 3 ✓ · Week 4 Day 1 ✓ (Lighthouse deferred to Day 2 by design) |
-| **Status** | Day 1 closed. Favicon + Open Graph image done in-session after the scheduled remote agent fired but failed silently (sandbox had no GitHub credentials → push failed with no PR). Code-side Lighthouse prep complete. Production-ready meta tags / OG image / favicon / 404+error pages / a11y skip link / 25 of 25 pages prerendered with 0 console errors. |
-| **Next Action** | Week 4 Day 2: Production deploy. Create Vercel project `ai-dashboard-factory`, configure turborepo build settings, deploy to production, smoke-test all 6 dataset flows on the live URL, author `apps/dashboard-factory/portfolio.meta.json` with liveUrl. Then run actual Lighthouse audit on the deployed build (the Day 1 deferred task). |
+| **Current Day** | Week 4 · Day 3 (Wed) — Loom Video |
+| **Overall Progress** | 115 tasks of 115 complete · **Production live at https://ai-portfolio-dashboard-factory.vercel.app** · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ · Week 3 ✓ · Week 4 Days 1-2 ✓ |
+| **Status** | Day 2 closed. Vercel project `ai-portfolio-dashboard-factory` deployed from main, all 6 dashboards + 3 wireframes verified clean on production (0 console errors), 4 issues found and fixed during QA (doubled title suffix, color contrast on text-muted, heading-order skip on home + AiNarrativeBlock, color-only footer links). Final Lighthouse: home 100/100/100/100, /generate 100/98/100/100 — all 4 categories above 90 target across every audited route. portfolio.meta.json now has live URL + deployedAt. |
+| **Next Action** | Week 4 Day 3: Loom video. Write 90s script (problem → gallery → profiling → dashboard → PDF export → outro), record on clean browser at 1440px, edit, upload to YouTube unlisted, copy embed URL, update `portfolio.meta.json` with `loomUrl`. |
 | **Blockers** | None |
 
 ### Phase Progress Overview
@@ -41,6 +41,29 @@
 ## Recent Activity Log
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
+
+### 2026-04-28 · Week 4 Day 2 — Production Deploy + Lighthouse to 90+
+- **Live at https://ai-portfolio-dashboard-factory.vercel.app**. Vercel project deployed from main, autodetected Next.js, build target `apps/dashboard-factory` with `pnpm install --frozen-lockfile` at workspace root. First production deploy + 4 follow-up patch deploys completed in the same session.
+- **4 issues caught during production QA, all fixed**:
+  1. **Doubled title suffix** — Day 1's `template: '%s · Dashboard Factory'` in root layout was appending to per-route titles that already included the suffix. Result: "Dashboard · RevOps Sales SSOT · Dashboard Factory · Dashboard Factory" (visible in browser tab + degrades SEO). Fixed by stripping the suffix from 8 sites across 5 files; the template handles it now.
+  2. **Color contrast (a11y)** — design-system token `--color-text-muted: #6b7280` failed WCAG AA against the lightest card surface (~3.8:1 vs required 4.5:1). Lifted to `#94a3b8` (slate-400, ~6.4:1). Stays distinct from `--color-text-secondary: #9ca3af` so visual hierarchy holds. **Token-level change → all consumers benefit**.
+  3. **Heading order (a11y)** — two skips: home page `PersonaCard` used `<h3>` directly under hero `<h1>` (skipped h2); `AiNarrativeBlock` mapped markdown `##` to `<h4>` (skipped h2 and h3 under page h1). Fixed by promoting PersonaCard to h2 and remapping AiNarrativeBlock so markdown `h2 → <h2>`. Pixel output unchanged (CSS classes drive size, not the tag) — only semantic levels shift.
+  4. **Links rely on color (a11y)** — footer links to GitHub repo + portfolio site were teal-on-dark only, no underline. Added `underline underline-offset-4 decoration-accent/40 hover:decoration-accent`. Visible signal that doesn't depend on color recognition.
+- **Lighthouse audit, final scores** (run via `npx lighthouse@12 --preset=desktop --headless`):
+  - Home page (`/`): **Performance 100 · Accessibility 100 · Best Practices 100 · SEO 100** — perfect across the board after the a11y fixes.
+  - `/generate/revops-sales` (Lighthouse followed the navigation guard from `/dashboard/revops-sales` because headless Chrome had no Zustand seed): **Performance 100 · Accessibility 98 · Best Practices 100 · SEO 100** — well above the 90 target on all 4 categories.
+- **Why headless Lighthouse hit /generate not /dashboard**: the navigation guard correctly redirects unprofiled dataset routes — exactly the Week 2 Day 6 design intent. A subtle reminder that Lighthouse runs in a clean browser context with no localStorage, so any nav guard logic surfaces immediately.
+- **Tooling friction**: Google PageSpeed Insights API rate-limited the unauthenticated path (quota_limit_value: 0/day for this consumer), so fell back to local `lighthouse@12` CLI via `npx`. Worked despite a Windows EPERM cleanup error at the end of each run — the JSON output was written before the cleanup race fired, so audits completed correctly.
+- **Build observations from Vercel**: monorepo build worked first-shot. `pnpm install --frozen-lockfile` at workspace root handled the workspace deps (`@rishi/design-system`, `@rishi/ai-core`) without `transpilePackages` issues — `next.config.mjs` had it pre-configured from earlier days. All 25 pages prerendered. No env vars needed for the basic deploy (`VERCEL_URL` auto-injection drove the metadataBase resolution).
+- **portfolio.meta.json updated**: `liveUrl: https://ai-portfolio-dashboard-factory.vercel.app`, `deployedAt: 2026-04-28`.
+- **Commits** (4 to dashboard-factory + 1 to design-system in this session):
+  - `69523f8` — fix: metadataBase fallback follows ai-portfolio-{slug} convention
+  - `ad1c783` — fix: strip redundant 'Dashboard Factory' suffix from route titles
+  - `9c58611` — fix(a11y): lift text-muted contrast + heading order + link underlines
+  - `d10a385` — chore: set dashboard-factory liveUrl + deployedAt
+  - `b587369` — fix(a11y): AiNarrativeBlock heading mapping preserves document order
+- **Context for Day 3 (Wed)**: Loom video. Plan a 90-second walkthrough — problem framing (10s) → datasets gallery (15s) → profiling stream animation (20s) → dashboard interactivity + drill-down (30s) → PDF export (10s) → outro with link (5s). Record on a clean Chrome window at 1440px viewport. Edit (trim, captions, end card). Upload to YouTube unlisted. Update `portfolio.meta.json` with `loomUrl` + commit.
+- **Next**: Week 4 Day 3 — Loom Video
 
 ### 2026-04-28 · Week 4 Day 1 (close) — Favicon + OG image + remote-agent post-mortem
 - **Day 1 closed**, 4 of 5 tasks done in code; Lighthouse audit explicitly deferred to Day 2 because dev mode penalises minification / source maps / dev overlay scripts and only a deployed production build gives a meaningful score.
@@ -1103,14 +1126,17 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 - Author `apps/dashboard-factory/portfolio.meta.json` with the live URL + deployedAt.
 - Then run actual Lighthouse audit on the deployed build (the deferred Day 1 task), iterate on findings until 90+ on all 4 categories.
 
-#### Day 2 (Tue) · Production Deploy
-- [ ] Create Vercel project `ai-dashboard-factory`
-- [ ] Configure build settings for turborepo monorepo
-- [ ] Deploy to production
-- [ ] Smoke test all 6 dataset flows on production URL
-- [ ] Author `apps/dashboard-factory/portfolio.meta.json` with liveUrl
+#### Day 2 (Tue) · Production Deploy — COMPLETED 2026-04-28
+- [x] Vercel project `ai-portfolio-dashboard-factory` created (matching `ai-portfolio-design-system-docs` naming convention)
+- [x] Build settings: Root Directory `apps/dashboard-factory`, Install Command `pnpm install --frozen-lockfile`, framework autodetected as Next.js
+- [x] Deployed to production at https://ai-portfolio-dashboard-factory.vercel.app
+- [x] Smoke-tested all 6 dataset flows + 3 wireframe templates on the live URL via Playwright — 0 console errors
+- [x] portfolio.meta.json updated with liveUrl + deployedAt 2026-04-28
+- [x] **Bonus**: Lighthouse run + iterated to all-green. Home 100/100/100/100, /generate 100/98/100/100. Fixed 4 issues found during the deploy: doubled title suffix, color contrast on text-muted, heading order, color-only links.
 
-**Context for Next Session**: _(fill in after completion)_
+**Context for Next Session (Week 4 Day 3)**:
+- Day 3 = Loom video. 90-second script: problem framing (10s) → datasets gallery (15s) → profiling stream animation (20s) → dashboard interactivity + drill-down (30s) → PDF export (10s) → outro with link (5s).
+- Record on clean Chrome window at 1440px viewport. Edit (trim, captions, end card). Upload to YouTube unlisted, copy embed URL, update `portfolio.meta.json` with `loomUrl`, commit + push.
 
 #### Day 3 (Wed) · Loom Video
 - [ ] Write 90-second script: problem (10s) → gallery (15s) → profiling (20s) → dashboard (30s) → PDF export (10s) → outro (5s)

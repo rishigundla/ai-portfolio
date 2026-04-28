@@ -1472,10 +1472,10 @@
       currentStatus: {
         phase: "Phase 1 — Project 1 (Dashboard Factory)",
         week: "Week 1 of 14",
-        day: "Week 4 · Day 2 (Tue) — Production Deploy",
-        progress: { done: 110, total: 110 },
-        status: "Day 1 closed. Favicon + Open Graph image done in-session after the scheduled remote agent fired but failed silently (sandbox had no GitHub credentials → push failed with no PR). 25 of 25 pages prerendered. Verified via Playwright on production build: /icon renders 32×32 teal-gradient DF mark, /opengraph-image renders 1200×630 with Space Grotesk Bold, home page <head> wires og:image / twitter:image / apple-touch-icon / favicon as absolute URLs from metadataBase. 0 console errors — Day 7 favicon 404 fully resolved.",
-        nextAction: "Week 4 Day 2 (Tue evening): Production deploy. Create Vercel project ai-dashboard-factory, configure turborepo build, deploy to main. Smoke-test all 6 datasets + 3 wireframes on the live URL. Author portfolio.meta.json with liveUrl. Then run actual Lighthouse audit on the deployed build, iterate findings until 90+ on all 4 categories.",
+        day: "Week 4 · Day 3 (Wed) — Loom Video",
+        progress: { done: 115, total: 115 },
+        status: "PRODUCTION LIVE at https://ai-portfolio-dashboard-factory.vercel.app. Day 2 closed. Vercel project deployed from main, all 6 dashboards + 3 wireframes verified clean (0 console errors), 4 issues fixed during QA (doubled title suffix, color contrast on text-muted, heading-order skip on home + AiNarrativeBlock, color-only footer links). Final Lighthouse: home 100/100/100/100, /generate 100/98/100/100 — all 4 categories above 90 across every audited route. portfolio.meta.json now has live URL + deployedAt.",
+        nextAction: "Week 4 Day 3: Loom video. Write 90s script (problem → gallery → profiling → dashboard → PDF → outro), record on clean Chrome at 1440px, edit, upload to YouTube unlisted, update portfolio.meta.json with loomUrl.",
         blockers: "None"
       },
 
@@ -1532,7 +1532,9 @@
         // Phase 1 · Week 3 · Day 7 (5 tasks — datasets QA, filters, wireframes, bug fixes, tag)
         "3-W3.D7-0", "3-W3.D7-1", "3-W3.D7-2", "3-W3.D7-3", "3-W3.D7-4",
         // Phase 1 · Week 4 · Day 1 (4 of 5 done — SEO meta, favicon, 404/error, OG; Lighthouse Day 2 by design)
-        "1-W4.D1-1", "1-W4.D1-2", "1-W4.D1-3", "1-W4.D1-4"
+        "1-W4.D1-1", "1-W4.D1-2", "1-W4.D1-3", "1-W4.D1-4",
+        // Phase 1 · Week 4 · Day 2 (5 tasks — Vercel project, build settings, deploy, smoke test, portfolio.meta.json)
+        "1-W4.D2-0", "1-W4.D2-1", "1-W4.D2-2", "1-W4.D2-3", "1-W4.D2-4"
       ],
 
       phases: [
@@ -1545,6 +1547,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-04-28",
+          title: "Week 4 Day 2 — Production Deploy + Lighthouse to 90+",
+          desc: "LIVE at https://ai-portfolio-dashboard-factory.vercel.app. Vercel project deployed from main, autodetected Next.js, build target apps/dashboard-factory with pnpm install --frozen-lockfile at workspace root. First production deploy + 4 follow-up patch deploys completed in the same session. 4 ISSUES caught during production QA, all fixed: (1) DOUBLED TITLE SUFFIX — Day 1's title template '%s · Dashboard Factory' was appending to per-route titles that already had the suffix, producing 'Dashboard · RevOps Sales SSOT · Dashboard Factory · Dashboard Factory'. Stripped suffix from 8 sites across 5 files. (2) COLOR CONTRAST — token --color-text-muted #6b7280 failed WCAG AA against lightest card surface (~3.8:1 vs required 4.5:1). Lifted to #94a3b8 (slate-400, ~6.4:1). Stays distinct from text-secondary so visual hierarchy holds. Token-level change so all consumers benefit. (3) HEADING ORDER — two skips: home PersonaCard <h3> directly under hero <h1> (skipped h2); AiNarrativeBlock mapped markdown ## to <h4> (skipped h2 and h3 under page h1). Fixed by promoting PersonaCard to h2 and remapping AiNarrativeBlock so markdown h2 → <h2>. Pixel output unchanged (CSS classes drive size). (4) LINKS RELY ON COLOR — footer links to GitHub + portfolio site were teal-on-dark only, no underline. Added underline-offset-4 with decoration-accent/40 → decoration-accent on hover. FINAL LIGHTHOUSE (npx lighthouse@12 --preset=desktop --headless): Home page 100/100/100/100 perfect across the board after a11y fixes. /generate/revops-sales 100/98/100/100 — all 4 above 90 target (Lighthouse followed nav guard from /dashboard since headless Chrome had no Zustand seed; valid behavior, /generate is a primary route). PageSpeed Insights API hit a quota limit so used local lighthouse CLI via npx — worked despite Windows EPERM cleanup race (audit completed before cleanup fired). portfolio.meta.json updated: liveUrl + deployedAt 2026-04-28. 5 commits pushed: 69523f8 (metadataBase fallback), ad1c783 (title suffix), 9c58611 (a11y triple), d10a385 (portfolio.meta), b587369 (AiNarrativeBlock heading mapping).",
+          next: "Week 4 Day 3 — Loom Video. 90s script: problem (10s) → gallery (15s) → profiling stream (20s) → dashboard interactivity + drill-down (30s) → PDF export (10s) → outro (5s). Record on clean Chrome at 1440px, edit, upload to YouTube unlisted, update portfolio.meta.json with loomUrl."
+        },
         {
           date: "2026-04-28",
           title: "Week 4 Day 1 (close) — Favicon + OG image + remote-agent post-mortem",
