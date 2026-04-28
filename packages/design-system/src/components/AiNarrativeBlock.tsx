@@ -84,14 +84,18 @@ export const AiNarrativeBlock = React.forwardRef<HTMLDivElement, AiNarrativeBloc
                   {children}
                 </a>
               ),
+              // Markdown headings render with on-brand typography but
+              // semantic levels stay close to the host page so screen
+              // readers and Lighthouse heading-order checks pass.
+              // Host pages always render h1; narrative ## becomes h2 etc.
               h1: ({ children }) => (
-                <h3 className="mb-2 font-display text-base font-semibold text-text-primary">{children}</h3>
+                <h2 className="mb-2 font-display text-base font-semibold text-text-primary">{children}</h2>
               ),
               h2: ({ children }) => (
-                <h4 className="mb-2 font-display text-sm font-semibold text-text-primary">{children}</h4>
+                <h2 className="mb-2 font-display text-sm font-semibold text-text-primary">{children}</h2>
               ),
               h3: ({ children }) => (
-                <h5 className="mb-1 font-display text-sm font-semibold text-text-primary">{children}</h5>
+                <h3 className="mb-1 font-display text-sm font-semibold text-text-primary">{children}</h3>
               ),
             }}
           >
