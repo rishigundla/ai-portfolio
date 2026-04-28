@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI Portfolio Projects · Master Plan · Rishikesh Gundla</title>
-  <meta name="description" content="14-week build plan for 5 AI-powered portfolio projects. Anchored to Nutanix SaaS Data Team work. Tracking day-by-day progress through Phase 1 to Phase 5." />
+  <meta name="description" content="16-week build plan for 5 AI-powered portfolio projects. Anchored to enterprise SaaS data work. Tracking day-by-day progress through Phase 1 to Phase 5." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
@@ -1156,7 +1156,7 @@
   <header class="hero">
     <span class="hero-eyebrow">Senior BI Engineer → Data / Analytics Engineer</span>
     <h1 class="hero-title">AI Portfolio<br />Projects</h1>
-    <p class="hero-subtitle">Five AI-native applications anchored to real Nutanix SaaS Data Team work. Tracking 14 weeks of day-by-day build progress.</p>
+    <p class="hero-subtitle">Five AI-native applications anchored to real enterprise SaaS data work. Tracking 16 weeks of day-by-day build progress.</p>
 
     <div class="hero-stats" id="hero-stats">
       <!-- rendered by JS -->
@@ -1167,7 +1167,7 @@
     <div class="section-header">
       <div class="section-eyebrow">Part A · Live Tracker</div>
       <h2 class="section-title">Current Status</h2>
-      <p class="section-desc">Real-time view of where we are in the 14-week plan. Updated at end of each work session.</p>
+      <p class="section-desc">Real-time view of where we are in the 16-week plan. Updated at end of each work session.</p>
     </div>
 
     <div class="phase-grid" id="phase-grid">
@@ -1471,7 +1471,7 @@
     const planData = {
       currentStatus: {
         phase: "Phase 1 — Project 1 (Dashboard Factory)",
-        week: "Week 1 of 14",
+        week: "Week 1 of 16",
         day: "Week 4 · Day 4 (Thu) — PDF visual fidelity",
         progress: { done: 119, total: 150 },
         status: "PRODUCTION LIVE at https://ai-portfolio-dashboard-factory.vercel.app. W4.D3 closed. Items 2 + 5 + 6 + 7 shipped: 'For Developers' rename across 4 sites; click-to-drill chip on bar + donut chart cards; NAI/NC2/NCI → Atlas/Orion/Vega across 6 datasets + 4 profiling fixtures + wireframe mock data + design-system-docs + READMEs; 'Nutanix' string removed from user-facing copy; dashes removed from user-visible text. 4 SVG/math-heavy files reverted after a regex broke arithmetic; they had no user-visible dashes worth fixing. Build clean, 25 of 25 pages prerendered. Commit fb4aba1 pushed.",
@@ -1543,11 +1543,11 @@
 
       phases: [
         { id: 0, name: "Pre-flight Setup", weeks: "—", totalDays: 5, done: 0, status: "not-started", code: "P0" },
-        { id: 1, name: "Project 1 · Dashboard Factory", weeks: "1-4", totalDays: 28, done: 0, status: "not-started", code: "P1" },
-        { id: 2, name: "Project 2 · Narrative Generator", weeks: "5-6", totalDays: 14, done: 0, status: "not-started", code: "P2" },
-        { id: 3, name: "Project 4 · Sprint Intelligence", weeks: "7-8", totalDays: 14, done: 0, status: "not-started", code: "P3" },
-        { id: 4, name: "Project 3 · Anomaly Alerting", weeks: "9-11", totalDays: 21, done: 0, status: "not-started", code: "P4" },
-        { id: 5, name: "Project 5 · Pipeline Self-Healer", weeks: "12-14", totalDays: 21, done: 0, status: "not-started", code: "P5" }
+        { id: 1, name: "Project 1 · Dashboard Factory", weeks: "1-6", totalDays: 42, done: 0, status: "not-started", code: "P1" },
+        { id: 2, name: "Project 2 · Narrative Generator", weeks: "7-8", totalDays: 14, done: 0, status: "not-started", code: "P2" },
+        { id: 3, name: "Project 4 · Sprint Intelligence", weeks: "9-10", totalDays: 14, done: 0, status: "not-started", code: "P3" },
+        { id: 4, name: "Project 3 · Anomaly Alerting", weeks: "11-13", totalDays: 21, done: 0, status: "not-started", code: "P4" },
+        { id: 5, name: "Project 5 · Pipeline Self-Healer", weeks: "14-16", totalDays: 21, done: 0, status: "not-started", code: "P5" }
       ],
 
       activity: [
@@ -1805,7 +1805,7 @@
         { label: "Automation", q: "How portfolio + resume stay fresh", a: "GitHub Action fires on deploy → opens PRs on portfolio-site and resume-builder. Manual review and merge as safety net." }
       ],
 
-      // Full 14-week day-by-day plan
+      // Full 16-week day-by-day plan (revised 2026-04-28: Phase 1 grew from 4 to 6 weeks)
       weeksPlan: [
         // ========== PHASE 0 ==========
         {
@@ -1872,50 +1872,77 @@
         {
           phase: 1,
           week: 4,
-          name: "Week 4 — Project 1 Polish, Deploy, Automation Setup",
-          goal: "Live on production, Loom published, automation infrastructure deployed",
+          name: "Week 4 — Project 1 Polish + Enrichment",
+          goal: "Production deploy, then 5-day polish + enrichment pass before Loom",
           days: [
             { num: "W4.D1", weekday: "Mon", name: "Production Polish", tasks: ["Lighthouse audit (target 90+)", "SEO meta tags + Open Graph images", "Favicon", "404 + error pages", "Social preview image"] },
-            { num: "W4.D2", weekday: "Tue", name: "Production Deploy", tasks: ["Create Vercel project ai-dashboard-factory", "Configure turborepo build settings", "Deploy to production", "Smoke test all 6 flows on prod URL", "Author apps/dashboard-factory/portfolio.meta.json"] },
-            { num: "W4.D3", weekday: "Wed", name: "Loom Video", tasks: ["Write 90s script", "Record at 1440px on clean browser", "Edit: trim, captions, end card", "Upload YouTube unlisted", "Update portfolio.meta.json with loomUrl"] },
-            { num: "W4.D4", weekday: "Thu", name: "Case Study Page", tasks: ["Create docs/case-studies/dashboard-factory.mdx", "Write hero, problem, approach, tech stack, impact sections", "Write Production Architecture Mermaid diagram", "Write Demo Architecture Mermaid diagram", "Add Loom embed, live link, GitHub link"] },
-            { num: "W4.D5", weekday: "Fri", name: "Automation Infrastructure", tasks: ["Push rishigundla/resume-builder to GitHub via MCP", "Generate GitHub PAT with repo scope", "Add PORTFOLIO_SYNC_PAT secret", "Build scripts/sync-deployed.ts", "Build .github/workflows/sync-portfolio.yml", "Dry-run sync locally"] },
-            { num: "W4.D6", weekday: "Sat", name: "Live Automation Run", tasks: ["Trigger sync-portfolio workflow manually", "Verify PR opens on portfolio-site", "Verify PR opens on resume-builder", "Review + merge both PRs", "Portfolio-site auto-redeploys", "Regenerate resume PDF"] },
-            { num: "W4.D7", weekday: "Sun", name: "Phase 1 Wrap", tasks: ["Buffer day — fix bugs", "Update master plan with Phase 1 lessons", "Tag Phase 1 complete", "Review Phase 2 Week 5 plan"] }
+            { num: "W4.D2", weekday: "Tue", name: "Production Deploy", tasks: ["Create Vercel project ai-portfolio-dashboard-factory", "Configure turborepo build settings", "Deploy to production", "Smoke test all 6 flows on prod URL", "Author apps/dashboard-factory/portfolio.meta.json"] },
+            { num: "W4.D3", weekday: "Wed", name: "Copy + UX cleanup", tasks: ["Item 7: For BI engineers → For Developers rename (4 sites)", "Item 5: Click-to-drill chip on bar + donut chart cards", "Item 6 Option B: NAI/NC2/NCI → Atlas/Orion/Vega across datasets + fixtures + remove Nutanix references", "Item 2: Remove em/en/hyphen-with-spaces dashes from copy + fixtures"] },
+            { num: "W4.D4", weekday: "Thu", name: "PDF visual fidelity", tasks: ["Switch PDF export from text-summary to canvas-based capture (html2canvas + jsPDF)", "PDF must look pixel-identical to the on-screen dashboard", "Preserve filter-aware behavior", "Test on all 6 datasets"] },
+            { num: "W4.D5", weekday: "Fri", name: "Theme toggle + particle background", tasks: ["Study portfolio-site source for particle + theme implementation", "Build shared <ParticleBackground /> in @rishi/design-system", "Build shared <ThemeToggle /> in @rishi/design-system", "Wire both into dashboard-factory + design-system-docs", "Light-mode QA pass + Lighthouse re-audit in light mode"] },
+            { num: "W4.D6", weekday: "Sat", name: "Dashboard depth (growth %, charts, filters)", tasks: ["Generate synthetic period-over-period data so growth % is meaningful", "Add growth % delta to each KPI", "Add 2 new chart types: heatmap + scatter", "Add multi-select filter primitive", "Add date-range filter primitive"] },
+            { num: "W4.D7", weekday: "Sun", name: "Dashboard uniqueness (per-domain layouts)", tasks: ["RevOps: pipeline funnel + win-rate ring + region-channel matrix", "Marketing: ROI quadrant scatter + funnel + channel CPA bars", "Pulse: latency heatmap + health histogram", "Supply: fulfillment scorecard + supplier scatter", "Financial: resolution-time distribution + state breakdown", "Customer: cohort retention matrix + LTV scatter", "Enhanced multi-tab drill-down dialog + expandable rows"] }
           ],
-          deliverables: ["Project 1 fully live", "90s Loom published", "Case study page on portfolio-site", "Automation working for future projects", "Portfolio card + resume bullet added"]
+          deliverables: ["All 6 dashboards have unique per-domain layouts", "Theme toggle live across portfolio apps", "Visual-fidelity PDF export", "Polished copy with no dashes or company-specific terms"]
+        },
+        {
+          phase: 1,
+          week: 5,
+          name: "Week 5 — Wireframe Reframe + Loom + Case Study + Automation",
+          goal: "Reframe wireframe mode as dataset-driven, then ship Loom + case study + automation",
+          days: [
+            { num: "W5.D1", weekday: "Mon", name: "6 new wireframe-mode datasets", tasks: ["Manufacturing — production-line throughput", "Real estate — brokerage pipeline", "Healthcare — clinic operations", "Education — course enrollment + retention", "SaaS Subscription Analytics — MRR/churn/expansion", "Logistics — fleet utilization", "Author 30-50 row JSON each + add to fixtures index"] },
+            { num: "W5.D2", weekday: "Tue", name: "6 new profiling fixtures", tasks: ["Hand-curate ~3KB profiling fixture per new dataset", "Reference real columns + observed patterns", "AI narrative voice consistent (no dashes)", "Each fixture recommends KPIs + chart layouts the wireframe engine will materialize"] },
+            { num: "W5.D3", weekday: "Wed", name: "Data-driven wireframe template engine", tasks: ["Refactor wireframe rendering to be schema-driven", "One engine renders any dataset's structure", "Replace 3 hardcoded templates with the engine", "Old aesthetic preserved as one of 3 layout density modes"] },
+            { num: "W5.D4", weekday: "Thu", name: "Export-to-Figma demo + final QA", tasks: ["Add Export to Figma CTA on each generated wireframe", "Click → Future-state page (Figma MCP + Claude integration story)", "Honest framing of manual-Figma reality", "Final cross-mode QA (ad-hoc + wireframe parallel structure)"] },
+            { num: "W5.D5", weekday: "Fri", name: "Loom Video", tasks: ["Write 90s script: problem → gallery → profiling → dashboard → PDF → outro", "Record on clean browser at 1440px (light + dark mode toggle visible)", "Edit: trim, captions, end card", "Upload YouTube unlisted + copy embed URL", "Update portfolio.meta.json with loomUrl"] },
+            { num: "W5.D6", weekday: "Sat", name: "Case Study Page", tasks: ["Create docs/case-studies/dashboard-factory.mdx", "Sections: hero, problem, approach, architecture (Production vs Demo), tech stack, impact", "Loom embed + live link + GitHub link", "Mermaid architecture diagrams"] },
+            { num: "W5.D7", weekday: "Sun", name: "Automation Infrastructure", tasks: ["Push rishigundla/resume-builder to GitHub", "Generate GitHub PAT with repo scope", "Add PORTFOLIO_SYNC_PAT secret", "Build scripts/sync-deployed.ts", "Build .github/workflows/sync-portfolio.yml", "Dry-run sync locally"] }
+          ],
+          deliverables: ["6 new wireframe-mode datasets (different verticals from ad-hoc mode)", "Data-driven wireframe engine replacing hardcoded templates", "Loom video published", "Case study page in docs/", "Automation scripts ready"]
+        },
+        {
+          phase: 1,
+          week: 6,
+          name: "Week 6 — Phase 1 Close",
+          goal: "Run automation live, fix any bugs, tag Phase 1 complete",
+          days: [
+            { num: "W6.D1", weekday: "Mon", name: "Live Automation Run", tasks: ["Trigger sync-portfolio workflow manually", "Verify PR opens on portfolio-site with new project card", "Verify PR opens on resume-builder with new bullet", "Review and merge both PRs", "Portfolio-site auto-redeploys", "Regenerate resume PDF via existing ATS optimizer workflow"] },
+            { num: "W6.D2", weekday: "Tue", name: "Phase 1 Wrap", tasks: ["Buffer day — fix any bugs found post-deploy", "Update master plan with Phase 1 lessons (including fixture-promise audit step for future projects)", "Tag Phase 1 complete", "Review Phase 2 (Project 2 Narrative Generator) plan"] }
+          ],
+          deliverables: ["Project 1 fully live + automated", "Phase 1 tagged complete", "Resume + portfolio-site updated with new card and bullet"]
         },
 
         // ========== PHASE 2 — PROJECT 2 ==========
         {
           phase: 2,
-          week: 5,
-          name: "Week 5 — Project 2 Core Build",
+          week: 7,
+          name: "Week 7 — Project 2 Core Build",
           goal: "User picks sample dashboard → streaming narrative → downloads PPTX",
           days: [
-            { num: "W5.D1", weekday: "Mon", name: "App Scaffold", tasks: ["Create apps/narrative-generator/ Next.js 16", "Install design-system + ai-core", "Landing page with Browse sample dashboards CTA"] },
-            { num: "W5.D2", weekday: "Tue", name: "Sample Dashboard Fixtures", tasks: ["Create fixtures/narrative-generator/ directory", "Build acv-grr-weekly.json", "Build marketing-weekly.json", "Build balanced-scorecard.json (flagship)", "Build cx-okr-quarterly.json", "Include PDF preview image + KPIs per fixture"] },
-            { num: "W5.D3", weekday: "Wed", name: "Gallery + PDF Preview", tasks: ["Gallery grid with 4 dashboard cards", "Click → /generate/[slug]", "Left panel: PDF preview via pdfjs-dist", "Right panel: narrative placeholder"] },
-            { num: "W5.D4", weekday: "Thu", name: "Generate Narrative Fixtures", tasks: ["Use Claude Code to generate narrative JSON per dashboard", "Each: exec summary, per-KPI narratives, risks, opportunities, talking points", "Save to fixtures/narrative-generator/{slug}/narrative.json"] },
-            { num: "W5.D5", weekday: "Fri", name: "Streaming Narrative Panel", tasks: ["Build right-panel streaming display", "Wire ai-core replay to stream narrative", "Progress indicators: Parsing → Extracting → Generating → Talking Points"] },
-            { num: "W5.D6", weekday: "Sat", name: "Slide Deck Generation", tasks: ["Install pptxgenjs", "Write slide template matching design system", "Pre-generate PPTX for each dashboard", "Upload to Vercel Blob"] },
-            { num: "W5.D7", weekday: "Sun", name: "Download Flow", tasks: ["Download Deck button fetches from Vercel Blob", "Thumbnail preview of deck", "Simulated delivery UI: Email, Slack, Drive"] }
+            { num: "W7.D1", weekday: "Mon", name: "App Scaffold", tasks: ["Create apps/narrative-generator/ Next.js 16", "Install design-system + ai-core", "Landing page with Browse sample dashboards CTA"] },
+            { num: "W7.D2", weekday: "Tue", name: "Sample Dashboard Fixtures", tasks: ["Create fixtures/narrative-generator/ directory", "Build acv-grr-weekly.json", "Build marketing-weekly.json", "Build balanced-scorecard.json (flagship)", "Build cx-okr-quarterly.json", "Include PDF preview image + KPIs per fixture"] },
+            { num: "W7.D3", weekday: "Wed", name: "Gallery + PDF Preview", tasks: ["Gallery grid with 4 dashboard cards", "Click → /generate/[slug]", "Left panel: PDF preview via pdfjs-dist", "Right panel: narrative placeholder"] },
+            { num: "W7.D4", weekday: "Thu", name: "Generate Narrative Fixtures", tasks: ["Use Claude Code to generate narrative JSON per dashboard", "Each: exec summary, per-KPI narratives, risks, opportunities, talking points", "Save to fixtures/narrative-generator/{slug}/narrative.json"] },
+            { num: "W7.D5", weekday: "Fri", name: "Streaming Narrative Panel", tasks: ["Build right-panel streaming display", "Wire ai-core replay to stream narrative", "Progress indicators: Parsing → Extracting → Generating → Talking Points"] },
+            { num: "W7.D6", weekday: "Sat", name: "Slide Deck Generation", tasks: ["Install pptxgenjs", "Write slide template matching design system", "Pre-generate PPTX for each dashboard", "Upload to Vercel Blob"] },
+            { num: "W7.D7", weekday: "Sun", name: "Download Flow", tasks: ["Download Deck button fetches from Vercel Blob", "Thumbnail preview of deck", "Simulated delivery UI: Email, Slack, Drive"] }
           ],
           deliverables: ["Gallery + streaming narrative for all 4 dashboards", "Pre-generated PPTX in Vercel Blob", "Download flow working"]
         },
         {
           phase: 2,
-          week: 6,
-          name: "Week 6 — Project 2 Polish + Deploy",
+          week: 8,
+          name: "Week 8 — Project 2 Polish + Deploy",
           goal: "Project 2 live, automation fires for Project 2",
           days: [
-            { num: "W6.D1", weekday: "Mon", name: "Delivery Simulation", tasks: ["Mock Send to Slack success toast", "Mock Email delivery", "Mock Save to Drive"] },
-            { num: "W6.D2", weekday: "Tue", name: "States + Error Handling", tasks: ["Skeleton loaders for PDF preview", "Error boundary for PDF failures", "Toast notifications"] },
-            { num: "W6.D3", weekday: "Wed", name: "Responsive Polish", tasks: ["Test all breakpoints", "Mobile: collapse PDF below narrative", "Fix layout bugs"] },
-            { num: "W6.D4", weekday: "Thu", name: "Lighthouse + SEO", tasks: ["90+ Lighthouse audit", "Meta tags + Open Graph", "Social preview image"] },
-            { num: "W6.D5", weekday: "Fri", name: "Deploy + Loom", tasks: ["Vercel production deploy", "Author portfolio.meta.json", "Record 90s Loom"] },
-            { num: "W6.D6", weekday: "Sat", name: "Case Study + Automation", tasks: ["Write case study MDX", "Commit portfolio.meta.json with deployedAt → triggers automation", "Review + merge PRs"] },
-            { num: "W6.D7", weekday: "Sun", name: "Phase 2 Wrap", tasks: ["Buffer day", "Lessons learned", "Prep Phase 3"] }
+            { num: "W8.D1", weekday: "Mon", name: "Delivery Simulation", tasks: ["Mock Send to Slack success toast", "Mock Email delivery", "Mock Save to Drive"] },
+            { num: "W8.D2", weekday: "Tue", name: "States + Error Handling", tasks: ["Skeleton loaders for PDF preview", "Error boundary for PDF failures", "Toast notifications"] },
+            { num: "W8.D3", weekday: "Wed", name: "Responsive Polish", tasks: ["Test all breakpoints", "Mobile: collapse PDF below narrative", "Fix layout bugs"] },
+            { num: "W8.D4", weekday: "Thu", name: "Lighthouse + SEO", tasks: ["90+ Lighthouse audit", "Meta tags + Open Graph", "Social preview image"] },
+            { num: "W8.D5", weekday: "Fri", name: "Deploy + Loom", tasks: ["Vercel production deploy", "Author portfolio.meta.json", "Record 90s Loom"] },
+            { num: "W8.D6", weekday: "Sat", name: "Case Study + Automation", tasks: ["Write case study MDX", "Commit portfolio.meta.json with deployedAt → triggers automation", "Review + merge PRs"] },
+            { num: "W8.D7", weekday: "Sun", name: "Phase 2 Wrap", tasks: ["Buffer day", "Lessons learned", "Prep Phase 3"] }
           ],
           deliverables: ["Project 2 live", "Loom + case study published", "Portfolio + resume updated"]
         },
@@ -1923,33 +1950,33 @@
         // ========== PHASE 3 — PROJECT 4 ==========
         {
           phase: 3,
-          week: 7,
-          name: "Week 7 — Project 4 Core Build",
+          week: 9,
+          name: "Week 9 — Project 4 Core Build",
           goal: "User picks synthetic sprint → KPIs + streaming meeting brief",
           days: [
-            { num: "W7.D1", weekday: "Mon", name: "App Scaffold + Sprint Data", tasks: ["Create apps/sprint-intelligence/", "Author 4 synthetic sprint JSONs", "Each: 20-30 tickets, status history, 8 engineers"] },
-            { num: "W7.D2", weekday: "Tue", name: "Sprint Selector + Shell", tasks: ["Dropdown to select sprint (42/43/44/45)", "Dashboard shell: brief panel (top), KPIs (middle), tabs (bottom)"] },
-            { num: "W7.D3", weekday: "Wed", name: "Team-Level KPIs", tasks: ["Sprint Burndown chart", "Velocity vs 4-sprint baseline", "Status Distribution donut", "Blocked Tickets count + aging"] },
-            { num: "W7.D4", weekday: "Thu", name: "More KPIs + Trends", tasks: ["Cycle Time trend line", "Throughput per week", "Scope Creep tracker", "Carryover Rate"] },
-            { num: "W7.D5", weekday: "Fri", name: "Individual Deep-Dive Tabs", tasks: ["Tab per engineer", "Workload Score (weighted priority)", "Completion Rate", "Personal vs team cycle time", "Review bottleneck"] },
-            { num: "W7.D6", weekday: "Sat", name: "Generate Meeting Brief Fixtures", tasks: ["Use Claude Code to generate brief per sprint", "Each: exec summary, highlights, watch list, recommendations, talking points"] },
-            { num: "W7.D7", weekday: "Sun", name: "Streaming Brief Panel", tasks: ["Top panel streams brief on sprint load", "Regenerate button to replay streaming"] }
+            { num: "W9.D1", weekday: "Mon", name: "App Scaffold + Sprint Data", tasks: ["Create apps/sprint-intelligence/", "Author 4 synthetic sprint JSONs", "Each: 20-30 tickets, status history, 8 engineers"] },
+            { num: "W9.D2", weekday: "Tue", name: "Sprint Selector + Shell", tasks: ["Dropdown to select sprint (42/43/44/45)", "Dashboard shell: brief panel (top), KPIs (middle), tabs (bottom)"] },
+            { num: "W9.D3", weekday: "Wed", name: "Team-Level KPIs", tasks: ["Sprint Burndown chart", "Velocity vs 4-sprint baseline", "Status Distribution donut", "Blocked Tickets count + aging"] },
+            { num: "W9.D4", weekday: "Thu", name: "More KPIs + Trends", tasks: ["Cycle Time trend line", "Throughput per week", "Scope Creep tracker", "Carryover Rate"] },
+            { num: "W9.D5", weekday: "Fri", name: "Individual Deep-Dive Tabs", tasks: ["Tab per engineer", "Workload Score (weighted priority)", "Completion Rate", "Personal vs team cycle time", "Review bottleneck"] },
+            { num: "W9.D6", weekday: "Sat", name: "Generate Meeting Brief Fixtures", tasks: ["Use Claude Code to generate brief per sprint", "Each: exec summary, highlights, watch list, recommendations, talking points"] },
+            { num: "W9.D7", weekday: "Sun", name: "Streaming Brief Panel", tasks: ["Top panel streams brief on sprint load", "Regenerate button to replay streaming"] }
           ],
           deliverables: ["4 sprints with full KPI breakdowns + AI briefs"]
         },
         {
           phase: 3,
-          week: 8,
-          name: "Week 8 — Project 4 Polish + Deploy",
+          week: 10,
+          name: "Week 10 — Project 4 Polish + Deploy",
           goal: "Project 4 live, automation fires",
           days: [
-            { num: "W8.D1", weekday: "Mon", name: "Interactions + Drill-Downs", tasks: ["Click engineer name → filter to that person", "Click blocker → show blocker history"] },
-            { num: "W8.D2", weekday: "Tue", name: "Responsive Polish", tasks: ["Breakpoint testing", "Mobile: collapse deep-dive tabs to accordion"] },
-            { num: "W8.D3", weekday: "Wed", name: "States + Errors", tasks: ["Skeleton states", "Error boundaries"] },
-            { num: "W8.D4", weekday: "Thu", name: "Lighthouse + SEO", tasks: ["90+ audit"] },
-            { num: "W8.D5", weekday: "Fri", name: "Deploy + Loom", tasks: ["Vercel production deploy", "portfolio.meta.json", "Record 90s Loom"] },
-            { num: "W8.D6", weekday: "Sat", name: "Case Study + Automation", tasks: ["Write case study MDX", "Trigger automation, merge PRs"] },
-            { num: "W8.D7", weekday: "Sun", name: "Phase 3 Wrap", tasks: ["Buffer", "Lessons learned", "Prep Phase 4"] }
+            { num: "W10.D1", weekday: "Mon", name: "Interactions + Drill-Downs", tasks: ["Click engineer name → filter to that person", "Click blocker → show blocker history"] },
+            { num: "W10.D2", weekday: "Tue", name: "Responsive Polish", tasks: ["Breakpoint testing", "Mobile: collapse deep-dive tabs to accordion"] },
+            { num: "W10.D3", weekday: "Wed", name: "States + Errors", tasks: ["Skeleton states", "Error boundaries"] },
+            { num: "W10.D4", weekday: "Thu", name: "Lighthouse + SEO", tasks: ["90+ audit"] },
+            { num: "W10.D5", weekday: "Fri", name: "Deploy + Loom", tasks: ["Vercel production deploy", "portfolio.meta.json", "Record 90s Loom"] },
+            { num: "W10.D6", weekday: "Sat", name: "Case Study + Automation", tasks: ["Write case study MDX", "Trigger automation, merge PRs"] },
+            { num: "W10.D7", weekday: "Sun", name: "Phase 3 Wrap", tasks: ["Buffer", "Lessons learned", "Prep Phase 4"] }
           ],
           deliverables: ["Project 4 live", "Loom + case study", "Automation fires"]
         },
@@ -1957,49 +1984,49 @@
         // ========== PHASE 4 — PROJECT 3 ==========
         {
           phase: 4,
-          week: 9,
-          name: "Week 9 — Project 3 Core Build",
+          week: 11,
+          name: "Week 11 — Project 3 Core Build",
           goal: "Synthetic historical data + anomaly gallery + streaming RCA",
           days: [
-            { num: "W9.D1", weekday: "Mon", name: "App Scaffold + Historical Data", tasks: ["Create apps/anomaly-alerting/", "Author NAI Pulse historical data", "Author NC2 Pulse data", "Author NCI Pulse data", "Author RevOps historical data", "Author CX historical data"] },
-            { num: "W9.D2", weekday: "Tue", name: "Dashboard with Time-Series", tasks: ["Dashboard route with time-series per KPI", "30-day rolling mean bands overlaid", "Date range selector"] },
-            { num: "W9.D3", weekday: "Wed", name: "Anomaly Scenario Gallery", tasks: ["Gallery with 6-8 curated anomalies", "Each card: metric, deviation, Z-score, domain", "Click → /scenario/[slug]"] },
-            { num: "W9.D4", weekday: "Thu", name: "Baseline Visualization", tasks: ["Expected vs actual chart per anomaly", "Highlight deviation point", "Related-metric time-series alongside"] },
-            { num: "W9.D5", weekday: "Fri", name: "Generate RCA Fixtures", tasks: ["Use Claude Code per scenario", "Each: hypothesis, correlation, confidence, action"] },
-            { num: "W9.D6", weekday: "Sat", name: "Streaming RCA Display", tasks: ["Right panel streams RCA", "Confidence badge (high/medium/low)", "Suggested Action card"] },
-            { num: "W9.D7", weekday: "Sun", name: "Alert List + Severity", tasks: ["Sidebar with recent alerts", "SEV1/SEV2/SEV3 routing", "Timestamp + ack state"] }
+            { num: "W11.D1", weekday: "Mon", name: "App Scaffold + Historical Data", tasks: ["Create apps/anomaly-alerting/", "Author NAI Pulse historical data", "Author NC2 Pulse data", "Author NCI Pulse data", "Author RevOps historical data", "Author CX historical data"] },
+            { num: "W11.D2", weekday: "Tue", name: "Dashboard with Time-Series", tasks: ["Dashboard route with time-series per KPI", "30-day rolling mean bands overlaid", "Date range selector"] },
+            { num: "W11.D3", weekday: "Wed", name: "Anomaly Scenario Gallery", tasks: ["Gallery with 6-8 curated anomalies", "Each card: metric, deviation, Z-score, domain", "Click → /scenario/[slug]"] },
+            { num: "W11.D4", weekday: "Thu", name: "Baseline Visualization", tasks: ["Expected vs actual chart per anomaly", "Highlight deviation point", "Related-metric time-series alongside"] },
+            { num: "W11.D5", weekday: "Fri", name: "Generate RCA Fixtures", tasks: ["Use Claude Code per scenario", "Each: hypothesis, correlation, confidence, action"] },
+            { num: "W11.D6", weekday: "Sat", name: "Streaming RCA Display", tasks: ["Right panel streams RCA", "Confidence badge (high/medium/low)", "Suggested Action card"] },
+            { num: "W11.D7", weekday: "Sun", name: "Alert List + Severity", tasks: ["Sidebar with recent alerts", "SEV1/SEV2/SEV3 routing", "Timestamp + ack state"] }
           ],
           deliverables: ["Historical dashboard + 6-8 working scenarios"]
         },
         {
           phase: 4,
-          week: 10,
-          name: "Week 10 — Project 3 Expanded Features",
+          week: 12,
+          name: "Week 12 — Project 3 Expanded Features",
           goal: "Richer visualizations + simulated infrastructure views",
           days: [
-            { num: "W10.D1", weekday: "Mon", name: "Confidence Score UI", tasks: ["Visual gauge 0-100%", "Breakdown: how calculated", "Risk-tolerance slider"] },
-            { num: "W10.D2", weekday: "Tue", name: "Recommended Action Flow", tasks: ["Run Playbook button", "Mock action execution", "Action history log"] },
-            { num: "W10.D3", weekday: "Wed", name: "Historical Archive", tasks: ["Table of past anomalies with status", "Filter by category, severity, date"] },
-            { num: "W10.D4", weekday: "Thu", name: "Simulated Deployment Log", tasks: ["Mock deployments timeline", "Correlation between deploys and anomalies"] },
-            { num: "W10.D5", weekday: "Fri", name: "MLflow-Style Trace View", tasks: ["Per-RCA trace: inputs → reasoning → output", "Simulated MLflow aesthetic"] },
-            { num: "W10.D6", weekday: "Sat", name: "Architecture Diagrams", tasks: ["Production Mermaid (Databricks + UC + MLflow)", "Demo Mermaid (Vercel + JSON)"] },
-            { num: "W10.D7", weekday: "Sun", name: "Mobile Responsive", tasks: ["Breakpoint polish"] }
+            { num: "W12.D1", weekday: "Mon", name: "Confidence Score UI", tasks: ["Visual gauge 0-100%", "Breakdown: how calculated", "Risk-tolerance slider"] },
+            { num: "W12.D2", weekday: "Tue", name: "Recommended Action Flow", tasks: ["Run Playbook button", "Mock action execution", "Action history log"] },
+            { num: "W12.D3", weekday: "Wed", name: "Historical Archive", tasks: ["Table of past anomalies with status", "Filter by category, severity, date"] },
+            { num: "W12.D4", weekday: "Thu", name: "Simulated Deployment Log", tasks: ["Mock deployments timeline", "Correlation between deploys and anomalies"] },
+            { num: "W12.D5", weekday: "Fri", name: "MLflow-Style Trace View", tasks: ["Per-RCA trace: inputs → reasoning → output", "Simulated MLflow aesthetic"] },
+            { num: "W12.D6", weekday: "Sat", name: "Architecture Diagrams", tasks: ["Production Mermaid (Databricks + UC + MLflow)", "Demo Mermaid (Vercel + JSON)"] },
+            { num: "W12.D7", weekday: "Sun", name: "Mobile Responsive", tasks: ["Breakpoint polish"] }
           ],
           deliverables: ["Rich anomaly exploration UX", "All simulated infrastructure views"]
         },
         {
           phase: 4,
-          week: 11,
-          name: "Week 11 — Project 3 Polish + Deploy",
+          week: 13,
+          name: "Week 13 — Project 3 Polish + Deploy",
           goal: "Project 3 live, automation fires",
           days: [
-            { num: "W11.D1", weekday: "Mon", name: "Lighthouse + SEO", tasks: ["90+ audit", "Meta tags"] },
-            { num: "W11.D2", weekday: "Tue", name: "Deploy", tasks: ["Vercel production", "portfolio.meta.json"] },
-            { num: "W11.D3", weekday: "Wed", name: "Loom", tasks: ["Record 90s video"] },
-            { num: "W11.D4", weekday: "Thu", name: "Case Study", tasks: ["MDX with both architecture diagrams"] },
-            { num: "W11.D5", weekday: "Fri", name: "Automation Sync", tasks: ["Trigger workflow", "Review + merge PRs"] },
-            { num: "W11.D6", weekday: "Sat", name: "Documentation", tasks: ["App README", "Add to monorepo README"] },
-            { num: "W11.D7", weekday: "Sun", name: "Phase 4 Wrap", tasks: ["Buffer", "Lessons", "Prep Phase 5"] }
+            { num: "W13.D1", weekday: "Mon", name: "Lighthouse + SEO", tasks: ["90+ audit", "Meta tags"] },
+            { num: "W13.D2", weekday: "Tue", name: "Deploy", tasks: ["Vercel production", "portfolio.meta.json"] },
+            { num: "W13.D3", weekday: "Wed", name: "Loom", tasks: ["Record 90s video"] },
+            { num: "W13.D4", weekday: "Thu", name: "Case Study", tasks: ["MDX with both architecture diagrams"] },
+            { num: "W13.D5", weekday: "Fri", name: "Automation Sync", tasks: ["Trigger workflow", "Review + merge PRs"] },
+            { num: "W13.D6", weekday: "Sat", name: "Documentation", tasks: ["App README", "Add to monorepo README"] },
+            { num: "W13.D7", weekday: "Sun", name: "Phase 4 Wrap", tasks: ["Buffer", "Lessons", "Prep Phase 5"] }
           ],
           deliverables: ["Project 3 live", "Loom + case study", "Automation fires"]
         },
@@ -2007,49 +2034,49 @@
         // ========== PHASE 5 — PROJECT 5 ==========
         {
           phase: 5,
-          week: 12,
-          name: "Week 12 — Project 5 Core Build",
+          week: 14,
+          name: "Week 14 — Project 5 Core Build",
           goal: "Failure gallery + streaming diagnosis + PySpark patch display",
           days: [
-            { num: "W12.D1", weekday: "Mon", name: "App Scaffold + Scenarios", tasks: ["Create apps/pipeline-healer/", "SCHEMA_DRIFT (Informatica rename — Q14)", "NULL_EXPLOSION", "DATA_SKEW (partition imbalance — Q17)", "TYPE_MISMATCH", "RESOURCE_LIMIT (OOM)", "LOGIC_ERROR", "DEPENDENCY_FAIL", "FILE_CORRUPT"] },
-            { num: "W12.D2", weekday: "Tue", name: "Scenario Gallery", tasks: ["Gallery with 8 scenario cards", "Card shows category, pipeline, timestamp, severity", "Click → /scenario/[slug]"] },
-            { num: "W12.D3", weekday: "Wed", name: "Failure Detail View", tasks: ["Mock Spark driver logs (highlighted)", "Failing notebook code snippet", "Run history last 10 runs"] },
-            { num: "W12.D4", weekday: "Thu", name: "Schema Diff Viz", tasks: ["Visual diff of schema (today vs last successful)", "Added/removed/renamed/type-changed highlighted"] },
-            { num: "W12.D5", weekday: "Fri", name: "Generate Diagnosis Fixtures", tasks: ["Use Claude Code per scenario", "Each: root cause, PySpark patch, confidence, risk"] },
-            { num: "W12.D6", weekday: "Sat", name: "Streaming Diagnosis Panel", tasks: ["Stream diagnosis text", "Category badge", "Confidence score display"] },
-            { num: "W12.D7", weekday: "Sun", name: "PySpark Patch Display", tasks: ["Syntax-highlighted code with Shiki", "Before/after diff view", "Copy to clipboard"] }
+            { num: "W14.D1", weekday: "Mon", name: "App Scaffold + Scenarios", tasks: ["Create apps/pipeline-healer/", "SCHEMA_DRIFT (Informatica rename — Q14)", "NULL_EXPLOSION", "DATA_SKEW (partition imbalance — Q17)", "TYPE_MISMATCH", "RESOURCE_LIMIT (OOM)", "LOGIC_ERROR", "DEPENDENCY_FAIL", "FILE_CORRUPT"] },
+            { num: "W14.D2", weekday: "Tue", name: "Scenario Gallery", tasks: ["Gallery with 8 scenario cards", "Card shows category, pipeline, timestamp, severity", "Click → /scenario/[slug]"] },
+            { num: "W14.D3", weekday: "Wed", name: "Failure Detail View", tasks: ["Mock Spark driver logs (highlighted)", "Failing notebook code snippet", "Run history last 10 runs"] },
+            { num: "W14.D4", weekday: "Thu", name: "Schema Diff Viz", tasks: ["Visual diff of schema (today vs last successful)", "Added/removed/renamed/type-changed highlighted"] },
+            { num: "W14.D5", weekday: "Fri", name: "Generate Diagnosis Fixtures", tasks: ["Use Claude Code per scenario", "Each: root cause, PySpark patch, confidence, risk"] },
+            { num: "W14.D6", weekday: "Sat", name: "Streaming Diagnosis Panel", tasks: ["Stream diagnosis text", "Category badge", "Confidence score display"] },
+            { num: "W14.D7", weekday: "Sun", name: "PySpark Patch Display", tasks: ["Syntax-highlighted code with Shiki", "Before/after diff view", "Copy to clipboard"] }
           ],
           deliverables: ["8 scenarios with full diagnosis + patch flows"]
         },
         {
           phase: 5,
-          week: 13,
-          name: "Week 13 — Project 5 Interactive Demo Features",
+          week: 15,
+          name: "Week 15 — Project 5 Interactive Demo Features",
           goal: "Simulated approval flow + historical dashboards",
           days: [
-            { num: "W13.D1", weekday: "Mon", name: "Sample Validation UI", tasks: ["Run Sample Test button simulates 100-row patch", "Progress indicator", "Success/failure result"] },
-            { num: "W13.D2", weekday: "Tue", name: "Mock Slack Approval", tasks: ["Slack-styled message preview", "Approve / Reject / Escalate buttons", "Simulated response"] },
-            { num: "W13.D3", weekday: "Wed", name: "Incident History Timeline", tasks: ["Table of past incidents", "Filter by category, pipeline, auto-healed", "Click to view details"] },
-            { num: "W13.D4", weekday: "Thu", name: "MTTR Trend Chart", tasks: ["Weekly MTTR line chart", "Auto-heal rate % over time", "Manual vs auto resolution comparison"] },
-            { num: "W13.D5", weekday: "Fri", name: "Architecture Diagrams", tasks: ["Production Mermaid (Databricks Agent Bricks + MLflow)", "Demo Mermaid (Vercel + JSON)"] },
-            { num: "W13.D6", weekday: "Sat", name: "Per-Category Breakdown", tasks: ["Dashboard tab with category frequency", "Most common root causes per pipeline"] },
-            { num: "W13.D7", weekday: "Sun", name: "Mobile Responsive", tasks: ["Breakpoint polish"] }
+            { num: "W15.D1", weekday: "Mon", name: "Sample Validation UI", tasks: ["Run Sample Test button simulates 100-row patch", "Progress indicator", "Success/failure result"] },
+            { num: "W15.D2", weekday: "Tue", name: "Mock Slack Approval", tasks: ["Slack-styled message preview", "Approve / Reject / Escalate buttons", "Simulated response"] },
+            { num: "W15.D3", weekday: "Wed", name: "Incident History Timeline", tasks: ["Table of past incidents", "Filter by category, pipeline, auto-healed", "Click to view details"] },
+            { num: "W15.D4", weekday: "Thu", name: "MTTR Trend Chart", tasks: ["Weekly MTTR line chart", "Auto-heal rate % over time", "Manual vs auto resolution comparison"] },
+            { num: "W15.D5", weekday: "Fri", name: "Architecture Diagrams", tasks: ["Production Mermaid (Databricks Agent Bricks + MLflow)", "Demo Mermaid (Vercel + JSON)"] },
+            { num: "W15.D6", weekday: "Sat", name: "Per-Category Breakdown", tasks: ["Dashboard tab with category frequency", "Most common root causes per pipeline"] },
+            { num: "W15.D7", weekday: "Sun", name: "Mobile Responsive", tasks: ["Breakpoint polish"] }
           ],
           deliverables: ["Complete interactive demo experience", "All simulated infrastructure views"]
         },
         {
           phase: 5,
-          week: 14,
-          name: "Week 14 — Project 5 Polish + Portfolio Wrap",
+          week: 16,
+          name: "Week 16 — Project 5 Polish + Portfolio Wrap",
           goal: "Project 5 live, all 5 projects polished, final portfolio review",
           days: [
-            { num: "W14.D1", weekday: "Mon", name: "Lighthouse + SEO", tasks: ["90+ audit"] },
-            { num: "W14.D2", weekday: "Tue", name: "Deploy", tasks: ["Vercel production", "portfolio.meta.json"] },
-            { num: "W14.D3", weekday: "Wed", name: "Loom", tasks: ["Record 90s video"] },
-            { num: "W14.D4", weekday: "Thu", name: "Case Study + Automation", tasks: ["MDX", "Trigger sync, merge PRs"] },
-            { num: "W14.D5", weekday: "Fri", name: "Final Portfolio Review", tasks: ["Click-test all 5 deployed apps", "Verify all cards on portfolio-site", "Verify resume PDF reflects 5 projects"] },
-            { num: "W14.D6", weekday: "Sat", name: "Monorepo Documentation", tasks: ["Update root README — all 5 live", "Portfolio overview video (optional 3-min tour)", "LinkedIn post draft"] },
-            { num: "W14.D7", weekday: "Sun", name: "Retrospective", tasks: ["Lessons learned document", "Plan next chapter (blog posts, talks)", "Tag Phase 5 complete — portfolio shipped"] }
+            { num: "W16.D1", weekday: "Mon", name: "Lighthouse + SEO", tasks: ["90+ audit"] },
+            { num: "W16.D2", weekday: "Tue", name: "Deploy", tasks: ["Vercel production", "portfolio.meta.json"] },
+            { num: "W16.D3", weekday: "Wed", name: "Loom", tasks: ["Record 90s video"] },
+            { num: "W16.D4", weekday: "Thu", name: "Case Study + Automation", tasks: ["MDX", "Trigger sync, merge PRs"] },
+            { num: "W16.D5", weekday: "Fri", name: "Final Portfolio Review", tasks: ["Click-test all 5 deployed apps", "Verify all cards on portfolio-site", "Verify resume PDF reflects 5 projects"] },
+            { num: "W16.D6", weekday: "Sat", name: "Monorepo Documentation", tasks: ["Update root README — all 5 live", "Portfolio overview video (optional 3-min tour)", "LinkedIn post draft"] },
+            { num: "W16.D7", weekday: "Sun", name: "Retrospective", tasks: ["Lessons learned document", "Plan next chapter (blog posts, talks)", "Tag Phase 5 complete — portfolio shipped"] }
           ],
           deliverables: ["All 5 AI projects live on Vercel", "Portfolio-site has 5 new cards", "Resume has new Personal Projects category", "Monorepo publicly showcases the whole system"]
         }
@@ -2184,7 +2211,7 @@
       const { totals, currentDay } = computeProgress();
       const s = planData.currentStatus;
       const phaseDisplay = s.phase || (currentDay ? planData.phases[currentDay.phase].name : "All phases complete");
-      const weekDisplay = s.week || (currentDay ? `Week ${currentDay.week} of 14` : "All weeks complete");
+      const weekDisplay = s.week || (currentDay ? `Week ${currentDay.week} of 16` : "All weeks complete");
       const dayDisplay = s.day || (currentDay ? `${currentDay.day} — ${currentDay.dayName}` : "—");
       const progressDone = (s.progress && s.progress.done != null) ? s.progress.done : totals.done;
       const progressTotal = (s.progress && s.progress.total != null) ? s.progress.total : totals.total;
