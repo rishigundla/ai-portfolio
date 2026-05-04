@@ -12,23 +12,36 @@
 
 import type { ColumnSchema } from './full-datasets'
 
-export type DateRangeKey = 'all' | 'recent-30' | 'recent-90'
+export type DateRangeKey = 'all' | 'recent-30' | 'recent-90' | 'custom'
 
 export interface DashboardFilters {
   /** Free-text search across id + dimension columns. Empty string = no filter. */
   search: string
   /** Active dimension column name being filtered, or null. */
   segmentKey: string | null
-  /** Selected dimension value, or 'all'. */
-  segmentValue: string
-  /** Date range relative to the dataset's max date, or 'all'. */
+  /**
+   * Selected dimension values. Empty array = no filter (matches all rows).
+   * Single value = same as the prior single-select behavior.
+   * Multiple values = OR'd union (row matches if its dim value is in the array).
+   */
+  segmentValues: string[]
+  /**
+   * Date range mode.
+   *  - 'all': no date filter
+   *  - 'recent-30' / 'recent-90': last N days of data, anchored to dataset max date
+   *  - 'custom': use dateStart + dateEnd (ISO YYYY-MM-DD) for an arbitrary window
+   */
   dateRange: DateRangeKey
+  /** ISO YYYY-MM-DD; only honored when dateRange === 'custom'. */
+  dateStart?: string
+  /** ISO YYYY-MM-DD; only honored when dateRange === 'custom'. */
+  dateEnd?: string
 }
 
 export const EMPTY_FILTERS: DashboardFilters = {
   search: '',
   segmentKey: null,
-  segmentValue: 'all',
+  segmentValues: [],
   dateRange: 'all',
 }
 
@@ -52,25 +65,43 @@ export function applyFilters(
 ): Record<string, unknown>[] {
   let result = rows
 
-  // Segment filter
-  if (filters.segmentKey && filters.segmentValue !== 'all') {
-    result = result.filter((row) => row[filters.segmentKey!] === filters.segmentValue)
+  // Segment filter — empty array = match all
+  if (filters.segmentKey && filters.segmentValues.length > 0) {
+    const allowed = new Set(filters.segmentValues)
+    result = result.filter((row) => allowed.has(String(row[filters.segmentKey!])))
   }
 
-  // Date range filter (relative to dataset max date)
+  // Date range filter
   if (filters.dateRange !== 'all') {
     const timeCol = schema.find((c) => c.type === 'time')
     if (timeCol) {
-      const maxDate = computeMaxDate(rows, timeCol)
-      if (maxDate) {
-        const days = filters.dateRange === 'recent-30' ? 30 : 90
-        const cutoff = new Date(maxDate.getTime() - days * 24 * 60 * 60 * 1000)
+      if (filters.dateRange === 'custom') {
+        // Honor explicit start/end dates (ISO). Either may be absent — open
+        // intervals are useful ("from Jan 1" with no end, "before Mar 31"
+        // with no start).
+        const start = filters.dateStart ? new Date(filters.dateStart) : null
+        const end = filters.dateEnd ? new Date(filters.dateEnd) : null
         result = result.filter((row) => {
           const dateStr = row[timeCol.name]
           if (typeof dateStr !== 'string') return false
           const date = new Date(dateStr)
-          return !Number.isNaN(date.getTime()) && date >= cutoff
+          if (Number.isNaN(date.getTime())) return false
+          if (start && date < start) return false
+          if (end && date > end) return false
+          return true
         })
+      } else {
+        const maxDate = computeMaxDate(rows, timeCol)
+        if (maxDate) {
+          const days = filters.dateRange === 'recent-30' ? 30 : 90
+          const cutoff = new Date(maxDate.getTime() - days * 24 * 60 * 60 * 1000)
+          result = result.filter((row) => {
+            const dateStr = row[timeCol.name]
+            if (typeof dateStr !== 'string') return false
+            const date = new Date(dateStr)
+            return !Number.isNaN(date.getTime()) && date >= cutoff
+          })
+        }
       }
     }
   }

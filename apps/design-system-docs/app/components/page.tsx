@@ -81,6 +81,10 @@ export default function ComponentsPage() {
   const [search, setSearch] = React.useState('')
   const [segment, setSegment] = React.useState('all')
   const [dateRange, setDateRange] = React.useState('30d')
+  const [segmentMulti, setSegmentMulti] = React.useState<string[]>([])
+  const [dateMode, setDateMode] = React.useState<string>('all')
+  const [dateStart, setDateStart] = React.useState<string | undefined>(undefined)
+  const [dateEnd, setDateEnd] = React.useState<string | undefined>(undefined)
 
   return (
     <Section
@@ -148,29 +152,71 @@ export default function ComponentsPage() {
         </div>
       </SubSection>
 
-      <SubSection label="FilterBar" description="Compound component — .Search, .Select, .DateRange, .Clear">
-        <FilterBar>
-          <FilterBar.Search value={search} onValueChange={setSearch} placeholder="Search datasets..." />
-          <FilterBar.Select
-            label="Segment"
-            value={segment}
-            onValueChange={setSegment}
-            options={[
-              { value: 'all', label: 'All Segments' },
-              { value: 'enterprise', label: 'Enterprise' },
-              { value: 'smb', label: 'SMB' },
-              { value: 'apac', label: 'APAC' },
-            ]}
-          />
-          <FilterBar.DateRange value={dateRange} onValueChange={setDateRange} />
-          <FilterBar.Clear
-            onClear={() => {
-              setSearch('')
-              setSegment('all')
-              setDateRange('30d')
-            }}
-          />
-        </FilterBar>
+      <SubSection label="FilterBar" description="Compound component — .Search, .Select, .MultiSelect, .DateRange, .DateRangePicker, .Clear">
+        <div className="space-y-3">
+          <div>
+            <p className="text-xs text-text-muted mb-2 font-mono">Single-select segment + preset date range (the original combo)</p>
+            <FilterBar>
+              <FilterBar.Search value={search} onValueChange={setSearch} placeholder="Search datasets..." />
+              <FilterBar.Select
+                label="Segment"
+                value={segment}
+                onValueChange={setSegment}
+                options={[
+                  { value: 'all', label: 'All Segments' },
+                  { value: 'enterprise', label: 'Enterprise' },
+                  { value: 'smb', label: 'SMB' },
+                  { value: 'apac', label: 'APAC' },
+                ]}
+              />
+              <FilterBar.DateRange value={dateRange} onValueChange={setDateRange} />
+              <FilterBar.Clear
+                onClear={() => {
+                  setSearch('')
+                  setSegment('all')
+                  setDateRange('30d')
+                }}
+              />
+            </FilterBar>
+          </div>
+          <div>
+            <p className="text-xs text-text-muted mb-2 font-mono">Multi-select segment (cmdk check-list) + custom date-range picker (popover with start/end inputs and preset chips)</p>
+            <FilterBar>
+              <FilterBar.MultiSelect
+                label="Segments"
+                values={segmentMulti}
+                onValuesChange={setSegmentMulti}
+                options={[
+                  { value: 'enterprise', label: 'Enterprise' },
+                  { value: 'mid-market', label: 'Mid-Market' },
+                  { value: 'smb', label: 'SMB' },
+                  { value: 'startup', label: 'Startup' },
+                ]}
+                allLabel="All segments"
+              />
+              <FilterBar.DateRangePicker
+                mode={dateMode}
+                start={dateStart}
+                end={dateEnd}
+                onPresetChange={(preset) => {
+                  setDateMode(preset)
+                  setDateStart(undefined)
+                  setDateEnd(undefined)
+                }}
+                onCustomChange={(start, end) => {
+                  setDateMode('custom')
+                  setDateStart(start)
+                  setDateEnd(end)
+                }}
+                onClear={() => {
+                  setDateMode('all')
+                  setDateStart(undefined)
+                  setDateEnd(undefined)
+                }}
+              />
+            </FilterBar>
+          </div>
+        </div>
       </SubSection>
 
       <SubSection label="DataGrid" description="Sortable columns, pagination, typed columns with render functions">

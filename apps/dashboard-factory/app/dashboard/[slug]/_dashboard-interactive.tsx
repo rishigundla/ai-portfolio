@@ -15,11 +15,9 @@ import type { FullDataset } from '@/lib/full-datasets'
 import {
   applyFilters,
   computeMaxDate,
-  DATE_RANGE_OPTIONS,
   EMPTY_FILTERS,
   uniqueDimensionValues,
   type DashboardFilters,
-  type DateRangeKey,
 } from '@/lib/filters'
 import { buildDashboardLayout } from '@/lib/dashboard-builder'
 import { DashboardView } from './_dashboard-view'
@@ -68,24 +66,38 @@ export function DashboardInteractive({
     rows: Record<string, unknown>[]
   } | null>(null)
 
-  // Compute filter inputs once per dataset
+  // Compute filter inputs once per dataset.
+  // Multi-select: empty array = "all" (no synthetic All-X option needed —
+  // the trigger label and clearSelection action handle that path natively).
   const segmentOptions = React.useMemo(() => {
     if (!primaryDimension) return []
-    const values = uniqueDimensionValues(rows, primaryDimension.name)
-    return [
-      { value: 'all', label: `All ${pluralize(primaryDimension.label.toLowerCase())}` },
-      ...values.map((v) => ({ value: v, label: v })),
-    ]
+    return uniqueDimensionValues(rows, primaryDimension.name).map((v) => ({
+      value: v,
+      label: v,
+    }))
   }, [rows, primaryDimension])
 
   const hasTimeColumn = React.useMemo(
     () => schema.some((c) => c.type === 'time'),
     [schema],
   )
-  const datasetMaxDate = React.useMemo(() => {
+  const dateBounds = React.useMemo(() => {
     const timeCol = schema.find((c) => c.type === 'time')
-    return timeCol ? computeMaxDate(rows, timeCol) : null
+    if (!timeCol) return null
+    let min: Date | null = null
+    let max: Date | null = null
+    for (const row of rows) {
+      const v = row[timeCol.name]
+      if (typeof v !== 'string') continue
+      const d = new Date(v)
+      if (Number.isNaN(d.getTime())) continue
+      if (min === null || d < min) min = d
+      if (max === null || d > max) max = d
+    }
+    return { min, max }
   }, [rows, schema])
+  const isoDate = (d: Date | null): string | undefined =>
+    d?.toISOString().split('T')[0]
 
   // Recompute filtered rows + layout per render via useMemo
   const filteredRows = React.useMemo(
@@ -113,7 +125,7 @@ export function DashboardInteractive({
   // Filter helpers
   const isFiltered =
     filters.search !== '' ||
-    filters.segmentValue !== 'all' ||
+    filters.segmentValues.length > 0 ||
     filters.dateRange !== 'all'
 
   const clearFilters = React.useCallback(() => {
@@ -295,22 +307,50 @@ export function DashboardInteractive({
             .join(' / ')}...`}
         />
         {primaryDimension && segmentOptions.length > 1 && (
-          <FilterBar.Select
+          <FilterBar.MultiSelect
             label={primaryDimension.label}
-            value={filters.segmentValue}
-            onValueChange={(segmentValue) =>
-              setFilters((f) => ({ ...f, segmentValue }))
+            values={filters.segmentValues}
+            onValuesChange={(segmentValues) =>
+              setFilters((f) => ({ ...f, segmentValues }))
             }
             options={segmentOptions}
+            allLabel={`All ${pluralize(primaryDimension.label.toLowerCase())}`}
+            placeholder={`Filter ${primaryDimension.label.toLowerCase()}...`}
           />
         )}
-        {hasTimeColumn && datasetMaxDate && (
-          <FilterBar.DateRange
-            value={filters.dateRange}
-            onValueChange={(v) =>
-              setFilters((f) => ({ ...f, dateRange: v as DateRangeKey }))
+        {hasTimeColumn && dateBounds?.max && (
+          <FilterBar.DateRangePicker
+            mode={filters.dateRange}
+            start={filters.dateStart}
+            end={filters.dateEnd}
+            bounds={{
+              min: isoDate(dateBounds.min),
+              max: isoDate(dateBounds.max),
+            }}
+            onPresetChange={(preset) =>
+              setFilters((f) => ({
+                ...f,
+                dateRange: preset,
+                dateStart: undefined,
+                dateEnd: undefined,
+              }))
             }
-            options={[...DATE_RANGE_OPTIONS]}
+            onCustomChange={(start, end) =>
+              setFilters((f) => ({
+                ...f,
+                dateRange: 'custom',
+                dateStart: start,
+                dateEnd: end,
+              }))
+            }
+            onClear={() =>
+              setFilters((f) => ({
+                ...f,
+                dateRange: 'all',
+                dateStart: undefined,
+                dateEnd: undefined,
+              }))
+            }
           />
         )}
         {isFiltered && <FilterBar.Clear onClear={clearFilters} />}
