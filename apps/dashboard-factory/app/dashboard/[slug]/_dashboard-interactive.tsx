@@ -10,6 +10,10 @@ import {
   DialogTitle,
   DialogDescription,
   Button,
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
 } from '@rishi/design-system/primitives'
 import type { FullDataset } from '@/lib/full-datasets'
 import {
@@ -22,6 +26,8 @@ import {
 import { buildDashboardLayout } from '@/lib/dashboard-builder'
 import { DashboardView } from './_dashboard-view'
 import { DrilldownTable } from './_drilldown-table'
+import { DrilldownSummary } from './_drilldown-summary'
+import { DrilldownDistribution } from './_drilldown-distribution'
 import type { ColorClassSet } from '@/lib/datasets'
 import { pluralize } from '@/lib/format'
 import { toast } from '@/lib/toast-store'
@@ -409,9 +415,31 @@ export function DashboardInteractive({
                 <DialogTitle>{drilldown.title}</DialogTitle>
                 <DialogDescription>{drilldown.description}</DialogDescription>
               </DialogHeader>
-              <div className="mt-2 flex-1 min-h-0 overflow-auto">
-                <DrilldownTable rows={drilldown.rows} schema={schema} />
-              </div>
+              <Tabs defaultValue="rows" className="mt-2 flex-1 min-h-0 flex flex-col">
+                <TabsList className="self-start">
+                  <TabsTrigger value="rows">Rows</TabsTrigger>
+                  <TabsTrigger value="summary">Summary stats</TabsTrigger>
+                  <TabsTrigger value="distribution">Distribution</TabsTrigger>
+                </TabsList>
+                <TabsContent
+                  value="rows"
+                  className="mt-3 flex-1 min-h-0 overflow-auto"
+                >
+                  <DrilldownTable rows={drilldown.rows} schema={schema} />
+                </TabsContent>
+                <TabsContent
+                  value="summary"
+                  className="mt-3 flex-1 min-h-0 overflow-auto"
+                >
+                  <DrilldownSummary rows={drilldown.rows} schema={schema} />
+                </TabsContent>
+                <TabsContent
+                  value="distribution"
+                  className="mt-3 flex-1 min-h-0 overflow-auto"
+                >
+                  <DrilldownDistribution rows={drilldown.rows} schema={schema} />
+                </TabsContent>
+              </Tabs>
             </>
           )}
         </DialogContent>

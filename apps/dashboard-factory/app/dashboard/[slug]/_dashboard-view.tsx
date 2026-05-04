@@ -192,14 +192,17 @@ function CustomTooltip({ active, payload, label }: TooltipProps<number, string>)
 // Chart renderer dispatcher
 // ============================================================
 
-function ChartRenderer({
+export function ChartRenderer({
   chart,
   colors,
   onBarClick,
   onDonutClick,
 }: {
   chart: DashboardChart
-  colors: ColorClassSet
+  /** Currently unused by chart bodies (token CSS vars cover theming) but kept
+   *  on the contract so callers can stay future-proof. Optional from W4.D7
+   *  so reusable contexts (drill-down dialog) don't have to plumb it. */
+  colors?: ColorClassSet
   onBarClick?: (dimensionKey: string, dimensionLabel: string, label: string) => void
   onDonutClick?: (dimensionKey: string, dimensionLabel: string, label: string) => void
 }) {
@@ -233,7 +236,7 @@ function BarChartView({
   onBarClick,
 }: {
   data: Extract<DashboardChartData, { type: 'bar' }>
-  colors: ColorClassSet
+  colors?: ColorClassSet
   onBarClick?: (dimensionKey: string, dimensionLabel: string, label: string) => void
 }) {
   if (data.bars.length === 0) {
@@ -295,7 +298,7 @@ function LineChartView({
   colors: _colors,
 }: {
   data: Extract<DashboardChartData, { type: 'line' }>
-  colors: ColorClassSet
+  colors?: ColorClassSet
 }) {
   if (data.points.length === 0) {
     return <EmptyChart message="No time-series data" />
@@ -364,7 +367,7 @@ function DonutChartView({
   onDonutClick,
 }: {
   data: Extract<DashboardChartData, { type: 'donut' }>
-  colors: ColorClassSet
+  colors?: ColorClassSet
   onDonutClick?: (dimensionKey: string, dimensionLabel: string, label: string) => void
 }) {
   if (data.slices.length === 0 || data.total === 0) {
