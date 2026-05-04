@@ -14,6 +14,12 @@ import {
   Truck,
   FileWarning,
   Users,
+  Factory,
+  Home,
+  Stethoscope,
+  GraduationCap,
+  Repeat,
+  Plane,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -62,6 +68,13 @@ const ICON_MAP: Record<string, LucideIcon> = {
   Truck,
   FileWarning,
   Users,
+  // W5.D1 — wireframe-mode dataset icons
+  Factory,
+  Home,
+  Stethoscope,
+  GraduationCap,
+  Repeat,
+  Plane,
 }
 
 export function getDatasetIcon(name: string): LucideIcon {

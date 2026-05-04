@@ -1,0 +1,67 @@
+{
+  "version": "1.0.0",
+  "generatedAt": "2026-05-05",
+  "mode": "wireframe",
+  "datasets": [
+    {
+      "id": "manufacturing-throughput",
+      "title": "Manufacturing Throughput",
+      "tagline": "Production-line yield, defect rates, and OEE across plants and shifts",
+      "domain": "operations",
+      "colorToken": "amber",
+      "icon": "Factory",
+      "rowCount": 36,
+      "thumbnail": "/datasets/manufacturing-throughput.png"
+    },
+    {
+      "id": "real-estate-pipeline",
+      "title": "Real Estate Pipeline",
+      "tagline": "Listings, days on market, sale prices, and broker performance across markets",
+      "domain": "sales",
+      "colorToken": "rose",
+      "icon": "Home",
+      "rowCount": 36,
+      "thumbnail": "/datasets/real-estate-pipeline.png"
+    },
+    {
+      "id": "healthcare-operations",
+      "title": "Healthcare Operations",
+      "tagline": "Clinic visits, wait times, patient satisfaction, and charges across departments",
+      "domain": "operations",
+      "colorToken": "teal",
+      "icon": "Stethoscope",
+      "rowCount": 36,
+      "thumbnail": "/datasets/healthcare-operations.png"
+    },
+    {
+      "id": "education-enrollment",
+      "title": "Course Enrollment & Retention",
+      "tagline": "Course-level enrollment, completion rates, grades, and student satisfaction across modalities",
+      "domain": "education",
+      "colorToken": "blue",
+      "icon": "GraduationCap",
+      "rowCount": 32,
+      "thumbnail": "/datasets/education-enrollment.png"
+    },
+    {
+      "id": "saas-subscriptions",
+      "title": "SaaS Subscription Analytics",
+      "tagline": "MRR, churn, expansion, and account health across plan tiers, industries, and regions",
+      "domain": "sales",
+      "colorToken": "accent",
+      "icon": "Repeat",
+      "rowCount": 38,
+      "thumbnail": "/datasets/saas-subscriptions.png"
+    },
+    {
+      "id": "logistics-fleet",
+      "title": "Logistics Fleet Utilization",
+      "tagline": "Shipment routes, transit times, fuel efficiency, and capacity utilization across vehicle classes",
+      "domain": "operations",
+      "colorToken": "purple",
+      "icon": "Plane",
+      "rowCount": 36,
+      "thumbnail": "/datasets/logistics-fleet.png"
+    }
+  ]
+}
