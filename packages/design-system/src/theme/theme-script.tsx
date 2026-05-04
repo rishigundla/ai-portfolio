@@ -13,7 +13,7 @@
  */
 
 import Script from 'next/script'
-import { STORAGE_KEY } from './use-theme'
+import { STORAGE_KEY } from './storage-key'
 
 const initScript = `(function(){try{var s=localStorage.getItem('${STORAGE_KEY}');var t=(s==='light')?'light':'dark';var r=document.documentElement;r.classList.remove('light','dark');r.classList.add(t);}catch(e){}})()`
 

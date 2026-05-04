@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { STORAGE_KEY } from './storage-key'
 
 /**
  * Theme state for the AI Portfolio apps.
@@ -15,14 +16,15 @@ import * as React from 'react'
  * the first render. This Provider then reads what the script set and uses it
  * as the initial state.
  *
- * Persistence key is `ai-portfolio-theme` so each project's localStorage stays
- * isolated from the portfolio-site (`portfolio-theme`) but synced across all
- * five AI portfolio apps.
+ * STORAGE_KEY itself lives in `./storage-key` (no `'use client'`) so server
+ * components like `<ThemeScript />` can import the same constant without
+ * tripping Next.js's client-boundary guard, which would otherwise replace the
+ * import with a runtime-throwing function whose stringified message contains
+ * apostrophes that break inline single-quoted script literals.
  */
 
+export { STORAGE_KEY }
 export type Theme = 'dark' | 'light'
-
-export const STORAGE_KEY = 'ai-portfolio-theme'
 
 interface ThemeContextValue {
   theme: Theme
