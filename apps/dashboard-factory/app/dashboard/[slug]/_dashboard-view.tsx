@@ -48,8 +48,12 @@ export function DashboardView({
   onBarClick,
   onDonutClick,
 }: DashboardViewProps) {
+  // The id="dashboard-capture-target" is used by the canvas-based PDF
+  // exporter (html2canvas) to find this subtree and snapshot it at the
+  // dashboard's current filtered state. Don't rename without updating
+  // exportPdf in _dashboard-interactive.tsx.
   return (
-    <div className="space-y-6">
+    <div id="dashboard-capture-target" className="space-y-6">
       {/* KPI strip, responsive shape depends on count. 5-up on lg, then
           stepping down through 3+2 (sm), then 1-up (mobile). The 3-col sm
           breakpoint matters: with 2-up at sm, 5 KPIs would render 2+2+1,

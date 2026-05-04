@@ -124,38 +124,114 @@ export function DashboardInteractive({
     toast.info('Filters cleared', 'Showing all rows')
   }, [primaryDimension])
 
-  // PDF export — dynamic-import @react-pdf/renderer + lib/pdf-document
-  // only when the user clicks Export, so the ~200 kB renderer bundle
-  // stays out of the route's First Load JS.
+  // PDF export uses html2canvas + jsPDF, captures the live dashboard DOM
+  // (KPIs + charts + filters) at its current filtered state and embeds it
+  // as PNG inside an A4 PDF. Both libs dynamic-import on click so they
+  // stay out of First Load JS.
+  //
+  // Capture target: <div id="dashboard-capture-target"> set in DashboardView.
+  // If multiple A4 pages are needed, the canvas is sliced vertically and
+  // each slice is added as a separate page so nothing gets clipped or
+  // squished into one giant page.
   const [isExporting, setIsExporting] = React.useState(false)
   const exportPdf = React.useCallback(async () => {
     setIsExporting(true)
     try {
-      const [{ pdf }, { DashboardPdf }] = await Promise.all([
-        import('@react-pdf/renderer'),
-        import('@/lib/pdf-document'),
+      const target = document.getElementById('dashboard-capture-target')
+      if (!target) {
+        throw new Error('Dashboard capture target not found in DOM')
+      }
+
+      const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([
+        import('html2canvas'),
+        import('jspdf'),
       ])
-      const blob = await pdf(
-        <DashboardPdf
-          datasetTitle={metadata.title}
-          datasetTagline={metadata.tagline}
-          datasetDomain={metadata.domain}
-          layout={layout}
-          filters={filters}
-          filterSegmentLabel={primaryDimension?.label}
-          totalRows={rows.length}
-          filteredRowCount={filteredRows.length}
-          generatedAt={new Date()}
-        />,
-      ).toBlob()
-      const url = URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
+
+      // Capture at 2x device pixel ratio for crisp text/charts on print.
+      // backgroundColor: matches the app's base-900 so the PDF page tint
+      // outside the captured region looks intentional, not a leak.
+      const canvas = await html2canvas(target, {
+        backgroundColor: '#0a0a0f',
+        scale: 2,
+        useCORS: true,
+        logging: false,
+      })
+
+      // A4 portrait at 72 DPI = 595 x 842 pt. We use jsPDF's default 'mm'
+      // unit (210 x 297 mm) and let it handle the pt conversion.
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+      })
+      const pageWidthMm = 210
+      const pageHeightMm = 297
+      const marginMm = 8
+      const usableWidthMm = pageWidthMm - marginMm * 2
+      const usableHeightMm = pageHeightMm - marginMm * 2
+
+      // Convert capture pixel dims to mm using ratio of usableWidthMm to
+      // canvas width. The full canvas height in mm tells us if we need
+      // to split into multiple pages.
+      const canvasMmHeight = (canvas.height * usableWidthMm) / canvas.width
+
+      if (canvasMmHeight <= usableHeightMm) {
+        // Single-page case — common for short filtered views.
+        pdf.addImage(
+          canvas.toDataURL('image/jpeg', 0.92),
+          'JPEG',
+          marginMm,
+          marginMm,
+          usableWidthMm,
+          canvasMmHeight,
+        )
+      } else {
+        // Multi-page case — slice the canvas vertically into A4-height
+        // chunks and add each as its own page. Use a hidden <canvas> as
+        // the slice buffer so we don't have to do it via context math.
+        const slicePxHeight = Math.floor(
+          (usableHeightMm * canvas.width) / usableWidthMm,
+        )
+        const sliceCanvas = document.createElement('canvas')
+        sliceCanvas.width = canvas.width
+        sliceCanvas.height = slicePxHeight
+        const sliceCtx = sliceCanvas.getContext('2d')
+        if (!sliceCtx) {
+          throw new Error('Could not create 2D context for PDF page split')
+        }
+
+        let yOffsetPx = 0
+        let isFirstPage = true
+        while (yOffsetPx < canvas.height) {
+          const remainingPx = canvas.height - yOffsetPx
+          const thisSlicePx = Math.min(slicePxHeight, remainingPx)
+          // Reset slice canvas to background color in case it's the last
+          // (short) slice, so we don't see ghost pixels from the previous one.
+          sliceCtx.fillStyle = '#0a0a0f'
+          sliceCtx.fillRect(0, 0, sliceCanvas.width, sliceCanvas.height)
+          sliceCtx.drawImage(
+            canvas,
+            0, yOffsetPx, canvas.width, thisSlicePx,
+            0, 0, sliceCanvas.width, thisSlicePx,
+          )
+          const sliceMmHeight = (thisSlicePx * usableWidthMm) / canvas.width
+          if (!isFirstPage) pdf.addPage()
+          pdf.addImage(
+            sliceCanvas.toDataURL('image/jpeg', 0.92),
+            'JPEG',
+            marginMm,
+            marginMm,
+            usableWidthMm,
+            sliceMmHeight,
+          )
+          yOffsetPx += slicePxHeight
+          isFirstPage = false
+        }
+      }
+
       const dateStamp = new Date().toISOString().split('T')[0]
       const filename = `${fullDataset.id}-dashboard-${dateStamp}.pdf`
-      link.download = filename
-      link.click()
-      URL.revokeObjectURL(url)
+      pdf.save(filename)
       toast.success('PDF exported', filename)
     } catch (err) {
       console.error('PDF export failed', err)
@@ -166,17 +242,7 @@ export function DashboardInteractive({
     } finally {
       setIsExporting(false)
     }
-  }, [
-    metadata.title,
-    metadata.tagline,
-    metadata.domain,
-    layout,
-    filters,
-    primaryDimension,
-    rows.length,
-    filteredRows.length,
-    fullDataset.id,
-  ])
+  }, [fullDataset.id])
 
   return (
     <div className="space-y-6">
