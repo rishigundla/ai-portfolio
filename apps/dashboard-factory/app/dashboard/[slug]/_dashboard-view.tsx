@@ -21,6 +21,7 @@ import {
   ZAxis,
 } from 'recharts'
 import { ChartCard, KpiCard } from '@rishi/design-system/components'
+import { cn } from '@rishi/design-system/lib/cn'
 import type {
   DashboardChart,
   DashboardChartData,
@@ -215,6 +216,10 @@ function ChartRenderer({
       return <HeatmapChartView data={chart.data} />
     case 'scatter':
       return <ScatterChartView data={chart.data} />
+    case 'funnel':
+      return <FunnelChartView data={chart.data} onSegmentClick={onBarClick} />
+    case 'histogram':
+      return <HistogramChartView data={chart.data} />
   }
 }
 
@@ -633,6 +638,156 @@ function ScatterTooltip({
             {formatChartValue(point.y)}
           </span>
         </div>
+      </div>
+    </div>
+  )
+}
+
+// ============================================================
+// Funnel (CSS — descending tapered bars)
+// ============================================================
+
+function FunnelChartView({
+  data,
+  onSegmentClick,
+}: {
+  data: Extract<DashboardChartData, { type: 'funnel' }>
+  onSegmentClick?: (dimensionKey: string, dimensionLabel: string, label: string) => void
+}) {
+  if (data.stages.length === 0) {
+    return <EmptyChart message="No funnel data" />
+  }
+  // Drill-in only when the funnel was built from a real dim column —
+  // measure-aggregated funnels (impressions → clicks) have no rows to filter
+  // by stage, so we don't show a click affordance for them.
+  const isClickable = !!onSegmentClick && !!data.dimensionKey
+  const triggerStage = (label: string) => {
+    if (!isClickable || !data.dimensionKey || !data.dimensionLabel) return
+    onSegmentClick!(data.dimensionKey, data.dimensionLabel, label)
+  }
+  const max = data.stages.reduce((m, s) => Math.max(m, s.value), 0)
+
+  return (
+    <div className="w-full h-[280px] flex flex-col justify-center gap-1.5 px-2">
+      {data.stages.map((stage, i) => {
+        const widthPct = max > 0 ? (stage.value / max) * 100 : 0
+        return (
+          <div
+            key={`${stage.label}-${i}`}
+            className="flex items-center gap-3 group"
+          >
+            <div className="w-28 shrink-0 text-xs text-text-secondary truncate text-right">
+              {stage.label}
+            </div>
+            <div className="flex-1 relative h-7">
+              <button
+                type="button"
+                disabled={!isClickable}
+                onClick={() => triggerStage(stage.label)}
+                title={`${stage.label}: ${formatChartValue(stage.value)} ${data.valueLabel} · ${stage.pct.toFixed(0)}% of max`}
+                className={cn(
+                  'absolute left-0 top-0 h-full rounded-md bg-accent/75 transition-all',
+                  isClickable
+                    ? 'hover:bg-accent cursor-pointer'
+                    : 'cursor-default',
+                )}
+                style={{ width: `${widthPct}%` }}
+                aria-label={`${stage.label}: ${stage.value}`}
+              />
+              <div className="absolute inset-0 flex items-center px-3 pointer-events-none">
+                <span className="text-xs font-mono font-medium text-base-900 mix-blend-screen">
+                  {formatChartValue(stage.value)}
+                </span>
+              </div>
+            </div>
+            <div className="w-12 shrink-0 text-right text-xs font-mono text-text-muted">
+              {stage.pct.toFixed(0)}%
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+// ============================================================
+// Histogram (Recharts BarChart — no-gap vertical bars)
+// ============================================================
+
+function HistogramChartView({
+  data,
+}: {
+  data: Extract<DashboardChartData, { type: 'histogram' }>
+}) {
+  if (data.bins.length === 0) {
+    return <EmptyChart message="No histogram data" />
+  }
+  return (
+    <div className="w-full h-[280px]">
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart
+          data={data.bins}
+          margin={{ top: 8, right: 16, left: 0, bottom: 8 }}
+          barCategoryGap={1}
+        >
+          <CartesianGrid
+            strokeDasharray="3 3"
+            stroke="var(--color-surface-border)"
+            vertical={false}
+          />
+          <XAxis
+            dataKey="rangeLabel"
+            tick={{ fontSize: 10, fill: 'var(--color-text-muted)' }}
+            axisLine={false}
+            tickLine={false}
+            interval="preserveStartEnd"
+          />
+          <YAxis
+            tick={{ fontSize: 10, fill: 'var(--color-text-muted)' }}
+            tickFormatter={formatChartValue}
+            axisLine={false}
+            tickLine={false}
+            width={45}
+            allowDecimals={false}
+          />
+          <Tooltip
+            content={<HistogramTooltip measureLabel={data.measureLabel} unit={data.unit} />}
+            cursor={{ fill: 'rgba(45, 212, 191, 0.08)' }}
+          />
+          <Bar
+            dataKey="count"
+            fill="var(--color-accent)"
+            fillOpacity={0.75}
+            radius={[2, 2, 0, 0]}
+          />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  )
+}
+
+function HistogramTooltip({
+  active,
+  payload,
+  measureLabel,
+  unit,
+}: TooltipProps<number, string> & { measureLabel: string; unit?: string }) {
+  if (!active || !payload || payload.length === 0) return null
+  const bin = payload[0]?.payload as
+    | { rangeLabel: string; rangeMin: number; rangeMax: number; count: number }
+    | undefined
+  if (!bin) return null
+  return (
+    <div className="rounded-md border border-surface-border bg-surface-elevated px-3 py-2 shadow-lg text-xs backdrop-blur-sm">
+      <div className="text-text-muted mb-1 font-mono text-[10px] uppercase tracking-wider">
+        {measureLabel}
+        {unit ? ` (${unit})` : ''}
+      </div>
+      <div className="text-text-secondary">
+        {formatChartValue(bin.rangeMin)} – {formatChartValue(bin.rangeMax)}
+      </div>
+      <div className="mt-1 text-text-primary font-mono font-semibold">
+        {bin.count} {bin.count === 1 ? 'record' : 'records'}
       </div>
     </div>
   )

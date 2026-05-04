@@ -81,6 +81,24 @@ export type DashboardChartData =
       xUnit?: string
       yUnit?: string
     }
+  | {
+      type: 'funnel'
+      stages: Array<{ label: string; value: number; pct: number }>
+      total: number
+      /** Set when funnel is built from a dimension column; absent for
+       *  measure-aggregated funnels (e.g. impressions → clicks → conversions). */
+      dimensionKey?: string
+      dimensionLabel?: string
+      valueLabel: string
+    }
+  | {
+      type: 'histogram'
+      bins: Array<{ rangeLabel: string; rangeMin: number; rangeMax: number; count: number }>
+      max: number
+      measureLabel: string
+      measureKey: string
+      unit?: string
+    }
 
 export interface DashboardChart {
   id: string
@@ -620,6 +638,198 @@ function buildDonutChart(
       total,
       dimensionKey: dimension.name,
       dimensionLabel: dimension.label,
+    },
+  }
+}
+
+/**
+ * Build a funnel chart from a dimension column.
+ *
+ * Stages are sorted by `dim.values` ordering when present (which preserves
+ * semantic order like Qualification → Proposal → Negotiation), otherwise
+ * by count descending.
+ *
+ * Each stage's `pct` is its proportion of the LARGEST stage (not the total),
+ * so the bar width visually communicates the "drop-off" through the funnel.
+ */
+export function buildFunnelChart(
+  rows: Record<string, unknown>[],
+  dim: ColumnSchema,
+): DashboardChart {
+  const counts = new Map<string, number>()
+  for (const row of rows) {
+    const v = String(row[dim.name] ?? 'Unknown')
+    counts.set(v, (counts.get(v) ?? 0) + 1)
+  }
+
+  const ordered = dim.values
+    ? dim.values
+        .map((v) => ({ label: v, value: counts.get(v) ?? 0 }))
+        .filter((s) => s.value > 0)
+    : [...counts.entries()]
+        .sort(([, a], [, b]) => b - a)
+        .map(([label, value]) => ({ label, value }))
+
+  const max = ordered.reduce((m, s) => Math.max(m, s.value), 0)
+  const total = rows.length
+  const stages = ordered.map((s) => ({
+    label: s.label,
+    value: s.value,
+    pct: max > 0 ? (s.value / max) * 100 : 0,
+  }))
+
+  return {
+    id: 'funnel',
+    title: `${dim.label} pipeline`,
+    subtitle: `${stages.length} stages · ${total} records`,
+    data: {
+      type: 'funnel',
+      stages,
+      total,
+      dimensionKey: dim.name,
+      dimensionLabel: dim.label,
+      valueLabel: 'Records',
+    },
+  }
+}
+
+/**
+ * Build a funnel chart from a list of measures whose totals form an
+ * ordered drop-off (e.g. Impressions → Clicks → Conversions).
+ *
+ * Each measure's stage value is the SUM across rows. Stages render in the
+ * given order — caller is responsible for picking measures that actually
+ * make funnel sense (the builder doesn't enforce monotonic decline).
+ */
+export function buildFunnelChartFromMeasures(
+  rows: Record<string, unknown>[],
+  measures: ColumnSchema[],
+  title?: string,
+): DashboardChart {
+  const stages = measures
+    .map((m) => {
+      const sum = rows.reduce((acc, r) => {
+        const v = r[m.name]
+        return typeof v === 'number' ? acc + v : acc
+      }, 0)
+      return { label: m.label, value: sum, key: m.name }
+    })
+    .filter((s) => s.value > 0)
+
+  const max = stages.reduce((m, s) => Math.max(m, s.value), 0)
+  const total = rows.length
+  const stagesWithPct = stages.map((s) => ({
+    label: s.label,
+    value: s.value,
+    pct: max > 0 ? (s.value / max) * 100 : 0,
+  }))
+
+  return {
+    id: 'measure-funnel',
+    title: title ?? `${measures.map((m) => m.label).join(' → ')}`,
+    subtitle: `${stagesWithPct.length} stages · ${total} records`,
+    data: {
+      type: 'funnel',
+      stages: stagesWithPct,
+      total,
+      valueLabel: 'Total',
+    },
+  }
+}
+
+/**
+ * Build a histogram of a numeric measure.
+ *
+ * Bucket count via Sturges' rule: `k = ceil(log2(n) + 1)`, capped at 12 to
+ * keep small datasets readable. Bucket width = (max - min) / k. Each bin
+ * shows the row count whose measure value falls in [min + i*width,
+ * min + (i+1)*width). The last bin is inclusive on both ends.
+ */
+export function buildHistogramChart(
+  rows: Record<string, unknown>[],
+  measure: ColumnSchema,
+): DashboardChart {
+  const values = rows
+    .map((r) => r[measure.name])
+    .filter((v): v is number => typeof v === 'number')
+
+  if (values.length === 0) {
+    return {
+      id: 'histogram',
+      title: `${measure.label} distribution`,
+      subtitle: 'No measure data',
+      data: {
+        type: 'histogram',
+        bins: [],
+        max: 0,
+        measureLabel: measure.label,
+        measureKey: measure.name,
+        unit: measure.unit,
+      },
+    }
+  }
+
+  const min = Math.min(...values)
+  const max = Math.max(...values)
+  if (min === max) {
+    // Degenerate single-value series — render a single bin
+    return {
+      id: 'histogram',
+      title: `${measure.label} distribution`,
+      subtitle: '1 bucket · all values equal',
+      data: {
+        type: 'histogram',
+        bins: [
+          {
+            rangeLabel: formatKpiValue(min, measure),
+            rangeMin: min,
+            rangeMax: min,
+            count: values.length,
+          },
+        ],
+        max: values.length,
+        measureLabel: measure.label,
+        measureKey: measure.name,
+        unit: measure.unit,
+      },
+    }
+  }
+
+  const k = Math.min(12, Math.max(4, Math.ceil(Math.log2(values.length) + 1)))
+  const width = (max - min) / k
+  const bins = Array.from({ length: k }, (_, i) => {
+    const rmin = min + i * width
+    const rmax = i === k - 1 ? max : min + (i + 1) * width
+    return { rangeLabel: '', rangeMin: rmin, rangeMax: rmax, count: 0 }
+  })
+  for (const v of values) {
+    const idx = Math.min(k - 1, Math.floor((v - min) / width))
+    bins[idx]!.count += 1
+  }
+  // Format range labels using the measure's unit-aware formatter for the
+  // bin midpoint, which is more readable than "12,345.6 - 13,456.8".
+  for (const b of bins) {
+    const midpoint = (b.rangeMin + b.rangeMax) / 2
+    b.rangeLabel = formatKpiValue(midpoint, measure)
+  }
+
+  // Drop empty trailing bins so a sparse upper tail doesn't waste chart real
+  // estate, but keep empty middle bins (they're meaningful).
+  while (bins.length > 1 && bins[bins.length - 1]!.count === 0) bins.pop()
+
+  const maxCount = bins.reduce((m, b) => Math.max(m, b.count), 0)
+
+  return {
+    id: 'histogram',
+    title: `${measure.label} distribution`,
+    subtitle: `${bins.length} buckets · ${values.length} records`,
+    data: {
+      type: 'histogram',
+      bins,
+      max: maxCount,
+      measureLabel: measure.label,
+      measureKey: measure.name,
+      unit: measure.unit,
     },
   }
 }
