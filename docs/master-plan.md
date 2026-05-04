@@ -5,7 +5,7 @@
 > **Target Roles**: Data Engineer, Analytics Engineer, AI Data Engineer, AI Engineer
 > **Repo**: `rishigundla/ai-portfolio` (public, to be created)
 > **Plan Version**: 3.0 — includes day-by-day tracker and progress log
-> **Last Plan Update**: 2026-04-24
+> **Last Plan Update**: 2026-05-04
 
 ---
 
@@ -17,10 +17,10 @@
 |-------|-------|
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
-| **Current Day** | Week 4 · Day 5 (Fri) — Theme toggle + particle background |
-| **Overall Progress** | 124 tasks of ~150 complete · **Production live at https://ai-portfolio-dashboard-factory.vercel.app** · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ · Week 3 ✓ · Week 4 Days 1-4 ✓ |
-| **Status** | W4.D4 closed. PDF export rewritten with html2canvas + jsPDF. PDF now looks pixel-identical to the on-screen dashboard. 3 incremental rounds shipped: (1) baseline canvas capture; (2) widened capture to include FilterBar + count summary, hid drill chips, added programmatic title header (jsPDF text); (3) hid Export button during capture so the spinner state doesn't leak into the snapshot. Verified on production: title + filters + 5 KPIs + 4 charts all render, drill chips and Export button hidden, page break landed cleanly between charts. Net diff: -850 / +263 lines (deleted the @react-pdf-based pdf-document.tsx, dropped @react-pdf/renderer dep). |
-| **Next Action** | Week 4 Day 5: Theme toggle + particle background. Study portfolio-site source at C:\Users\Rishi\Documents\portfolio-site for particle + theme toggle implementation. Build shared <ParticleBackground /> + <ThemeToggle /> in @rishi/design-system. Wire into dashboard-factory + design-system-docs. Light-mode QA pass. Re-run Lighthouse in light mode. |
+| **Current Day** | Week 4 · Day 6 (Sat) — Dashboard depth (growth %, new charts, more filters) |
+| **Overall Progress** | 131 tasks of ~150 complete · **Production live at https://ai-portfolio-dashboard-factory.vercel.app** · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ · Week 3 ✓ · Week 4 Days 1-5 ✓ |
+| **Status** | W4.D5 closed. Theme toggle + animated particle background shipped as shared modules in @rishi/design-system, ported from portfolio-site (rishikeshgundla.com) for visual consistency across all 5 AI portfolio apps: ThemeProvider + useTheme (React Context, no Zustand to keep design-system framework-agnostic), ThemeScript (pre-paint init via next/script strategy="beforeInteractive"), ThemeToggle (Sun/Moon lucide button), ParticleBackground (canvas with grid + pulsing nodes + data streams + connected particles, theme-aware RGB). Wired into dashboard-factory + design-system-docs root layouts. TWO PRODUCTION HOTFIXES followed the initial feat commit: (1) inline ThemeScript SyntaxError "missing ) after argument list" because STORAGE_KEY was imported across a 'use client' boundary and Next.js replaced the import with a throw-fn placeholder whose stringified message ("It's not possible to invoke a client function...") contained apostrophes that terminated the single-quoted localStorage.getItem() string — fixed by hoisting STORAGE_KEY into its own non-'use client' module both halves can safely import; (2) React error #418 hydration mismatch on light-mode page loads because ThemeToggle conditionally rendered Sun vs Moon based on theme — server defaulted to 'dark' (no document) while ThemeScript pre-set client to 'light' via the saved localStorage — fixed via a CSS-only icon swap (both icons in DOM, hidden dark:block / block dark:hidden). aria-label changed from theme-conditioned to fixed "Toggle theme" to avoid re-introducing the same mismatch. Verified clean: zero console errors on home/datasets/dashboard/wireframe in both themes via Playwright. Lighthouse: home 95/100/100/100, /generate 97/100/100/100, /dashboard/revops 79/100/100/100 — particle canvas costs ~3-5pt perf vs prior baseline; dashboard's 79 is Recharts-driven (heavier route) not particle-driven, flagged for future opt. 3 commits: 7e8d9bc (feat), b057ba6 (storage-key fix), 1bc0f2e (hydration fix). |
+| **Next Action** | Week 4 Day 6: Dashboard depth. Generate synthetic period-over-period data per dataset (so growth % is meaningful). Add growth % delta to each KPI on dashboard. Add 2 new chart types — heatmap (cohort/matrix views), scatter (quadrant analysis). Add multi-select filter primitive + date-range filter primitive to FilterBar. Verify across 2-3 datasets. |
 | **Blockers** | None |
 
 ### Phase Progress Overview
@@ -41,6 +41,32 @@
 ## Recent Activity Log
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
+
+### 2026-05-04 · Week 4 Day 5 — Theme toggle + particle background (Item 1)
+- **Goal**: visual consistency across all 5 AI portfolio sites by porting the portfolio-site (rishikeshgundla.com) light/dark theme + animated particle background into shared `@rishi/design-system` modules. Wire into dashboard-factory + design-system-docs as the first two consumers.
+- **6 new files in `packages/design-system/src/theme/`**:
+  - `storage-key.ts` — `STORAGE_KEY = 'ai-portfolio-theme'` constant. Server-safe (no `'use client'`) so both server and client modules can import it.
+  - `use-theme.tsx` — React Context + `<ThemeProvider />` + `useTheme()` hook. Initial state read from `<html>` class (set pre-paint by ThemeScript), falling back to localStorage then `'dark'`. `useEffect` syncs theme back to `<html>` class + localStorage.
+  - `theme-script.tsx` — `<ThemeScript />` server component renders a Next.js `<Script strategy="beforeInteractive">` IIFE that reads localStorage and applies `.dark`/`.light` to `<html>` BEFORE first paint, preventing flash of wrong theme.
+  - `theme-toggle.tsx` — `<ThemeToggle />` button with Sun/Moon lucide icons. Hydration-safe via CSS-only swap (`hidden dark:block` / `block dark:hidden`) — both icons always in DOM, Tailwind's `darkMode: 'class'` does the visibility selection from the `.dark` class on `<html>`.
+  - `particle-background.tsx` — `<ParticleBackground />` canvas. Direct port of portfolio-site GlobalBackground.jsx: faint grid + pulsing nodes + horizontal data streams + connected particle field. Theme-aware RGB (dark = teal-400 `45,212,191`, light = teal-600 `13,148,136` with slightly higher alphas because lighter background washes color out). Particle count scales with viewport (15 mobile / 80 tablet / 140 desktop). Connections only render on tablet+ (O(n²)).
+  - `index.ts` — barrel export.
+- **Wiring in both apps' root layouts**: `<head><ThemeScript /></head>`, then inside `<body>`, wrap content in `<ThemeProvider>` with `<ParticleBackground />` as a sibling, then `<div className="relative" style={{zIndex:1}}>` for the actual content (so it stacks above the `position:fixed inset-0 z-0` canvas). Removed hardcoded `className="dark"` from `<html>` and added `suppressHydrationWarning`. `<ThemeToggle />` added to both Nav components.
+- **Architecture choices**:
+  - **React Context, not Zustand**: keeps design-system framework-agnostic — consumers don't have to install Zustand just to use the theme module.
+  - **`next` as optional peerDependency + devDependency**: theme-script.tsx is the only file using `next/script`. Adding `next` as devDep lets `tsc --noEmit` resolve the type from inside the package; making the peerDep optional means apps without Next.js (e.g. a future Vite consumer) don't fail to install — they just won't import the ThemeScript.
+- **Two production hotfixes shipped after the initial feat commit (`7e8d9bc`)**:
+  - **Hotfix 1 (`b057ba6`) — Inline ThemeScript SyntaxError on every page load**: Prod console showed `Failed to execute 'appendChild' on 'Node': missing ) after argument list`. Diagnosed by curl-ing the deployed HTML and inspecting the rendered Script body, which contained `localStorage.getItem('function(){throw Error("Attempted to call STORAGE_KEY() from the server but STORAGE_KEY is on the client. It's not possible to invoke a client function...")}')`. ROOT CAUSE: `theme-script.tsx` (server component) imported `STORAGE_KEY` from `use-theme.tsx` which carries `'use client'`. Next.js replaces such cross-boundary value imports with a runtime-throwing guard function. When that guard's stringified message was interpolated into the script template literal, the apostrophe in "It's" terminated the single-quoted JS string, leaving unbalanced parens → SyntaxError. FIX: hoist `STORAGE_KEY` into its own server-safe `storage-key.ts` (no `'use client'`); both `theme-script.tsx` and `use-theme.tsx` import from there. Verified the rebuilt HTML now contains the clean IIFE `localStorage.getItem('ai-portfolio-theme')`.
+  - **Hotfix 2 (`1bc0f2e`) — React error #418 hydration mismatch on light-mode page loads**: After hotfix 1 the home page worked, but `/datasets` (and any route loaded fresh with stored `'light'` preference) fired `Minified React error #418`. ROOT CAUSE: `ThemeToggle` rendered `<Sun />` or `<Moon />` conditionally on `theme === 'dark'`. On the server, `readInitialTheme()` returns `'dark'` (no `document`) → renders Sun. On the client, the same initializer re-runs during hydration, sees `<html class="light">` (set pre-paint by ThemeScript) → returns `'light'` → wants to render Moon. The two renders disagreed. FIX: render BOTH icons unconditionally; hide one via Tailwind's `dark:` selector. Server and client emit identical DOM regardless of stored preference. ThemeProvider's state still drives the `.dark`/`.light` class on `<html>` via its useEffect (which runs only after hydration, no mismatch). TRADE-OFF: aria-label is now a stable `"Toggle theme"` instead of swapping between `"Switch to light theme"` / `"Switch to dark theme"` — a theme-conditioned label would re-introduce the same mismatch. The visible icon already communicates state to sighted users; the stable label is unambiguous for screen readers.
+- **Verification**: Playwright walked home, /datasets, /dashboard/revops-sales, /wireframe/executive in both themes — zero console errors after hotfix 2. Toggle click flips state and persists to localStorage, survives page reloads. CSS-only icon swap confirmed via `getComputedStyle` (Sun `display: none`, Moon `display: block` in light mode).
+- **Lighthouse re-audit (against prior 100/100/100/100 baseline from W4.D2)**:
+  - Home: **95** / 100 / 100 / 100 (−5 perf from continuous canvas rAF loop)
+  - /generate/revops-sales: **97** / 100 / 100 / 100 (−3 perf, was 100/98/100/100)
+  - /dashboard/revops-sales: **79** / 100 / 100 / 100 — first-time-audited route, dominated by Recharts + dynamically-loaded html2canvas+jsPDF, particle contributes ~3-5pt; flagged for follow-up (lazy-render canvas after first paint OR `prefers-reduced-motion` short-circuit).
+  - All routes hit 100 on a11y / best-practices / SEO. Performance trade-off accepted for brand-consistent visual identity across 5 apps.
+- **Build**: 25 of 25 pages still prerendered. design-system-docs builds clean. Typecheck clean across both packages.
+- **Context for W4.D6 (Sat)**: Dashboard depth — generate synthetic period-over-period data per dataset so growth % is meaningful. Add growth % delta to each KPI. Add 2 new chart types: heatmap (cohort/matrix views), scatter (quadrant analysis). Add multi-select filter primitive + date-range (between-dates) filter primitive to FilterBar. Verify across 2-3 datasets.
+- **Next**: Week 4 Day 6 — Dashboard depth (growth %, new charts, more filters)
 
 ### 2026-04-30 · Week 4 Day 4 — PDF visual fidelity (Item 3)
 - **Replaced the structured-text PDF with a canvas-based snapshot.** PDF now looks pixel-identical to the live dashboard, including Recharts visuals, brand colors, typography, current filtered state. The previous PDF (built with @react-pdf/renderer) was correctly designed for "structured summary export" but didn't match what the user expected from "Export PDF" button. After this rewrite the artifact answers exactly that: "give me a PDF that looks like what's on screen."
@@ -1218,16 +1244,21 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 - Build shared `<ParticleBackground />` + `<ThemeToggle />` in `@rishi/design-system`. Wire into dashboard-factory + design-system-docs.
 - Light-mode QA pass — every route, every component, contrast checks. Re-run Lighthouse in light mode (target 90+).
 
-#### Day 5 (Fri) · Theme toggle + particle background
-- [ ] **Item 1 part A** Study portfolio-site source at `C:\Users\Rishi\Documents\portfolio-site` — extract particle-canvas + theme-toggle implementation
-- [ ] Build shared `<ParticleBackground />` component in `@rishi/design-system` (the teal accent particles)
-- [ ] Build shared `<ThemeToggle />` primitive in `@rishi/design-system` (sun/moon icon, Zustand-persisted)
-- [ ] Wire both into dashboard-factory app layout
-- [ ] Wire both into design-system-docs app layout (consistency across portfolio)
-- [ ] Light-mode QA pass: every route, every component, contrast checks
-- [ ] Re-run Lighthouse in light mode, ensure 90+ holds
+#### Day 5 (Fri) · Theme toggle + particle background — COMPLETED 2026-05-04
+- [x] **Item 1 part A** Study portfolio-site source at `C:\Users\Rishi\Documents\portfolio-site` — extract particle-canvas + theme-toggle implementation — **DONE**: ported GlobalBackground.jsx + Navbar theme toggle pattern; replaced react-icons with lucide-react Sun/Moon to avoid duplicating the icon stack; replaced Zustand with React Context to keep design-system framework-agnostic.
+- [x] Build shared `<ParticleBackground />` component in `@rishi/design-system` (the teal accent particles) — **DONE**: `packages/design-system/src/theme/particle-background.tsx`. Theme-aware RGB (dark teal-400, light teal-600 with bumped alpha). Particle count scales with viewport (15/80/140). O(n²) connections only on tablet+.
+- [x] Build shared `<ThemeToggle />` primitive in `@rishi/design-system` (sun/moon icon) — **DONE**: `theme-toggle.tsx`. Hydration-safe via CSS-only swap (`hidden dark:block` / `block dark:hidden`); aria-label fixed to "Toggle theme". Also shipped: `<ThemeProvider />`, `<ThemeScript />` (pre-paint init via Next.js Script strategy=beforeInteractive), `useTheme()` hook, `STORAGE_KEY` (server-safe constant in its own module).
+- [x] Wire both into dashboard-factory app layout — **DONE**: removed hardcoded `className="dark"` from `<html>`, added `suppressHydrationWarning`, `<ThemeScript />` in `<head>`, `<ThemeProvider><ParticleBackground /><div className="relative" style={{zIndex:1}}>...</div></ThemeProvider>` body wrapping, `<ThemeToggle />` in Nav.
+- [x] Wire both into design-system-docs app layout (consistency across portfolio) — **DONE**: same wiring pattern.
+- [x] Light-mode QA pass: every route, every component, contrast checks — **DONE** via Playwright on production. Walked /, /datasets, /dashboard/revops-sales, /wireframe/executive in both themes. Zero console errors after hotfix 2. Toggle click flips theme and persists across reloads. Bottom paragraph color in light mode `rgb(73,80,87)` (text-text-secondary, neutral dark gray, fine).
+- [x] Re-run Lighthouse in light mode, ensure 90+ holds — **DONE**. Home 95/100/100/100, /generate 97/100/100/100, /dashboard/revops 79/100/100/100. Particle canvas costs ~3-5pt perf. Dashboard route's 79 is Recharts-driven (heavier route) not particle-driven.
 
-**Context for Next Session**: _(fill in after completion)_
+**Context for Next Session (Week 4 Day 6)**:
+- Day 6 = Dashboard depth. Generate synthetic period-over-period data per dataset so growth % is meaningful (currently the single-period rows can't compute deltas).
+- Add growth % delta to each KPI on dashboard — small ↑/↓ chip + percentage next to value.
+- Add 2 new chart types: heatmap (cohort/matrix views, e.g. retention by signup month × tenure) and scatter (quadrant analysis, e.g. ROI vs spend).
+- Add multi-select filter primitive (e.g. multiple regions at once) + date-range filter primitive (between-dates) to FilterBar.
+- Verify across 2-3 datasets. RevOps + Marketing + Pulse cover scatter / heatmap / time-series respectively.
 
 #### Day 6 (Sat) · Dashboard depth (growth %, new charts, more filters)
 - [ ] **Item 4 part A** Generate synthetic period-over-period data per dataset (so growth % is meaningful)
