@@ -63,6 +63,7 @@ export function DashboardView({
             value={kpi.value}
             unit={kpi.unit}
             sparkline={kpi.sparkline}
+            delta={kpi.delta}
           />
         ))}
       </div>

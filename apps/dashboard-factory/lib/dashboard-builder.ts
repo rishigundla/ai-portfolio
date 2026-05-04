@@ -15,6 +15,9 @@
 
 import type { ColumnSchema } from './full-datasets'
 import { bucketSparkline, formatInteger, formatKpiValue, pluralize } from './format'
+import { splitByPeriod } from './period'
+
+import type { KpiDelta } from '@rishi/design-system/components'
 
 // ============================================================
 // Types
@@ -29,6 +32,13 @@ export interface DashboardKpi {
   unit?: string
   /** Bucketed values for the inline sparkline. */
   sparkline?: number[]
+  /**
+   * Period-over-period growth on this KPI. Set only for measure-based KPIs
+   * when the dataset has enough date range to split in half cleanly.
+   * Derived KPIs (counts, top values) leave this undefined since
+   * period comparison isn't semantically meaningful for them.
+   */
+  delta?: KpiDelta
 }
 
 export type DashboardChartData =
@@ -101,7 +111,8 @@ export function buildDashboardLayout(
     return distinct > 1 && distinct < rows.length
   })
 
-  const kpis = buildKpis(rows, measures, usefulDimensions, idColumn)
+  const period = splitByPeriod(rows, times[0])
+  const kpis = buildKpis(rows, measures, usefulDimensions, idColumn, period)
   const charts: DashboardChart[] = []
 
   // Primary bar: top measure × primary useful dimension
@@ -141,6 +152,7 @@ function buildKpis(
   measures: ColumnSchema[],
   dimensions: ColumnSchema[],
   idColumn: ColumnSchema | undefined,
+  period: ReturnType<typeof splitByPeriod>,
 ): DashboardKpi[] {
   // 1. Schema measures (sum or avg per the schema's aggregation hint).
   const measureKpis: DashboardKpi[] = measures.slice(0, TARGET_KPI_COUNT).map((measure) => {
@@ -159,6 +171,7 @@ function buildKpis(
       rawValue: aggregated,
       unit: measure.unit,
       sparkline: bucketSparkline(values, 8),
+      delta: period ? computeMeasureDelta(measure, period) : undefined,
     }
   })
 
@@ -326,6 +339,44 @@ function buildLineChart(
       points,
       max,
     },
+  }
+}
+
+/**
+ * Compute period-over-period delta for a measure. Returns the same shape
+ * KpiCard's `delta` prop expects, or undefined when prior aggregate is zero
+ * (no meaningful comparison) or both halves yield no numeric values.
+ *
+ * Direction: 'up' if current > prior, 'down' if smaller, 'neutral' on equal.
+ * Value is the absolute percent change (KpiCard renders an absolute value
+ * with a directional arrow, so signs would double up).
+ */
+function computeMeasureDelta(
+  measure: ColumnSchema,
+  period: NonNullable<ReturnType<typeof splitByPeriod>>,
+): KpiDelta | undefined {
+  const aggregate = (rows: Record<string, unknown>[]): number | null => {
+    const values = rows
+      .map((r) => r[measure.name])
+      .filter((v): v is number => typeof v === 'number')
+    if (values.length === 0) return null
+    return measure.aggregation === 'avg'
+      ? values.reduce((a, b) => a + b, 0) / values.length
+      : values.reduce((a, b) => a + b, 0)
+  }
+
+  const curr = aggregate(period.currentRows)
+  const prior = aggregate(period.priorRows)
+  if (curr === null || prior === null || prior === 0) return undefined
+
+  const changePct = ((curr - prior) / Math.abs(prior)) * 100
+  const direction: KpiDelta['direction'] =
+    Math.abs(changePct) < 0.05 ? 'neutral' : changePct > 0 ? 'up' : 'down'
+
+  return {
+    value: Math.round(changePct * 10) / 10,
+    direction,
+    period: 'vs prior period',
   }
 }
 
