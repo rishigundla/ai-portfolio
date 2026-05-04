@@ -52,4 +52,12 @@
     background-image: radial-gradient(rgba(var(--particle-color), var(--dot-opacity)) 1px, transparent 1px);
     background-size: 24px 24px;
   }
+
+  /* When the dashboard subtree is being captured for PDF export, hide
+     interactive affordance chrome that would render as visual clutter
+     in a static document. Driven by data-exporting toggle in
+     _dashboard-interactive.tsx exportPdf handler. */
+  [data-exporting="true"] [aria-label="Click bars or slices to drill in"] {
+    display: none !important;
+  }
 }

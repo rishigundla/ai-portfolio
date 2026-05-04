@@ -147,6 +147,11 @@ export function DashboardInteractive({
         import('jspdf'),
       ])
 
+      // Mark the subtree as 'exporting' so globals.css can hide the
+      // interactive drill-in chips (affordance for click, irrelevant in
+      // a static PDF). Cleared in finally{} below regardless of outcome.
+      target.setAttribute('data-exporting', 'true')
+
       // Capture at 2x device pixel ratio for crisp text/charts on print.
       // backgroundColor: matches the app's base-900 so the PDF page tint
       // outside the captured region looks intentional, not a leak.
@@ -167,8 +172,31 @@ export function DashboardInteractive({
       const pageWidthMm = 210
       const pageHeightMm = 297
       const marginMm = 8
+      const headerHeightMm = 14
       const usableWidthMm = pageWidthMm - marginMm * 2
-      const usableHeightMm = pageHeightMm - marginMm * 2
+      const usableHeightMm = pageHeightMm - marginMm * 2 - headerHeightMm
+
+      // Programmatic header on page 1 so the PDF identifies the source
+      // dataset + export date even when shared without context. Renders
+      // as native PDF text (selectable, searchable) above the canvas
+      // image. Subsequent pages get just a thin "{title} · page N" line.
+      const exportDateStamp = new Date().toLocaleDateString('en-US', {
+        year: 'numeric', month: 'short', day: 'numeric',
+      })
+      pdf.setFontSize(14)
+      pdf.setTextColor(45, 212, 191) // accent teal
+      pdf.text('Dashboard Factory', marginMm, marginMm + 5)
+      pdf.setFontSize(11)
+      pdf.setTextColor(241, 245, 249) // text-primary
+      pdf.text(metadata.title, marginMm, marginMm + 11)
+      pdf.setFontSize(8)
+      pdf.setTextColor(148, 163, 184) // text-muted (slate-400)
+      pdf.text(
+        `Exported ${exportDateStamp} • ${filteredRows.length} of ${rows.length} rows`,
+        pageWidthMm - marginMm,
+        marginMm + 11,
+        { align: 'right' },
+      )
 
       // Convert capture pixel dims to mm using ratio of usableWidthMm to
       // canvas width. The full canvas height in mm tells us if we need
@@ -181,7 +209,7 @@ export function DashboardInteractive({
           canvas.toDataURL('image/jpeg', 0.92),
           'JPEG',
           marginMm,
-          marginMm,
+          marginMm + headerHeightMm,
           usableWidthMm,
           canvasMmHeight,
         )
@@ -216,11 +244,14 @@ export function DashboardInteractive({
           )
           const sliceMmHeight = (thisSlicePx * usableWidthMm) / canvas.width
           if (!isFirstPage) pdf.addPage()
+          // First page reserves headerHeightMm at top for the title;
+          // subsequent pages start at the regular margin (no header).
+          const yPosMm = isFirstPage ? marginMm + headerHeightMm : marginMm
           pdf.addImage(
             sliceCanvas.toDataURL('image/jpeg', 0.92),
             'JPEG',
             marginMm,
-            marginMm,
+            yPosMm,
             usableWidthMm,
             sliceMmHeight,
           )
@@ -240,12 +271,18 @@ export function DashboardInteractive({
         err instanceof Error ? err.message : 'Unknown error',
       )
     } finally {
+      const target = document.getElementById('dashboard-capture-target')
+      if (target) target.removeAttribute('data-exporting')
       setIsExporting(false)
     }
-  }, [fullDataset.id])
+  }, [fullDataset.id, metadata.title, filteredRows.length, rows.length])
 
   return (
-    <div className="space-y-6">
+    // id + data-exporting flag here mark the dashboard subtree for PDF
+    // capture. data-exporting is toggled by the export handler and used
+    // by globals.css to hide affordance chrome (the drill-in chips) that
+    // shouldn't appear in a static PDF.
+    <div id="dashboard-capture-target" className="space-y-6">
       {/* Filter bar */}
       <FilterBar>
         <FilterBar.Search
