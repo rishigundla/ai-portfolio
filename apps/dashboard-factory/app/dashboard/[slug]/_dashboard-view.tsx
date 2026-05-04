@@ -12,10 +12,13 @@ import {
   Pie,
   PieChart,
   ResponsiveContainer,
+  Scatter,
+  ScatterChart,
   Tooltip,
   type TooltipProps,
   XAxis,
   YAxis,
+  ZAxis,
 } from 'recharts'
 import { ChartCard, KpiCard } from '@rishi/design-system/components'
 import type {
@@ -208,6 +211,10 @@ function ChartRenderer({
       return (
         <DonutChartView data={chart.data} colors={colors} onDonutClick={onDonutClick} />
       )
+    case 'heatmap':
+      return <HeatmapChartView data={chart.data} />
+    case 'scatter':
+      return <ScatterChartView data={chart.data} />
   }
 }
 
@@ -438,6 +445,195 @@ function EmptyChart({ message }: { message: string }) {
   return (
     <div className="flex h-full items-center justify-center text-sm text-text-muted">
       {message}
+    </div>
+  )
+}
+
+// ============================================================
+// Heatmap (CSS grid — Recharts has no heatmap primitive)
+// ============================================================
+
+function HeatmapChartView({
+  data,
+}: {
+  data: Extract<DashboardChartData, { type: 'heatmap' }>
+}) {
+  if (data.cells.length === 0 || data.max === 0) {
+    return <EmptyChart message="No heatmap data" />
+  }
+  const cellMap = React.useMemo(() => {
+    const m = new Map<string, number>()
+    for (const c of data.cells) m.set(`${c.x}|${c.y}`, c.value)
+    return m
+  }, [data.cells])
+
+  return (
+    <div className="w-full h-[280px] flex flex-col text-xs">
+      {/* Grid: y-label column + one column per x-label */}
+      <div
+        className="flex-1 grid gap-px overflow-hidden rounded-md border border-surface-border"
+        style={{
+          gridTemplateColumns: `minmax(80px, 110px) repeat(${data.xLabels.length}, minmax(0, 1fr))`,
+          gridTemplateRows: `repeat(${data.yLabels.length}, minmax(0, 1fr))`,
+        }}
+      >
+        {data.yLabels.map((y) => (
+          <React.Fragment key={y}>
+            <div className="flex items-center px-2 bg-surface text-text-secondary truncate">
+              {y}
+            </div>
+            {data.xLabels.map((x) => {
+              const v = cellMap.get(`${x}|${y}`) ?? 0
+              const intensity = data.max > 0 ? v / data.max : 0
+              return (
+                <div
+                  key={`${x}|${y}`}
+                  title={`${y} · ${x}: ${formatChartValue(v)} ${data.valueLabel}`}
+                  className="bg-surface relative"
+                  style={{
+                    backgroundColor:
+                      intensity > 0
+                        ? `rgba(45, 212, 191, ${0.08 + intensity * 0.8})`
+                        : 'var(--color-surface)',
+                  }}
+                />
+              )
+            })}
+          </React.Fragment>
+        ))}
+      </div>
+
+      {/* x-axis labels under the grid (skipped first column for y-label gutter) */}
+      <div
+        className="grid gap-px mt-2 text-text-muted font-mono text-[10px]"
+        style={{
+          gridTemplateColumns: `minmax(80px, 110px) repeat(${data.xLabels.length}, minmax(0, 1fr))`,
+        }}
+      >
+        <div />
+        {data.xLabels.map((x) => (
+          <div key={x} className="truncate text-center">
+            {x}
+          </div>
+        ))}
+      </div>
+
+      {/* Legend bar */}
+      <div className="mt-2 flex items-center gap-2 text-text-muted font-mono text-[10px]">
+        <span>0</span>
+        <div
+          className="flex-1 h-1.5 rounded-full"
+          style={{
+            background:
+              'linear-gradient(to right, rgba(45, 212, 191, 0.08), rgba(45, 212, 191, 0.88))',
+          }}
+        />
+        <span>{formatChartValue(data.max)}</span>
+        <span className="text-text-secondary truncate">{data.valueLabel}</span>
+      </div>
+    </div>
+  )
+}
+
+// ============================================================
+// Scatter (Recharts ScatterChart)
+// ============================================================
+
+function ScatterChartView({
+  data,
+}: {
+  data: Extract<DashboardChartData, { type: 'scatter' }>
+}) {
+  if (data.points.length === 0) {
+    return <EmptyChart message="No scatter data" />
+  }
+  return (
+    <div className="w-full h-[280px]">
+      <ResponsiveContainer width="100%" height="100%">
+        <ScatterChart margin={{ top: 8, right: 16, left: 0, bottom: 16 }}>
+          <CartesianGrid
+            strokeDasharray="3 3"
+            stroke="var(--color-surface-border)"
+          />
+          <XAxis
+            type="number"
+            dataKey="x"
+            name={data.xLabel}
+            tick={{ fontSize: 10, fill: 'var(--color-text-muted)' }}
+            tickFormatter={formatChartValue}
+            axisLine={false}
+            tickLine={false}
+            label={{
+              value: data.xLabel,
+              position: 'insideBottom',
+              offset: -8,
+              style: {
+                fontSize: 10,
+                fill: 'var(--color-text-secondary)',
+                fontFamily: 'var(--font-mono)',
+              },
+            }}
+          />
+          <YAxis
+            type="number"
+            dataKey="y"
+            name={data.yLabel}
+            tick={{ fontSize: 10, fill: 'var(--color-text-muted)' }}
+            tickFormatter={formatChartValue}
+            axisLine={false}
+            tickLine={false}
+            width={45}
+          />
+          <ZAxis range={[40, 40]} />
+          <Tooltip
+            content={<ScatterTooltip xLabel={data.xLabel} yLabel={data.yLabel} />}
+            cursor={{ strokeDasharray: '3 3', stroke: 'var(--color-accent)' }}
+          />
+          <Scatter
+            data={data.points}
+            fill="var(--color-accent)"
+            fillOpacity={0.7}
+            stroke="var(--color-accent-light)"
+            strokeWidth={1}
+          />
+        </ScatterChart>
+      </ResponsiveContainer>
+    </div>
+  )
+}
+
+function ScatterTooltip({
+  active,
+  payload,
+  xLabel,
+  yLabel,
+}: TooltipProps<number, string> & { xLabel: string; yLabel: string }) {
+  if (!active || !payload || payload.length === 0) return null
+  const point = payload[0]?.payload as
+    | { x: number; y: number; label: string }
+    | undefined
+  if (!point) return null
+  return (
+    <div className="rounded-md border border-surface-border bg-surface-elevated px-3 py-2 shadow-lg text-xs backdrop-blur-sm">
+      {point.label && (
+        <div className="text-text-muted mb-1.5 font-mono text-[10px] uppercase tracking-wider">
+          {point.label}
+        </div>
+      )}
+      <div className="space-y-0.5">
+        <div className="flex justify-between gap-4">
+          <span className="text-text-secondary">{xLabel}</span>
+          <span className="text-text-primary font-mono font-semibold">
+            {formatChartValue(point.x)}
+          </span>
+        </div>
+        <div className="flex justify-between gap-4">
+          <span className="text-text-secondary">{yLabel}</span>
+          <span className="text-text-primary font-mono font-semibold">
+            {formatChartValue(point.y)}
+          </span>
+        </div>
+      </div>
     </div>
   )
 }

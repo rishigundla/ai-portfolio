@@ -59,6 +59,28 @@ export type DashboardChartData =
       dimensionKey: string
       dimensionLabel: string
     }
+  | {
+      type: 'heatmap'
+      /** Cells indexed by (xLabels.indexOf(x), yLabels.indexOf(y)). */
+      cells: Array<{ x: string; y: string; value: number }>
+      xLabels: string[]
+      yLabels: string[]
+      max: number
+      xLabel: string
+      yLabel: string
+      /** What the cell value represents — "Total ACV", "Row count", etc. */
+      valueLabel: string
+    }
+  | {
+      type: 'scatter'
+      points: Array<{ x: number; y: number; label: string }>
+      xKey: string
+      yKey: string
+      xLabel: string
+      yLabel: string
+      xUnit?: string
+      yUnit?: string
+    }
 
 export interface DashboardChart {
   id: string
@@ -115,28 +137,37 @@ export function buildDashboardLayout(
   const kpis = buildKpis(rows, measures, usefulDimensions, idColumn, period)
   const charts: DashboardChart[] = []
 
-  // Primary bar: top measure × primary useful dimension
+  // Slot 1: primary bar (top measure × primary useful dimension)
   if (measures[0] && usefulDimensions[0]) {
     charts.push(buildBarChart(rows, measures[0], usefulDimensions[0], 'primary-bar'))
   }
 
-  // Trend line: top measure × time (if time column exists)
+  // Slot 2: trend line (top measure × time)
   if (measures[0] && times[0]) {
     charts.push(buildLineChart(rows, measures[0], times[0]))
   }
 
-  // Donut: distribution by secondary useful dimension (falls back to primary)
-  const donutDim = usefulDimensions[1] ?? usefulDimensions[0]
-  if (donutDim) {
-    charts.push(buildDonutChart(rows, donutDim))
+  // Slot 3: scatter (≥ 2 measures, quadrant analysis) OR donut (distribution).
+  // Scatter wins when the dataset is numerically rich enough for a 2-measure
+  // view — that's a higher-information chart than yet another distribution.
+  if (measures[0] && measures[1]) {
+    charts.push(buildScatterChart(rows, measures[0], measures[1], idColumn, usefulDimensions[0]))
+  } else {
+    const donutDim = usefulDimensions[1] ?? usefulDimensions[0]
+    if (donutDim) {
+      charts.push(buildDonutChart(rows, donutDim))
+    }
   }
 
-  // Secondary bar: top measure × tertiary useful dimension (different from
-  // the primary bar). Keeps the 4-chart promise — fixtures consistently
-  // recommend a 4th view that isn't a simple table.
-  if (measures[0] && usefulDimensions[2]) {
+  // Slot 4: heatmap (time × primary useful dim) OR secondary bar (3rd dim).
+  // Heatmap wins when there's both time AND a categorical dimension — the
+  // matrix view answers "which segment is rising/falling over time", which
+  // a separate trend line + segment bar can't show together.
+  if (times[0] && usefulDimensions[0]) {
+    charts.push(buildHeatmapChart(rows, times[0], usefulDimensions[0], measures[0]))
+  } else if (measures[0] && usefulDimensions[2]) {
     charts.push(buildBarChart(rows, measures[0], usefulDimensions[2], 'secondary-bar'))
-  } else if (measures[0] && usefulDimensions[1] && donutDim !== usefulDimensions[1]) {
+  } else if (measures[0] && usefulDimensions[1]) {
     charts.push(buildBarChart(rows, measures[0], usefulDimensions[1], 'secondary-bar'))
   }
 
@@ -377,6 +408,176 @@ function computeMeasureDelta(
     value: Math.round(changePct * 10) / 10,
     direction,
     period: 'vs prior period',
+  }
+}
+
+/**
+ * Build a scatter chart from two measures. Each row becomes one point.
+ * Used for quadrant analysis (ROI vs spend, ACV vs GRR%, etc.) — not
+ * aggregated, so users see actual record-level distribution.
+ *
+ * Caps at 100 points to keep render cost bounded; samples evenly when
+ * row count exceeds the cap. The portfolio fixtures top out around 50
+ * rows so the cap rarely triggers, but downstream consumers may pass
+ * larger sets.
+ */
+function buildScatterChart(
+  rows: Record<string, unknown>[],
+  measureX: ColumnSchema,
+  measureY: ColumnSchema,
+  idColumn: ColumnSchema | undefined,
+  fallbackLabelDim: ColumnSchema | undefined,
+): DashboardChart {
+  const labelKey = idColumn?.name ?? fallbackLabelDim?.name
+  const points = rows
+    .map((r) => {
+      const x = r[measureX.name]
+      const y = r[measureY.name]
+      if (typeof x !== 'number' || typeof y !== 'number') return null
+      const label = labelKey ? String(r[labelKey] ?? '') : ''
+      return { x, y, label }
+    })
+    .filter((p): p is { x: number; y: number; label: string } => p !== null)
+
+  const MAX_POINTS = 100
+  const sampled =
+    points.length <= MAX_POINTS
+      ? points
+      : points.filter((_, i) => i % Math.ceil(points.length / MAX_POINTS) === 0)
+
+  return {
+    id: 'quadrant-scatter',
+    title: `${measureX.label} vs ${measureY.label}`,
+    subtitle: `Each dot is one record · ${sampled.length} points`,
+    data: {
+      type: 'scatter',
+      points: sampled,
+      xKey: measureX.name,
+      yKey: measureY.name,
+      xLabel: measureX.label,
+      yLabel: measureY.label,
+      xUnit: measureX.unit,
+      yUnit: measureY.unit,
+    },
+  }
+}
+
+/**
+ * Build a heatmap (time bucket × dimension value matrix). Cells contain the
+ * sum of `valueMeasure` (or row count when no measure is provided).
+ *
+ * Time bucketing: monthly when the date span fits in ≤ 18 months, yearly
+ * when the span exceeds that. Avoids sparse grids on multi-year datasets
+ * (customer-demographics spans 2020-2024) and over-wide grids on single-
+ * month datasets.
+ *
+ * Y axis is the top {@link TOP_N_BARS} values of the dimension (matches the
+ * primary-bar chart's truncation). Smaller values fold into "Other".
+ */
+function buildHeatmapChart(
+  rows: Record<string, unknown>[],
+  timeCol: ColumnSchema,
+  dim: ColumnSchema,
+  valueMeasure: ColumnSchema | undefined,
+): DashboardChart {
+  // Parse and time-bucket every row
+  const dated = rows
+    .map((r) => {
+      const v = r[timeCol.name]
+      if (typeof v !== 'string') return null
+      const d = new Date(v)
+      if (Number.isNaN(d.getTime())) return null
+      return { row: r, date: d }
+    })
+    .filter((x): x is { row: Record<string, unknown>; date: Date } => x !== null)
+
+  if (dated.length === 0) {
+    return {
+      id: 'time-heatmap',
+      title: `${dim.label} over ${timeCol.label}`,
+      subtitle: 'No time-series data',
+      data: {
+        type: 'heatmap',
+        cells: [],
+        xLabels: [],
+        yLabels: [],
+        max: 0,
+        xLabel: timeCol.label,
+        yLabel: dim.label,
+        valueLabel: valueMeasure?.label ?? 'Records',
+      },
+    }
+  }
+
+  const minTime = dated[0]!.date.getTime()
+  const maxTime = dated[dated.length - 1]!.date.getTime()
+  const spanMonths = (maxTime - minTime) / (1000 * 60 * 60 * 24 * 30.44)
+  const granularity: 'month' | 'year' = spanMonths > 18 ? 'year' : 'month'
+
+  const bucketKey = (d: Date): string => {
+    if (granularity === 'year') return String(d.getFullYear())
+    return `${d.toLocaleString('en-US', { month: 'short' })} ${d.getFullYear()}`
+  }
+
+  const xLabelsSet = new Set<string>()
+  const dimCounts = new Map<string, number>()
+  for (const { row, date } of dated) {
+    xLabelsSet.add(bucketKey(date))
+    const dimVal = String(row[dim.name] ?? 'Unknown')
+    const w = valueMeasure ? Number(row[valueMeasure.name]) : 1
+    dimCounts.set(dimVal, (dimCounts.get(dimVal) ?? 0) + (Number.isFinite(w) ? w : 0))
+  }
+
+  // Top-N dim values, fold rest into Other
+  const sortedDims = [...dimCounts.entries()]
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, TOP_N_BARS)
+    .map(([k]) => k)
+  const dimSet = new Set(sortedDims)
+  const yLabels = [...sortedDims, ...(dimCounts.size > sortedDims.length ? ['Other'] : [])]
+
+  const xLabels = [...xLabelsSet].sort((a, b) => {
+    // Stable chronological sort — convert label back to a Date for comparison
+    const da = new Date(a).getTime()
+    const db = new Date(b).getTime()
+    if (Number.isNaN(da) || Number.isNaN(db)) return a.localeCompare(b)
+    return da - db
+  })
+
+  // Build cell map keyed by `${x}|${y}`
+  const cellMap = new Map<string, number>()
+  for (const { row, date } of dated) {
+    const x = bucketKey(date)
+    const dimVal = String(row[dim.name] ?? 'Unknown')
+    const y = dimSet.has(dimVal) ? dimVal : 'Other'
+    const w = valueMeasure ? Number(row[valueMeasure.name]) : 1
+    if (!Number.isFinite(w)) continue
+    const key = `${x}|${y}`
+    cellMap.set(key, (cellMap.get(key) ?? 0) + w)
+  }
+
+  const cells: Array<{ x: string; y: string; value: number }> = []
+  for (const x of xLabels) {
+    for (const y of yLabels) {
+      cells.push({ x, y, value: cellMap.get(`${x}|${y}`) ?? 0 })
+    }
+  }
+  const max = cells.reduce((m, c) => Math.max(m, c.value), 0)
+
+  return {
+    id: 'time-heatmap',
+    title: `${dim.label} over ${timeCol.label}`,
+    subtitle: `${xLabels.length} ${granularity}s × ${yLabels.length} ${pluralize(dim.label.toLowerCase())}${valueMeasure ? ` · ${valueMeasure.label}` : ' · row count'}`,
+    data: {
+      type: 'heatmap',
+      cells,
+      xLabels,
+      yLabels,
+      max,
+      xLabel: timeCol.label,
+      yLabel: dim.label,
+      valueLabel: valueMeasure?.label ?? 'Records',
+    },
   }
 }
 
