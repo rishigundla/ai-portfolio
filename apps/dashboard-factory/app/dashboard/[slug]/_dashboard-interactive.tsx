@@ -105,8 +105,8 @@ export function DashboardInteractive({
     [rows, schema, filters],
   )
   const layout = React.useMemo(
-    () => buildDashboardLayout(filteredRows, schema),
-    [filteredRows, schema],
+    () => buildDashboardLayout(filteredRows, schema, fullDataset.id),
+    [filteredRows, schema, fullDataset.id],
   )
 
   // Drill-down handler — open a dialog showing rows matching the clicked label

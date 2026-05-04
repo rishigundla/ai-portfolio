@@ -16,6 +16,11 @@
 import type { ColumnSchema } from './full-datasets'
 import { bucketSparkline, formatInteger, formatKpiValue, pluralize } from './format'
 import { splitByPeriod } from './period'
+import {
+  getDomainOverride,
+  type ChartPick,
+  type DomainOverride,
+} from './per-domain-layout'
 
 import type { KpiDelta } from '@rishi/design-system/components'
 
@@ -137,6 +142,13 @@ const TARGET_KPI_COUNT = 5
 export function buildDashboardLayout(
   rows: Record<string, unknown>[],
   schema: ColumnSchema[],
+  /**
+   * Optional dataset slug. When provided and a per-domain override is
+   * registered for it (see `lib/per-domain-layout.ts`), the override drives
+   * KPI + chart selection. When absent or unknown, the generic schema-driven
+   * allocator kicks in (W4.D6 behavior).
+   */
+  slug?: string,
 ): DashboardLayout {
   const measures = schema.filter((c) => c.type === 'measure')
   const dimensions = schema.filter((c) => c.type === 'dimension')
@@ -152,7 +164,31 @@ export function buildDashboardLayout(
   })
 
   const period = splitByPeriod(rows, times[0])
-  const kpis = buildKpis(rows, measures, usefulDimensions, idColumn, period)
+  const override = slug ? getDomainOverride(slug) : undefined
+
+  const kpis = override
+    ? buildOverrideKpis(rows, schema, measures, usefulDimensions, idColumn, period, override)
+    : buildKpis(rows, measures, usefulDimensions, idColumn, period)
+
+  const charts: DashboardChart[] = override
+    ? resolveOverrideCharts(rows, schema, idColumn, override)
+    : buildGenericCharts(rows, schema, measures, usefulDimensions, times, idColumn)
+
+  return { kpis, charts }
+}
+
+/**
+ * Generic chart-slot allocator (W4.D6 behavior). Used for any dataset
+ * without a registered per-domain override.
+ */
+function buildGenericCharts(
+  rows: Record<string, unknown>[],
+  schema: ColumnSchema[],
+  measures: ColumnSchema[],
+  usefulDimensions: ColumnSchema[],
+  times: ColumnSchema[],
+  idColumn: ColumnSchema | undefined,
+): DashboardChart[] {
   const charts: DashboardChart[] = []
 
   // Slot 1: primary bar (top measure × primary useful dimension)
@@ -165,22 +201,15 @@ export function buildDashboardLayout(
     charts.push(buildLineChart(rows, measures[0], times[0]))
   }
 
-  // Slot 3: scatter (≥ 2 measures, quadrant analysis) OR donut (distribution).
-  // Scatter wins when the dataset is numerically rich enough for a 2-measure
-  // view — that's a higher-information chart than yet another distribution.
+  // Slot 3: scatter (≥ 2 measures) OR donut (fallback)
   if (measures[0] && measures[1]) {
     charts.push(buildScatterChart(rows, measures[0], measures[1], idColumn, usefulDimensions[0]))
   } else {
     const donutDim = usefulDimensions[1] ?? usefulDimensions[0]
-    if (donutDim) {
-      charts.push(buildDonutChart(rows, donutDim))
-    }
+    if (donutDim) charts.push(buildDonutChart(rows, donutDim))
   }
 
-  // Slot 4: heatmap (time × primary useful dim) OR secondary bar (3rd dim).
-  // Heatmap wins when there's both time AND a categorical dimension — the
-  // matrix view answers "which segment is rising/falling over time", which
-  // a separate trend line + segment bar can't show together.
+  // Slot 4: heatmap (time × dim) OR secondary bar (fallback)
   if (times[0] && usefulDimensions[0]) {
     charts.push(buildHeatmapChart(rows, times[0], usefulDimensions[0], measures[0]))
   } else if (measures[0] && usefulDimensions[2]) {
@@ -189,12 +218,219 @@ export function buildDashboardLayout(
     charts.push(buildBarChart(rows, measures[0], usefulDimensions[1], 'secondary-bar'))
   }
 
-  return { kpis, charts }
+  return charts
+}
+
+/**
+ * Resolve a per-domain override into concrete DashboardCharts. Each pick
+ * dispatches to the matching builder fn; missing columns warn and skip.
+ */
+function resolveOverrideCharts(
+  rows: Record<string, unknown>[],
+  schema: ColumnSchema[],
+  idColumn: ColumnSchema | undefined,
+  override: DomainOverride,
+): DashboardChart[] {
+  const byName = new Map(schema.map((c) => [c.name, c]))
+  const findMeasure = (name?: string): ColumnSchema | undefined => {
+    if (!name) return undefined
+    const c = byName.get(name)
+    return c?.type === 'measure' ? c : undefined
+  }
+  const findDim = (name?: string): ColumnSchema | undefined => {
+    if (!name) return undefined
+    const c = byName.get(name)
+    return c?.type === 'dimension' ? c : undefined
+  }
+  const timeCol = schema.find((c) => c.type === 'time')
+
+  const charts: DashboardChart[] = []
+  for (const pick of override.chartPicks) {
+    const chart = resolveChartPick(rows, pick, {
+      findMeasure,
+      findDim,
+      timeCol,
+      idColumn,
+    })
+    if (chart) {
+      // Honor per-pick title override if provided.
+      charts.push(pick.title ? { ...chart, title: pick.title } : chart)
+    } else {
+      // Surface override misconfigs in dev — silent skips would hide bugs.
+      // eslint-disable-next-line no-console
+      console.warn(
+        `[dashboard-builder] Skipped chart pick (kind=${pick.kind}) — required column(s) missing or wrong type.`,
+        pick,
+      )
+    }
+  }
+  return charts
+}
+
+interface PickResolverHelpers {
+  findMeasure: (name?: string) => ColumnSchema | undefined
+  findDim: (name?: string) => ColumnSchema | undefined
+  timeCol: ColumnSchema | undefined
+  idColumn: ColumnSchema | undefined
+}
+
+function resolveChartPick(
+  rows: Record<string, unknown>[],
+  pick: ChartPick,
+  h: PickResolverHelpers,
+): DashboardChart | null {
+  switch (pick.kind) {
+    case 'bar': {
+      const dim = h.findDim(pick.dimName)
+      if (!dim) return null
+      const measure = h.findMeasure(pick.measureName)
+      // When measureName is omitted on a bar pick, fall back to a
+      // count-by-dim style — render via buildDonutChart-ish counts:
+      // simplest implementation is a synthetic measure-less bar.
+      if (!measure) {
+        // Synthesize a count bar via temporary aggregation
+        const counts = new Map<string, number>()
+        for (const r of rows) {
+          const v = String(r[dim.name] ?? 'Unknown')
+          counts.set(v, (counts.get(v) ?? 0) + 1)
+        }
+        const sorted = [...counts.entries()].sort(([, a], [, b]) => b - a).slice(0, TOP_N_BARS)
+        const max = sorted[0]?.[1] ?? 0
+        return {
+          id: `bar-${dim.name}`,
+          title: `${dim.label} (count)`,
+          subtitle: `Top ${sorted.length} categories · row count`,
+          data: {
+            type: 'bar',
+            bars: sorted.map(([label, value]) => ({ label, value })),
+            max,
+            dimensionKey: dim.name,
+            dimensionLabel: dim.label,
+          },
+        }
+      }
+      return buildBarChart(rows, measure, dim, `bar-${dim.name}`)
+    }
+    case 'line': {
+      if (!h.timeCol) return null
+      // measureName optional — when omitted, build a count-over-time line.
+      const measure = h.findMeasure(pick.measureName)
+      if (measure) return buildLineChart(rows, measure, h.timeCol)
+      return buildCountLineChart(rows, h.timeCol)
+    }
+    case 'donut': {
+      const dim = h.findDim(pick.dimName)
+      if (!dim) return null
+      return buildDonutChart(rows, dim)
+    }
+    case 'heatmap': {
+      const dim = h.findDim(pick.dimName)
+      if (!h.timeCol || !dim) return null
+      const valueMeasure = h.findMeasure(pick.measureName)
+      return buildHeatmapChart(rows, h.timeCol, dim, valueMeasure)
+    }
+    case 'scatter': {
+      const measureX = h.findMeasure(pick.measureXName)
+      const measureY = h.findMeasure(pick.measureYName)
+      if (!measureX || !measureY) return null
+      return buildScatterChart(rows, measureX, measureY, h.idColumn, undefined)
+    }
+    case 'funnel': {
+      // Two flavors: dim-based or measure-aggregated
+      if (pick.funnelMeasureNames && pick.funnelMeasureNames.length > 0) {
+        const ms = pick.funnelMeasureNames
+          .map((n) => h.findMeasure(n))
+          .filter((m): m is ColumnSchema => m !== undefined)
+        if (ms.length === 0) return null
+        return buildFunnelChartFromMeasures(rows, ms, pick.title)
+      }
+      const dim = h.findDim(pick.dimName)
+      if (!dim) return null
+      return buildFunnelChart(rows, dim)
+    }
+    case 'histogram': {
+      const measure = h.findMeasure(pick.measureName)
+      if (!measure) return null
+      return buildHistogramChart(rows, measure)
+    }
+  }
+}
+
+/**
+ * Count-over-time line chart. Used for line picks that omit measureName
+ * (e.g. customer-demographics "signup count over time"). Buckets rows
+ * evenly across the time range, summing 1 per row.
+ */
+function buildCountLineChart(
+  rows: Record<string, unknown>[],
+  time: ColumnSchema,
+): DashboardChart {
+  const dated = rows
+    .map((r) => {
+      const v = r[time.name]
+      if (typeof v !== 'string') return null
+      const d = new Date(v)
+      if (Number.isNaN(d.getTime())) return null
+      return { date: d, value: 1 }
+    })
+    .filter((d): d is { date: Date; value: number } => d !== null)
+    .sort((a, b) => a.date.getTime() - b.date.getTime())
+
+  if (dated.length === 0) {
+    return {
+      id: 'count-line',
+      title: `Records over ${time.label}`,
+      subtitle: 'No time-series data',
+      data: { type: 'line', points: [], max: 0 },
+    }
+  }
+
+  const points: Array<{ label: string; value: number }> = []
+  const bucketSize = Math.max(1, Math.ceil(dated.length / LINE_BUCKETS))
+  for (let i = 0; i < dated.length; i += bucketSize) {
+    const slice = dated.slice(i, i + bucketSize)
+    const labelDate = slice[Math.floor(slice.length / 2)]?.date ?? slice[0]?.date
+    if (!labelDate) continue
+    const label = `${labelDate.toLocaleString('en-US', { month: 'short' })} ${labelDate.getFullYear()}`
+    points.push({ label, value: slice.length })
+  }
+
+  const max = points.reduce((m, p) => Math.max(m, p.value), 0)
+  return {
+    id: 'count-line',
+    title: `Records over ${time.label}`,
+    subtitle: `${points.length} buckets · ${dated.length} records`,
+    data: { type: 'line', points, max },
+  }
 }
 
 // ============================================================
 // Internals
 // ============================================================
+
+/**
+ * Per-domain KPI selection. Picks measures by name from the override's
+ * `kpiMeasureNames` list (in order), then fills any remaining slots with
+ * the same derived KPIs the generic builder uses.
+ */
+function buildOverrideKpis(
+  rows: Record<string, unknown>[],
+  schema: ColumnSchema[],
+  measures: ColumnSchema[],
+  dimensions: ColumnSchema[],
+  idColumn: ColumnSchema | undefined,
+  period: ReturnType<typeof splitByPeriod>,
+  override: DomainOverride,
+): DashboardKpi[] {
+  if (!override.kpiMeasureNames || override.kpiMeasureNames.length === 0) {
+    return buildKpis(rows, measures, dimensions, idColumn, period)
+  }
+  const byName = new Map(schema.map((c) => [c.name, c]))
+  const ordered: ColumnSchema[] = override.kpiMeasureNames
+    .map((n) => byName.get(n))
+    .filter((c): c is ColumnSchema => c?.type === 'measure')
+  return buildKpis(rows, ordered, dimensions, idColumn, period)
+}
 
 function buildKpis(
   rows: Record<string, unknown>[],
