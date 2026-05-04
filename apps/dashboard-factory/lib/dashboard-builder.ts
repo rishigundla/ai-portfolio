@@ -734,7 +734,12 @@ function buildHeatmapChart(
   dim: ColumnSchema,
   valueMeasure: ColumnSchema | undefined,
 ): DashboardChart {
-  // Parse and time-bucket every row
+  // Parse and time-bucket every row. Sort chronologically so dated[0] is
+  // the earliest date and dated[length-1] is the latest — buggy without
+  // this when the JSON happens to be in non-chronological order (e.g.
+  // customer-demographics' first row is 2022-03 and last row is 2021-12,
+  // giving a negative span and triggering monthly bucketing on what's
+  // actually a 4-year dataset).
   const dated = rows
     .map((r) => {
       const v = r[timeCol.name]
@@ -744,6 +749,7 @@ function buildHeatmapChart(
       return { row: r, date: d }
     })
     .filter((x): x is { row: Record<string, unknown>; date: Date } => x !== null)
+    .sort((a, b) => a.date.getTime() - b.date.getTime())
 
   if (dated.length === 0) {
     return {
