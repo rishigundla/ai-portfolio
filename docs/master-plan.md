@@ -17,12 +17,10 @@
 |-------|-------|
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
-| **Current Day** | Week 5 · Day 1 (Mon) — 6 new wireframe-mode datasets |
-| **Overall Progress** | 145 tasks of ~150 complete · **Production live at https://ai-portfolio-dashboard-factory.vercel.app** · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ · Week 3 ✓ · Week 4 ✓ |
-| **Status** | W4.D7 closed. **Week 4 complete.** Dashboard uniqueness shipped in 3 phased commits + 1 in-session hotfix. **Phase 1 (2804306) funnel + histogram chart types**: extended `DashboardChartData` union with 2 new variants. `buildFunnelChart(rows, dim)` sorts by `dim.values` ordering when present (preserving semantic stage order like Qualification → Proposal → Negotiation), else by count desc. `buildFunnelChartFromMeasures(rows, [m1, m2, ...])` sums each measure as a stage value (used for Marketing's Impressions → Clicks → Conversions). Funnel rendered as CSS-only horizontal bars with hover-clickable stages — drill-in wired only for dim-based funnels (measure funnels have no rows-per-stage to filter by). `buildHistogramChart(rows, measure)` uses Sturges' rule for bucket count (k = ceil(log2(n) + 1), capped [4, 12]); empty trailing bins dropped, empty middle bins kept. Rendered via Recharts BarChart with no-gap bars + range tooltips. **Phase 2 (faba6e4) per-domain layout overrides**: new `lib/per-domain-layout.ts` registers 6 hand-curated chart mixes — RevOps (deal-stage funnel), Marketing (Imp→Clicks→Conv funnel + CPA-vs-ROI scatter + spend heatmap), Pulse (latency histogram), Supply (lead-time histogram), Financial (response funnel + days-to-resolve histogram), Customer (LTV-vs-CSAT scatter + Industry × signup-year cohort heatmap). Picks reference columns by NAME so schema reorders won't silently swap axes; missing-column picks console.warn and skip. KPIs are also override-driven (Marketing now leads with Spend/Conversions/ROI/CPA/CTR — the headline campaign measures — instead of the generic builder's spend/impressions/clicks). Backward-compatible: any dataset without an override falls through to the W4.D6 generic allocator. **Phase 3 (482b9e0) multi-tab drill-down**: clicking a bar/donut now opens a 3-tab Dialog instead of a single rows table. Tab 1 (Rows) is the existing `DrilldownTable`, untouched. Tab 2 (Summary stats) shows count + per-measure stats table (mean/median/sum/min/max with unit-aware formatting) + per-dim top-3 values. Tab 3 (Distribution) reuses the new histogram chart for the primary measure within the drilled subset. ChartRenderer made exportable + colors prop optional so the Distribution tab can reuse the dispatcher. **Hotfix (ba65326)**: surfaced during cross-dataset QA — `buildHeatmapChart` computed spanMonths from `dated[0]` and `dated[length-1]` without sorting first. Customer-demographics' rows happen to be in non-chronological order (rows[0]=2022-03, rows[last]=2021-12 → computed span -3.15 months → monthly bucketing fired on what's actually a 4-year dataset, producing a 36-column heatmap). Fixed by sorting `dated` before reading min/max. Same builder logic now produces granularity 'year' on customer-demographics, matching the 'LTV: Industry × signup year' title. Other datasets weren't affected because their JSON happens to be roughly chronological. **Production verification** via Playwright: revops, marketing, customer-demographics dashboards render with their per-domain mixes in dark mode; clicking ACV-by-Segment Enterprise bar opens 3-tab drill-down dialog (Rows / Summary stats / Distribution) — all 3 tabs render correctly with 19 matched Enterprise rows. Zero console errors across all routes. **Lighthouse**: home 99/100/100/100 (+1 vs W4.D6 baseline), /dashboard/revops 73/100/100/100 (-6 perf vs W4.D6's 79; trade-off accepted — the new chart variants + drill-down depth + Tabs primitive add weight, all other categories perfect). Build: 25/25 pages still prerendered. /dashboard/[slug] grew 126 → 130 kB (+4 kB), First Load 320 → 325 kB (+5 kB). **Two follow-ups noted from W4.D6 still open**: rate-based delta comparison (front-loaded data shows naturally negative deltas) and FilterBar.MultiSelect smart-default to `usefulDimensions[0]` instead of the first dim column.
-
- |
-| **Next Action** | Week 5 Day 1: 6 new wireframe-mode datasets. Design schemas for 6 sample datasets in different verticals (don't overlap with ad-hoc mode): Manufacturing (production-line throughput), Real estate (brokerage pipeline), Healthcare (clinic operations), Education (course enrollment + retention), SaaS Subscription Analytics (MRR/churn/expansion), Logistics (fleet utilization). Author 30-50 row JSON for each. Add to fixtures/dashboard-factory/datasets/ index. |
+| **Current Day** | Week 5 · Day 2 (Tue) — 6 new profiling fixtures |
+| **Overall Progress** | 148 tasks of ~150 complete · **Production live at https://ai-portfolio-dashboard-factory.vercel.app** · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ · Week 3 ✓ · Week 4 ✓ · Week 5 Day 1 ✓ |
+| **Status** | W5.D1 closed. Six wireframe-mode datasets shipped in a single commit (`2a9e833`) — 214 rows total across manufacturing-throughput / real-estate-pipeline / healthcare-operations / education-enrollment / saas-subscriptions / logistics-fleet. Each fixture: ≥4 ordered-stage dimensions (so W5.D3's funnel charts will have semantic stage ordering via dim.values), ≥4 measures (scatter X/Y), 1 time column with ≥3-month spread (heatmap-ready). Stored in a separate `fixtures/dashboard-factory/wireframe-datasets/` folder with its own `index.json` manifest carrying `"mode": "wireframe"`. Existing ad-hoc /datasets gallery + /generate + /dashboard flows completely untouched (no static-import changes, no profiling fixtures yet — those are W5.D2). ICON_MAP in lib/datasets.ts extended with 6 new lucide icons (Factory, Home, Stethoscope, GraduationCap, Repeat, Plane) — no new deps. Build: 25/25 pages still prerendered, /dashboard/[slug] 130 → 131 kB. |
+| **Next Action** | Week 5 Day 2: 6 new profiling fixtures. Hand-curate ~3KB profiling fixtures for each of the 6 wireframe datasets — describe what wireframe to generate per dataset (recommended KPIs, chart layouts the wireframe engine will materialize). Reference real columns + observed patterns. AI narrative voice consistent with existing 6 fixtures (without dashes per W4.D3 rule). Each fixture recommends the KPIs + chart picks the W5.D3 engine will resolve. |
 | **Blockers** | None |
 
 ### Phase Progress Overview
@@ -43,6 +41,26 @@
 ## Recent Activity Log
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
+
+### 2026-05-05 · Week 5 Day 1 — 6 wireframe-mode datasets
+- **Goal**: author the data input that W5.D3's data-driven wireframe template engine will consume. Six new datasets in verticals that don't overlap with the existing 6 ad-hoc datasets, so the wireframe gallery feels distinct.
+- **Single commit (`2a9e833`)**: 6 fixtures + 1 manifest + ICON_MAP extension. 214 rows total, hand-authored.
+  - **manufacturing-throughput** (36 rows, ops/amber/Factory): Production-line yield, defect rates, OEE across plants and shifts. Ordered-stage dim `defect_status` (Pass/Rework/Scrap). Multimodal value distributions — Pass rows ~92-99% pass-through with low defects, Rework rows 78-90% with moderate defects, Scrap rows ~75% with high defect rates. 4 plants × 4 lines × 3 shifts.
+  - **real-estate-pipeline** (36 rows, sales/rose/Home): Listings, days on market, sale prices, broker performance. Ordered-stage dim `listing_status` (Active/Pending/Sold/Expired/Withdrawn) — 5 stages forming a real pipeline funnel. Hot markets (Austin/Nashville) close in 6-15 days; expired/withdrawn listings sit 80-120 days.
+  - **healthcare-operations** (36 rows, ops/teal/Stethoscope): Clinic visits, wait times, satisfaction, charges by department. Ordered-stage dim `visit_type` (Scheduled/Walk-in/Urgent/Emergency). Wait times bimodal: Scheduled ~10-15 min, Walk-in ~30-45 min. Emergency visits highest charges ($1850-2380).
+  - **education-enrollment** (32 rows, edu/blue/GraduationCap): Course enrollment, completion, grades, satisfaction across modalities. Ordered-stage dim `enrollment_status` (Active/Completed/Withdrawn/Dropped). Online courses lower completion (~76-81%) than In-Person (~91-98%) — the kind of pattern that makes a heatmap (modality × subject) immediately readable.
+  - **saas-subscriptions** (38 rows, sales/accent/Repeat): MRR, churn, expansion across plan tiers + industries. Ordered-stage dim `account_status` (Trial/Active/At-Risk/Churned). Spans 2024-02 → 2026-10 (33 months) — the only multi-year wireframe dataset, will trigger yearly heatmap bucketing in the W5.D3 engine.
+  - **logistics-fleet** (36 rows, ops/purple/Plane): Shipment routes, transit, fuel efficiency, capacity by vehicle class. Ordered-stage dim `shipment_status` (Loaded/In-Transit/Delivered/Delayed). Distance bimodal: Local (15-40 mi) vs Long-haul (665-2015 mi) — natural histogram showcase.
+- **Storage layout**: separate folder `fixtures/dashboard-factory/wireframe-datasets/` + own `index.json` carrying `"mode": "wireframe"`. The existing ad-hoc /datasets gallery + /generate + /dashboard flows are completely untouched (no static-import changes in lib/full-datasets.ts, no profiling fixtures yet — those are W5.D2). Backward-compatible: any future dataset added without an override falls through to the W4.D6 generic allocator (the wireframe-datasets won't show in /datasets gallery yet because no route reads from the new folder).
+- **ICON_MAP extension** in `apps/dashboard-factory/lib/datasets.ts`: added Factory, Home, Stethoscope, GraduationCap, Repeat, Plane lucide icons. All 6 already in lucide-react — no new dep. Existing `getDatasetIcon(name)` resolver picks them up.
+- **Validation**: each fixture passes JSON.parse, has every schema column referenced in every row (no missing/extra keys), rowCount in metadata matches actual rows, ≥4 ordered-stage dims (funnel-ready), ≥4 measures (scatter X/Y), 1 time column with reasonable spread (≥3 months for monthly heatmap, multi-year for saas-subscriptions which triggers yearly bucketing).
+- **Build**: 25 of 25 pages still prerendered (the new fixtures are inert — no route imports them). /dashboard/[slug] grew 130 → 131 kB (+1 kB for the 6 new icon imports tree-shaken into the dashboard route via lib/datasets.ts).
+- **Skipped intentionally**:
+  - Profiling fixtures for the 6 new datasets (W5.D2 — tomorrow)
+  - Wireframe-datasets loader + UI integration (W5.D3 — needs to decide gallery layout: separate route vs filtered ad-hoc gallery)
+  - Thumbnails in /public/datasets/*.png (placeholder paths in the manifest; can be generated on a polish day)
+- **Context for W5.D2 (Tue)**: 6 new profiling fixtures. Hand-curate ~3KB profiling fixtures per dataset (matching the existing 6 ad-hoc fixtures' voice + format) — column classification, domain inference, recommended KPIs, recommended chart layouts. The W5.D3 wireframe engine will use these recommendations to materialize the per-dataset chart picks (similar to W4.D7's per-domain-layout.ts but generated from profiling instead of hand-coded).
+- **Next**: Week 5 Day 2 — 6 new profiling fixtures (the heavy content lift)
 
 ### 2026-05-04 · Week 4 Day 7 — Dashboard uniqueness (Item 4 part B — per-domain layouts + funnel + histogram + multi-tab drill-down)
 - **Goal**: each of the 6 dashboards should feel curated for its domain rather than generically schema-driven. Master plan called for per-domain layouts + 5 new chart types (funnel, ring, scorecard, histogram, matrix) + enhanced drill-down + cross-dataset QA. Realistic-scoped to per-domain configs using 2 new universal chart types (funnel, histogram) on top of the existing toolkit + 3-tab drill-down — covers the spirit ("uniqueness" + "depth") without building 5 new chart components in one day.
@@ -1351,16 +1369,16 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 
 **Week goal**: Reframe wireframe mode as dataset-driven (parallel to ad-hoc mode), then ship Loom + case study + automation.
 
-#### Day 1 (Mon May 4) · 6 new wireframe-mode datasets
-- [ ] Design schemas for 6 new sample datasets in different verticals (don't overlap with ad-hoc mode):
-  1. Manufacturing — production-line throughput
-  2. Real estate — brokerage pipeline
-  3. Healthcare — clinic operations
-  4. Education — course enrollment + retention
-  5. SaaS Subscription Analytics — MRR/churn/expansion
-  6. Logistics — fleet utilization
-- [ ] Author 30-50 row JSON for each
-- [ ] Add to `fixtures/dashboard-factory/datasets/` index
+#### Day 1 (Mon May 5) · 6 new wireframe-mode datasets — COMPLETED 2026-05-05
+- [x] Design schemas for 6 new sample datasets in different verticals — **DONE**: each fixture has 1 id + 5 dimensions + 4-5 measures + 1 time column. Every dataset includes ≥4 ordered-stage dimensions (so W5.D3's funnel charts will have semantic stage ordering).
+  1. Manufacturing — production-line throughput (36 rows)
+  2. Real estate — brokerage pipeline (36 rows)
+  3. Healthcare — clinic operations (36 rows)
+  4. Education — course enrollment + retention (32 rows)
+  5. SaaS Subscription Analytics — MRR/churn/expansion (38 rows)
+  6. Logistics — fleet utilization (36 rows)
+- [x] Author 30-50 row JSON for each — **DONE**: 214 rows total. All hand-authored with realistic patterns (multimodal distributions, plausible value ranges, time-ordered, some segments deliberately dominant).
+- [x] Add to `fixtures/dashboard-factory/datasets/` index — **REFRAMED**: stored in a separate `fixtures/dashboard-factory/wireframe-datasets/` folder with its own `index.json` carrying `"mode": "wireframe"`. Cleaner than mixing into the ad-hoc manifest — W5.D3's wireframe-only loader becomes trivial. Existing /datasets gallery untouched.
 
 #### Day 2 (Tue May 5) · 6 new profiling fixtures (the heavy content lift)
 - [ ] Hand-curate 6 profiling fixtures (~3KB each) describing what wireframe to generate from each dataset
