@@ -1,4 +1,9 @@
 import type { Metadata, Viewport } from 'next'
+import {
+  ParticleBackground,
+  ThemeProvider,
+  ThemeScript,
+} from '@rishi/design-system/theme'
 import { Nav } from './_components/Nav'
 import { Toaster } from './_components/Toaster'
 import './globals.css'
@@ -72,46 +77,59 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: '#0a0e1a',
-  colorScheme: 'dark',
+  colorScheme: 'dark light',
   width: 'device-width',
   initialScale: 1,
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // suppressHydrationWarning on <html> is intentional. The ThemeScript runs
+  // before hydration to set the dark/light class on documentElement, which
+  // would otherwise trip React's mismatch warning. The div wrapping the
+  // app body has position: relative + zIndex: 1 so it stacks above the
+  // ParticleBackground canvas (which sits at zIndex: 0, fixed inset-0).
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <ThemeScript />
+      </head>
       <body className="min-h-screen bg-base-900 text-text-primary">
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-md focus:bg-accent focus:px-4 focus:py-2 focus:text-base-900 focus:font-semibold focus:shadow-lg"
-        >
-          Skip to main content
-        </a>
-        <Nav />
-        <main id="main-content">{children}</main>
-        <footer className="section-container py-16 border-t border-surface-border mt-24">
-          <p className="font-mono text-xs text-text-muted">
-            Project 01 of 5 · part of the{' '}
-            <a
-              href="https://github.com/rishigundla/ai-portfolio"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-accent hover:text-accent-light underline underline-offset-4 decoration-accent/40 hover:decoration-accent"
-            >
-              ai-portfolio
-            </a>{' '}
-            monorepo · built by{' '}
-            <a
-              href="https://rishikeshgundla.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-accent hover:text-accent-light underline underline-offset-4 decoration-accent/40 hover:decoration-accent"
-            >
-              Rishikesh Gundla
-            </a>
-          </p>
-        </footer>
-        <Toaster />
+        <ThemeProvider>
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-md focus:bg-accent focus:px-4 focus:py-2 focus:text-base-900 focus:font-semibold focus:shadow-lg"
+          >
+            Skip to main content
+          </a>
+          <ParticleBackground />
+          <div className="relative" style={{ zIndex: 1 }}>
+            <Nav />
+            <main id="main-content">{children}</main>
+            <footer className="section-container py-16 border-t border-surface-border mt-24">
+              <p className="font-mono text-xs text-text-muted">
+                Project 01 of 5 · part of the{' '}
+                <a
+                  href="https://github.com/rishigundla/ai-portfolio"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-accent hover:text-accent-light underline underline-offset-4 decoration-accent/40 hover:decoration-accent"
+                >
+                  ai-portfolio
+                </a>{' '}
+                monorepo · built by{' '}
+                <a
+                  href="https://rishikeshgundla.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-accent hover:text-accent-light underline underline-offset-4 decoration-accent/40 hover:decoration-accent"
+                >
+                  Rishikesh Gundla
+                </a>
+              </p>
+            </footer>
+          </div>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   )

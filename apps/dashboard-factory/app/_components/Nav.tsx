@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Github } from 'lucide-react'
+import { ThemeToggle } from '@rishi/design-system/theme'
 
 export function Nav() {
   return (
@@ -33,6 +34,7 @@ export function Nav() {
             <Github className="h-4 w-4" />
             <span className="hidden sm:inline">GitHub</span>
           </a>
+          <ThemeToggle />
         </div>
       </div>
     </nav>

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { ThemeToggle } from '@rishi/design-system/theme'
 
 export function Nav() {
   return (
@@ -22,6 +23,7 @@ export function Nav() {
           <NavLink href="/tokens">Tokens</NavLink>
           <NavLink href="/primitives">Primitives</NavLink>
           <NavLink href="/components">Components</NavLink>
+          <ThemeToggle />
         </div>
       </div>
     </nav>

@@ -4,7 +4,9 @@
   "private": true,
   "description": "Design system for the AI Portfolio monorepo. Tokens, primitives, and AI-specific components extracted from rishikeshgundla.com portfolio site.",
   "type": "module",
-  "sideEffects": ["**/*.css"],
+  "sideEffects": [
+    "**/*.css"
+  ],
   "exports": {
     "./tokens": "./src/tokens/index.css",
     "./tokens/typed": "./src/tokens/index.ts",
@@ -14,7 +16,9 @@
     "./primitives/*": "./src/primitives/*.tsx",
     "./components": "./src/components/index.ts",
     "./components/*": "./src/components/*.tsx",
-    "./motion": "./src/motion/index.ts"
+    "./motion": "./src/motion/index.ts",
+    "./theme": "./src/theme/index.ts",
+    "./theme/*": "./src/theme/*.tsx"
   },
   "scripts": {
     "lint": "eslint src",
@@ -43,13 +47,20 @@
     "tailwind-merge": "^2.5.5"
   },
   "peerDependencies": {
+    "next": ">=15",
     "react": "^18 || ^19",
     "react-dom": "^18 || ^19"
+  },
+  "peerDependenciesMeta": {
+    "next": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
+    "next": "^15.1.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwindcss": "^3.4.17",

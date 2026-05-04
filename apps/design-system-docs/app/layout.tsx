@@ -1,4 +1,9 @@
 import type { Metadata } from 'next'
+import {
+  ParticleBackground,
+  ThemeProvider,
+  ThemeScript,
+} from '@rishi/design-system/theme'
 import { Nav } from './_components/Nav'
 import './globals.css'
 
@@ -15,24 +20,32 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <ThemeScript />
+      </head>
       <body className="min-h-screen bg-base-900 text-text-primary">
-        <Nav />
-        <main>{children}</main>
-        <footer className="section-container py-16 border-t border-surface-border mt-24">
-          <p className="font-mono text-xs text-text-muted">
-            @rishi/design-system · part of the{' '}
-            <a
-              href="https://github.com/rishigundla/ai-portfolio"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-accent hover:text-accent-light"
-            >
-              ai-portfolio
-            </a>{' '}
-            monorepo · built by Rishikesh Gundla
-          </p>
-        </footer>
+        <ThemeProvider>
+          <ParticleBackground />
+          <div className="relative" style={{ zIndex: 1 }}>
+            <Nav />
+            <main>{children}</main>
+            <footer className="section-container py-16 border-t border-surface-border mt-24">
+              <p className="font-mono text-xs text-text-muted">
+                @rishi/design-system · part of the{' '}
+                <a
+                  href="https://github.com/rishigundla/ai-portfolio"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-accent hover:text-accent-light"
+                >
+                  ai-portfolio
+                </a>{' '}
+                monorepo · built by Rishikesh Gundla
+              </p>
+            </footer>
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   )
