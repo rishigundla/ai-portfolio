@@ -56,7 +56,11 @@
   /* When the dashboard subtree is being captured for PDF export, hide
      interactive affordance chrome that would render as visual clutter
      in a static document. Driven by data-exporting toggle in
-     _dashboard-interactive.tsx exportPdf handler. */
+     _dashboard-interactive.tsx exportPdf handler. The aria-label
+     selector targets drill-in chips by their accessibility label so
+     the rule survives styling-class renames. The data-pdf-hide
+     attribute is a generic escape hatch any element can opt into. */
+  [data-exporting="true"] [data-pdf-hide],
   [data-exporting="true"] [aria-label="Click bars or slices to drill in"] {
     display: none !important;
   }

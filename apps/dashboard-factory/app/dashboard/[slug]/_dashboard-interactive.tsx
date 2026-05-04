@@ -332,6 +332,7 @@ export function DashboardInteractive({
           size="sm"
           onClick={exportPdf}
           disabled={isExporting || filteredRows.length === 0}
+          data-pdf-hide
         >
           {isExporting ? (
             <Loader2 className="h-3.5 w-3.5 animate-spin" />
