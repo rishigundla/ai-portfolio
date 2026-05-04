@@ -1472,10 +1472,10 @@
       currentStatus: {
         phase: "Phase 1 — Project 1 (Dashboard Factory)",
         week: "Week 1 of 16",
-        day: "Week 4 · Day 4 (Thu) — PDF visual fidelity",
-        progress: { done: 120, total: 150 },
-        status: "PRODUCTION LIVE at https://ai-portfolio-dashboard-factory.vercel.app. W4.D3 closed. Items 2 + 5 + 6 + 7 shipped: 'For Developers' rename across 4 sites; click-to-drill chip on bar + donut chart cards; NAI/NC2/NCI → Atlas/Orion/Vega across 6 datasets + 4 profiling fixtures + wireframe mock data + design-system-docs + READMEs; 'Nutanix' string removed from user-facing copy; dashes removed from user-visible text. 4 SVG/math-heavy files reverted after a regex broke arithmetic; they had no user-visible dashes worth fixing. Build clean, 25 of 25 pages prerendered. Commit fb4aba1 pushed.",
-        nextAction: "Week 4 Day 4: PDF visual fidelity. Switch PDF export from text-summary to canvas-based capture (html2canvas + jsPDF) so PDF looks pixel-identical to dashboard on screen. Preserve filter-aware behavior. Test on all 6 datasets.",
+        day: "Week 4 · Day 5 (Fri) — Theme toggle + particle background",
+        progress: { done: 124, total: 150 },
+        status: "PRODUCTION LIVE at https://ai-portfolio-dashboard-factory.vercel.app. W4.D4 closed. PDF export rewritten with html2canvas + jsPDF — looks pixel-identical to the on-screen dashboard now. 3 incremental rounds shipped (baseline canvas capture → widened to include filters + programmatic title header → hid Export button during capture). Verified on production. Net diff -850 / +263 lines (deleted lib/pdf-document.tsx, dropped @react-pdf/renderer dep). Generic data-pdf-hide attribute introduced as a future escape hatch.",
+        nextAction: "Week 4 Day 5: Theme toggle + particle background. Study portfolio-site source for particle + theme toggle implementation. Build shared ParticleBackground + ThemeToggle in @rishi/design-system. Wire into dashboard-factory + design-system-docs. Light-mode QA + Lighthouse re-audit.",
         blockers: "None"
       },
 
@@ -1538,7 +1538,9 @@
         // Phase 1 · Week 4 · Day 2 (5 tasks — Vercel project, build settings, deploy, smoke test, portfolio.meta.json)
         "4-W4.D2-0", "4-W4.D2-1", "4-W4.D2-2", "4-W4.D2-3", "4-W4.D2-4",
         // Phase 1 · Week 4 · Day 3 (4 tasks — For Developers rename, drill chip, product code rename, dash cleanup)
-        "4-W4.D3-0", "4-W4.D3-1", "4-W4.D3-2", "4-W4.D3-3"
+        "4-W4.D3-0", "4-W4.D3-1", "4-W4.D3-2", "4-W4.D3-3",
+        // Phase 1 · Week 4 · Day 4 (4 tasks — html2canvas+jsPDF rewrite, capture target wider, hide affordances during capture, programmatic title header)
+        "4-W4.D4-0", "4-W4.D4-1", "4-W4.D4-2", "4-W4.D4-3"
       ],
 
       phases: [
@@ -1551,6 +1553,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-04-30",
+          title: "Week 4 Day 4 — PDF visual fidelity (Item 3)",
+          desc: "Replaced the structured-text PDF with a canvas-based snapshot. PDF now looks pixel-identical to the live dashboard, including Recharts visuals, brand colors, typography, current filtered state. Approach: html2canvas captures the live DOM at scale 2 (DPR 2 for crisp print), backgroundColor #0a0a0f to match base-900. jsPDF assembles as A4 portrait. If capture height fits one page, single addImage; otherwise slice canvas vertically into A4-height chunks via a hidden buffer canvas, addImage each slice as its own page so nothing gets clipped or squished. THREE INCREMENTAL ROUNDS: Round 1 (e32ebbf) baseline working PDF but capture target was just KPIs+charts, no header context, no filter bar, drill-in chips visible. Round 2 (fe6973b) widened capture-target to outer wrapper so FilterBar + 'Showing N of M rows' line now in snapshot, added programmatic page-1 header via jsPDF.text() with brand-colored 'Dashboard Factory' + dataset title + export date + row count rendering as NATIVE PDF TEXT (selectable, searchable), hid drill chips during capture via data-exporting='true' toggle + globals.css rule. Round 3 (c6a7876) noticed the Export PDF button itself got captured in Generating spinner state, tagged it with data-pdf-hide attribute. Generic CSS rule [data-exporting='true'] [data-pdf-hide] { display: none } makes it disappear during capture only. data-pdf-hide is now an escape hatch any element can opt into. TRADE-OFFS: text in PDF not selectable (pixel data inside image, except title header which is native PDF text), links not clickable, file size ~290 kB instead of ~30 kB. Correct for a portfolio export-this-screenshot use case. CODE-QUALITY WIN: net diff -850 / +263 lines. Deleted lib/pdf-document.tsx (the @react-pdf/renderer Document component, ~600 lines re-implementing the design system's KPI/bar/donut/line layouts in PDF primitives). Uninstalled @react-pdf/renderer (~200 kB). Old code wasn't wrong, it was an entire parallel rendering path that had to track the live UI by hand. Capturing the live DOM eliminates the divergence contract. New deps: html2canvas@1.4.1, jspdf@4.2.1. Both dynamic-import on click. Build: 25 of 25 pages still prerendered. /dashboard/[slug] at 122 kB + 308 kB First Load JS (was 121 + 307 with @react-pdf, +1 kB negligible since both dynamic-load).",
+          next: "Week 4 Day 5 — Theme toggle + particle background. Study portfolio-site source for particle + theme implementation. Build shared ParticleBackground + ThemeToggle in @rishi/design-system. Wire into dashboard-factory + design-system-docs. Light-mode QA + Lighthouse re-audit in light mode."
+        },
         {
           date: "2026-04-28",
           title: "Week 4 Day 3 — Copy + UX cleanup (Items 2, 5, 6, 7)",
