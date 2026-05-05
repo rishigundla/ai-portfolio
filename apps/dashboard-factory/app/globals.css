@@ -66,26 +66,25 @@
   }
 
   /* Wireframe density grid overrides (W5.D3).
-     The wireframe page wraps DashboardView in a [data-density] container
-     and the chart row in DashboardView uses Tailwind's 12-col grid at lg.
-     These rules override the grid template for sparse / dense modes so
-     the same 4 charts re-flow without mutating DashboardView's markup.
-     Balanced uses DashboardView's defaults (no override needed). */
+     The wireframe page wraps DashboardView in a [data-density] container.
+     DashboardView's chart row is tagged with the stable .dashboard-chart-row
+     class so we can target it here without colliding with Tailwind's
+     escaped-colon utility classes (which Tailwind's CSS pipeline strips
+     when used in raw CSS rules outside its JIT's class detection).
+     - sparse → 1 column (charts stacked at full width)
+     - dense  → 4 columns (charts side by side)
+     - balanced → DashboardView's default 12-col grid */
   @media (min-width: 1024px) {
-    [data-density="sparse"] .lg\:grid-cols-12 {
+    [data-density="sparse"] .dashboard-chart-row {
       grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
     }
-    [data-density="sparse"] .lg\:col-span-7,
-    [data-density="sparse"] .lg\:col-span-5,
-    [data-density="sparse"] .lg\:col-span-6 {
+    [data-density="sparse"] .dashboard-chart-row > * {
       grid-column: span 1 / span 1 !important;
     }
-    [data-density="dense"] .lg\:grid-cols-12 {
+    [data-density="dense"] .dashboard-chart-row {
       grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
     }
-    [data-density="dense"] .lg\:col-span-7,
-    [data-density="dense"] .lg\:col-span-5,
-    [data-density="dense"] .lg\:col-span-6 {
+    [data-density="dense"] .dashboard-chart-row > * {
       grid-column: span 1 / span 1 !important;
     }
   }

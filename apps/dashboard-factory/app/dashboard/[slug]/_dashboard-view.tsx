@@ -76,7 +76,7 @@ export function DashboardView({
           Drill chip appears in the actions slot for bar + donut charts so the
           clickable affordance is visible at the chart level (not buried in a
           footer line). Line chart has no drill behavior, so no chip. */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 dashboard-chart-row">
         {layout.charts.map((chart, i) => {
           const drillable =
             (chart.data.type === 'bar' && !!onBarClick) ||
