@@ -267,14 +267,14 @@ function resolveOverrideCharts(
   return charts
 }
 
-interface PickResolverHelpers {
+export interface PickResolverHelpers {
   findMeasure: (name?: string) => ColumnSchema | undefined
   findDim: (name?: string) => ColumnSchema | undefined
   timeCol: ColumnSchema | undefined
   idColumn: ColumnSchema | undefined
 }
 
-function resolveChartPick(
+export function resolveChartPick(
   rows: Record<string, unknown>[],
   pick: ChartPick,
   h: PickResolverHelpers,
@@ -432,7 +432,7 @@ function buildOverrideKpis(
   return buildKpis(rows, ordered, dimensions, idColumn, period)
 }
 
-function buildKpis(
+export function buildKpis(
   rows: Record<string, unknown>[],
   measures: ColumnSchema[],
   dimensions: ColumnSchema[],
