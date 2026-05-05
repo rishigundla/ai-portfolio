@@ -17,10 +17,10 @@
 |-------|-------|
 | **Current Phase** | Phase 1 — Project 1 (Dashboard Factory) |
 | **Current Week** | Week 1 of 14 |
-| **Current Day** | Week 5 · Day 2 (Tue) — 6 new profiling fixtures |
-| **Overall Progress** | 148 tasks of ~150 complete · **Production live at https://ai-portfolio-dashboard-factory.vercel.app** · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ · Week 3 ✓ · Week 4 ✓ · Week 5 Day 1 ✓ |
-| **Status** | W5.D1 closed. Six wireframe-mode datasets shipped in a single commit (`2a9e833`) — 214 rows total across manufacturing-throughput / real-estate-pipeline / healthcare-operations / education-enrollment / saas-subscriptions / logistics-fleet. Each fixture: ≥4 ordered-stage dimensions (so W5.D3's funnel charts will have semantic stage ordering via dim.values), ≥4 measures (scatter X/Y), 1 time column with ≥3-month spread (heatmap-ready). Stored in a separate `fixtures/dashboard-factory/wireframe-datasets/` folder with its own `index.json` manifest carrying `"mode": "wireframe"`. Existing ad-hoc /datasets gallery + /generate + /dashboard flows completely untouched (no static-import changes, no profiling fixtures yet — those are W5.D2). ICON_MAP in lib/datasets.ts extended with 6 new lucide icons (Factory, Home, Stethoscope, GraduationCap, Repeat, Plane) — no new deps. Build: 25/25 pages still prerendered, /dashboard/[slug] 130 → 131 kB. |
-| **Next Action** | Week 5 Day 2: 6 new profiling fixtures. Hand-curate ~3KB profiling fixtures for each of the 6 wireframe datasets — describe what wireframe to generate per dataset (recommended KPIs, chart layouts the wireframe engine will materialize). Reference real columns + observed patterns. AI narrative voice consistent with existing 6 fixtures (without dashes per W4.D3 rule). Each fixture recommends the KPIs + chart picks the W5.D3 engine will resolve. |
+| **Current Day** | Week 5 · Day 3 (Wed) — Data-driven wireframe template engine |
+| **Overall Progress** | 151 tasks of ~150 complete · **Production live at https://ai-portfolio-dashboard-factory.vercel.app** · Phase 0 ✓ · Week 1 ✓ · Week 2 ✓ · Week 3 ✓ · Week 4 ✓ · Week 5 Days 1-2 ✓ |
+| **Status** | W5.D2 closed. Six wireframe-mode profiling fixtures shipped in a single commit (`4ffb2fb`) — ~3.3-3.8 KB each, hand-curated narrative in the same voice as the existing 6 ad-hoc fixtures. Each follows the 4-section markdown structure (`## Column Classification` / `## Domain Inference` / `## Recommended KPIs` / `## Recommended Charts`) so the streaming UI's heading watchers advance correctly. Each fixture surfaces 1-2 observed patterns from the actual rows (Line D Night-shift scrap, Austin/Nashville hot-market velocity, Riverside East Walk-in satisfaction drag, Online completion gap, Enterprise At-Risk concentration, Long-haul Refrigerated delay clustering) and recommends 5 KPIs + 4 charts per dataset. Charts span the full 7-chart toolkit (bar/line/donut/heatmap/scatter/funnel/histogram) across the 6 datasets so W5.D3 has varied specs to materialize. Stored in `fixtures/dashboard-factory/wireframe-profiling/` parallel to the ad-hoc `profiling/` folder. New `lib/wireframe-profiling.ts` parallel loader exports `getWireframeProfilingFixture(slug)` and `getAllWireframeProfilingSlugs()` — dormant until W5.D3 wires it up. Existing `lib/profiling.ts` untouched. Build: 25/25 pages still prerendered, /dashboard/[slug] unchanged at 131 kB (loader tree-shaken). |
+| **Next Action** | Week 5 Day 3: Data-driven wireframe template engine. Refactor wireframe rendering to be schema + profiling-driven (not hardcoded). One engine renders any dataset's structure as a wireframe by consuming the chart recommendations from the profiling fixture. Replace the existing 3 hardcoded templates (Executive/Operational/Exploratory) with the engine — old template aesthetic preserved as one of 3 layout density modes. Wire `/wireframe/[slug]` route to read from `wireframe-datasets/` + `wireframe-profiling/` parallel loaders. |
 | **Blockers** | None |
 
 ### Phase Progress Overview
@@ -41,6 +41,26 @@
 ## Recent Activity Log
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
+
+### 2026-05-05 · Week 5 Day 2 — 6 wireframe-mode profiling fixtures
+- **Goal**: hand-curate the profiling narratives that W5.D3's wireframe template engine will consume to materialize per-dataset chart picks. Quality bar: match the existing 6 ad-hoc profiling fixtures' voice exactly (confident, observation-based, references real column names + named outliers, no em/en-dashes per W4.D3 rule).
+- **Single commit (`4ffb2fb`)**: 6 fixtures + 1 parallel loader. ~3.3-3.8 KB per fixture. Stored in `fixtures/dashboard-factory/wireframe-profiling/` parallel to the ad-hoc `profiling/` folder.
+- **Per-fixture observed pattern surfaced** (the bit W5.D3 will lean on most):
+  - **manufacturing-throughput**: Line D + Night-shift scrap concentration (4 of 4 Scrap rows on that combo, OEE 56-58%); Detroit/Stuttgart Morning shifts dominate clean Pass throughput at 88-92% OEE.
+  - **real-estate-pipeline**: Hot/stale market split (Austin+Nashville close 6-15 days vs Phoenix Expired/Withdrawn 80-121 DOM); Over-$1M listings disproportionately Multi-Family.
+  - **healthcare-operations**: Walk-in visits at Riverside East drag satisfaction (38-45 min waits → 68-72 score, lowest cluster); Mental Health highest satisfaction (92-95) despite longest visit durations (50-55 min).
+  - **education-enrollment**: Online completion lags In-Person by 10-15 points (76-81% vs 91-98%); Advanced Humanities/CS hit 95-98% in small but committed cohorts (38-48 students).
+  - **saas-subscriptions**: Enterprise dominates MRR but isn't risk-free (named At-Risk Enterprise accounts at NPS 22-25); At-Risk + Churned cluster in Free/Starter at NPS 18 or below; multi-year span enables cohort retention view.
+  - **logistics-fleet**: Bimodal distance distribution (Local 15-40 mi vs Long-haul 665-2015 mi, natural histogram showcase); Refrigerated highest capacity utilization (88-96%); Delayed shipments cluster in Long-haul Refrigerated.
+- **Per-fixture recommendation**: 5 KPIs + 4 charts. Charts deliberately span the full 7-chart toolkit (bar/line/donut/heatmap/scatter/funnel/histogram) across the 6 datasets so W5.D3's engine has varied per-dataset specs to materialize, not just repeated bar+line+donut.
+- **Architecture**: new `lib/wireframe-profiling.ts` parallel to `lib/profiling.ts`. Static-imports the 6 wireframe profiling JSONs, exports `getWireframeProfilingFixture(slug)` returning the Fixture-typed payload + `getAllWireframeProfilingSlugs()` for the W5.D3 engine to enumerate. Loader is dormant until W5.D3 wires up a route that consumes it. Existing `lib/profiling.ts` untouched, ad-hoc /generate flow unaffected.
+- **Validation**: each fixture passes JSON.parse, has all 4 section headings present in `text` (Column Classification / Domain Inference / Recommended KPIs / Recommended Charts), all 5 metadata keys present (generatedAt, model, promptTokens, completionTokens, notes), lengths 3.3-3.8 KB (matching the ~3KB target). No em-dashes / en-dashes / hyphen-with-spaces in user-visible prose (W4.D3 rule).
+- **Build**: 25/25 pages still prerendered, /dashboard/[slug] unchanged at 131 kB (loader tree-shaken since no route imports it yet). Typecheck clean.
+- **Skipped intentionally**:
+  - Wireframe template engine (W5.D3 — tomorrow)
+  - UI integration (gallery / /generate / /wireframe routes — W5.D3 decides whether to add a separate `/wireframe/[slug]` profiling-driven route or merge into the ad-hoc gallery filtered by mode)
+- **Context for W5.D3 (Wed)**: data-driven wireframe template engine. Replace the 3 hardcoded templates (Executive/Operational/Exploratory at `apps/dashboard-factory/app/wireframe/_components/`) with one schema + profiling-driven generator. Inputs: `getWireframeDataset(slug)` (W5.D1) + `getWireframeProfilingFixture(slug)` (W5.D2). Output: a `DashboardLayout` similar to W4.D6's `buildDashboardLayout()` but driven by parsing the profiling text's "Recommended Charts" section into `ChartPick[]` (the same discriminated tag W4.D7's per-domain-layout.ts uses). Old template aesthetic preserved as one of 3 layout density modes (Sparse / Balanced / Dense) so the existing wireframe gallery still has visual variety.
+- **Next**: Week 5 Day 3 — Data-driven wireframe template engine
 
 ### 2026-05-05 · Week 5 Day 1 — 6 wireframe-mode datasets
 - **Goal**: author the data input that W5.D3's data-driven wireframe template engine will consume. Six new datasets in verticals that don't overlap with the existing 6 ad-hoc datasets, so the wireframe gallery feels distinct.
@@ -1380,11 +1400,11 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 - [x] Author 30-50 row JSON for each — **DONE**: 214 rows total. All hand-authored with realistic patterns (multimodal distributions, plausible value ranges, time-ordered, some segments deliberately dominant).
 - [x] Add to `fixtures/dashboard-factory/datasets/` index — **REFRAMED**: stored in a separate `fixtures/dashboard-factory/wireframe-datasets/` folder with its own `index.json` carrying `"mode": "wireframe"`. Cleaner than mixing into the ad-hoc manifest — W5.D3's wireframe-only loader becomes trivial. Existing /datasets gallery untouched.
 
-#### Day 2 (Tue May 5) · 6 new profiling fixtures (the heavy content lift)
-- [ ] Hand-curate 6 profiling fixtures (~3KB each) describing what wireframe to generate from each dataset
-- [ ] Reference real columns + observed patterns
-- [ ] AI narrative voice consistent with existing 6 fixtures (without dashes per Day 3 rule)
-- [ ] Each fixture recommends KPIs + chart layouts the wireframe engine will materialize
+#### Day 2 (Tue May 5) · 6 new profiling fixtures (the heavy content lift) — COMPLETED 2026-05-05
+- [x] Hand-curate 6 profiling fixtures (~3KB each) describing what wireframe to generate from each dataset — **DONE**: 3.3-3.8 KB per fixture in `fixtures/dashboard-factory/wireframe-profiling/`. Total ~21 KB of carefully written prose.
+- [x] Reference real columns + observed patterns — **DONE**: each fixture references actual schema column names in backticks + 1-2 observed patterns from the actual rows (Line D Night-shift scrap concentration; Austin/Nashville hot-market velocity; Riverside East Walk-in satisfaction drag; Online completion gap; Enterprise At-Risk concentration in named accounts; Long-haul Refrigerated delay clustering).
+- [x] AI narrative voice consistent with existing 6 fixtures (without dashes per Day 3 rule) — **DONE**: matches the revops-sales fixture's voice (slightly conversational, confident, never hedged). Verified zero em/en/hyphen-with-space dashes via grep.
+- [x] Each fixture recommends KPIs + chart layouts the wireframe engine will materialize — **DONE**: 5 KPIs + 4 charts per fixture. Charts span the full 7-chart toolkit (bar/line/donut/heatmap/scatter/funnel/histogram) across the 6 datasets. Plus shipped `lib/wireframe-profiling.ts` parallel loader (dormant until W5.D3 wires it up).
 
 #### Day 3 (Wed May 6) · Data-driven wireframe template engine
 - [ ] Refactor wireframe rendering to be schema-driven (not hardcoded)
