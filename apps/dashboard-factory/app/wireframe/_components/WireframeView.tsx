@@ -119,8 +119,12 @@ export function WireframeView({ slug, colors }: WireframeViewProps) {
 
       {/* The layout itself. DashboardView already handles the responsive
           5-KPI strip + 4-chart 2x2 grid (the Balanced density). Sparse and
-          Dense override the grid template via wrapper classes below. */}
-      <div className={densityWrapperClass(density)} data-density={density}>
+          Dense flip the chart-row grid via CSS rules in globals.css that
+          target [data-density="sparse"] / [data-density="dense"] descendants
+          (Tailwind's arbitrary-variant approach didn't reliably emit CSS
+          for the escaped colon class names, so a regular CSS rule keeps
+          things deterministic). */}
+      <div data-density={density}>
         <DashboardView layout={layout} colors={colors} />
       </div>
 
@@ -134,43 +138,3 @@ export function WireframeView({ slug, colors }: WireframeViewProps) {
   )
 }
 
-/**
- * Density-aware wrapper class. Applied around <DashboardView>, these
- * classes use Tailwind's child-selector arbitrary variants ([&_.foo])
- * to override the grid template the DashboardView's chart row uses.
- *
- * - sparse: collapse the chart 2-col grid to 1-col so each chart spans
- *   full width (`lg:grid-cols-1` overrides the default `lg:grid-cols-12`)
- *   AND collapse the KPI grid to single hero-card width.
- * - balanced: no override — DashboardView's defaults apply.
- * - dense: pull the chart row into 4 narrow columns side by side and
- *   shrink the KPI strip into a compact horizontal row.
- *
- * Implementation note: DashboardView's chart row uses
- *   `grid grid-cols-1 lg:grid-cols-12 gap-4`
- * so we override at the lg breakpoint.
- */
-function densityWrapperClass(density: WireframeDensity): string {
-  switch (density) {
-    case 'sparse':
-      return [
-        // Single-column charts: target the inner 12-col grid and fold to 1
-        '[&_.lg\\:grid-cols-12]:lg:grid-cols-1',
-        // Each chart card spans full width
-        '[&_.lg\\:col-span-7]:lg:col-span-1',
-        '[&_.lg\\:col-span-5]:lg:col-span-1',
-        '[&_.lg\\:col-span-6]:lg:col-span-1',
-      ].join(' ')
-    case 'dense':
-      return [
-        // Pull the chart row into a tight 4-across grid
-        '[&_.lg\\:grid-cols-12]:lg:grid-cols-4',
-        '[&_.lg\\:col-span-7]:lg:col-span-1',
-        '[&_.lg\\:col-span-5]:lg:col-span-1',
-        '[&_.lg\\:col-span-6]:lg:col-span-1',
-      ].join(' ')
-    case 'balanced':
-    default:
-      return ''
-  }
-}
