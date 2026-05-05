@@ -1,7 +1,8 @@
 'use client'
 
 import * as React from 'react'
-import { Wand2 } from 'lucide-react'
+import Link from 'next/link'
+import { Wand2, ExternalLink } from 'lucide-react'
 import {
   buildWireframeLayout,
   WIREFRAME_DENSITIES,
@@ -84,36 +85,51 @@ export function WireframeView({ slug, colors }: WireframeViewProps) {
           </div>
         </div>
 
-        {/* Density selector */}
-        <div className="flex items-center gap-1.5">
-          <span className="font-mono text-[10px] uppercase tracking-wider text-text-muted hidden sm:inline">
-            Density
-          </span>
-          <div
-            role="radiogroup"
-            aria-label="Wireframe density"
-            className="inline-flex rounded-md border border-surface-border bg-surface p-0.5"
-          >
-            {WIREFRAME_DENSITIES.map((d) => {
-              const active = density === d
-              return (
-                <button
-                  key={d}
-                  type="button"
-                  role="radio"
-                  aria-checked={active}
-                  onClick={() => setDensity(d)}
-                  className={`px-3 h-8 text-xs font-medium rounded-sm transition-colors ${
-                    active
-                      ? 'bg-accent text-base-900'
-                      : 'text-text-secondary hover:text-text-primary'
-                  }`}
-                >
-                  {DENSITY_LABELS[d]}
-                </button>
-              )
-            })}
+        {/* Right-side controls: density selector + Export to Figma CTA */}
+        <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex items-center gap-1.5">
+            <span className="font-mono text-[10px] uppercase tracking-wider text-text-muted hidden sm:inline">
+              Density
+            </span>
+            <div
+              role="radiogroup"
+              aria-label="Wireframe density"
+              className="inline-flex rounded-md border border-surface-border bg-surface p-0.5"
+            >
+              {WIREFRAME_DENSITIES.map((d) => {
+                const active = density === d
+                return (
+                  <button
+                    key={d}
+                    type="button"
+                    role="radio"
+                    aria-checked={active}
+                    onClick={() => setDensity(d)}
+                    className={`px-3 h-8 text-xs font-medium rounded-sm transition-colors ${
+                      active
+                        ? 'bg-accent text-base-900'
+                        : 'text-text-secondary hover:text-text-primary'
+                    }`}
+                  >
+                    {DENSITY_LABELS[d]}
+                  </button>
+                )
+              })}
+            </div>
           </div>
+
+          {/* Export to Figma CTA. Click navigates to the future-state page
+              (/wireframe/figma-export). aria-label explicitly notes the
+              honest framing for screen readers + keyboard users so the
+              link's intent is clear without first clicking through. */}
+          <Link
+            href="/wireframe/figma-export"
+            aria-label="Export to Figma — opens the future-state demo page (manual rebuild today)"
+            className="inline-flex items-center gap-1.5 h-9 px-3 rounded-md border border-surface-border bg-surface text-text-primary hover:border-accent/40 hover:text-accent transition-colors text-xs font-medium"
+          >
+            <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+            <span className="hidden sm:inline">Export to Figma</span>
+          </Link>
         </div>
       </div>
 
