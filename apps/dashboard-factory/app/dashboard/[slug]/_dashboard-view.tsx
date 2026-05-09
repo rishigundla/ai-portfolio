@@ -689,9 +689,9 @@ function FunnelChartView({
                 onClick={() => triggerStage(stage.label)}
                 title={`${stage.label}: ${formatChartValue(stage.value)} ${data.valueLabel} · ${stage.pct.toFixed(0)}% of max`}
                 className={cn(
-                  'absolute left-0 top-0 h-full rounded-md bg-accent/75 transition-all',
+                  'absolute left-0 top-0 h-full rounded-md bg-accent transition-all',
                   isClickable
-                    ? 'hover:bg-accent cursor-pointer'
+                    ? 'hover:bg-accent-light cursor-pointer'
                     : 'cursor-default',
                 )}
                 style={{ width: `${widthPct}%` }}
