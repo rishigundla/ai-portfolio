@@ -887,12 +887,16 @@ function buildDonutChart(
 /**
  * Build a funnel chart from a dimension column.
  *
- * Stages are sorted by `dim.values` ordering when present (which preserves
- * semantic order like Qualification → Proposal → Negotiation), otherwise
- * by count descending.
+ * Stages start in `dim.values` order when present (e.g. Qualification →
+ * Proposal → Negotiation, a real conversion sequence). If that ordering is
+ * already monotonically non-increasing it's kept — the schema-declared
+ * sequence wins because it carries semantic meaning. If it isn't (e.g. a
+ * status snapshot where the lifecycle order doesn't reflect magnitude), we
+ * fall back to sorting by value descending so the chart still looks like
+ * a funnel rather than a sequence of disconnected bars.
  *
- * Each stage's `pct` is its proportion of the LARGEST stage (not the total),
- * so the bar width visually communicates the "drop-off" through the funnel.
+ * Each stage's `pct` is its proportion of the LARGEST stage. With descending
+ * order this reads as "% of stage 1" — the canonical funnel KPI.
  */
 export function buildFunnelChart(
   rows: Record<string, unknown>[],
@@ -904,13 +908,19 @@ export function buildFunnelChart(
     counts.set(v, (counts.get(v) ?? 0) + 1)
   }
 
-  const ordered = dim.values
+  const semantic = dim.values
     ? dim.values
         .map((v) => ({ label: v, value: counts.get(v) ?? 0 }))
         .filter((s) => s.value > 0)
     : [...counts.entries()]
         .sort(([, a], [, b]) => b - a)
         .map(([label, value]) => ({ label, value }))
+
+  const isMonotonicDesc = semantic.every((s, i) => {
+    const prev = semantic[i - 1]
+    return prev === undefined || s.value <= prev.value
+  })
+  const ordered = isMonotonicDesc ? semantic : [...semantic].sort((a, b) => b.value - a.value)
 
   const max = ordered.reduce((m, s) => Math.max(m, s.value), 0)
   const total = rows.length

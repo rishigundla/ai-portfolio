@@ -682,14 +682,14 @@ function FunnelChartView({
             <div className="w-28 shrink-0 text-xs text-text-secondary truncate text-right">
               {stage.label}
             </div>
-            <div className="flex-1 relative h-7">
+            <div className="flex-1 flex justify-center items-center h-7">
               <button
                 type="button"
                 disabled={!isClickable}
                 onClick={() => triggerStage(stage.label)}
-                title={`${stage.label}: ${formatChartValue(stage.value)} ${data.valueLabel} · ${stage.pct.toFixed(0)}% of max`}
+                title={`${stage.label}: ${formatChartValue(stage.value)} ${data.valueLabel} · ${stage.pct.toFixed(0)}% of stage 1`}
                 className={cn(
-                  'absolute left-0 top-0 h-full rounded-md bg-accent transition-all',
+                  'h-full rounded-md bg-accent transition-all min-w-[2px]',
                   isClickable
                     ? 'hover:bg-accent-light cursor-pointer'
                     : 'cursor-default',
