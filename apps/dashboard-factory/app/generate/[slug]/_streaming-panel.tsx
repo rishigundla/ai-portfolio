@@ -45,9 +45,6 @@ export function StreamingPanel({
   const abortRef = React.useRef<AbortController | null>(null)
 
   const hydrated = useStoreHydrated()
-  const alreadyProfiled = useDashboardStore(
-    (s) => s.profilingComplete[datasetSlug] ?? false,
-  )
   const markProfilingComplete = useDashboardStore((s) => s.markProfilingComplete)
   const resetProfiling = useDashboardStore((s) => s.resetProfiling)
 
@@ -104,15 +101,16 @@ export function StreamingPanel({
   }, [datasetSlug, resetProfiling, startStream])
 
   // Auto-start once Zustand has hydrated.
-  // If the user already profiled this slug in a prior session, render the
-  // full text immediately and skip the animation.
+  //
+  // The streaming animation IS the headline product moment ("watch Claude
+  // profile your data") — so we replay it on every visit, even when the
+  // user has profiled this slug before. The `alreadyProfiled` flag still
+  // gets set after each successful run because `/dashboard/[slug]`'s
+  // navigation guard (`_guard.tsx`) reads it to decide whether to grant
+  // access. The hydration check stays so SSR + post-hydration agree on
+  // the initial empty render.
   React.useEffect(() => {
     if (!hydrated) return
-    if (alreadyProfiled) {
-      setStreamedText(fixture.text)
-      setCompleted(true)
-      return
-    }
     startStream()
     return () => abortRef.current?.abort()
     // eslint-disable-next-line react-hooks/exhaustive-deps
