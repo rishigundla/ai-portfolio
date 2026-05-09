@@ -1,13 +1,18 @@
 'use client'
 
 import * as React from 'react'
-import Link from 'next/link'
-import { Wand2, ExternalLink } from 'lucide-react'
+import { Wand2, ExternalLink, Sparkles } from 'lucide-react'
 import {
-  buildWireframeLayout,
-  WIREFRAME_DENSITIES,
-  type WireframeDensity,
-} from '@/lib/wireframe-engine'
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
+  Button,
+} from '@rishi/design-system/primitives'
+import { buildWireframeLayout } from '@/lib/wireframe-engine'
 import type { ColorClassSet } from '@/lib/datasets'
 import { DashboardView } from '@/app/dashboard/[slug]/_dashboard-view'
 
@@ -16,39 +21,24 @@ interface WireframeViewProps {
   colors: ColorClassSet
 }
 
-const DENSITY_LABELS: Record<WireframeDensity, string> = {
-  sparse: 'Sparse',
-  balanced: 'Balanced',
-  dense: 'Dense',
-}
-
-const DENSITY_DESCRIPTIONS: Record<WireframeDensity, string> = {
-  sparse: 'Single hero KPI · charts stacked at full width · executive readout feel',
-  balanced: '5-KPI strip · 4-chart grid · same density as the live dashboard',
-  dense: '5-KPI compact · 4 charts side by side · operational control room feel',
-}
-
 /**
  * Client wrapper for the data-driven wireframe view.
  *
- * Holds the local density state (defaults to balanced) and passes the
- * resulting WireframeLayout into the existing <DashboardView> for rendering.
- * The chart grid layout is theming-only here — DashboardView already handles
- * the responsive grid for `balanced`. Sparse/Dense are signaled via wrapper
- * classes that override the grid template at the section level.
+ * Renders the engine's output through the existing <DashboardView>. The
+ * wireframe engine has a single canonical density (5-KPI strip + 4-chart
+ * 2x2 grid) — earlier Sparse/Dense modes were removed in favour of one
+ * polished default. Same data drives every wireframe; the engine picks
+ * the chart mix from the per-slug profiling recommendation.
  *
  * Wireframe-specific chrome:
  * - "Wireframe" badge in the header (vs ad-hoc's "Live dashboard")
- * - No filter bar, no PDF export, no drill-down dialog (wireframes are static
- *   showcase — full filter machinery would imply real-time analytics)
- * - Density selector at the top
+ * - No filter bar, no PDF export, no drill-down dialog (wireframes are
+ *   static showcase — full filter machinery would imply real-time analytics)
+ * - Export-to-Figma button opens an in-page modal explaining the
+ *   future-state Figma MCP integration + why it's not wired today
  */
 export function WireframeView({ slug, colors }: WireframeViewProps) {
-  const [density, setDensity] = React.useState<WireframeDensity>('balanced')
-  const wireframe = React.useMemo(
-    () => buildWireframeLayout(slug, density),
-    [slug, density],
-  )
+  const wireframe = React.useMemo(() => buildWireframeLayout(slug), [slug])
 
   if (!wireframe) {
     return (
@@ -62,7 +52,7 @@ export function WireframeView({ slug, colors }: WireframeViewProps) {
 
   return (
     <div className="space-y-6">
-      {/* Status row — wireframe badge + density selector */}
+      {/* Status row — wireframe badge on the left, Export-to-Figma on the right */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <div
@@ -81,76 +71,91 @@ export function WireframeView({ slug, colors }: WireframeViewProps) {
                 Auto-generated from profiling
               </span>
             </div>
-            <p className="mt-1 text-xs text-text-muted">{DENSITY_DESCRIPTIONS[density]}</p>
+            <p className="mt-1 text-xs text-text-muted">
+              5-KPI strip · 4-chart grid · same density as the live dashboard
+            </p>
           </div>
         </div>
 
-        {/* Right-side controls: density selector + Export to Figma CTA */}
-        <div className="flex items-center gap-3 flex-wrap">
-          <div className="flex items-center gap-1.5">
-            <span className="font-mono text-[10px] uppercase tracking-wider text-text-muted hidden sm:inline">
-              Density
-            </span>
-            <div
-              role="radiogroup"
-              aria-label="Wireframe density"
-              className="inline-flex rounded-md border border-surface-border bg-surface p-0.5"
-            >
-              {WIREFRAME_DENSITIES.map((d) => {
-                const active = density === d
-                return (
-                  <button
-                    key={d}
-                    type="button"
-                    role="radio"
-                    aria-checked={active}
-                    onClick={() => setDensity(d)}
-                    className={`px-3 h-8 text-xs font-medium rounded-sm transition-colors ${
-                      active
-                        ? 'bg-accent text-base-900'
-                        : 'text-text-secondary hover:text-text-primary'
-                    }`}
-                  >
-                    {DENSITY_LABELS[d]}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-
-          {/* Export to Figma CTA. Click navigates to the future-state page
-              (/wireframe/figma-export). aria-label explicitly notes the
-              honest framing for screen readers + keyboard users so the
-              link's intent is clear without first clicking through. */}
-          <Link
-            href="/wireframe/figma-export"
-            aria-label="Export to Figma — opens the future-state demo page (manual rebuild today)"
-            className="inline-flex items-center gap-1.5 h-9 px-3 rounded-md border border-surface-border bg-surface text-text-primary hover:border-accent/40 hover:text-accent transition-colors text-xs font-medium"
-          >
-            <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
-            <span className="hidden sm:inline">Export to Figma</span>
-          </Link>
-        </div>
+        <ExportToFigmaModal />
       </div>
 
-      {/* The layout itself. DashboardView already handles the responsive
-          5-KPI strip + 4-chart 2x2 grid (the Balanced density). Sparse and
-          Dense flip the chart-row grid via CSS rules in globals.css that
-          target [data-density="sparse"] / [data-density="dense"] descendants
-          (Tailwind's arbitrary-variant approach didn't reliably emit CSS
-          for the escaped colon class names, so a regular CSS rule keeps
-          things deterministic). */}
-      <div data-density={density}>
-        <DashboardView layout={layout} colors={colors} />
-      </div>
+      {/* The engine output rendered through DashboardView */}
+      <DashboardView layout={layout} colors={colors} />
 
       {/* Footer hint */}
       <p className="mt-8 max-w-2xl text-xs text-text-muted leading-relaxed">
-        Switch densities to see how the same charts re-flow for different audiences. Same data,
-        different framing — exec, exploratory analyst, ops control room. The chart selection
-        itself is driven by the {dataset.id} profiling fixture and the wireframe engine.
+        Chart selection is driven by the{' '}
+        <span className="font-mono text-text-secondary">{dataset.id}</span> profiling fixture
+        and the wireframe engine. Same machinery powers the ad-hoc dashboard at{' '}
+        <span className="font-mono text-text-secondary">/dashboard/[slug]</span>; only the
+        recommendation source differs.
       </p>
     </div>
   )
 }
 
+/**
+ * Export-to-Figma modal trigger + content.
+ *
+ * Reuses the design-system Dialog primitive whose overlay is already
+ * styled with `bg-base-900/80 backdrop-blur-sm` — the blurred backdrop
+ * is built-in. Modal body is intentionally short: what the button would
+ * do, why it's not wired today (Figma MCP needs desktop client + ongoing
+ * API spend), and an explicit acknowledgement that for a personal-portfolio
+ * project the costs aren't justified.
+ */
+function ExportToFigmaModal() {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <button
+          type="button"
+          aria-label="Export to Figma — opens an explanation modal"
+          className="inline-flex items-center gap-1.5 h-9 px-3 rounded-md border border-surface-border bg-surface text-text-primary hover:border-accent/40 hover:text-accent transition-colors text-xs font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        >
+          <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+          <span className="hidden sm:inline">Export to Figma</span>
+        </button>
+      </DialogTrigger>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <div className="flex items-center gap-2 mb-2">
+            <Sparkles className="h-4 w-4 text-accent" aria-hidden="true" />
+            <span className="font-mono text-[10px] uppercase tracking-widest text-accent">
+              Future-state preview
+            </span>
+          </div>
+          <DialogTitle>Export to Figma, not wired in this build</DialogTitle>
+          <DialogDescription className="leading-relaxed">
+            In a production deploy, clicking this button would hand the wireframe layout
+            to Claude via the Figma MCP server, which would create an editable Figma file
+            styled with the portfolio design system. That replaces the typical multi-day
+            manual rebuild after a dashboard mockup is approved.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-3 text-sm text-text-secondary leading-relaxed">
+          <p>
+            The integration needs Figma desktop running locally plus ongoing API spend
+            per export. For a personal portfolio project running on free Vercel hosting
+            and sample data, those costs aren&apos;t justified, so this surface is a
+            wireframe of the export feature itself.
+          </p>
+          <p className="text-xs text-text-muted">
+            The architecture is in place: the engine already produces a typed{' '}
+            <span className="font-mono text-text-secondary">WireframeLayout</span> ready
+            for an MCP handoff. Wiring the Figma side becomes a matter of stable MCP
+            access, not new product work.
+          </p>
+        </div>
+        <div className="mt-2 flex justify-end">
+          <DialogClose asChild>
+            <Button variant="primary" size="sm">
+              Got it
+            </Button>
+          </DialogClose>
+        </div>
+      </DialogContent>
+    </Dialog>
+  )
+}
