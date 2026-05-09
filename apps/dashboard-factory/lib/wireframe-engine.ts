@@ -13,23 +13,18 @@
  * (the same component the ad-hoc /dashboard route uses). All chart
  * resolution + KPI building reuses dashboard-builder's machinery.
  *
- * The 3 original templates' aesthetic is preserved as 3 layout density modes:
- *   - sparse   = was Executive   = 1 hero KPI + 4 charts at full width
- *   - balanced = was Exploratory = 5-KPI strip + 4-chart 2x2 (default)
- *   - dense    = was Operational = 5-KPI compact + 4-chart 4-across
- *
- * Density only affects the KPI count + signals to the view layer how to
- * lay out the chart grid. Same 4 charts render in all 3 modes.
+ * The engine produces a single canonical layout: 5-KPI strip + 4-chart
+ * 2x2 grid (formerly the "Balanced" density). Earlier Sparse and Dense
+ * modes were removed in favour of one polished default — same data
+ * drives every wireframe.
  */
 
 import type { ColumnSchema } from './full-datasets'
 import type { FullDataset } from './full-datasets'
-import type { ChartPick } from './per-domain-layout'
 import {
   buildKpis,
   resolveChartPick,
   type DashboardChart,
-  type DashboardKpi,
   type DashboardLayout,
   type PickResolverHelpers,
 } from './dashboard-builder'
@@ -40,13 +35,9 @@ import {
 } from './wireframe-recommendations'
 import { getWireframeDataset } from './wireframe-datasets'
 
-export type WireframeDensity = 'sparse' | 'balanced' | 'dense'
-
 export interface WireframeLayout {
   /** KPIs + charts, identical shape to the ad-hoc DashboardLayout. */
   layout: DashboardLayout
-  /** Currently selected density mode — passed through to the view layer. */
-  density: WireframeDensity
   /** Source dataset, exposed for header chrome (title / tagline). */
   dataset: FullDataset
   /** Recommendation source, exposed for a future "Why these charts?" panel. */
@@ -54,14 +45,11 @@ export interface WireframeLayout {
 }
 
 /**
- * Build a wireframe layout for the given dataset slug + density mode.
+ * Build a wireframe layout for the given dataset slug.
  * Returns null when the slug is unknown OR no recommendation is registered
  * (both are expected — caller should 404 in that case).
  */
-export function buildWireframeLayout(
-  slug: string,
-  density: WireframeDensity = 'balanced',
-): WireframeLayout | null {
+export function buildWireframeLayout(slug: string): WireframeLayout | null {
   const dataset = getWireframeDataset(slug)
   const recommendation = getWireframeRecommendation(slug)
   if (!dataset || !recommendation) return null
@@ -123,29 +111,11 @@ export function buildWireframeLayout(
   })
   const period = splitByPeriod(rows, helpers.timeCol)
 
-  let kpis: DashboardKpi[] = buildKpis(
-    rows,
-    measures,
-    usefulDimensions,
-    helpers.idColumn,
-    period,
-  )
-
-  // Density-aware KPI strip: sparse mode keeps only the headline measure
-  // for an "exec readout" feel. Balanced + dense both render the full
-  // 5-strip — density differs in the surrounding grid layout, handled at
-  // the view layer.
-  if (density === 'sparse') {
-    kpis = kpis.slice(0, 1)
-  }
+  const kpis = buildKpis(rows, measures, usefulDimensions, helpers.idColumn, period)
 
   return {
     layout: { kpis, charts },
-    density,
     dataset,
     recommendation,
   }
 }
-
-/** All registered wireframe densities, useful for selector enumeration. */
-export const WIREFRAME_DENSITIES: WireframeDensity[] = ['sparse', 'balanced', 'dense']
