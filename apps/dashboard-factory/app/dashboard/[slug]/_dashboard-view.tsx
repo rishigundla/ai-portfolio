@@ -697,11 +697,9 @@ function FunnelChartView({
                 style={{ width: `${widthPct}%` }}
                 aria-label={`${stage.label}: ${stage.value}`}
               />
-              <div className="absolute inset-0 flex items-center px-3 pointer-events-none">
-                <span className="text-xs font-mono font-medium text-base-900 mix-blend-screen">
-                  {formatChartValue(stage.value)}
-                </span>
-              </div>
+            </div>
+            <div className="w-14 shrink-0 text-right text-xs font-mono font-semibold text-text-primary">
+              {formatChartValue(stage.value)}
             </div>
             <div className="w-12 shrink-0 text-right text-xs font-mono text-text-muted">
               {stage.pct.toFixed(0)}%
