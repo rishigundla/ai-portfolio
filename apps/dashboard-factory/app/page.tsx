@@ -56,10 +56,10 @@ export default function HomePage() {
           <PersonaCard
             href="/wireframe"
             badge="For Developers"
-            badgeAccent="muted"
+            badgeAccent="accent"
             title="Hi-fi wireframe mode"
             quote="I'm kicking off a new CX dashboard project. I need a clickable hi-fi mockup for Monday's discovery session, but I don't want to spend a week in Figma first."
-            description="Pick a layout template (Executive, Operational, Exploratory), get a fully designed clickable mockup. Export to Figma for stakeholder refinement before any real development begins."
+            description="Pick from 6 dataset-driven wireframes spanning manufacturing, real estate, healthcare, education, SaaS, and logistics. Each layout is generated from the dataset schema, ready to share with stakeholders or export to Figma."
           />
         </div>
       </section>
