@@ -68,6 +68,10 @@ const config: Config = {
         'fade-in': 'fadeIn 0.6s ease-out forwards',
         'slide-up': 'slideUp 0.6s ease-out forwards',
         'slide-down': 'slideDown 0.6s ease-out forwards',
+        // Dialog-specific entrance that preserves the translate(-50%,-50%)
+        // centering applied to DialogContent. Plain slide-up overwrites the
+        // translate at the final keyframe and ends up bottom-right of viewport.
+        'dialog-show': 'dialogContentShow 0.25s ease-out forwards',
         'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
         float: 'float 6s ease-in-out infinite',
         'grid-flow': 'gridFlow 20s linear infinite',
@@ -86,6 +90,14 @@ const config: Config = {
         slideDown: {
           '0%': { opacity: '0', transform: 'translateY(-30px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        // Composite transform keeps the centering translate while sliding
+        // up. Without these explicit translate-x/y, the animation's final
+        // keyframe overrides the inline `translate(-50%, -50%)` that
+        // DialogContent uses for centering.
+        dialogContentShow: {
+          '0%': { opacity: '0', transform: 'translate(-50%, calc(-50% + 8px))' },
+          '100%': { opacity: '1', transform: 'translate(-50%, -50%)' },
         },
         pulseGlow: {
           '0%, 100%': { boxShadow: '0 0 20px rgba(45, 212, 191, 0.3)' },

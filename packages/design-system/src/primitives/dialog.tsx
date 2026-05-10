@@ -37,7 +37,10 @@ export const DialogContent = React.forwardRef<
       className={cn(
         'fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 p-6',
         'rounded-xl border border-surface-border bg-surface shadow-modal',
-        'data-[state=open]:animate-slide-up',
+        // Dialog-specific entrance — animate-slide-up's keyframe overwrote
+        // the translate(-50%,-50%) centering and sent the dialog to the
+        // bottom-right quadrant. animate-dialog-show preserves both axes.
+        'data-[state=open]:animate-dialog-show',
         className,
       )}
       {...props}
