@@ -5,11 +5,11 @@
   "tags": ["AI", "Narrative", "PPTX", "React", "Next.js", "Claude"],
   "description": "Pick a sample dashboard PDF, watch Claude write the executive narrative, get a polished PPTX-ready deck. The other half of the BI workflow — turning visuals back into story.",
   "thumbnail": "/projects/ai-narrative-generator.png",
-  "liveUrl": "",
+  "liveUrl": "https://ai-portfolio-narrative-generator.vercel.app",
   "githubUrl": "https://github.com/rishigundla/ai-portfolio/tree/main/apps/narrative-generator",
   "caseStudyUrl": "",
   "loomUrl": "",
-  "deployedAt": "",
+  "deployedAt": "2026-05-15",
   "resumeBullet": {
     "category": "AI-Powered Analytics & Data Engineering Projects",
     "text": "Built a Dashboard-to-Deck Narrative Generator on Next.js + Vercel — consumes sample BI dashboards, streams an AI-authored executive narrative explaining what the data means, and emits a polished PPTX-ready deck. Closes the loop on the BI workflow: dashboards out, stories back in."

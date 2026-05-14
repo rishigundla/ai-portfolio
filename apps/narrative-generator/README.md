@@ -2,7 +2,7 @@
 
 **Project 02 of 5** — Dashboard-to-Deck Narrative Generator. Pick a sample dashboard, watch Claude write the executive narrative, get a polished PPTX-ready deck.
 
-**Live**: _coming W6.D2_ &nbsp;·&nbsp; **Case study**: _coming with v1.0_ &nbsp;·&nbsp; **Status**: W6.D1 scaffold
+**Live**: <https://ai-portfolio-narrative-generator.vercel.app> &nbsp;·&nbsp; **Case study**: _coming with v1.0_ &nbsp;·&nbsp; **Status**: W6.D2 deployed (scaffold)
 
 ---
 
