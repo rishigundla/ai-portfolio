@@ -1,19 +1,41 @@
 /**
  * Color tokens — extracted from rishikeshgundla.com portfolio-site
  * Dark theme primary. Light theme variables kept for future toggle.
+ *
+ * Dual-track pattern for opacity-modified tokens:
+ *   --color-X       hex literal, used by code that consumes the token
+ *                   directly (SVG fill/stroke, gradient stop, inline style)
+ *   --color-X-rgb   space-separated R G B triplet, consumed by Tailwind's
+ *                   `rgb(var(--color-X-rgb) / <alpha-value>)` color mapping
+ *                   so utilities like `bg-X/75` resolve correctly. Without
+ *                   the triplet form, Tailwind's <alpha-value> substitution
+ *                   produces invalid CSS like `rgb(#2dd4bf / 0.75)` which
+ *                   browsers silently drop to transparent (see W5.D4.2
+ *                   activity log for the bug history).
+ *
+ * Only tokens actually used with opacity modifiers in apps get a -rgb
+ * sibling. Audit (W5.D6): accent, accent-light, base-900, status-completed.
+ * If you start using opacity utilities on another token, add its -rgb
+ * sibling here AND update the corresponding Tailwind config entry.
+ *
+ * Drift warning: keep the hex and -rgb values in sync. Visual regression
+ * tests (W5 close, Cat A #2) catch drift downstream.
  */
 
 :root,
 .dark {
   /* Accent — teal signature */
   --color-accent: #2dd4bf;
+  --color-accent-rgb: 45 212 191;
   --color-accent-light: #5eead4;
+  --color-accent-light-rgb: 94 234 212;
   --color-accent-dark: #14b8a6;
   --color-accent-glow: rgba(45, 212, 191, 0.15);
   --color-accent-glow-strong: rgba(45, 212, 191, 0.35);
 
   /* Base dark scale — ascending lightness */
   --color-base-900: #0a0a0f;
+  --color-base-900-rgb: 10 10 15;
   --color-base-800: #12121a;
   --color-base-700: #1a1a25;
   --color-base-600: #222230;
@@ -38,6 +60,7 @@
   --color-status-not-started: #475569;
   --color-status-in-progress: #f59e0b;
   --color-status-completed: #10b981;
+  --color-status-completed-rgb: 16 185 129;
   --color-status-blocked: #ef4444;
 
   /* Severity — mirrors status but semantically named for ops dashboards */
@@ -64,6 +87,7 @@
 /* Light theme — matches portfolio-site for future toggle support */
 .light {
   --color-base-900: #f8f9fa;
+  --color-base-900-rgb: 248 249 250;
   --color-base-800: #f1f3f5;
   --color-base-700: #e9ecef;
   --color-base-600: #dee2e6;

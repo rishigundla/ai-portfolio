@@ -17,14 +17,22 @@ const config: Config = {
     extend: {
       colors: {
         base: {
-          900: 'var(--color-base-900)',
+          // base-900 uses the RGB-triplet form so `bg-base-900/85` (used by
+          // the sticky nav backdrop) resolves to a translucent dark layer.
+          // Other base-* values are solid-only and stay on the hex var.
+          900: 'rgb(var(--color-base-900-rgb) / <alpha-value>)',
           800: 'var(--color-base-800)',
           700: 'var(--color-base-700)',
           600: 'var(--color-base-600)',
         },
         accent: {
-          DEFAULT: 'var(--color-accent)',
-          light: 'var(--color-accent-light)',
+          // accent + accent-light use the RGB-triplet form so every
+          // `bg-accent/X` and `border-accent/X` utility across the app
+          // actually renders. accent-dark + accent-glow are solid-only.
+          // See packages/design-system/src/tokens/colors.css for the
+          // dual-track pattern rationale.
+          DEFAULT: 'rgb(var(--color-accent-rgb) / <alpha-value>)',
+          light: 'rgb(var(--color-accent-light-rgb) / <alpha-value>)',
           dark: 'var(--color-accent-dark)',
           glow: 'var(--color-accent-glow)',
         },
@@ -43,7 +51,9 @@ const config: Config = {
         status: {
           'not-started': 'var(--color-status-not-started)',
           'in-progress': 'var(--color-status-in-progress)',
-          completed: 'var(--color-status-completed)',
+          // status-completed uses RGB-triplet form for the streaming-panel
+          // success-state badge background (bg-status-completed/10).
+          completed: 'rgb(var(--color-status-completed-rgb) / <alpha-value>)',
           blocked: 'var(--color-status-blocked)',
         },
         severity: {
