@@ -60,7 +60,7 @@ export default async function DeckPage({ params }: PageProps) {
             you&apos;re ready to share.
           </p>
         </div>
-        <PptxExportModal />
+        <PptxExportModal slug={slug} />
       </header>
 
       <SlidePreview dashboard={dashboard} narrative={narrative} />

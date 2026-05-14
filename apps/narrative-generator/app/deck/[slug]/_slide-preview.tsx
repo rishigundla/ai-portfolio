@@ -5,6 +5,7 @@ import type { Fixture } from '@rishi/ai-core'
 import type { DashboardFixture, KpiSpec } from '@/lib/full-dashboards'
 import { getColorClasses, getDashboardIcon } from '@/lib/dashboards'
 import { parseNarrativeSections, extractBullets } from '@/lib/parse-narrative'
+import { formatKpiValue } from '@/lib/format-kpi'
 
 /**
  * Slide-by-slide preview of the deck the narrative + dashboard pair
@@ -236,42 +237,6 @@ function KpiDelta({ kpi }: { kpi: KpiSpec }) {
       )}
     </div>
   )
-}
-
-// ============================================================
-// KPI formatter
-// ============================================================
-
-function formatKpiValue(kpi: KpiSpec): string {
-  if (kpi.format === 'categorical' || typeof kpi.value !== 'number') {
-    return String(kpi.value)
-  }
-  const v = kpi.value
-  switch (kpi.format) {
-    case 'currency': {
-      const symbol = kpi.currency === 'USD' || !kpi.currency ? '$' : ''
-      if (Math.abs(v) >= 1_000_000) return `${symbol}${(v / 1_000_000).toFixed(1)}M`
-      if (Math.abs(v) >= 1_000) return `${symbol}${(v / 1_000).toFixed(0)}K`
-      return `${symbol}${v.toLocaleString()}`
-    }
-    case 'percent':
-      return `${v.toFixed(1)}%`
-    case 'duration':
-      return `${v}${kpi.unit ? ' ' + kpi.unit : ''}`
-    case 'ratio':
-      return `${v.toFixed(1)}${kpi.unit ?? ''}`
-    case 'rating':
-      return `${v.toFixed(1)}${kpi.unit ? ' ' + kpi.unit : ''}`
-    case 'score':
-      return `${v}`
-    case 'count': {
-      if (Math.abs(v) >= 1_000_000) return `${(v / 1_000_000).toFixed(1)}M`
-      if (Math.abs(v) >= 10_000) return `${(v / 1_000).toFixed(1)}K`
-      return v.toLocaleString()
-    }
-    default:
-      return String(v)
-  }
 }
 
 // ReactMarkdown overrides — keep paragraphs lean; no links/headings inside slides.
