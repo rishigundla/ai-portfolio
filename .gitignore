@@ -20,6 +20,10 @@ test-results/
 playwright-report/
 .playwright/
 
+# Lighthouse audit raw reports — regeneratable, summary lives in activity log
+docs/lighthouse-reports/*.json
+docs/lighthouse-reports/*.html
+
 # Turbo
 .turbo
 
