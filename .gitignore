@@ -15,6 +15,11 @@ node_modules
 # Testing
 coverage
 
+# Playwright visual regression — keep __snapshots__ tracked, ignore run output
+test-results/
+playwright-report/
+.playwright/
+
 # Turbo
 .turbo
 

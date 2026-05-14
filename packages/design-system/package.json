@@ -22,7 +22,8 @@
   },
   "scripts": {
     "lint": "eslint src",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "test:visual": "playwright test"
   },
   "dependencies": {
     "@fontsource/jetbrains-mono": "^5.2.8",
@@ -57,6 +58,7 @@
     }
   },
   "devDependencies": {
+    "@playwright/test": "^1.49.0",
     "@repo/typescript-config": "workspace:*",
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
