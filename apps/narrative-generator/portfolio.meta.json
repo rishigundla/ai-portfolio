@@ -1,0 +1,22 @@
+{
+  "slug": "narrative-generator",
+  "title": "Dashboard-to-Deck Narrative Generator",
+  "category": "AI",
+  "tags": ["AI", "Narrative", "PPTX", "React", "Next.js", "Claude"],
+  "description": "Pick a sample dashboard PDF, watch Claude write the executive narrative, get a polished PPTX-ready deck. The other half of the BI workflow — turning visuals back into story.",
+  "thumbnail": "/projects/ai-narrative-generator.png",
+  "liveUrl": "",
+  "githubUrl": "https://github.com/rishigundla/ai-portfolio/tree/main/apps/narrative-generator",
+  "caseStudyUrl": "",
+  "loomUrl": "",
+  "deployedAt": "",
+  "resumeBullet": {
+    "category": "AI-Powered Analytics & Data Engineering Projects",
+    "text": "Built a Dashboard-to-Deck Narrative Generator on Next.js + Vercel — consumes sample BI dashboards, streams an AI-authored executive narrative explaining what the data means, and emits a polished PPTX-ready deck. Closes the loop on the BI workflow: dashboards out, stories back in."
+  },
+  "portfolioCard": {
+    "problem": "Once a BI engineer ships a dashboard, the analyst's real work begins: writing the executive readout. Pulling the headline insight, drafting the bullet narrative, formatting a PPTX that survives the Monday review. This is the part nobody outsources well — vendor narrative tools generate generic captions, manual writing eats hours per week, and the dashboard-to-deck handoff is where insight quality gets lost.",
+    "approach": "Two-step factory mirroring the Project 1 pattern. (1) Pick a sample dashboard from a curated library, watch Claude stream the executive narrative live — hero metric, week-over-week movement, the contextual one-liner that explains why it matters. (2) Get a polished slide deck themed to the same design system, ready to download as PPTX or hand off to a designer. Same shared streaming primitive as Project 1, different output medium.",
+    "impact": "Analyst readout-writing time drops from hours to minutes. Narrative quality stays consistent because the AI works off the same hand-curated voice as Project 1's profiling fixtures. The deck is themed, accessible, and matches the company's design system out of the box — no separate template wrangling. See the case study (coming with v1.0) for architecture and engineering decisions."
+  }
+}
