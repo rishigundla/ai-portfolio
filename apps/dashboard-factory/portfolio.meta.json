@@ -12,7 +12,7 @@
   "deployedAt": "2026-04-28",
   "resumeBullet": {
     "category": "AI-Powered Analytics & Data Engineering Projects",
-    "text": "Architected an AI-powered dashboard factory on Next.js + Vercel — applies a unified design-token system across 6 business domains with streaming AI profiling, automatic KPI / chart recommendation, and Figma-exportable hi-fi wireframes. Reduces ad-hoc dashboard turnaround from days to minutes."
+    "text": "Architected an AI-powered dashboard factory on Next.js + Vercel — unified design-token system across 6 business domains, streaming AI profiling with hand-curated fixtures, automatic KPI / chart recommendation, and dataset-driven hi-fi wireframes designed for Figma MCP handoff. Reduces ad-hoc dashboard turnaround from days to minutes."
   },
   "portfolioCard": {
     "problem": "Dashboard creation is slow and unstructured. A VP wants Q3 vs Q2 regional sales by Monday; the typical path is a BI ticket plus a three-day wait for something that looks like Excel circa 2012. Meanwhile BI engineers spend 2-4 days mocking dashboards in Figma before the real build, for stakeholder discovery and alignment. Two audiences, two timelines, one underlying cause.",
