@@ -4,8 +4,11 @@
 > Built on Next.js + Vercel with a shared design system. Designed to complete the Senior BI Engineer → Data / Analytics Engineer transition.
 
 **Author**: Rishikesh Gundla — [rishikeshgundla.com](https://rishikeshgundla.com)
-**Status**: Phase 1 · Week 1 complete (44 / 98 tasks · 44.9%)
-**Live demo**: [ai-portfolio-design-system-docs.vercel.app](https://ai-portfolio-design-system-docs.vercel.app)
+**Status**: Phase 1 · Project 1 (Dashboard Factory) closing · 159 / 150 tasks · case study shipped
+**Live demos**:
+- Project 0 (Design System) — [ai-portfolio-design-system-docs.vercel.app](https://ai-portfolio-design-system-docs.vercel.app)
+- Project 1 (Dashboard Factory) — [ai-portfolio-dashboard-factory.vercel.app](https://ai-portfolio-dashboard-factory.vercel.app) · [case study](./docs/case-studies/dashboard-factory.md)
+
 **Plan**: [docs/master-plan.md](./docs/master-plan.md) · [docs/plan.html](./docs/plan.html) (interactive)
 
 ---
@@ -15,13 +18,13 @@
 | # | Project | What it does | Status | Live |
 |---|---------|--------------|--------|------|
 | 0 | [Design System Docs](./apps/design-system-docs/) | Showcase of tokens, primitives, AI components | **Live** | [link](https://ai-portfolio-design-system-docs.vercel.app) |
-| 1 | Instant Analytics Dashboard Factory | Pick a sample dataset → streaming AI profiling → interactive dashboard | Not started | — |
+| 1 | [Instant Analytics Dashboard Factory](./apps/dashboard-factory/) | Pick a sample dataset → streaming AI profiling → interactive dashboard | **Live** · [case study](./docs/case-studies/dashboard-factory.md) | [link](https://ai-portfolio-dashboard-factory.vercel.app) |
 | 2 | Dashboard-to-Deck Narrative Generator | Sample dashboard PDF → AI narrative → polished PPTX | Not started | — |
 | 3 | Smart Metric Anomaly Alerting | Curated anomalies → AI root-cause narration with correlation analysis | Not started | — |
 | 4 | AI Sprint Intelligence Dashboard | Synthetic sprints → team + individual KPIs → AI meeting brief | Not started | — |
 | 5 | AI Pipeline Debugger & Self-Healer | PySpark failure scenarios → AI diagnosis + patch + mock Slack approval | Not started | — |
 
-Each app will have its own `README.md`, `portfolio.meta.json`, case study in `docs/case-studies/`, and 90-second Loom walkthrough.
+Each app has its own `README.md`, `portfolio.meta.json`, and case study in [`docs/case-studies/`](./docs/case-studies/). Project 1 is the first to close — see the [Dashboard Factory case study](./docs/case-studies/dashboard-factory.md).
 
 ---
 
