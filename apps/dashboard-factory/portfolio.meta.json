@@ -16,7 +16,7 @@
   },
   "portfolioCard": {
     "problem": "Dashboard creation follows a slow cycle: stakeholder shares raw data, BI engineer profiles it manually, designs wireframe in Figma, gets alignment, then builds in Tableau or Power BI. Ad-hoc requests get deprioritised. Power users spend days wireframing before stakeholder discovery sessions.",
-    "approach": "An AI-powered factory with two modes. (1) Ad-hoc mode for business users: pick a sample dataset, AI profiles columns and recommends KPIs / charts via streaming explanation, fully designed interactive dashboard renders with filters and PDF export. (2) Wireframe mode for BI engineers: pick a layout template, get a clickable hi-fi mockup, export to Figma for stakeholder discovery.",
+    "approach": "An AI-powered factory with two modes. (1) Ad-hoc mode for business users: pick a sample dataset, AI profiles columns and recommends KPIs / charts via streaming explanation, fully designed interactive dashboard renders with filters and PDF export. (2) Wireframe mode for BI engineers: pick a dataset-driven wireframe, each layout is generated from the dataset schema by the same chart engine that powers the ad-hoc dashboard, ready to share with stakeholders or hand off to a designer via the future-state Figma MCP integration.",
     "impact": "Ad-hoc dashboard turnaround drops from days to minutes. BI engineers save 3-4 days of wireframing per project. The unified design system means every output looks like it came from a professional BI team."
   }
 }
