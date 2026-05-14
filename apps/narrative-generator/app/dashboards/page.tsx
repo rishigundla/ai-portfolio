@@ -59,13 +59,20 @@ export default function DashboardsGalleryPage() {
                 >
                   {dashboard.domain}
                 </div>
-                <h3 className="font-display text-lg font-semibold tracking-tight mb-2">
+                {/* h2 because the H1 above is the gallery title and these cards
+                    are top-level sections of the gallery. H3 (the previous tag)
+                    skipped a level and triggered the Lighthouse heading-order
+                    audit on the W6.D6 sweep. */}
+                <h2 className="font-display text-lg font-semibold tracking-tight mb-2">
                   {dashboard.title}
-                </h3>
+                </h2>
                 <p className="text-xs text-text-muted leading-relaxed mb-4 line-clamp-2">
                   {dashboard.tagline}
                 </p>
-                <div className="flex items-center justify-between text-xs text-text-dim font-mono">
+                {/* text-text-muted (slate-400) not text-text-dim (#4b5563) —
+                    dim is below the WCAG AA 4.5:1 contrast threshold against
+                    bg-surface (#16161e). Footer stats need to be readable. */}
+                <div className="flex items-center justify-between text-xs text-text-muted font-mono">
                   <span>
                     {dashboard.kpiCount} KPIs · {dashboard.chartCount} charts · {dashboard.rowCount} rows
                   </span>
