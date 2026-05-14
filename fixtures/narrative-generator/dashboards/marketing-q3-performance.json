@@ -1,0 +1,122 @@
+{
+  "id": "marketing-q3-performance",
+  "metadata": {
+    "title": "Marketing Q3 Performance",
+    "tagline": "Channel spend, sourced pipeline, and CAC payback for the Q3 close",
+    "domain": "marketing",
+    "colorToken": "purple",
+    "icon": "Megaphone",
+    "thumbnail": "/dashboards/marketing-q3.png",
+    "period": "2026-07-01 to 2026-09-30",
+    "audience": "CMO · VP Demand Gen · Finance Business Partner"
+  },
+  "kpis": [
+    {
+      "id": "marketing-sourced-pipeline",
+      "label": "Marketing-Sourced Pipeline",
+      "value": 6280000,
+      "format": "currency",
+      "currency": "USD",
+      "deltaPct": 18.6,
+      "deltaDirection": "up",
+      "deltaWindow": "vs Q2",
+      "sparkline": [5.0, 5.1, 5.2, 5.4, 5.5, 5.7, 5.8, 6.0, 6.1, 6.2, 6.2, 6.3, 6.3]
+    },
+    {
+      "id": "cost-per-lead",
+      "label": "Blended CPL",
+      "value": 184,
+      "format": "currency",
+      "currency": "USD",
+      "deltaPct": 8.4,
+      "deltaDirection": "down",
+      "deltaWindow": "vs Q2",
+      "sparkline": [201, 198, 196, 193, 192, 190, 188, 187, 186, 185, 184, 184, 184]
+    },
+    {
+      "id": "mql-to-sql",
+      "label": "MQL → SQL Conversion",
+      "value": 32.1,
+      "format": "percent",
+      "deltaPct": 3.4,
+      "deltaDirection": "up",
+      "deltaWindow": "vs Q2",
+      "sparkline": [28.5, 29.1, 29.6, 30.1, 30.4, 30.8, 31.2, 31.5, 31.7, 31.9, 32.0, 32.1, 32.1]
+    },
+    {
+      "id": "cac-payback",
+      "label": "CAC Payback",
+      "value": 11.4,
+      "format": "duration",
+      "unit": "mo",
+      "deltaPct": 6.1,
+      "deltaDirection": "down",
+      "deltaWindow": "vs Q2",
+      "sparkline": [12.1, 12.0, 11.9, 11.8, 11.7, 11.6, 11.6, 11.5, 11.5, 11.5, 11.4, 11.4, 11.4]
+    },
+    {
+      "id": "top-channel",
+      "label": "Top Channel by ROI",
+      "value": "Paid Search",
+      "format": "categorical",
+      "subtext": "3.6x return · Enterprise leans here"
+    }
+  ],
+  "charts": [
+    {
+      "id": "pipeline-by-channel",
+      "type": "bar",
+      "title": "Sourced pipeline by channel",
+      "subtitle": "Q3 attributed ACV · USD",
+      "data": [
+        { "label": "Paid Search", "value": 2180000 },
+        { "label": "Webinars", "value": 1420000 },
+        { "label": "Content / SEO", "value": 1080000 },
+        { "label": "Field Events", "value": 920000 },
+        { "label": "Paid Social", "value": 680000 }
+      ]
+    },
+    {
+      "id": "cpl-trend",
+      "type": "line",
+      "title": "Blended CPL, weekly",
+      "subtitle": "13 weeks trailing · 8.4% improvement",
+      "data": [
+        { "label": "W27", "value": 201 },
+        { "label": "W28", "value": 198 },
+        { "label": "W29", "value": 196 },
+        { "label": "W30", "value": 193 },
+        { "label": "W31", "value": 192 },
+        { "label": "W32", "value": 190 },
+        { "label": "W33", "value": 188 },
+        { "label": "W34", "value": 187 },
+        { "label": "W35", "value": 186 },
+        { "label": "W36", "value": 185 },
+        { "label": "W37", "value": 184 },
+        { "label": "W38", "value": 184 },
+        { "label": "W39", "value": 184 }
+      ]
+    },
+    {
+      "id": "channel-mix",
+      "type": "donut",
+      "title": "Spend mix by channel",
+      "subtitle": "Q3 marketing budget allocation",
+      "data": [
+        { "label": "Paid Search", "value": 425000 },
+        { "label": "Paid Social", "value": 280000 },
+        { "label": "Field Events", "value": 220000 },
+        { "label": "Webinars", "value": 145000 },
+        { "label": "Content / SEO", "value": 110000 }
+      ]
+    }
+  ],
+  "rows": [
+    { "campaign_id": "CMP-Q3-014", "name": "Mid-Market ABM · NAMER", "channel": "Paid Search", "spend_usd": 84000, "leads": 412, "mqls": 168, "sqls": 54, "sourced_acv_usd": 720000 },
+    { "campaign_id": "CMP-Q3-021", "name": "Vega Launch · webinar series", "channel": "Webinars", "spend_usd": 38000, "leads": 286, "mqls": 142, "sqls": 51, "sourced_acv_usd": 480000 },
+    { "campaign_id": "CMP-Q3-028", "name": "Atlas Platform · SEO authority push", "channel": "Content / SEO", "spend_usd": 22000, "leads": 184, "mqls": 88, "sqls": 28, "sourced_acv_usd": 320000 },
+    { "campaign_id": "CMP-Q3-033", "name": "RevOps Forum · NAMER 2026", "channel": "Field Events", "spend_usd": 95000, "leads": 92, "mqls": 64, "sqls": 24, "sourced_acv_usd": 540000 },
+    { "campaign_id": "CMP-Q3-041", "name": "Orion launch · LinkedIn paid", "channel": "Paid Social", "spend_usd": 64000, "leads": 320, "mqls": 96, "sqls": 22, "sourced_acv_usd": 280000 },
+    { "campaign_id": "CMP-Q3-052", "name": "Enterprise CX · webinar", "channel": "Webinars", "spend_usd": 28000, "leads": 168, "mqls": 84, "sqls": 31, "sourced_acv_usd": 365000 }
+  ]
+}

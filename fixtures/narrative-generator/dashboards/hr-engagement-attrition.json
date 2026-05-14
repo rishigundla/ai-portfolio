@@ -1,0 +1,118 @@
+{
+  "id": "hr-engagement-attrition",
+  "metadata": {
+    "title": "People · Engagement & Attrition",
+    "tagline": "Headcount mix, engagement pulse, and voluntary attrition trends through Q3",
+    "domain": "hr",
+    "colorToken": "rose",
+    "icon": "Users",
+    "thumbnail": "/dashboards/hr-engagement.png",
+    "period": "2026-Q3 · rolling 90 days",
+    "audience": "CPO · CEO · People Team leads · Board prep"
+  },
+  "kpis": [
+    {
+      "id": "headcount",
+      "label": "Headcount",
+      "value": 412,
+      "format": "count",
+      "deltaPct": 8.4,
+      "deltaDirection": "up",
+      "deltaWindow": "vs Q2 (380)",
+      "subtext": "32 net adds · 38 hires, 6 voluntary departures",
+      "sparkline": [380, 384, 388, 391, 394, 397, 400, 403, 405, 407, 409, 411, 412]
+    },
+    {
+      "id": "engagement-score",
+      "label": "Engagement Score",
+      "value": 7.8,
+      "format": "rating",
+      "unit": "/ 10",
+      "deltaPct": 2.6,
+      "deltaDirection": "up",
+      "deltaWindow": "vs Q2 (7.6)",
+      "subtext": "Manager effectiveness driver up 0.4; Comp clarity down 0.2"
+    },
+    {
+      "id": "voluntary-attrition",
+      "label": "Voluntary Attrition (TTM)",
+      "value": 8.2,
+      "format": "percent",
+      "deltaPct": 1.4,
+      "deltaDirection": "down",
+      "deltaWindow": "vs Q2 (8.3%)",
+      "subtext": "Industry benchmark: 12-15%"
+    },
+    {
+      "id": "time-to-hire",
+      "label": "Avg Time to Hire",
+      "value": 38,
+      "format": "duration",
+      "unit": "days",
+      "deltaPct": 9.5,
+      "deltaDirection": "down",
+      "deltaWindow": "vs Q2 (42 days)",
+      "sparkline": [42, 41, 41, 40, 40, 39, 39, 39, 38, 38, 38, 38, 38]
+    },
+    {
+      "id": "enps",
+      "label": "eNPS",
+      "value": 38,
+      "format": "score",
+      "deltaPct": 8.6,
+      "deltaDirection": "up",
+      "deltaWindow": "vs Q2 (35)",
+      "subtext": "76 promoters · 24 passives · 12 detractors"
+    }
+  ],
+  "charts": [
+    {
+      "id": "attrition-by-tenure",
+      "type": "bar",
+      "title": "Voluntary attrition by tenure cohort",
+      "subtitle": "0-1y leavers dominate; 5+y cohort stable",
+      "data": [
+        { "label": "0-1y", "value": 18 },
+        { "label": "1-2y", "value": 9 },
+        { "label": "2-3y", "value": 4 },
+        { "label": "3-5y", "value": 2 },
+        { "label": "5+y", "value": 1 }
+      ]
+    },
+    {
+      "id": "engagement-by-team",
+      "type": "donut",
+      "title": "Engagement score by team",
+      "subtitle": "Average over Q3 pulse responses",
+      "data": [
+        { "label": "Engineering", "value": 8.1 },
+        { "label": "Sales", "value": 7.9 },
+        { "label": "Customer Success", "value": 7.8 },
+        { "label": "Product + Design", "value": 7.8 },
+        { "label": "G&A", "value": 7.5 },
+        { "label": "Support", "value": 7.2 }
+      ]
+    },
+    {
+      "id": "hiring-funnel",
+      "type": "bar",
+      "title": "Q3 hiring funnel",
+      "subtitle": "Applications → hires · 12% offer acceptance lift vs Q2",
+      "data": [
+        { "label": "Applications", "value": 2840 },
+        { "label": "Phone Screens", "value": 612 },
+        { "label": "Onsite Loops", "value": 184 },
+        { "label": "Offers", "value": 48 },
+        { "label": "Hires", "value": 38 }
+      ]
+    }
+  ],
+  "rows": [
+    { "team": "Engineering", "headcount": 142, "engagement": 8.1, "attrition_ttm_pct": 6.8, "open_roles": 8, "avg_tenure_yr": 3.2 },
+    { "team": "Sales", "headcount": 84, "engagement": 7.9, "attrition_ttm_pct": 11.2, "open_roles": 6, "avg_tenure_yr": 1.9 },
+    { "team": "Customer Success", "headcount": 48, "engagement": 7.8, "attrition_ttm_pct": 9.4, "open_roles": 3, "avg_tenure_yr": 2.4 },
+    { "team": "Product + Design", "headcount": 36, "engagement": 7.8, "attrition_ttm_pct": 5.1, "open_roles": 2, "avg_tenure_yr": 2.8 },
+    { "team": "G&A", "headcount": 62, "engagement": 7.5, "attrition_ttm_pct": 6.4, "open_roles": 1, "avg_tenure_yr": 4.1 },
+    { "team": "Support", "headcount": 40, "engagement": 7.2, "attrition_ttm_pct": 14.8, "open_roles": 4, "avg_tenure_yr": 1.4 }
+  ]
+}

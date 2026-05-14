@@ -1,0 +1,135 @@
+{
+  "id": "finance-quarter-close",
+  "metadata": {
+    "title": "Finance · Q3 Close",
+    "tagline": "Revenue, margin, expense, and burn trajectory at the Q3 books-closed checkpoint",
+    "domain": "finance",
+    "colorToken": "green",
+    "icon": "DollarSign",
+    "thumbnail": "/dashboards/finance-q3.png",
+    "period": "2026-Q3 (closed)",
+    "audience": "CFO · Audit Committee · Board prep"
+  },
+  "kpis": [
+    {
+      "id": "revenue",
+      "label": "Q3 Revenue",
+      "value": 38400000,
+      "format": "currency",
+      "currency": "USD",
+      "deltaPct": 14.6,
+      "deltaDirection": "up",
+      "deltaWindow": "vs Q2",
+      "subtext": "Beat plan by 3.8% · NRR-driven not new-logo-driven",
+      "sparkline": [33.5, 33.9, 34.4, 35.0, 35.5, 36.0, 36.4, 36.8, 37.2, 37.6, 37.9, 38.2, 38.4]
+    },
+    {
+      "id": "gross-margin",
+      "label": "Gross Margin",
+      "value": 76.8,
+      "format": "percent",
+      "deltaPct": 1.2,
+      "deltaDirection": "up",
+      "deltaWindow": "vs Q2",
+      "sparkline": [75.6, 75.8, 75.9, 76.0, 76.1, 76.3, 76.4, 76.5, 76.6, 76.7, 76.7, 76.8, 76.8]
+    },
+    {
+      "id": "operating-expenses",
+      "label": "Operating Expenses",
+      "value": 24800000,
+      "format": "currency",
+      "currency": "USD",
+      "deltaPct": 6.4,
+      "deltaDirection": "up",
+      "deltaWindow": "vs Q2",
+      "subtext": "Sales hiring + AI infra dominate the delta"
+    },
+    {
+      "id": "net-income",
+      "label": "Net Income",
+      "value": 4720000,
+      "format": "currency",
+      "currency": "USD",
+      "deltaPct": 38.2,
+      "deltaDirection": "up",
+      "deltaWindow": "vs Q2",
+      "sparkline": [3.4, 3.5, 3.6, 3.7, 3.9, 4.0, 4.1, 4.3, 4.4, 4.5, 4.6, 4.7, 4.7]
+    },
+    {
+      "id": "burn-rate",
+      "label": "Monthly Burn (gross)",
+      "value": 8270000,
+      "format": "currency",
+      "currency": "USD",
+      "deltaPct": 4.1,
+      "deltaDirection": "up",
+      "deltaWindow": "vs Q2",
+      "subtext": "Runway: 18.4 months at current burn"
+    }
+  ],
+  "charts": [
+    {
+      "id": "revenue-vs-plan",
+      "type": "line",
+      "title": "Revenue vs plan, weekly",
+      "subtitle": "Plan line at $36.8M closed-quarter target",
+      "data": [
+        { "label": "W27", "value": 2.7 },
+        { "label": "W28", "value": 2.8 },
+        { "label": "W29", "value": 2.9 },
+        { "label": "W30", "value": 3.0 },
+        { "label": "W31", "value": 3.0 },
+        { "label": "W32", "value": 3.1 },
+        { "label": "W33", "value": 3.1 },
+        { "label": "W34", "value": 3.2 },
+        { "label": "W35", "value": 3.2 },
+        { "label": "W36", "value": 3.3 },
+        { "label": "W37", "value": 3.3 },
+        { "label": "W38", "value": 3.3 },
+        { "label": "W39", "value": 3.4 }
+      ]
+    },
+    {
+      "id": "expense-breakdown",
+      "type": "donut",
+      "title": "OpEx breakdown",
+      "subtitle": "Q3 · USD",
+      "data": [
+        { "label": "Sales + Marketing", "value": 10800000 },
+        { "label": "Engineering + R&D", "value": 8420000 },
+        { "label": "G&A", "value": 3120000 },
+        { "label": "Customer Success", "value": 1840000 },
+        { "label": "Infrastructure", "value": 620000 }
+      ]
+    },
+    {
+      "id": "margin-trend",
+      "type": "line",
+      "title": "Gross margin %, weekly",
+      "subtitle": "Margin lift from infra optimization landed in W34",
+      "data": [
+        { "label": "W27", "value": 75.6 },
+        { "label": "W28", "value": 75.8 },
+        { "label": "W29", "value": 75.9 },
+        { "label": "W30", "value": 76.0 },
+        { "label": "W31", "value": 76.1 },
+        { "label": "W32", "value": 76.3 },
+        { "label": "W33", "value": 76.4 },
+        { "label": "W34", "value": 76.5 },
+        { "label": "W35", "value": 76.6 },
+        { "label": "W36", "value": 76.7 },
+        { "label": "W37", "value": 76.7 },
+        { "label": "W38", "value": 76.8 },
+        { "label": "W39", "value": 76.8 }
+      ]
+    }
+  ],
+  "rows": [
+    { "line_item_id": "GL-2026Q3-001", "category": "Revenue", "subcategory": "Subscription · Enterprise", "amount_usd": 24800000, "vs_plan_pct": 4.2 },
+    { "line_item_id": "GL-2026Q3-014", "category": "Revenue", "subcategory": "Subscription · Mid-Market", "amount_usd": 9620000, "vs_plan_pct": 2.8 },
+    { "line_item_id": "GL-2026Q3-023", "category": "Revenue", "subcategory": "Services + Implementation", "amount_usd": 3980000, "vs_plan_pct": -1.4 },
+    { "line_item_id": "GL-2026Q3-052", "category": "OpEx", "subcategory": "Sales + Marketing", "amount_usd": 10800000, "vs_plan_pct": 3.2 },
+    { "line_item_id": "GL-2026Q3-068", "category": "OpEx", "subcategory": "Engineering + R&D · headcount", "amount_usd": 6840000, "vs_plan_pct": 1.8 },
+    { "line_item_id": "GL-2026Q3-071", "category": "OpEx", "subcategory": "AI infra (model + Vercel + AWS)", "amount_usd": 1580000, "vs_plan_pct": 18.4 }
+  ]
+}

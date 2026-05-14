@@ -1,6 +1,11 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, ArrowRight } from 'lucide-react'
+import {
+  dashboards,
+  getDashboardIcon,
+  getColorClasses,
+} from '@/lib/dashboards'
 
 export const metadata: Metadata = {
   title: 'Sample dashboards',
@@ -26,20 +31,50 @@ export default function DashboardsGalleryPage() {
           Pick a dashboard. Get a narrative readout.
         </h1>
         <p className="mt-4 text-text-secondary leading-relaxed">
-          The dashboard library and streaming narrative pipeline land in W6.D3 and W7.
-          This scaffold proves the route exists and consumes the shared design system.
+          Six sample dashboards spanning RevOps, Marketing, Ops, Finance, HR, and CX.
+          Each one is a finished BI artifact — five KPIs and three charts plus
+          supporting rows. Click in to watch Claude write the executive narrative
+          and assemble a PPTX-ready deck.
         </p>
       </header>
 
-      {/* W6.D1 placeholder — gallery cards land in W6.D3 once sample dashboards are authored */}
-      <div className="rounded-xl border border-dashed border-surface-border bg-surface/50 p-12 text-center">
-        <p className="font-mono text-sm text-text-muted">
-          Sample dashboard gallery — coming W6.D3
-        </p>
-        <p className="mt-2 text-xs text-text-dim">
-          Will mirror the dashboard-factory <code className="font-mono text-text-secondary">/datasets</code>{' '}
-          gallery pattern — 6 sample dashboards spanning RevOps, marketing, ops, finance, HR, and CX.
-        </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {dashboards.map((dashboard) => {
+          const Icon = getDashboardIcon(dashboard.icon)
+          const colors = getColorClasses(dashboard.colorToken)
+          return (
+            <Link
+              key={dashboard.id}
+              href={`/generate/${dashboard.id}`}
+              className="group rounded-xl border border-surface-border bg-surface hover:border-accent/40 hover:shadow-card-hover transition-all overflow-hidden"
+            >
+              <div
+                className={`${colors.thumbBg} ${colors.thumbBorder} border-b aspect-[16/9] flex items-center justify-center`}
+              >
+                <Icon className={`h-12 w-12 ${colors.iconColor}`} strokeWidth={1.5} />
+              </div>
+              <div className="p-5">
+                <div
+                  className={`inline-flex items-center font-mono text-[10px] uppercase tracking-widest px-2 py-0.5 rounded border ${colors.badgeBg} ${colors.badgeText} ${colors.badgeBorder} mb-3`}
+                >
+                  {dashboard.domain}
+                </div>
+                <h3 className="font-display text-lg font-semibold tracking-tight mb-2">
+                  {dashboard.title}
+                </h3>
+                <p className="text-xs text-text-muted leading-relaxed mb-4 line-clamp-2">
+                  {dashboard.tagline}
+                </p>
+                <div className="flex items-center justify-between text-xs text-text-dim font-mono">
+                  <span>
+                    {dashboard.kpiCount} KPIs · {dashboard.chartCount} charts · {dashboard.rowCount} rows
+                  </span>
+                  <ArrowRight className="h-4 w-4 text-accent group-hover:translate-x-0.5 transition-transform" />
+                </div>
+              </div>
+            </Link>
+          )
+        })}
       </div>
     </section>
   )

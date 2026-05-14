@@ -1,0 +1,123 @@
+{
+  "id": "cx-csat-nps",
+  "metadata": {
+    "title": "Customer Experience · CSAT & NPS",
+    "tagline": "Support volume, satisfaction, and at-risk account signals through Q3",
+    "domain": "cx",
+    "colorToken": "blue",
+    "icon": "MessageSquare",
+    "thumbnail": "/dashboards/cx-csat-nps.png",
+    "period": "2026-Q3 · 90-day rolling",
+    "audience": "VP Customer Success · CRO · Exec QBR"
+  },
+  "kpis": [
+    {
+      "id": "nps",
+      "label": "NPS",
+      "value": 52,
+      "format": "score",
+      "deltaPct": 8.3,
+      "deltaDirection": "up",
+      "deltaWindow": "vs Q2 (48)",
+      "subtext": "Industry top quartile · 1,840 responses in window"
+    },
+    {
+      "id": "csat",
+      "label": "CSAT",
+      "value": 4.6,
+      "format": "rating",
+      "unit": "/ 5",
+      "deltaPct": 2.2,
+      "deltaDirection": "up",
+      "deltaWindow": "vs Q2 (4.5)",
+      "sparkline": [4.5, 4.5, 4.5, 4.5, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6]
+    },
+    {
+      "id": "ticket-volume",
+      "label": "Tickets (Q3)",
+      "value": 5840,
+      "format": "count",
+      "deltaPct": 11.4,
+      "deltaDirection": "up",
+      "deltaWindow": "vs Q2 (5240)",
+      "subtext": "Driven by NAMER Enterprise onboarding wave"
+    },
+    {
+      "id": "median-resolution",
+      "label": "Median Resolution",
+      "value": 2.8,
+      "format": "duration",
+      "unit": "hours",
+      "deltaPct": 17.6,
+      "deltaDirection": "down",
+      "deltaWindow": "vs Q2 (3.4 hours)",
+      "sparkline": [3.4, 3.3, 3.2, 3.1, 3.1, 3.0, 3.0, 2.9, 2.9, 2.8, 2.8, 2.8, 2.8]
+    },
+    {
+      "id": "at-risk-accounts",
+      "label": "At-Risk Accounts",
+      "value": 14,
+      "format": "count",
+      "deltaPct": 30.0,
+      "deltaDirection": "down",
+      "deltaWindow": "vs Q2 (20)",
+      "subtext": "Combined ARR exposure: $2.4M"
+    }
+  ],
+  "charts": [
+    {
+      "id": "nps-by-segment",
+      "type": "bar",
+      "title": "NPS by customer segment",
+      "subtitle": "Enterprise leads · SMB lagging",
+      "data": [
+        { "label": "Enterprise", "value": 64 },
+        { "label": "Mid-Market", "value": 51 },
+        { "label": "SMB", "value": 32 }
+      ]
+    },
+    {
+      "id": "csat-trend",
+      "type": "line",
+      "title": "CSAT, weekly",
+      "subtitle": "13 weeks · target line at 4.5",
+      "data": [
+        { "label": "W27", "value": 4.5 },
+        { "label": "W28", "value": 4.5 },
+        { "label": "W29", "value": 4.5 },
+        { "label": "W30", "value": 4.55 },
+        { "label": "W31", "value": 4.58 },
+        { "label": "W32", "value": 4.6 },
+        { "label": "W33", "value": 4.6 },
+        { "label": "W34", "value": 4.62 },
+        { "label": "W35", "value": 4.6 },
+        { "label": "W36", "value": 4.6 },
+        { "label": "W37", "value": 4.6 },
+        { "label": "W38", "value": 4.61 },
+        { "label": "W39", "value": 4.6 }
+      ]
+    },
+    {
+      "id": "resolution-distribution",
+      "type": "bar",
+      "title": "Resolution time distribution",
+      "subtitle": "Q3 tickets bucketed · 78% closed within 4h",
+      "data": [
+        { "label": "< 30 min", "value": 1240 },
+        { "label": "30 min - 2 h", "value": 2380 },
+        { "label": "2-4 h", "value": 940 },
+        { "label": "4-8 h", "value": 720 },
+        { "label": "8-24 h", "value": 380 },
+        { "label": "> 24 h", "value": 180 }
+      ]
+    }
+  ],
+  "rows": [
+    { "ticket_id": "TKT-26-08821", "account": "Polaris Defense", "segment": "Enterprise", "subject": "SSO timeout during peak login", "priority": "P1", "csat": 5, "resolution_h": 1.4, "status": "Resolved" },
+    { "ticket_id": "TKT-26-08947", "account": "Helios Manufacturing", "segment": "Enterprise", "subject": "API rate limit on bulk import", "priority": "P2", "csat": 4, "resolution_h": 3.2, "status": "Resolved" },
+    { "ticket_id": "TKT-26-09102", "account": "Astra Telecom", "segment": "Mid-Market", "subject": "Locale formatting on APAC reports", "priority": "P3", "csat": 5, "resolution_h": 6.8, "status": "Resolved" },
+    { "ticket_id": "TKT-26-09214", "account": "Vector Studios", "segment": "SMB", "subject": "Billing portal 404", "priority": "P2", "csat": 3, "resolution_h": 11.2, "status": "Resolved" },
+    { "ticket_id": "TKT-26-09308", "account": "Northwind Logistics", "segment": "Mid-Market", "subject": "Webhook signature mismatch", "priority": "P1", "csat": 5, "resolution_h": 0.8, "status": "Resolved" },
+    { "ticket_id": "TKT-26-09421", "account": "Quantum Bio", "segment": "Mid-Market", "subject": "Feature request: PDF export", "priority": "P3", "csat": 4, "resolution_h": 24.6, "status": "Triaged" }
+  ]
+}
