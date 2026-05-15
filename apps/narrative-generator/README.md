@@ -2,7 +2,7 @@
 
 **Project 02 of 5** — Dashboard-to-Deck Narrative Generator. Pick a sample dashboard, watch Claude write the executive readout, download a themed PPTX.
 
-**Live**: <https://ai-portfolio-narrative-generator.vercel.app> &nbsp;·&nbsp; **Case study**: [`docs/case-studies/narrative-generator.md`](../../docs/case-studies/narrative-generator.md) (W7.D4) &nbsp;·&nbsp; **Status**: Production · v1.0 in flight
+**Live**: <https://ai-portfolio-narrative-generator.vercel.app> &nbsp;·&nbsp; **Case study**: [`docs/case-studies/narrative-generator.md`](../../docs/case-studies/narrative-generator.md) &nbsp;·&nbsp; **Status**: Production · v1.0 in flight
 
 ---
 
@@ -60,7 +60,7 @@ apps/narrative-generator/app/
 
 **Unique to Project 2**: `lib/build-pptx.ts` (~330 lines, server-side `pptxgenjs` integration) and the narrative-fixture shape that pairs with each dashboard. The PPTX endpoint uses `dynamic = 'force-static'` + `generateStaticParams` so all 6 deck binaries prerender at build time and serve from CDN cache with `Cache-Control: immutable`.
 
-Full architecture walkthrough + key technical decisions + engineering moments will land in the [case study](../../docs/case-studies/narrative-generator.md) in W7.D4.
+Full architecture walkthrough + key technical decisions + engineering moments are in the [case study](../../docs/case-studies/narrative-generator.md).
 
 ## Development
 
