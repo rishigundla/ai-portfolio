@@ -1215,14 +1215,14 @@
         <div class="mapping-col">PDF dashboard → polished stakeholder slide deck with AI insights</div>
       </div>
       <div class="mapping-row">
-        <div class="mapping-col project-name">3 · Anomaly Alerting</div>
-        <div class="mapping-col">Pulse SSOT (NAI/NC2/NCI), RevOps SSOT, CX OKR</div>
-        <div class="mapping-col">AI root-cause narration on Gold-layer KPIs using correlation analysis</div>
-      </div>
-      <div class="mapping-row">
-        <div class="mapping-col project-name">4 · Sprint Intelligence</div>
+        <div class="mapping-col project-name">3 · Sprint Intelligence</div>
         <div class="mapping-col">Jira SSOT Data Portal + Project Progress / Velocity Dashboards</div>
         <div class="mapping-col">Auto-curated Monday sprint-review brief with AI recommendations</div>
+      </div>
+      <div class="mapping-row">
+        <div class="mapping-col project-name">4 · Anomaly Alerting</div>
+        <div class="mapping-col">Pulse SSOT (NAI/NC2/NCI), RevOps SSOT, CX OKR</div>
+        <div class="mapping-col">AI root-cause narration on Gold-layer KPIs using correlation analysis</div>
       </div>
       <div class="mapping-row">
         <div class="mapping-col project-name">5 · Pipeline Self-Healer</div>
@@ -1284,8 +1284,8 @@
 │   ├── design-system-docs/             <span class="comment">Week 1 · Component showcase</span>
 │   ├── dashboard-factory/              <span class="comment">Project 1</span>
 │   ├── narrative-generator/            <span class="comment">Project 2</span>
-│   ├── sprint-intelligence/            <span class="comment">Project 4</span>
-│   ├── anomaly-alerting/               <span class="comment">Project 3</span>
+│   ├── sprint-intelligence/            <span class="comment">Project 3</span>
+│   ├── anomaly-alerting/               <span class="comment">Project 4</span>
 │   └── pipeline-healer/                <span class="comment">Project 5</span>
 ├── <span class="keyword">fixtures/</span>                           <span class="comment">Pre-generated AI responses</span>
 ├── <span class="keyword">docs/</span>
@@ -1589,8 +1589,8 @@
         { id: 0, name: "Pre-flight Setup", weeks: "—", totalDays: 5, done: 5, status: "completed", code: "P0" },
         { id: 1, name: "Project 1 · Dashboard Factory", weeks: "1-5", totalDays: 32, done: 32, status: "completed", code: "P1", tag: "v1.0-dashboard-factory", liveUrl: "https://ai-portfolio-dashboard-factory.vercel.app", caseStudyUrl: "./case-studies/dashboard-factory.md" },
         { id: 2, name: "Project 2 · Narrative Generator", weeks: "6-7", totalDays: 14, done: 43, status: "completed", code: "P2", tag: "v1.0-narrative-generator", liveUrl: "https://ai-portfolio-narrative-generator.vercel.app", caseStudyUrl: "./case-studies/narrative-generator.md" },
-        { id: 3, name: "Project 4 · Sprint Intelligence", weeks: "8-9", totalDays: 14, done: 0, status: "not-started", code: "P3" },
-        { id: 4, name: "Project 3 · Anomaly Alerting", weeks: "10-12", totalDays: 21, done: 0, status: "not-started", code: "P4" },
+        { id: 3, name: "Project 3 · Sprint Intelligence", weeks: "8-9", totalDays: 14, done: 0, status: "not-started", code: "P3" },
+        { id: 4, name: "Project 4 · Anomaly Alerting", weeks: "10-12", totalDays: 21, done: 0, status: "not-started", code: "P4" },
         { id: 5, name: "Project 5 · Pipeline Self-Healer", weeks: "13-14", totalDays: 21, done: 0, status: "not-started", code: "P5" }
       ],
 
@@ -1974,29 +1974,29 @@
         },
         {
           num: "03",
-          title: "Smart Metric Anomaly Alerting",
-          pitch: "Dashboard of synthetic Pulse / RevOps / CX historical data. Gallery of curated anomaly scenarios. Click one → streaming AI root cause explanation with correlation analysis.",
-          scope: "3 weeks · Phase 4 · Weeks 9-11",
-          demoItems: [
-            "Historical data for NAI/NC2/NCI Pulse, RevOps, CX",
-            "6-8 curated anomaly scenarios with pre-generated RCAs",
-            "Simulated MLflow-style trace view"
-          ],
-          stackItems: ["Next.js 16", "Recharts", "Vercel KV"],
-          tags: ["AI", "Observability", "RCA", "Claude"]
-        },
-        {
-          num: "04",
           title: "AI Sprint Intelligence Dashboard",
-          pitch: "Dropdown for synthetic sprints. Pick one → dashboard populates with team + individual KPIs → streaming AI meeting brief appears with workload rebalancing recommendations.",
-          scope: "2 weeks · Phase 3 · Weeks 7-8",
+          pitch: "Dropdown for synthetic sprints. Pick one, the dashboard populates with team and individual KPIs, and a streaming AI meeting brief appears with workload rebalancing recommendations.",
+          scope: "2 weeks · Phase 3 · Weeks 8 to 9",
           demoItems: [
-            "3-4 synthetic sprint weeks of Jira-SSOT-style data",
+            "3 to 4 synthetic sprint weeks of Jira SSOT style data",
             "Pre-generated AI meeting briefs per sprint",
             "Burndown, velocity, cycle time, scope creep, carryover"
           ],
           stackItems: ["Next.js 16", "Static JSON", "Recharts"],
           tags: ["AI", "Jira", "Sprint Analytics", "Claude"]
+        },
+        {
+          num: "04",
+          title: "Smart Metric Anomaly Alerting",
+          pitch: "Dashboard of synthetic Pulse, RevOps, and CX historical data. Gallery of curated anomaly scenarios. Click one and a streaming AI root cause explanation appears with correlation analysis.",
+          scope: "3 weeks · Phase 4 · Weeks 10 to 12",
+          demoItems: [
+            "Historical data for NAI, NC2, NCI Pulse, RevOps, and CX",
+            "6 to 8 curated anomaly scenarios with pre-generated RCAs",
+            "Simulated MLflow style trace view"
+          ],
+          stackItems: ["Next.js 16", "Recharts", "Vercel KV"],
+          tags: ["AI", "Observability", "RCA", "Claude"]
         },
         {
           num: "05",
@@ -2160,11 +2160,11 @@
           deliverables: ["PPTX export wired across 6 dashboards", "All routes Lighthouse green (≥95 perf)", "Case study published at docs/case-studies/narrative-generator.md", "Project 2 v1.0 tagged + portfolio metadata finalized"]
         },
 
-        // ========== PHASE 3 — PROJECT 4 ==========
+        // ========== PHASE 3 — PROJECT 3 ==========
         {
           phase: 3,
           week: 9,
-          name: "Week 9 — Project 4 Core Build",
+          name: "Week 9 — Project 3 Core Build",
           goal: "User picks synthetic sprint → KPIs + streaming meeting brief",
           days: [
             { num: "W9.D1", weekday: "Mon", name: "App Scaffold + Sprint Data", tasks: ["Create apps/sprint-intelligence/", "Author 4 synthetic sprint JSONs", "Each: 20-30 tickets, status history, 8 engineers"] },
@@ -2180,8 +2180,8 @@
         {
           phase: 3,
           week: 10,
-          name: "Week 10 — Project 4 Polish + Deploy",
-          goal: "Project 4 live, automation fires",
+          name: "Week 10 — Project 3 Polish + Deploy",
+          goal: "Project 3 live, automation fires",
           days: [
             { num: "W10.D1", weekday: "Mon", name: "Interactions + Drill-Downs", tasks: ["Click engineer name → filter to that person", "Click blocker → show blocker history"] },
             { num: "W10.D2", weekday: "Tue", name: "Responsive Polish", tasks: ["Breakpoint testing", "Mobile: collapse deep-dive tabs to accordion"] },
@@ -2191,14 +2191,14 @@
             { num: "W10.D6", weekday: "Sat", name: "Case Study + Automation", tasks: ["Write case study MDX", "Trigger automation, merge PRs"] },
             { num: "W10.D7", weekday: "Sun", name: "Phase 3 Wrap", tasks: ["Buffer", "Lessons learned", "Prep Phase 4"] }
           ],
-          deliverables: ["Project 4 live", "Loom + case study", "Automation fires"]
+          deliverables: ["Project 3 live", "Loom + case study", "Automation fires"]
         },
 
-        // ========== PHASE 4 — PROJECT 3 ==========
+        // ========== PHASE 4 — PROJECT 4 ==========
         {
           phase: 4,
           week: 11,
-          name: "Week 11 — Project 3 Core Build",
+          name: "Week 11 — Project 4 Core Build",
           goal: "Synthetic historical data + anomaly gallery + streaming RCA",
           days: [
             { num: "W11.D1", weekday: "Mon", name: "App Scaffold + Historical Data", tasks: ["Create apps/anomaly-alerting/", "Author NAI Pulse historical data", "Author NC2 Pulse data", "Author NCI Pulse data", "Author RevOps historical data", "Author CX historical data"] },
@@ -2214,7 +2214,7 @@
         {
           phase: 4,
           week: 12,
-          name: "Week 12 — Project 3 Expanded Features",
+          name: "Week 12 — Project 4 Expanded Features",
           goal: "Richer visualizations + simulated infrastructure views",
           days: [
             { num: "W12.D1", weekday: "Mon", name: "Confidence Score UI", tasks: ["Visual gauge 0-100%", "Breakdown: how calculated", "Risk-tolerance slider"] },
@@ -2230,8 +2230,8 @@
         {
           phase: 4,
           week: 13,
-          name: "Week 13 — Project 3 Polish + Deploy",
-          goal: "Project 3 live, automation fires",
+          name: "Week 13 — Project 4 Polish + Deploy",
+          goal: "Project 4 live, automation fires",
           days: [
             { num: "W13.D1", weekday: "Mon", name: "Lighthouse + SEO", tasks: ["90+ audit", "Meta tags"] },
             { num: "W13.D2", weekday: "Tue", name: "Deploy", tasks: ["Vercel production", "portfolio.meta.json"] },
@@ -2241,7 +2241,7 @@
             { num: "W13.D6", weekday: "Sat", name: "Documentation", tasks: ["App README", "Add to monorepo README"] },
             { num: "W13.D7", weekday: "Sun", name: "Phase 4 Wrap", tasks: ["Buffer", "Lessons", "Prep Phase 5"] }
           ],
-          deliverables: ["Project 3 live", "Loom + case study", "Automation fires"]
+          deliverables: ["Project 4 live", "Loom + case study", "Automation fires"]
         },
 
         // ========== PHASE 5 — PROJECT 5 ==========
@@ -2315,6 +2315,23 @@
       return `${weekNum}-${dayNum}-${taskIdx}`;
     }
 
+    // Escape user authored strings before dropping them into innerHTML so
+    // literal characters like the angle bracket in `<button>` (which appears
+    // verbatim inside activity descriptions to refer to a DOM element) are
+    // rendered as text instead of parsed as live HTML. Without this, an
+    // unclosed `<button>` would render as a real button element with the
+    // browser default light styling, which is the visible bug Rishi flagged
+    // on the standalone plan website.
+    function escapeHtml(value) {
+      if (value === null || value === undefined) return '';
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
     // Compute current progress from checkbox state
     function computeProgress() {
       const progress = loadProgress();
@@ -2363,13 +2380,13 @@
       document.getElementById('hero-stats').innerHTML = `
         <div class="stat-card">
           <div class="stat-label">Current Phase</div>
-          <div class="stat-value">${phaseValue}</div>
-          <div class="stat-meta">${phaseMeta}</div>
+          <div class="stat-value">${escapeHtml(phaseValue)}</div>
+          <div class="stat-meta">${escapeHtml(phaseMeta)}</div>
         </div>
         <div class="stat-card">
           <div class="stat-label">Current Week</div>
-          <div class="stat-value">${weekValue}</div>
-          <div class="stat-meta">${weekMeta}</div>
+          <div class="stat-value">${escapeHtml(weekValue)}</div>
+          <div class="stat-meta">${escapeHtml(weekMeta)}</div>
         </div>
         <div class="stat-card">
           <div class="stat-label">Tasks Complete</div>
@@ -2398,11 +2415,11 @@
         return `
           <div class="phase-card ${isActive ? 'active' : ''}">
             <div class="phase-card-header">
-              <span class="phase-num">${phase.code}</span>
+              <span class="phase-num">${escapeHtml(phase.code)}</span>
               <span class="phase-status ${status}">${statusLabel}</span>
             </div>
-            <div class="phase-title">${phase.name}</div>
-            <div class="phase-meta">Weeks ${phase.weeks} · ${phase.totalDays} days</div>
+            <div class="phase-title">${escapeHtml(phase.name)}</div>
+            <div class="phase-meta">Weeks ${escapeHtml(phase.weeks)} · ${phase.totalDays} days</div>
             <div class="progress-track">
               <div class="progress-fill" style="width: ${pct}%"></div>
             </div>
@@ -2431,13 +2448,13 @@
       const progressPct = progressTotal > 0 ? Math.round(progressDone/progressTotal*100) : 0;
 
       document.getElementById('status-table').innerHTML = `
-        <div class="status-row"><span class="status-row-key">Current Phase</span><span class="status-row-value accent">${phaseDisplay}</span></div>
-        <div class="status-row"><span class="status-row-key">Current Week</span><span class="status-row-value">${weekDisplay}</span></div>
-        <div class="status-row"><span class="status-row-key">Current Day</span><span class="status-row-value">${dayDisplay}</span></div>
+        <div class="status-row"><span class="status-row-key">Current Phase</span><span class="status-row-value accent">${escapeHtml(phaseDisplay)}</span></div>
+        <div class="status-row"><span class="status-row-key">Current Week</span><span class="status-row-value">${escapeHtml(weekDisplay)}</span></div>
+        <div class="status-row"><span class="status-row-key">Current Day</span><span class="status-row-value">${escapeHtml(dayDisplay)}</span></div>
         <div class="status-row"><span class="status-row-key">Overall Progress</span><span class="status-row-value">${progressDone} / ${progressTotal} tasks (${progressPct}%)</span></div>
-        <div class="status-row"><span class="status-row-key">Status</span><span class="status-row-value">${s.status}</span></div>
-        <div class="status-row"><span class="status-row-key">Next Action</span><span class="status-row-value">${s.nextAction}</span></div>
-        <div class="status-row"><span class="status-row-key">Blockers</span><span class="status-row-value">${s.blockers}</span></div>
+        <div class="status-row"><span class="status-row-key">Status</span><span class="status-row-value">${escapeHtml(s.status)}</span></div>
+        <div class="status-row"><span class="status-row-key">Next Action</span><span class="status-row-value">${escapeHtml(s.nextAction)}</span></div>
+        <div class="status-row"><span class="status-row-key">Blockers</span><span class="status-row-value">${escapeHtml(s.blockers)}</span></div>
       `;
     }
 
@@ -2446,11 +2463,11 @@
       document.getElementById('activity-list').innerHTML = planData.activity.map(item => `
         <div class="activity-item">
           <div class="activity-meta">
-            <span class="activity-date">${item.date}</span>
+            <span class="activity-date">${escapeHtml(item.date)}</span>
           </div>
-          <div class="activity-title">${item.title}</div>
-          <div class="activity-desc">${item.desc}</div>
-          ${item.next ? `<div class="activity-next"><strong>Next:</strong> ${item.next}</div>` : ''}
+          <div class="activity-title">${escapeHtml(item.title)}</div>
+          <div class="activity-desc">${escapeHtml(item.desc)}</div>
+          ${item.next ? `<div class="activity-next"><strong>Next:</strong> ${escapeHtml(item.next)}</div>` : ''}
         </div>
       `).join('');
     }

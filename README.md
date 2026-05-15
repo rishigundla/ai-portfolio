@@ -21,8 +21,8 @@
 | 0 | [Design System Docs](./apps/design-system-docs/) | Showcase of tokens, primitives, AI components | **Live** | [link](https://ai-portfolio-design-system-docs.vercel.app) |
 | 1 | [Instant Analytics Dashboard Factory](./apps/dashboard-factory/) | Pick a sample dataset → streaming AI profiling → interactive dashboard | **Live** · [case study](./docs/case-studies/dashboard-factory.md) | [link](https://ai-portfolio-dashboard-factory.vercel.app) |
 | 2 | [Dashboard-to-Deck Narrative Generator](./apps/narrative-generator/) | Sample dashboard → streaming AI readout → themed PPTX download | **Live** · [case study](./docs/case-studies/narrative-generator.md) | [link](https://ai-portfolio-narrative-generator.vercel.app) |
-| 3 | Smart Metric Anomaly Alerting | Curated anomalies → AI root-cause narration with correlation analysis | Not started | — |
-| 4 | AI Sprint Intelligence Dashboard | Synthetic sprints → team + individual KPIs → AI meeting brief | Not started | — |
+| 3 | AI Sprint Intelligence Dashboard | Synthetic sprints → team + individual KPIs → AI meeting brief | Not started | — |
+| 4 | Smart Metric Anomaly Alerting | Curated anomalies → AI root-cause narration with correlation analysis | Not started | — |
 | 5 | AI Pipeline Debugger & Self-Healer | PySpark failure scenarios → AI diagnosis + patch + mock Slack approval | Not started | — |
 
 Each app has its own `README.md`, `portfolio.meta.json`, and case study in [`docs/case-studies/`](./docs/case-studies/). Project 1 is the first to close — see the [Dashboard Factory case study](./docs/case-studies/dashboard-factory.md).
@@ -44,8 +44,8 @@ flowchart TB
         DSD["design-system-docs<br/>(live)"]
         P1["dashboard-factory<br/>(Project 1)"]
         P2["narrative-generator<br/>(Project 2)"]
-        P3["anomaly-alerting<br/>(Project 3)"]
-        P4["sprint-intelligence<br/>(Project 4)"]
+        P3["sprint-intelligence<br/>(Project 3)"]
+        P4["anomaly-alerting<br/>(Project 4)"]
         P5["pipeline-healer<br/>(Project 5)"]
     end
 

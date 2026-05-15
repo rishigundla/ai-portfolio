@@ -30,8 +30,8 @@
 | 0 | Pre-flight setup | — | — | 5 / 5 | Completed |
 | 1 | Project 1 · Dashboard Factory | 1-5 | 32 | 32 / 28 | **✅ Shipped v1.0** (`v1.0-dashboard-factory`, [case study](./case-studies/dashboard-factory.md), [live](https://ai-portfolio-dashboard-factory.vercel.app)) |
 | 2 | Project 2 · Narrative Generator | 6-7 | 14 | 14 / 14 | **✅ Shipped v1.0** (`v1.0-narrative-generator`, [case study](./case-studies/narrative-generator.md), [live](https://ai-portfolio-narrative-generator.vercel.app)) |
-| 3 | Project 4 · Sprint Intelligence | 8-9 | 14 | 0 / 14 | Not Started |
-| 4 | Project 3 · Anomaly Alerting | 10-12 | 21 | 0 / 21 | Not Started |
+| 3 | Project 3 · Sprint Intelligence | 8-9 | 14 | 0 / 14 | Not Started |
+| 4 | Project 4 · Anomaly Alerting | 10-12 | 21 | 0 / 21 | Not Started |
 | 5 | Project 5 · Pipeline Self-Healer | 13-14 | 21 | 0 / 21 | Not Started |
 
 **Status Legend**: `[ ]` Not Started · `[~]` In Progress · `[x]` Completed · `[!]` Blocked · `[-]` Skipped
@@ -1253,7 +1253,7 @@ Automates the exact manual workflow your RevOps / Marketing teams do every Monda
 
 ---
 
-## Project 3 — Smart Metric Anomaly Alerting
+## Project 4 — Smart Metric Anomaly Alerting
 
 ### One-Line Pitch
 Dashboard of synthetic Pulse/RevOps/CX historical data. Gallery of curated anomaly scenarios. Click one → streaming AI root cause explanation with correlation analysis.
@@ -1278,7 +1278,7 @@ Vendor tools detect anomalies; this explains WHY. Correlation-aware causation en
 
 ---
 
-## Project 4 — AI Sprint Intelligence Dashboard
+## Project 3 — AI Sprint Intelligence Dashboard
 
 ### One-Line Pitch
 Dropdown selector for synthetic sprint weeks. Pick a sprint → dashboard populates with team + individual KPIs → streaming AI meeting brief appears on top with workload rebalancing recommendations.
@@ -1397,8 +1397,8 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 │   ├── design-system-docs/             Week 1 · Component showcase
 │   ├── dashboard-factory/              Project 1
 │   ├── narrative-generator/            Project 2
-│   ├── sprint-intelligence/            Project 4
-│   ├── anomaly-alerting/               Project 3
+│   ├── sprint-intelligence/            Project 3
+│   ├── anomaly-alerting/               Project 4
 │   └── pipeline-healer/                Project 5
 ├── fixtures/                           Pre-generated AI responses per project
 │   ├── dashboard-factory/
@@ -2060,9 +2060,9 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 
 ---
 
-## Phase 3 — Project 4 · Sprint Intelligence (Weeks 7-8)
+## Phase 3 — Project 3 · Sprint Intelligence (Weeks 7-8)
 
-### Week 7 — Project 4 Core Build
+### Week 7 — Project 3 Core Build
 
 **Week goal**: User picks synthetic sprint → sees KPIs + streaming meeting brief.
 
@@ -2107,9 +2107,9 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 
 ---
 
-### Week 8 — Project 4 Polish + Deploy
+### Week 8 — Project 3 Polish + Deploy
 
-**Week goal**: Project 4 live, automation fires.
+**Week goal**: Project 3 live, automation fires.
 
 #### Day 1 (Mon) · Interactions + Drill-Downs
 - [ ] Click engineer name → filter all views to that person
@@ -2145,9 +2145,9 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 
 ---
 
-## Phase 4 — Project 3 · Anomaly Alerting (Weeks 9-11)
+## Phase 4 — Project 4 · Anomaly Alerting (Weeks 9-11)
 
-### Week 9 — Project 3 Core Build
+### Week 9 — Project 4 Core Build
 
 **Week goal**: Synthetic historical data + anomaly gallery + streaming RCA.
 
@@ -2194,7 +2194,7 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 
 ---
 
-### Week 10 — Project 3 Expanding Features
+### Week 10 — Project 4 Expanding Features
 
 **Week goal**: Richer visualizations + simulated infrastructure.
 
@@ -2233,9 +2233,9 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 
 ---
 
-### Week 11 — Project 3 Polish + Deploy
+### Week 11 — Project 4 Polish + Deploy
 
-**Week goal**: Project 3 live, automation fires.
+**Week goal**: Project 4 live, automation fires.
 
 #### Day 1 (Mon) · Lighthouse + SEO
 - [ ] 90+ audit
@@ -2263,7 +2263,7 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 - [ ] Buffer, lessons, prep Phase 5
 
 **Week 11 Deliverables**:
-- Project 3 live
+- Project 4 live
 - Loom + case study published
 - Automation fires
 
@@ -2532,11 +2532,11 @@ Add to `resume-builder/original/resume-prompt-v1.md` and all per-role prompts:
 ## Nutanix Project Anchors (for examples)
 
 - Enterprise Dashboard Design System (Figma) — Project 1 anchor
-- Pulse SSOT: NAI, NC2, NCI — Project 3 anchor
-- Jira SSOT (Atlassian Postgres → Informatica → Databricks) — Project 4 + Project 5 anchors
-- RevOps Sales SSOT (ACV/GRR, Balanced Scorecard 50+ KPIs) — Project 2 + Project 3 anchors
+- Pulse SSOT: NAI, NC2, NCI — Project 4 anchor
+- Jira SSOT (Atlassian Postgres → Informatica → Databricks) — Project 3 + Project 5 anchors
+- RevOps Sales SSOT (ACV/GRR, Balanced Scorecard 50+ KPIs) — Project 2 + Project 4 anchors
 - Microsoft Fabric (Marketing, Procurement) — peripheral anchor
-- CX OKR Dashboard (Business + Product + Team dimensions) — Project 2 + Project 3 anchor
+- CX OKR Dashboard (Business + Product + Team dimensions) — Project 2 + Project 4 anchor
 
 ## Interview Anchors (Q14, Q17)
 
