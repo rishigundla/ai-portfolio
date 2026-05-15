@@ -172,6 +172,72 @@ function shortenBullet(bullet: string, maxChars = 110): string {
   return trimmed.slice(0, cutAt).trim()
 }
 
+// Split a narrative section body into discrete sentence sized bullets so
+// the slide content reads as a punchy list rather than a wall of prose.
+// Tries paragraph breaks first, falls back to sentence splits, and skips
+// scraps shorter than `minLen` so the output stays clean.
+function splitIntoBullets(body: string, maxBullets = 6, minLen = 14): string[] {
+  if (!body) return []
+  const cleaned = body.replace(/\r/g, '').trim()
+  const paragraphs = cleaned.split(/\n{2,}/)
+  const bullets: string[] = []
+  for (const paragraph of paragraphs) {
+    const sentences = paragraph
+      .trim()
+      .split(/(?<=[.!?])\s+(?=[A-Z(])/)
+    for (const sentence of sentences) {
+      const text = sentence.trim().replace(/[.]+$/, '')
+      if (text.length >= minLen) bullets.push(text)
+      if (bullets.length >= maxBullets) return bullets
+    }
+  }
+  return bullets
+}
+
+interface BulletBox {
+  x: number
+  y: number
+  w: number
+  h: number
+}
+
+function drawBulletList(
+  slide: PptxGenJS.Slide,
+  accent: string,
+  bullets: string[],
+  box: BulletBox,
+  options: { fontSize?: number; markerSize?: number } = {},
+) {
+  if (bullets.length === 0) return
+  const fontSize = options.fontSize ?? 14
+  const markerSize = options.markerSize ?? 0.1
+  const rowH = box.h / bullets.length
+  const textX = box.x + 0.32
+  const textW = box.w - 0.32
+  bullets.forEach((bullet, i) => {
+    const y = box.y + i * rowH
+    slide.addShape('rect', {
+      x: box.x,
+      y: y + 0.22,
+      w: markerSize,
+      h: markerSize,
+      fill: { color: accent },
+      line: { type: 'none' },
+    })
+    slide.addText(toRichText(bullet, C.textPrimary), {
+      x: textX,
+      y,
+      w: textW,
+      h: rowH - 0.05,
+      fontFace: FONT_DISPLAY,
+      fontSize,
+      color: C.textPrimary,
+      valign: 'top',
+      paraSpaceAfter: 4,
+    })
+  })
+}
+
 // ============================================================
 // Slide builders
 // ============================================================
@@ -365,18 +431,25 @@ function buildHeadlineSlide(
     })
   }
 
+  // Right column layout. The whole stack is anchored to a single
+  // available band that runs from CONTENT_TOP+0.5 down to FOOTER_Y, so
+  // every element below sits inside the slide regardless of whether the
+  // KPI ships a sparkline.
+  const rightX = MARGIN_X + CONTENT_W * 0.62
+  const rightW = CONTENT_W * 0.36
+
   if (kpi.sparkline && kpi.sparkline.length > 1) {
     addSparklineChart(slide, kpi.sparkline, accent, {
-      x: MARGIN_X + CONTENT_W * 0.62,
-      y: CONTENT_TOP + 1.4,
-      w: CONTENT_W * 0.36,
-      h: 2.2,
+      x: rightX,
+      y: CONTENT_TOP + 0.5,
+      w: rightW,
+      h: 1.7,
     })
     slide.addText('Trailing trend', {
-      x: MARGIN_X + CONTENT_W * 0.62,
-      y: CONTENT_TOP + 3.65,
-      w: CONTENT_W * 0.36,
-      h: 0.3,
+      x: rightX,
+      y: CONTENT_TOP + 2.25,
+      w: rightW,
+      h: 0.25,
       fontFace: FONT_MONO,
       fontSize: 9,
       color: C.textMuted,
@@ -387,19 +460,22 @@ function buildHeadlineSlide(
 
   // Right column lower stack. Two callouts that frame the headline with
   // the audience's two next questions. What lifted us here, and what is
-  // the offsetting concern.
+  // the offsetting concern. Both are positioned in absolute terms so they
+  // never run below the footer line.
   const otherKpis = dashboard.kpis.filter((k) => k.id !== kpi.id)
   const topWin = findTopWin(otherKpis)
   const topWatch = findTopWatch(otherKpis)
 
-  const calloutX = MARGIN_X + CONTENT_W * 0.62
-  const calloutW = CONTENT_W * 0.36
+  const topWinY = CONTENT_TOP + 2.7
+  const topWatchY = CONTENT_TOP + 4.0
+  const calloutH = 1.15
+
   if (topWin) {
     drawInsightCallout(slide, accent, {
-      x: calloutX,
-      y: CONTENT_TOP + 4.15,
-      w: calloutW,
-      h: 0.95,
+      x: rightX,
+      y: topWinY,
+      w: rightW,
+      h: calloutH,
       title: 'Top driver',
       label: topWin.label,
       value: topWin.value,
@@ -408,10 +484,10 @@ function buildHeadlineSlide(
   }
   if (topWatch) {
     drawInsightCallout(slide, accent, {
-      x: calloutX,
-      y: CONTENT_TOP + 5.2,
-      w: calloutW,
-      h: 0.95,
+      x: rightX,
+      y: topWatchY,
+      w: rightW,
+      h: calloutH,
       title: 'Watch',
       label: topWatch.label,
       value: topWatch.value,
@@ -584,18 +660,19 @@ function buildMovementSlide(
   slide.background = { color: C.bg }
   addHeader(slide, accent, 'What moved')
 
-  const summary = condenseProse(body, 320)
-  slide.addText(toRichText(summary, C.textSecondary), {
-    x: MARGIN_X,
-    y: CONTENT_TOP + 0.4,
-    w: CONTENT_W * 0.48,
-    h: 5.4,
-    fontFace: FONT_DISPLAY,
-    fontSize: 16,
-    color: C.textSecondary,
-    valign: 'top',
-    paraSpaceAfter: 10,
-  })
+  const bullets = splitIntoBullets(body, 6)
+  drawBulletList(
+    slide,
+    accent,
+    bullets,
+    {
+      x: MARGIN_X,
+      y: CONTENT_TOP + 0.4,
+      w: CONTENT_W * 0.48,
+      h: 5.4,
+    },
+    { fontSize: 14 },
+  )
 
   const chart = pickRepresentativeChart(dashboard.charts)
   if (chart) {
@@ -658,17 +735,19 @@ function buildAnalysisSlide(
     bold: true,
   })
 
-  slide.addText(toRichText(condenseProse(body, 480), C.textSecondary), {
-    x: MARGIN_X,
-    y: CONTENT_TOP + 1.1,
-    w: CONTENT_W * 0.58,
-    h: 4.7,
-    fontFace: FONT_DISPLAY,
-    fontSize: 15,
-    color: C.textSecondary,
-    valign: 'top',
-    paraSpaceAfter: 10,
-  })
+  const analysisBullets = splitIntoBullets(body, 5)
+  drawBulletList(
+    slide,
+    accent,
+    analysisBullets,
+    {
+      x: MARGIN_X,
+      y: CONTENT_TOP + 1.1,
+      w: CONTENT_W * 0.58,
+      h: 4.7,
+    },
+    { fontSize: 14 },
+  )
 
   // Recommended actions sidebar. Pulled from the first three talking
   // points. Each bullet starts action oriented in the narrative so they
@@ -839,18 +918,19 @@ function buildClosingSlide(
     bold: true,
   })
 
-  const risks = condenseProse(risksBody, 320)
-  slide.addText(toRichText(risks, C.textSecondary), {
-    x: MARGIN_X,
-    y: CONTENT_TOP + 0.95,
-    w: CONTENT_W * 0.55,
-    h: 4.2,
-    fontFace: FONT_DISPLAY,
-    fontSize: 14,
-    color: C.textSecondary,
-    valign: 'top',
-    paraSpaceAfter: 8,
-  })
+  const riskBullets = splitIntoBullets(risksBody, 5)
+  drawBulletList(
+    slide,
+    accent,
+    riskBullets,
+    {
+      x: MARGIN_X,
+      y: CONTENT_TOP + 0.95,
+      w: CONTENT_W * 0.55,
+      h: 4.5,
+    },
+    { fontSize: 13 },
+  )
 
   const stripX = MARGIN_X + CONTENT_W * 0.6
   const stripW = CONTENT_W * 0.4
