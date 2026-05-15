@@ -1,14 +1,14 @@
 {
   "id": "hr-engagement-attrition",
   "metadata": {
-    "title": "People · Engagement & Attrition",
-    "tagline": "Headcount mix, engagement pulse, and voluntary attrition trends through Q3",
+    "title": "People and Engagement Dashboard",
+    "tagline": "Headcount mix, engagement pulse, and voluntary attrition trends across the trailing quarter",
     "domain": "hr",
     "colorToken": "rose",
     "icon": "Users",
     "thumbnail": "/dashboards/hr-engagement.png",
-    "period": "2026-Q3 · rolling 90 days",
-    "audience": "CPO · CEO · People Team leads · Board prep"
+    "period": "Rolling 90 days",
+    "audience": "CPO, CEO, People Team leads, Board prep"
   },
   "kpis": [
     {
@@ -18,8 +18,8 @@
       "format": "count",
       "deltaPct": 8.4,
       "deltaDirection": "up",
-      "deltaWindow": "vs Q2 (380)",
-      "subtext": "32 net adds · 38 hires, 6 voluntary departures",
+      "deltaWindow": "vs prior quarter (380)",
+      "subtext": "32 net adds across 38 hires and 6 voluntary departures",
       "sparkline": [380, 384, 388, 391, 394, 397, 400, 403, 405, 407, 409, 411, 412]
     },
     {
@@ -30,8 +30,8 @@
       "unit": "/ 10",
       "deltaPct": 2.6,
       "deltaDirection": "up",
-      "deltaWindow": "vs Q2 (7.6)",
-      "subtext": "Manager effectiveness driver up 0.4; Comp clarity down 0.2"
+      "deltaWindow": "vs prior quarter (7.6)",
+      "subtext": "Manager effectiveness driver up 0.4. Comp clarity down 0.2"
     },
     {
       "id": "voluntary-attrition",
@@ -40,8 +40,8 @@
       "format": "percent",
       "deltaPct": 1.4,
       "deltaDirection": "down",
-      "deltaWindow": "vs Q2 (8.3%)",
-      "subtext": "Industry benchmark: 12-15%"
+      "deltaWindow": "vs prior quarter (8.3%)",
+      "subtext": "Industry benchmark sits between 12% and 15%"
     },
     {
       "id": "time-to-hire",
@@ -51,7 +51,7 @@
       "unit": "days",
       "deltaPct": 9.5,
       "deltaDirection": "down",
-      "deltaWindow": "vs Q2 (42 days)",
+      "deltaWindow": "vs prior quarter (42 days)",
       "sparkline": [42, 41, 41, 40, 40, 39, 39, 39, 38, 38, 38, 38, 38]
     },
     {
@@ -61,8 +61,8 @@
       "format": "score",
       "deltaPct": 8.6,
       "deltaDirection": "up",
-      "deltaWindow": "vs Q2 (35)",
-      "subtext": "76 promoters · 24 passives · 12 detractors"
+      "deltaWindow": "vs prior quarter (35)",
+      "subtext": "76 promoters, 24 passives, 12 detractors"
     }
   ],
   "charts": [
@@ -70,25 +70,25 @@
       "id": "attrition-by-tenure",
       "type": "bar",
       "title": "Voluntary attrition by tenure cohort",
-      "subtitle": "0-1y leavers dominate; 5+y cohort stable",
+      "subtitle": "0 to 1 year leavers dominate. 5 plus year cohort stable",
       "data": [
-        { "label": "0-1y", "value": 18 },
-        { "label": "1-2y", "value": 9 },
-        { "label": "2-3y", "value": 4 },
-        { "label": "3-5y", "value": 2 },
-        { "label": "5+y", "value": 1 }
+        { "label": "0 to 1y", "value": 18 },
+        { "label": "1 to 2y", "value": 9 },
+        { "label": "2 to 3y", "value": 4 },
+        { "label": "3 to 5y", "value": 2 },
+        { "label": "5 plus y", "value": 1 }
       ]
     },
     {
       "id": "engagement-by-team",
       "type": "donut",
       "title": "Engagement score by team",
-      "subtitle": "Average over Q3 pulse responses",
+      "subtitle": "Average across the latest quarterly pulse responses",
       "data": [
         { "label": "Engineering", "value": 8.1 },
         { "label": "Sales", "value": 7.9 },
         { "label": "Customer Success", "value": 7.8 },
-        { "label": "Product + Design", "value": 7.8 },
+        { "label": "Product and Design", "value": 7.8 },
         { "label": "G&A", "value": 7.5 },
         { "label": "Support", "value": 7.2 }
       ]
@@ -96,8 +96,8 @@
     {
       "id": "hiring-funnel",
       "type": "bar",
-      "title": "Q3 hiring funnel",
-      "subtitle": "Applications → hires · 12% offer acceptance lift vs Q2",
+      "title": "Quarterly hiring funnel",
+      "subtitle": "Applications through hires with a 12 percent offer acceptance lift versus prior quarter",
       "data": [
         { "label": "Applications", "value": 2840 },
         { "label": "Phone Screens", "value": 612 },
@@ -111,7 +111,7 @@
     { "team": "Engineering", "headcount": 142, "engagement": 8.1, "attrition_ttm_pct": 6.8, "open_roles": 8, "avg_tenure_yr": 3.2 },
     { "team": "Sales", "headcount": 84, "engagement": 7.9, "attrition_ttm_pct": 11.2, "open_roles": 6, "avg_tenure_yr": 1.9 },
     { "team": "Customer Success", "headcount": 48, "engagement": 7.8, "attrition_ttm_pct": 9.4, "open_roles": 3, "avg_tenure_yr": 2.4 },
-    { "team": "Product + Design", "headcount": 36, "engagement": 7.8, "attrition_ttm_pct": 5.1, "open_roles": 2, "avg_tenure_yr": 2.8 },
+    { "team": "Product and Design", "headcount": 36, "engagement": 7.8, "attrition_ttm_pct": 5.1, "open_roles": 2, "avg_tenure_yr": 2.8 },
     { "team": "G&A", "headcount": 62, "engagement": 7.5, "attrition_ttm_pct": 6.4, "open_roles": 1, "avg_tenure_yr": 4.1 },
     { "team": "Support", "headcount": 40, "engagement": 7.2, "attrition_ttm_pct": 14.8, "open_roles": 4, "avg_tenure_yr": 1.4 }
   ]

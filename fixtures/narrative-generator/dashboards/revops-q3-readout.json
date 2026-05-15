@@ -1,14 +1,14 @@
 {
   "id": "revops-q3-readout",
   "metadata": {
-    "title": "RevOps Q3 Pipeline Readout",
-    "tagline": "Thirteen weeks of pipeline activity heading into the Q3 close",
+    "title": "Revenue Operations Dashboard",
+    "tagline": "Pipeline ACV, win rates, and revenue retention across the trailing quarter",
     "domain": "sales",
     "colorToken": "accent",
     "icon": "TrendingUp",
     "thumbnail": "/dashboards/revops-q3.png",
-    "period": "2026-W27 to 2026-W39",
-    "audience": "VP of Sales · Exec leadership · RevOps stakeholders"
+    "period": "Trailing 13 weeks",
+    "audience": "VP of Sales, Exec leadership, RevOps stakeholders"
   },
   "kpis": [
     {
@@ -19,7 +19,7 @@
       "currency": "USD",
       "deltaPct": 12.4,
       "deltaDirection": "up",
-      "deltaWindow": "vs Q2",
+      "deltaWindow": "vs prior quarter",
       "sparkline": [12.1, 12.4, 12.6, 12.9, 13.1, 13.3, 13.6, 13.9, 14.0, 14.1, 14.2, 14.3, 14.4]
     },
     {
@@ -29,7 +29,7 @@
       "format": "percent",
       "deltaPct": 2.1,
       "deltaDirection": "up",
-      "deltaWindow": "vs Q2",
+      "deltaWindow": "vs prior quarter",
       "sparkline": [35.4, 35.8, 36.1, 36.3, 36.7, 37.1, 37.2, 37.5, 37.8, 38.0, 38.1, 38.2, 38.2]
     },
     {
@@ -40,7 +40,7 @@
       "currency": "USD",
       "deltaPct": 4.8,
       "deltaDirection": "up",
-      "deltaWindow": "vs Q2",
+      "deltaWindow": "vs prior quarter",
       "sparkline": [188, 190, 192, 193, 194, 195, 196, 196, 197, 197, 198, 198, 198]
     },
     {
@@ -50,7 +50,7 @@
       "format": "percent",
       "deltaPct": 0.4,
       "deltaDirection": "down",
-      "deltaWindow": "vs Q2",
+      "deltaWindow": "vs prior quarter",
       "sparkline": [94.3, 94.2, 94.1, 94.1, 94.0, 94.0, 93.9, 93.9, 93.9, 93.9, 93.9, 93.9, 93.9]
     },
     {
@@ -61,7 +61,7 @@
       "unit": "x",
       "deltaPct": 6.7,
       "deltaDirection": "up",
-      "deltaWindow": "vs Q2",
+      "deltaWindow": "vs prior quarter",
       "sparkline": [3.4, 3.5, 3.5, 3.6, 3.6, 3.7, 3.7, 3.7, 3.8, 3.8, 3.8, 3.8, 3.8]
     }
   ],
@@ -70,7 +70,7 @@
       "id": "acv-trend",
       "type": "line",
       "title": "ACV booked, weekly",
-      "subtitle": "13 weeks trailing · USD",
+      "subtitle": "13 weeks trailing in USD",
       "data": [
         { "label": "W27", "value": 845000 },
         { "label": "W28", "value": 920000 },
@@ -91,36 +91,36 @@
       "id": "segment-breakdown",
       "type": "donut",
       "title": "ACV by segment",
-      "subtitle": "Q3 closed-won + late-stage pipeline",
+      "subtitle": "Closed won and late stage pipeline",
       "data": [
         { "label": "Enterprise", "value": 8640000 },
-        { "label": "Mid-Market", "value": 4320000 },
+        { "label": "Mid Market", "value": 4320000 },
         { "label": "SMB", "value": 1440000 }
       ]
     },
     {
       "id": "channel-concentration",
       "type": "bar",
-      "title": "ACV by channel × region",
-      "subtitle": "NAMER Direct dominates; APAC runs through Partner",
+      "title": "ACV by channel and region",
+      "subtitle": "NAMER Direct dominates and APAC runs through Partner",
       "data": [
-        { "label": "NAMER · Direct", "value": 6420000 },
-        { "label": "EMEA · Direct", "value": 2880000 },
-        { "label": "APAC · Partner", "value": 2640000 },
-        { "label": "NAMER · Reseller", "value": 1260000 },
-        { "label": "EMEA · Partner", "value": 720000 },
-        { "label": "LATAM · Reseller", "value": 480000 }
+        { "label": "NAMER Direct", "value": 6420000 },
+        { "label": "EMEA Direct", "value": 2880000 },
+        { "label": "APAC Partner", "value": 2640000 },
+        { "label": "NAMER Reseller", "value": 1260000 },
+        { "label": "EMEA Partner", "value": 720000 },
+        { "label": "LATAM Reseller", "value": 480000 }
       ]
     }
   ],
   "rows": [
-    { "deal_id": "DL-26-0013", "name": "Polaris Defense · enterprise expansion", "segment": "Enterprise", "region": "NAMER", "channel": "Direct", "acv_usd": 1240000, "stage": "Closed Won", "close_date": "2026-09-12" },
-    { "deal_id": "DL-26-0027", "name": "Helios Manufacturing · platform license", "segment": "Enterprise", "region": "EMEA", "channel": "Direct", "acv_usd": 880000, "stage": "Negotiation", "close_date": "2026-09-26" },
-    { "deal_id": "DL-26-0041", "name": "Tachyon Robotics · Atlas+Orion bundle", "segment": "Enterprise", "region": "NAMER", "channel": "Direct", "acv_usd": 720000, "stage": "Closed Won", "close_date": "2026-08-22" },
-    { "deal_id": "DL-26-0058", "name": "Astra Telecom · APAC rollout", "segment": "Mid-Market", "region": "APAC", "channel": "Partner", "acv_usd": 420000, "stage": "Closed Won", "close_date": "2026-09-05" },
-    { "deal_id": "DL-26-0072", "name": "Meridian Health · pilot extension", "segment": "Mid-Market", "region": "NAMER", "channel": "Reseller", "acv_usd": 285000, "stage": "Proposal", "close_date": "2026-10-04" },
-    { "deal_id": "DL-26-0089", "name": "Vector Studios · creative tier", "segment": "SMB", "region": "NAMER", "channel": "Direct", "acv_usd": 84000, "stage": "Closed Won", "close_date": "2026-09-18" },
-    { "deal_id": "DL-26-0094", "name": "Northwind Logistics · multi-site", "segment": "Mid-Market", "region": "EMEA", "channel": "Direct", "acv_usd": 540000, "stage": "Negotiation", "close_date": "2026-10-15" },
-    { "deal_id": "DL-26-0103", "name": "Quantum Bio · APAC pilot", "segment": "Mid-Market", "region": "APAC", "channel": "Partner", "acv_usd": 320000, "stage": "Qualification", "close_date": "2026-11-08" }
+    { "deal_id": "DL-26-0013", "name": "Polaris Defense enterprise expansion", "segment": "Enterprise", "region": "NAMER", "channel": "Direct", "acv_usd": 1240000, "stage": "Closed Won", "close_date": "2026-09-12" },
+    { "deal_id": "DL-26-0027", "name": "Helios Manufacturing platform license", "segment": "Enterprise", "region": "EMEA", "channel": "Direct", "acv_usd": 880000, "stage": "Negotiation", "close_date": "2026-09-26" },
+    { "deal_id": "DL-26-0041", "name": "Tachyon Robotics Atlas and Orion bundle", "segment": "Enterprise", "region": "NAMER", "channel": "Direct", "acv_usd": 720000, "stage": "Closed Won", "close_date": "2026-08-22" },
+    { "deal_id": "DL-26-0058", "name": "Astra Telecom APAC rollout", "segment": "Mid Market", "region": "APAC", "channel": "Partner", "acv_usd": 420000, "stage": "Closed Won", "close_date": "2026-09-05" },
+    { "deal_id": "DL-26-0072", "name": "Meridian Health pilot extension", "segment": "Mid Market", "region": "NAMER", "channel": "Reseller", "acv_usd": 285000, "stage": "Proposal", "close_date": "2026-10-04" },
+    { "deal_id": "DL-26-0089", "name": "Vector Studios creative tier", "segment": "SMB", "region": "NAMER", "channel": "Direct", "acv_usd": 84000, "stage": "Closed Won", "close_date": "2026-09-18" },
+    { "deal_id": "DL-26-0094", "name": "Northwind Logistics multi site rollout", "segment": "Mid Market", "region": "EMEA", "channel": "Direct", "acv_usd": 540000, "stage": "Negotiation", "close_date": "2026-10-15" },
+    { "deal_id": "DL-26-0103", "name": "Quantum Bio APAC pilot", "segment": "Mid Market", "region": "APAC", "channel": "Partner", "acv_usd": 320000, "stage": "Qualification", "close_date": "2026-11-08" }
   ]
 }

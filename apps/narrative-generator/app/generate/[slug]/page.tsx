@@ -2,9 +2,16 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
-import { getDashboardSummary, getAllDashboardSlugs } from '@/lib/dashboards'
+import {
+  getDashboardSummary,
+  getAllDashboardSlugs,
+  getColorClasses,
+  getDashboardIcon,
+} from '@/lib/dashboards'
+import { getFullDashboard } from '@/lib/full-dashboards'
 import { getNarrativeFixture } from '@/lib/narratives'
-import { StreamingPanel } from './_streaming-panel'
+import { DashboardPreview } from './_dashboard-preview'
+import { GenerateShell } from './_generate-shell'
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -24,42 +31,70 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     }
   }
   return {
-    title: `Generating · ${dashboard.title}`,
-    description: `Streaming AI-authored executive narrative for the ${dashboard.title} dashboard.`,
+    title: `Generate narrative for ${dashboard.title}`,
+    description: `Preview the ${dashboard.title} and generate an AI authored executive readout plus a themed downloadable deck.`,
   }
 }
 
 export default async function GeneratePage({ params }: PageProps) {
   const { slug } = await params
-  const dashboard = getDashboardSummary(slug)
+  const summary = getDashboardSummary(slug)
+  if (!summary) notFound()
+
+  const dashboard = getFullDashboard(slug)
   if (!dashboard) notFound()
 
-  const fixture = getNarrativeFixture(slug)
-  if (!fixture) notFound()
+  const narrative = getNarrativeFixture(slug)
+  if (!narrative) notFound()
+
+  const colors = getColorClasses(dashboard.metadata.colorToken)
+  const Icon = getDashboardIcon(dashboard.metadata.icon)
 
   return (
-    <section className="section-container pt-12 pb-24">
-      <Link
-        href="/dashboards"
-        className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-accent transition-colors mb-8"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Back to dashboards
-      </Link>
-
-      <header className="mb-10 max-w-2xl">
-        <div className="font-mono text-xs uppercase tracking-widest text-accent mb-2">
-          Step 2 of 3 · Narrative streaming
+    <GenerateShell
+      fixture={narrative}
+      dashboardSlug={slug}
+      dashboardTitle={dashboard.metadata.title}
+      backLink={
+        <Link
+          href="/dashboards"
+          className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-accent transition-colors mb-8"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to dashboards
+        </Link>
+      }
+      header={
+        <div className="max-w-2xl">
+          <div className="flex items-center gap-3 mb-3">
+            <div
+              className={`inline-flex h-9 w-9 items-center justify-center rounded-md border ${colors.thumbBg} ${colors.thumbBorder}`}
+            >
+              <Icon className={`h-5 w-5 ${colors.iconColor}`} strokeWidth={1.5} />
+            </div>
+            <div
+              className={`inline-flex items-center font-mono text-[10px] uppercase tracking-widest px-2 py-1 rounded border ${colors.badgeBg} ${colors.badgeText} ${colors.badgeBorder}`}
+            >
+              {dashboard.metadata.domain}
+            </div>
+            <span className="font-mono text-xs uppercase tracking-widest text-text-muted">
+              Step 2 of 2
+            </span>
+          </div>
+          <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">
+            {dashboard.metadata.title}
+          </h1>
+          <p className="mt-3 text-text-secondary leading-relaxed">
+            {dashboard.metadata.tagline}
+          </p>
+          <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs font-mono text-text-muted">
+            <span>{dashboard.metadata.period}</span>
+            <span className="text-text-dim">·</span>
+            <span>{dashboard.metadata.audience}</span>
+          </div>
         </div>
-        <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">
-          {dashboard.title}
-        </h1>
-        <p className="mt-4 text-text-secondary leading-relaxed">
-          {dashboard.tagline}
-        </p>
-      </header>
-
-      <StreamingPanel fixture={fixture} dashboardSlug={slug} />
-    </section>
+      }
+      dashboardPreview={<DashboardPreview dashboard={dashboard} />}
+    />
   )
 }

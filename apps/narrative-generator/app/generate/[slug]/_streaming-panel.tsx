@@ -1,8 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import Link from 'next/link'
-import { Sparkles, ArrowRight, RotateCcw } from 'lucide-react'
+import { Sparkles, RotateCcw, Download } from 'lucide-react'
 import {
   replayFixture,
   ReplayAbortedError,
@@ -10,50 +9,47 @@ import {
 } from '@rishi/ai-core'
 import { AiNarrativeBlock } from '@rishi/design-system/components'
 import { Button } from '@rishi/design-system/primitives'
-import { NARRATIVE_SECTIONS } from '@/lib/narratives'
+import {
+  HEADING_HEADLINE,
+  HEADING_WHAT_MOVED,
+  HEADING_SO_WHAT,
+  HEADING_TALKING_POINTS,
+  HEADING_RISKS,
+} from '@/lib/narratives'
 
 interface StreamingPanelProps {
   fixture: Fixture
   dashboardSlug: string
-  /**
-   * Streaming cadence in chars/sec. Default 60 — slightly faster than
-   * typical Claude streaming for demo pacing. Matches Project 1.
-   */
+  dashboardTitle: string
   charsPerSecond?: number
 }
 
 type StepStatus = 'pending' | 'active' | 'done'
 
+interface AnalysisStep {
+  id: string
+  label: string
+  marker: string
+}
+
+const ANALYSIS_STEPS: AnalysisStep[] = [
+  { id: 'reading', label: 'Reading dashboard data', marker: HEADING_HEADLINE },
+  { id: 'movement', label: 'Identifying movement drivers', marker: HEADING_WHAT_MOVED },
+  { id: 'significance', label: 'Checking metric significance', marker: HEADING_SO_WHAT },
+  { id: 'narrative', label: 'Composing executive readout', marker: HEADING_TALKING_POINTS },
+  { id: 'risks', label: 'Surfacing risks and caveats', marker: HEADING_RISKS },
+]
+
 export function StreamingPanel({
   fixture,
   dashboardSlug,
+  dashboardTitle,
   charsPerSecond = 60,
 }: StreamingPanelProps) {
   const [streamedText, setStreamedText] = React.useState('')
   const [streaming, setStreaming] = React.useState(false)
   const [completed, setCompleted] = React.useState(false)
   const abortRef = React.useRef<AbortController | null>(null)
-
-  // Compute progress-step status from the streamed text. A section is
-  // "done" once a later section has started; the last section is "done"
-  // only when streaming completes (no later marker to watch).
-  const stepStatuses = React.useMemo<StepStatus[]>(() => {
-    if (!streamedText && !streaming) {
-      return NARRATIVE_SECTIONS.map(() => 'pending')
-    }
-    return NARRATIVE_SECTIONS.map((section, i) => {
-      const seenThisStep = streamedText.includes(section.marker)
-      const nextStep = NARRATIVE_SECTIONS[i + 1]
-      const seenNextStep = nextStep
-        ? streamedText.includes(nextStep.marker)
-        : completed
-      if (seenThisStep && seenNextStep) return 'done'
-      if (seenThisStep) return 'active'
-      // First step is "active" while we haven't yet rendered any heading (initial delay)
-      if (i === 0 && streaming && !seenThisStep) return 'active'
-      return 'pending'
-    })
-  }, [streamedText, streaming, completed])
 
   const startStream = React.useCallback(async () => {
     abortRef.current?.abort()
@@ -84,29 +80,40 @@ export function StreamingPanel({
     setStreaming(false)
   }, [])
 
-  // Auto-start the stream once mounted. The streaming animation IS the
-  // headline product moment ("watch Claude write the readout") — same
-  // philosophy as Project 1, so we replay it every visit. No Zustand
-  // navigation guard here; /deck/[slug] doesn't require a prior generate.
   React.useEffect(() => {
     startStream()
     return () => abortRef.current?.abort()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const stepStatuses = React.useMemo<StepStatus[]>(() => {
+    return ANALYSIS_STEPS.map((step, i) => {
+      const seenThisStep = streamedText.includes(step.marker)
+      const nextStep = ANALYSIS_STEPS[i + 1]
+      const seenNextStep = nextStep
+        ? streamedText.includes(nextStep.marker)
+        : completed
+      if (seenThisStep && seenNextStep) return 'done'
+      if (seenThisStep) return 'active'
+      if (i === 0 && streaming && !seenThisStep) return 'active'
+      return 'pending'
+    })
+  }, [streamedText, streaming, completed])
+
+  const downloadFilename = `${dashboardTitle.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}-deck.pptx`
+
   return (
     <div className="space-y-6">
-      {/* Progress steps */}
       <div className="rounded-xl border border-surface-border bg-surface p-4 sm:p-5">
         <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
           <div className="flex items-center gap-2 text-xs sm:text-sm font-mono uppercase tracking-wider text-text-muted min-w-0">
             <Sparkles className="h-4 w-4 text-accent shrink-0" />
             <span className="truncate">
               {streaming
-                ? 'Claude is writing the readout...'
+                ? 'Claude is analyzing the dashboard...'
                 : completed
-                  ? 'Narrative complete'
-                  : 'Ready to generate'}
+                  ? 'Analysis complete'
+                  : 'Preparing analysis'}
             </span>
           </div>
           {streaming && (
@@ -122,18 +129,17 @@ export function StreamingPanel({
           )}
         </div>
         <ol className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-          {NARRATIVE_SECTIONS.map((section, i) => (
+          {ANALYSIS_STEPS.map((step, i) => (
             <ProgressStep
-              key={section.id}
+              key={step.id}
               num={i + 1}
-              label={section.label}
+              label={step.label}
               status={stepStatuses[i] ?? 'pending'}
             />
           ))}
         </ol>
       </div>
 
-      {/* Streaming narrative */}
       <AiNarrativeBlock
         text={streamedText}
         streaming={streaming}
@@ -141,18 +147,18 @@ export function StreamingPanel({
         variant="default"
       />
 
-      {/* Continue CTA */}
       {completed && (
         <div className="flex flex-wrap items-center gap-3 pt-2">
-          <Link
-            href={`/deck/${dashboardSlug}`}
+          <a
+            href={`/api/deck/${dashboardSlug}`}
+            download={downloadFilename}
             className="inline-flex items-center gap-2 rounded-md bg-accent text-base-900 hover:bg-accent-light px-6 py-3 text-sm font-semibold shadow-glow-sm hover:shadow-glow-md transition-all"
           >
-            Generate deck
-            <ArrowRight className="h-4 w-4" />
-          </Link>
+            <Download className="h-4 w-4" />
+            Download PPTX
+          </a>
           <span className="text-xs text-text-muted">
-            Title slide + headline metric + per-bullet detail slides + closing recap.
+            7 slide deck themed to this dashboard, exported as a single PPTX file.
           </span>
         </div>
       )}
@@ -184,14 +190,18 @@ function ProgressStep({
         : 'text-text-muted'
 
   return (
-    <li className="flex items-center gap-3">
+    <li className="flex items-start gap-3">
       <span
+        className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border font-mono text-xs font-semibold transition-all ${ring}`}
         aria-label={`Step ${num} ${status}`}
-        className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border font-mono text-xs font-semibold transition-colors ${ring}`}
       >
         {status === 'done' ? '✓' : num}
       </span>
-      <span className={`text-xs font-medium ${labelColor}`}>{label}</span>
+      <span
+        className={`text-xs font-medium leading-tight pt-1 transition-colors ${labelColor}`}
+      >
+        {label}
+      </span>
     </li>
   )
 }

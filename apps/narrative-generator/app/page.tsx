@@ -9,7 +9,7 @@ export default function HomePage() {
         <div className="max-w-4xl">
           <div className="font-mono text-xs uppercase tracking-widest text-accent mb-4 inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent/30 bg-accent/10">
             <Sparkles className="h-3 w-3" />
-            Project 02 · Dashboard-to-Deck
+            Project 02 · Dashboard to Deck
           </div>
           <h1 className="font-display text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight leading-[1.05]">
             Dashboards out,{' '}
@@ -18,9 +18,10 @@ export default function HomePage() {
             </span>
           </h1>
           <p className="mt-6 max-w-2xl text-lg sm:text-xl text-text-secondary leading-relaxed">
-            Pick a sample dashboard. Watch Claude write the executive narrative — hero
-            metric, week-over-week movement, the contextual one-liner that explains why
-            it matters. Get a polished PPTX-ready deck themed to a unified design system.
+            Pick a sample dashboard. Watch Claude write the executive narrative live.
+            The hero metric pulled from the dashboard, the weekly movement, the short
+            paragraph that explains why it matters. Then download a polished deck
+            themed to the same design system, ready for the next executive review.
           </p>
           <div className="mt-10 flex flex-wrap gap-3">
             <Link
@@ -30,10 +31,6 @@ export default function HomePage() {
               Browse sample dashboards
               <ArrowRight className="h-4 w-4" />
             </Link>
-            <span className="inline-flex items-center gap-2 rounded-md border border-surface-border bg-surface px-6 py-3 text-sm font-medium text-text-muted">
-              <FileText className="h-4 w-4" />
-              W6.D1 scaffold — narrative + PPTX in W7
-            </span>
           </div>
         </div>
       </section>
@@ -44,12 +41,12 @@ export default function HomePage() {
           <StepCard
             num="01"
             title="Watch Claude write the readout"
-            description="Stream the executive narrative live — hero metric pulled from the dashboard, week-over-week deltas, the contextual one-liner. Same streaming primitive as Project 1's profiling, different output medium."
+            description="Stream the executive narrative live. The hero metric pulled from the dashboard, the weekly movement, the short paragraph that frames what changed and why it matters. The same streaming primitive as Project 1 profiling, applied to a different output medium."
           />
           <StepCard
             num="02"
             title="Download a polished deck"
-            description="Get a PPTX-ready slide deck themed to the design system, accessible, ready to drop into Monday's exec review. No template wrangling, no design re-do."
+            description="Get a slide deck as a downloadable PPTX file. Themed to the same design system, fully accessible, ready to drop into Monday morning executive review. No template wrangling and no redesign work needed."
           />
         </div>
       </section>

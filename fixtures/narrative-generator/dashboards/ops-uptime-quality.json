@@ -1,14 +1,14 @@
 {
   "id": "ops-uptime-quality",
   "metadata": {
-    "title": "Platform Ops · Uptime & Quality",
-    "tagline": "SLO performance, incident profile, and reliability for the trailing quarter",
+    "title": "Platform Operations Dashboard",
+    "tagline": "SLO performance, incident profile, and platform reliability across the trailing quarter",
     "domain": "operations",
     "colorToken": "teal",
     "icon": "Activity",
     "thumbnail": "/dashboards/ops-uptime-quality.png",
-    "period": "2026-Q3 · trailing 90 days",
-    "audience": "VP Engineering · SRE leads · CIO"
+    "period": "Trailing 90 days",
+    "audience": "VP Engineering, SRE leads, CIO"
   },
   "kpis": [
     {
@@ -18,8 +18,8 @@
       "format": "percent",
       "deltaPct": 0.05,
       "deltaDirection": "up",
-      "deltaWindow": "vs Q2",
-      "subtext": "SLO target: 99.9% · 4 of 13 weeks above 99.99%",
+      "deltaWindow": "vs prior quarter",
+      "subtext": "SLO target at 99.9%. 4 of 13 weeks above 99.99%",
       "sparkline": [99.85, 99.87, 99.89, 99.91, 99.92, 99.91, 99.92, 99.93, 99.94, 99.96, 99.96, 99.97, 99.94]
     },
     {
@@ -30,18 +30,18 @@
       "unit": "ms",
       "deltaPct": 12.3,
       "deltaDirection": "down",
-      "deltaWindow": "vs Q2",
+      "deltaWindow": "vs prior quarter",
       "sparkline": [212, 208, 204, 201, 197, 194, 191, 189, 187, 186, 185, 184, 184]
     },
     {
       "id": "incident-count",
-      "label": "Incidents (Sev 1-2)",
+      "label": "Incidents Sev 1 and Sev 2",
       "value": 7,
       "format": "count",
       "deltaPct": 22.2,
       "deltaDirection": "down",
-      "deltaWindow": "vs Q2 (9)",
-      "subtext": "0 Sev-1 in the last 4 weeks"
+      "deltaWindow": "vs prior quarter (9)",
+      "subtext": "0 Sev 1 incidents in the last 4 weeks"
     },
     {
       "id": "mttr",
@@ -51,7 +51,7 @@
       "unit": "min",
       "deltaPct": 18.4,
       "deltaDirection": "down",
-      "deltaWindow": "vs Q2 (51 min)",
+      "deltaWindow": "vs prior quarter (51 min)",
       "sparkline": [51, 50, 49, 48, 47, 46, 45, 44, 43, 43, 42, 42, 42]
     },
     {
@@ -61,7 +61,7 @@
       "format": "percent",
       "deltaPct": 3.2,
       "deltaDirection": "up",
-      "deltaWindow": "vs Q2",
+      "deltaWindow": "vs prior quarter",
       "subtext": "Headroom remaining before scaling threshold"
     }
   ],
@@ -70,7 +70,7 @@
       "id": "uptime-trend",
       "type": "line",
       "title": "Weekly uptime %",
-      "subtitle": "SLO line at 99.9% · 13 weeks trailing",
+      "subtitle": "SLO line at 99.9% across 13 weeks trailing",
       "data": [
         { "label": "W27", "value": 99.85 },
         { "label": "W28", "value": 99.87 },
@@ -91,7 +91,7 @@
       "id": "incident-severity",
       "type": "donut",
       "title": "Incident severity mix",
-      "subtitle": "Q3 · 7 total Sev-1/2 incidents",
+      "subtitle": "7 total Sev 1 and Sev 2 incidents this quarter",
       "data": [
         { "label": "Sev 2", "value": 5 },
         { "label": "Sev 1", "value": 2 }
@@ -101,7 +101,7 @@
       "id": "service-breakdown",
       "type": "bar",
       "title": "Incidents by service",
-      "subtitle": "Auth + Payments concentration",
+      "subtitle": "Auth and Payments concentration",
       "data": [
         { "label": "Auth", "value": 3 },
         { "label": "Payments", "value": 2 },
@@ -111,12 +111,12 @@
     }
   ],
   "rows": [
-    { "incident_id": "INC-26-0142", "service": "Auth", "severity": "Sev 1", "started_at": "2026-07-18T14:23:00Z", "resolved_at": "2026-07-18T15:18:00Z", "duration_min": 55, "root_cause": "Token rotation race condition", "customer_impact": "12 min of failed logins for ~3% of MAU" },
-    { "incident_id": "INC-26-0158", "service": "Payments", "severity": "Sev 1", "started_at": "2026-08-04T09:11:00Z", "resolved_at": "2026-08-04T09:42:00Z", "duration_min": 31, "root_cause": "Stripe webhook retry storm during outage", "customer_impact": "212 transactions queued; auto-resolved" },
-    { "incident_id": "INC-26-0163", "service": "Auth", "severity": "Sev 2", "started_at": "2026-08-12T03:44:00Z", "resolved_at": "2026-08-12T04:18:00Z", "duration_min": 34, "root_cause": "Stale session cache after deploy", "customer_impact": "SSO re-auth required" },
-    { "incident_id": "INC-26-0177", "service": "Catalog", "severity": "Sev 2", "started_at": "2026-08-22T11:08:00Z", "resolved_at": "2026-08-22T11:54:00Z", "duration_min": 46, "root_cause": "Search index corruption during reindex", "customer_impact": "Stale results for ~4% of queries" },
-    { "incident_id": "INC-26-0189", "service": "Payments", "severity": "Sev 2", "started_at": "2026-08-30T16:55:00Z", "resolved_at": "2026-08-30T17:24:00Z", "duration_min": 29, "root_cause": "Currency conversion service timeout", "customer_impact": "Non-USD checkout delayed by 30s" },
-    { "incident_id": "INC-26-0201", "service": "Notifications", "severity": "Sev 2", "started_at": "2026-09-11T07:32:00Z", "resolved_at": "2026-09-11T08:14:00Z", "duration_min": 42, "root_cause": "SES quota exhaustion (untriggered alarm)", "customer_impact": "Transactional emails delayed by 30-45 min" },
-    { "incident_id": "INC-26-0218", "service": "Auth", "severity": "Sev 2", "started_at": "2026-09-24T19:08:00Z", "resolved_at": "2026-09-24T19:53:00Z", "duration_min": 45, "root_cause": "Redis replica drift in NAMER region", "customer_impact": "8% of NAMER sessions invalidated mid-request" }
+    { "incident_id": "INC-26-0142", "service": "Auth", "severity": "Sev 1", "started_at": "2026-07-18T14:23:00Z", "resolved_at": "2026-07-18T15:18:00Z", "duration_min": 55, "root_cause": "Token rotation race condition", "customer_impact": "12 min of failed logins for about 3 percent of MAU" },
+    { "incident_id": "INC-26-0158", "service": "Payments", "severity": "Sev 1", "started_at": "2026-08-04T09:11:00Z", "resolved_at": "2026-08-04T09:42:00Z", "duration_min": 31, "root_cause": "Stripe webhook retry storm during outage", "customer_impact": "212 transactions queued and auto resolved" },
+    { "incident_id": "INC-26-0163", "service": "Auth", "severity": "Sev 2", "started_at": "2026-08-12T03:44:00Z", "resolved_at": "2026-08-12T04:18:00Z", "duration_min": 34, "root_cause": "Stale session cache after deploy", "customer_impact": "SSO re authentication required" },
+    { "incident_id": "INC-26-0177", "service": "Catalog", "severity": "Sev 2", "started_at": "2026-08-22T11:08:00Z", "resolved_at": "2026-08-22T11:54:00Z", "duration_min": 46, "root_cause": "Search index corruption during reindex", "customer_impact": "Stale results for about 4 percent of queries" },
+    { "incident_id": "INC-26-0189", "service": "Payments", "severity": "Sev 2", "started_at": "2026-08-30T16:55:00Z", "resolved_at": "2026-08-30T17:24:00Z", "duration_min": 29, "root_cause": "Currency conversion service timeout", "customer_impact": "Non USD checkout delayed by 30 seconds" },
+    { "incident_id": "INC-26-0201", "service": "Notifications", "severity": "Sev 2", "started_at": "2026-09-11T07:32:00Z", "resolved_at": "2026-09-11T08:14:00Z", "duration_min": 42, "root_cause": "SES quota exhaustion with untriggered alarm", "customer_impact": "Transactional emails delayed by 30 to 45 minutes" },
+    { "incident_id": "INC-26-0218", "service": "Auth", "severity": "Sev 2", "started_at": "2026-09-24T19:08:00Z", "resolved_at": "2026-09-24T19:53:00Z", "duration_min": 45, "root_cause": "Redis replica drift in NAMER region", "customer_impact": "8 percent of NAMER sessions invalidated mid request" }
   ]
 }

@@ -4,8 +4,8 @@
   "dashboards": [
     {
       "id": "revops-q3-readout",
-      "title": "RevOps Q3 Pipeline Readout",
-      "tagline": "Thirteen weeks of pipeline activity heading into the Q3 close",
+      "title": "Revenue Operations Dashboard",
+      "tagline": "Pipeline ACV, win rates, and revenue retention across the trailing quarter",
       "domain": "sales",
       "colorToken": "accent",
       "icon": "TrendingUp",
@@ -16,8 +16,8 @@
     },
     {
       "id": "marketing-q3-performance",
-      "title": "Marketing Q3 Performance",
-      "tagline": "Channel spend, sourced pipeline, and CAC payback for the Q3 close",
+      "title": "Marketing Performance Analytics Dashboard",
+      "tagline": "Channel spend, sourced pipeline, and CAC payback across the trailing quarter",
       "domain": "marketing",
       "colorToken": "purple",
       "icon": "Megaphone",
@@ -28,8 +28,8 @@
     },
     {
       "id": "ops-uptime-quality",
-      "title": "Platform Ops · Uptime & Quality",
-      "tagline": "SLO performance, incident profile, and reliability for the trailing quarter",
+      "title": "Platform Operations Dashboard",
+      "tagline": "SLO performance, incident profile, and platform reliability across the trailing quarter",
       "domain": "operations",
       "colorToken": "teal",
       "icon": "Activity",
@@ -40,8 +40,8 @@
     },
     {
       "id": "finance-quarter-close",
-      "title": "Finance · Q3 Close",
-      "tagline": "Revenue, margin, expense, and burn trajectory at the Q3 books-closed checkpoint",
+      "title": "Finance QBR Reporting",
+      "tagline": "Revenue, margin, expense, and burn trajectory at the books closed checkpoint",
       "domain": "finance",
       "colorToken": "green",
       "icon": "DollarSign",
@@ -52,8 +52,8 @@
     },
     {
       "id": "hr-engagement-attrition",
-      "title": "People · Engagement & Attrition",
-      "tagline": "Headcount mix, engagement pulse, and voluntary attrition trends through Q3",
+      "title": "People and Engagement Dashboard",
+      "tagline": "Headcount mix, engagement pulse, and voluntary attrition trends across the trailing quarter",
       "domain": "hr",
       "colorToken": "rose",
       "icon": "Users",
@@ -64,8 +64,8 @@
     },
     {
       "id": "cx-csat-nps",
-      "title": "Customer Experience · CSAT & NPS",
-      "tagline": "Support volume, satisfaction, and at-risk account signals through Q3",
+      "title": "Customer Experience Dashboard",
+      "tagline": "Support volume, satisfaction, and account risk signals across the trailing quarter",
       "domain": "cx",
       "colorToken": "blue",
       "icon": "MessageSquare",
