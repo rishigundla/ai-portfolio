@@ -128,10 +128,41 @@ def extract_days(content: str) -> dict[str, dict[str, object]]:
 
 
 def extract_completed_ids(content: str) -> list[str]:
-    block = re.search(r"completedTasks:\s*\[(.*?)\]\s*,", content, re.DOTALL)
-    if not block:
+    """Find the completedTasks array and return every quoted id inside.
+    Uses bracket aware walking so a `]` that appears inside a comment
+    or sibling array does not terminate the match early."""
+    marker = "completedTasks:"
+    idx = content.find(marker)
+    if idx < 0:
         return []
-    return re.findall(r'"(\d+-W\d+\.D\d+-\d+)"', block.group(1))
+    open_b = content.find("[", idx)
+    if open_b < 0:
+        return []
+    i = open_b + 1
+    depth = 1
+    in_string = False
+    escape = False
+    while i < len(content):
+        ch = content[i]
+        if escape:
+            escape = False
+        elif ch == "\\":
+            escape = True
+        elif in_string:
+            if ch == '"':
+                in_string = False
+        elif ch == '"':
+            in_string = True
+        elif ch == "[":
+            depth += 1
+        elif ch == "]":
+            depth -= 1
+            if depth == 0:
+                break
+        i += 1
+    blob = content[open_b + 1 : i]
+    # Match both the W form (1-W1.D1-0) and the pre flight P form (0-P0.1-0).
+    return re.findall(r'"(\d+-(?:W\d+\.D\d+|P\d+\.\d+)-\d+)"', blob)
 
 
 def check_prose(text: str, where: str) -> list[str]:
@@ -162,14 +193,19 @@ def validate() -> int:
         errors.append("No day entries found in weeksPlan; the parser regex may be out of sync")
 
     # 1. Every completed task ID must match an existing day and an
-    #    existing index inside that day.
+    #    existing index inside that day. Pre flight ids (P form) live
+    #    outside weeksPlan because Phase 0 is bootstrap rather than a
+    #    weekly cadence, so they only get the basic shape check.
     completed_ids = extract_completed_ids(content)
     seen: set[str] = set()
     for cid in completed_ids:
         if cid in seen:
             errors.append(f"completedTasks: duplicate id '{cid}'")
         seen.add(cid)
-        match = re.match(r"(\d+)-(W\d+\.D\d+)-(\d+)", cid)
+        p_match = re.match(r"\d+-P\d+\.\d+-\d+$", cid)
+        if p_match:
+            continue
+        match = re.match(r"(\d+)-(W\d+\.D\d+)-(\d+)$", cid)
         if not match:
             errors.append(f"completedTasks: malformed id '{cid}'")
             continue
