@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Auto sync the standalone plan viewer when a commit touches the plan files.
+#
+# Activation (run once after cloning):
+#   git config --local core.hooksPath .githooks
+
+set -euo pipefail
+
+# Look only at the most recent commit. If it modified the canonical plan
+# files, run the sync script. Otherwise stay quiet so unrelated commits
+# remain fast.
+if git diff-tree --no-commit-id --name-only -r HEAD \
+    | grep -qE '^docs/(master-plan\.md|plan\.html)$'; then
+  bash "$(git rev-parse --show-toplevel)/scripts/sync-plan.sh"
+fi
