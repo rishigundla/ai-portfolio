@@ -30,6 +30,30 @@ Every day end update of the plan must:
 
 Do not commit only one of the two files. The dashboard and the markdown must agree.
 
+## Plan website validation gate
+
+A pre commit hook runs `scripts/validate-plan.py` automatically whenever a commit touches `docs/master-plan.md` or `docs/plan.html`. The validator refuses the commit on any of these failures:
+
+- A `completedTasks` id references a day that does not exist in `weeksPlan`.
+- A `completedTasks` id has an index past the end of the day's task array.
+- A day's `tasks` array is empty.
+- A task string contains em dashes, en dashes, semicolons, banned compound modifier hyphens (`week-over-week`, `Dashboard-to-Deck`, and the rest of the list), or contractions.
+- A task string contains literal HTML tags (`<button>`, `<a>`, `<div>`, and so on) that the renderer would otherwise drop into innerHTML and parse as live HTML.
+
+If the hook fails, the error list points at the exact day and task index. Fix the source and recommit. The hook is the same `.githooks/` path as the sync hook, so the one time activation runs both:
+
+    git config --local core.hooksPath .githooks
+
+To run the validator manually:
+
+    python3 scripts/validate-plan.py
+
+To clean prose drift in bulk across every day in the plan:
+
+    python3 scripts/clean-plan-prose.py
+
+These two scripts plus the post commit sync hook are the permanent guardrail against the plan website breaking from typo level drift.
+
 ## What lives where
 
 - `apps/<project>/` Next.js apps. Each deploys to its own Vercel project. Routes shown in the per app README.

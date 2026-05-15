@@ -280,6 +280,10 @@
 
     .phase-card {
       background: var(--surface-solid);
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      cursor: pointer;
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 20px;
@@ -1563,8 +1567,8 @@
         // W5.D7 (Automation Infrastructure) intentionally NOT in completedTasks — deferred to v2 per user scope call.
         // Phase 2 · Week 6 · Day 1 (5 tasks — app scaffold for narrative-generator, build verified)
         "6-W6.D1-0", "6-W6.D1-1", "6-W6.D1-2", "6-W6.D1-3", "6-W6.D1-4",
-        // Phase 2 · Week 6 · Day 2 (5 tasks — Vercel project + GitHub connect + Root Directory + Lighthouse + portfolio.meta.json update)
-        "6-W6.D2-0", "6-W6.D2-1", "6-W6.D2-2", "6-W6.D2-3", "6-W6.D2-4",
+        // Phase 2 · Week 6 · Day 2 (6 tasks — Vercel project + GitHub connect + Root Directory + Deploy + Lighthouse + portfolio.meta.json update)
+        "6-W6.D2-0", "6-W6.D2-1", "6-W6.D2-2", "6-W6.D2-3", "6-W6.D2-4", "6-W6.D2-5",
         // Phase 2 · Week 6 · Day 3 (4 tasks — 6 dashboard fixtures + manifest, 2 typed loaders, 3-route wiring with generateStaticParams, build verified 16 routes)
         "6-W6.D3-0", "6-W6.D3-1", "6-W6.D3-2", "6-W6.D3-3",
         // Phase 2 · Week 6 · Day 4 (5 tasks — 6 narrative fixtures, narratives.ts loader, _streaming-panel.tsx client component, /generate/[slug] page rewired, production-verified via Playwright)
@@ -1573,16 +1577,18 @@
         "6-W6.D5-0", "6-W6.D5-1", "6-W6.D5-2", "6-W6.D5-3",
         // Phase 2 · Week 6 · Day 6 (4 tasks — cross-viewport Playwright sweep, Lighthouse audit, polish pass (favicon + card-footer contrast + heading-order), re-audit confirms 100/100/100/100 on 3 of 4 routes)
         "6-W6.D6-0", "6-W6.D6-1", "6-W6.D6-2", "6-W6.D6-3",
-        // Phase 2 · Week 7 · Day 1 (4 tasks — pptxgenjs dep + format-kpi.ts extraction, lib/build-pptx.ts 7-slide builder, /api/deck/[slug] route handler, _pptx-modal stub → real <a href download> link)
-        "7-W7.D1-0", "7-W7.D1-1", "7-W7.D1-2", "7-W7.D1-3",
-        // Phase 2 · Week 7 · Day 2 (3 tasks — download + ZIP-magic verify all 6 PPTXs, slide XML content audit (KPIs / narrative / bullets / closing-recap / 0 markdown leaks), Lighthouse re-audit confirms /deck/[slug] held 100/100/100/100)
-        "7-W7.D2-0", "7-W7.D2-1", "7-W7.D2-2",
-        // Phase 2 · Week 7 · Day 3 (3 tasks — apps/narrative-generator/README.md rewritten from scratch with architecture diagram + Vercel-CLI gotcha, root README Project 2 row flipped to Live, portfolio.meta.json portfolioCard refined to match shipped behavior)
-        "7-W7.D3-0", "7-W7.D3-1", "7-W7.D3-2",
-        // Phase 2 · Week 7 · Day 4 (3 tasks — docs/case-studies/narrative-generator.md (1,570 words / 9 sections), caseStudyUrl wired in portfolio.meta.json + portfolioCard.impact refined, W7.D4 forward-references swept from READMEs)
-        "7-W7.D4-0", "7-W7.D4-1", "7-W7.D4-2",
-        // Phase 2 · Week 7 · Day 5 (3 tasks — Project 2 Pending Follow-ups (Cat A/B/C) added to master-plan, Phase Progress Overview Project 2 row → Shipped v1.0 + status surfaces updated, annotated git tag v1.0-narrative-generator pushed)
-        "7-W7.D5-0", "7-W7.D5-1", "7-W7.D5-2"
+        // Phase 2 · Week 7 · Day 1 (5 tasks — pptxgenjs dep, format-kpi extraction, build-pptx builder, deck route, modal swap)
+        "7-W7.D1-0", "7-W7.D1-1", "7-W7.D1-2", "7-W7.D1-3", "7-W7.D1-4",
+        // Phase 2 · Week 7 · Day 2 (4 tasks — download verify, slide XML audit, Lighthouse re audit, deck route 100 confirmed)
+        "7-W7.D2-0", "7-W7.D2-1", "7-W7.D2-2", "7-W7.D2-3",
+        // Phase 2 · Week 7 · Day 3 (4 tasks — README rewrite, root README flip, portfolioCard refine, live demos refresh)
+        "7-W7.D3-0", "7-W7.D3-1", "7-W7.D3-2", "7-W7.D3-3",
+        // Phase 2 · Week 7 · Day 4 (4 tasks — case study, caseStudyUrl wired, portfolioCard.impact refined, forward references swept)
+        "7-W7.D4-0", "7-W7.D4-1", "7-W7.D4-2", "7-W7.D4-3",
+        // Phase 2 · Week 7 · Day 5 (4 tasks — Pending Follow-ups added, Phase Progress Overview flipped to Shipped v1.0, status surfaces refreshed, annotated tag pushed)
+        "7-W7.D5-0", "7-W7.D5-1", "7-W7.D5-2", "7-W7.D5-3",
+        // Phase 2 · Week 7 · Day 6 (4 tasks — post v1.0 UX fixes, richer PPTX, writing style sweep, plan sync hook)
+        "7-W7.D6-0", "7-W7.D6-1", "7-W7.D6-2", "7-W7.D6-3"
       ],
 
       phases: [
@@ -2056,7 +2062,7 @@
             { num: "W1.D3", weekday: "Wed", name: "Install shadcn Primitives", tasks: ["Run pnpm dlx shadcn@latest init in design-system", "Install Button, Dialog, Tabs, Tooltip, Popover, Card, Input, Select", "Install Toast, Command, Combobox, Badge, Avatar", "Theme all primitives to match token system", "Visual-test each primitive with teal accent and Space Grotesk"] },
             { num: "W1.D4", weekday: "Thu", name: "AI-Specific Components", tasks: ["Build KpiCard (value, delta, sparkline, states)", "Build ChartCard (Recharts wrapper with title, legend, states)", "Build AiNarrativeBlock (streaming markdown with cursor)", "Build FilterBar (date range, segment, dimension)", "Build DataGrid (sortable, filterable, paginated)", "Export Framer Motion variants (fadeIn, slideUp, pulseGlow, float, gridFlow)"] },
             { num: "W1.D5", weekday: "Fri", name: "Design System Showcase App", tasks: ["Create apps/design-system-docs/ as Next.js 16 project", "Install @rishi/design-system from workspace", "Create page per component showing all variants", "Deploy to Vercel and note URL", "Add README with install + usage instructions"] },
-            { num: "W1.D6", weekday: "Sat", name: "Build ai-core Package", tasks: ["Create packages/ai-core/ with package.json + tsconfig", "Install ai (Vercel AI SDK) and @anthropic-ai/sdk", "Build src/replay.ts (chunks fixture JSON at ~40 tokens/sec)", "Build src/generate.ts (Anthropic SDK client for dev-time generation)", "Define types: Fixture, Scenario, StreamConfig, AiNarrative", "Test with a fixture — verify streaming works"] },
+            { num: "W1.D6", weekday: "Sat", name: "Build ai-core Package", tasks: ["Create packages/ai-core/ with package.json + tsconfig", "Install ai (Vercel AI SDK) and @anthropic-ai/sdk", "Build src/replay.ts (chunks fixture JSON at ~40 tokens/sec)", "Build src/generate.ts (Anthropic SDK client for dev-time generation)", "Define types: Fixture, Scenario, StreamConfig, AiNarrative", "Test with a fixture. verify streaming works"] },
             { num: "W1.D7", weekday: "Sun", name: "Week 1 Polish", tasks: ["README per package (design-system, ai-core)", "Update monorepo root README with architecture diagram", "Fix any visual bugs in design-system-docs", "Tag Week 1 complete"] }
           ],
           deliverables: ["Monorepo live on GitHub", "@rishi/design-system + @rishi/ai-core working", "design-system-docs site deployed on Vercel"]
@@ -2085,7 +2091,7 @@
           days: [
             { num: "W3.D1", weekday: "Mon", name: "Dashboard Layout Generator", tasks: ["Build /dashboard/[slug] route", "Read profiling.json to determine KPIs + charts", "Render KpiCard components per recommended KPI", "Render ChartCard containers per recommended chart", "12-col responsive grid layout"] },
             { num: "W3.D2", weekday: "Tue", name: "Chart Rendering", tasks: ["Integrate Recharts (or Tremor)", "Support bar, line, donut, heatmap, scatter", "Theme all charts to design system tokens", "Wire actual dataset rows to chart data"] },
-            { num: "W3.D3", weekday: "Wed", name: "Filters + Interactivity", tasks: ["FilterBar on dashboard: date range, segment, dimension", "Filters apply reactively to all KPIs + charts", "Click a chart → drill-down modal", "Empty state when no data"] },
+            { num: "W3.D3", weekday: "Wed", name: "Filters + Interactivity", tasks: ["FilterBar on dashboard: date range, segment, dimension", "Filters apply reactively to all KPIs + charts", "Click a chart → drill down modal", "Empty state when no data"] },
             { num: "W3.D4", weekday: "Thu", name: "PDF Export", tasks: ["Install @react-pdf/renderer", "Build branded PDF template matching design system", "Export PDF button downloads dashboard", "Include KPI values + chart images + footer"] },
             { num: "W3.D5", weekday: "Fri", name: "Wireframe Mode", tasks: ["Build /wireframe/[template] route", "Gallery with 3 templates: Executive, Operational, Exploratory", "Each template shows static Figma-style mockup", "Download as PNG or PDF"] },
             { num: "W3.D6", weekday: "Sat", name: "States + Error Handling", tasks: ["Skeleton loaders for dashboard", "Empty state for no data match", "Error boundary for Recharts failures", "Toast notifications for user actions"] },
@@ -2105,7 +2111,7 @@
             { num: "W4.D4", weekday: "Thu", name: "PDF visual fidelity", tasks: ["Switch PDF export from text-summary to canvas-based capture (html2canvas + jsPDF)", "PDF must look pixel-identical to the on-screen dashboard", "Preserve filter-aware behavior", "Test on all 6 datasets"] },
             { num: "W4.D5", weekday: "Fri", name: "Theme toggle + particle background", tasks: ["Study portfolio-site source for particle + theme implementation", "Build shared <ParticleBackground /> in @rishi/design-system", "Build shared <ThemeToggle /> in @rishi/design-system", "Wire both into dashboard-factory app layout", "Wire both into design-system-docs app layout", "Light-mode QA pass: every route, every component, contrast checks", "Re-run Lighthouse in light mode, ensure 90+ holds"] },
             { num: "W4.D6", weekday: "Sat", name: "Dashboard depth (growth %, charts, filters)", tasks: ["Period-over-period split helper (median-date split, no fixture mutation)", "Add growth % delta to each measure-based KPI", "Add heatmap chart type (CSS-grid time-bucket × dim matrix, monthly/yearly bucketing by span)", "Add scatter chart type (Recharts ScatterChart, 100-point cap, custom tooltip)", "Add multi-select filter primitive (popover + cmdk check-list)", "Add date-range picker (popover + 2× HTML5 date inputs + preset chips)"] },
-            { num: "W4.D7", weekday: "Sun", name: "Dashboard uniqueness (per-domain layouts)", tasks: ["Funnel chart type (CSS-only, dim-based + measure-aggregated variants)", "Histogram chart type (Recharts BarChart, Sturges' rule bin count)", "Per-domain layout overrides (lib/per-domain-layout.ts) for all 6 datasets", "Multi-tab drill-down dialog (Tabs primitive wrapping the existing Dialog)", "Summary stats tab (per-measure stats table + per-dim top-3)", "Distribution tab (histogram of primary measure within drilled subset)", "Cross-dataset 1440px QA — uncovered heatmap-sort hotfix (ba65326)"] }
+            { num: "W4.D7", weekday: "Sun", name: "Dashboard uniqueness (per-domain layouts)", tasks: ["Funnel chart type (CSS-only, dim-based + measure-aggregated variants)", "Histogram chart type (Recharts BarChart, Sturges' rule bin count)", "Per-domain layout overrides (lib/per-domain-layout.ts) for all 6 datasets", "Multi-tab drill down dialog (Tabs primitive wrapping the existing Dialog)", "Summary stats tab (per-measure stats table + per-dim top-3)", "Distribution tab (histogram of primary measure within drilled subset)", "Cross-dataset 1440px QA. uncovered heatmap-sort hotfix (ba65326)"] }
           ],
           deliverables: ["All 6 dashboards have unique per-domain layouts", "Theme toggle live across portfolio apps", "Visual-fidelity PDF export", "Polished copy with no dashes or company-specific terms"]
         },
@@ -2119,9 +2125,8 @@
             { num: "W5.D2", weekday: "Tue", name: "6 new profiling fixtures", tasks: ["Hand-curate ~3KB profiling fixture per new dataset", "Reference real columns + observed patterns", "AI narrative voice consistent (no dashes)", "Each fixture recommends KPIs + chart layouts the wireframe engine will materialize"] },
             { num: "W5.D3", weekday: "Wed", name: "Data-driven wireframe template engine", tasks: ["Refactor wireframe rendering to be schema-driven", "One engine renders any dataset's structure", "Replace 3 hardcoded templates with the engine", "Old aesthetic preserved as one of 3 layout density modes"] },
             { num: "W5.D4", weekday: "Thu", name: "Export-to-Figma demo + final QA", tasks: ["Add Export to Figma CTA on each generated wireframe", "Click → Future-state page (Figma MCP + Claude integration story)", "Honest framing of manual-Figma reality", "Final cross-mode QA (ad-hoc + wireframe parallel structure)"] },
-            { num: "W5.D5", weekday: "Fri", name: "Case Study + Reframe (Loom skipped)", tasks: ["User scope call: skip Loom — doesn't add enough value for personal portfolio", "Write docs/case-studies/dashboard-factory.md (1,294 words, 9 sections)", "Wire caseStudyUrl in apps/dashboard-factory/portfolio.meta.json", "Refresh portfolioCard.problem/approach/impact strings to match case study framing"] },
-            { num: "W5.D6", weekday: "Sat", name: "Project 1 Close · v1.0-dashboard-factory tagged", tasks: ["Polish READMEs (root + apps/dashboard-factory) — cross-link to case study, reflect current product", "Cross-viewport visual QA via Playwright at 1440 / 1280 / 768 (zero overflow, funnel cones centered, zero console errors)", "Cat A tech debt: --color-accent RGB-triplet migration (a5efc9c) + visual regression baseline for Dialog (d028a40) + fresh Lighthouse audit (≥96 perf, ≥98 a11y, 100/100 BP+SEO)", "Cat B polish: resumeBullet text precision (e7bb441) + design-system-docs Dialog demo verified centered + annotated git tag v1.0-dashboard-factory pushed"] },
-            { num: "W5.D7", weekday: "Sun", name: "Automation Infrastructure (deferred to v2)", tasks: ["DEFERRED — automation infrastructure not blocking Project 1 close, scoped as v2 work alongside the Cat C future-work items", "Push rishigundla/resume-builder to GitHub (deferred)", "Build scripts/sync-deployed.ts (deferred)", "Build .github/workflows/sync-portfolio.yml (deferred)", "Will revisit with Project 2 or as part of a dedicated automation sprint"] }
+            { num: "W5.D5", weekday: "Fri", name: "Case Study + Reframe (Loom skipped)", tasks: ["User scope call: skip Loom. does not add enough value for personal portfolio", "Write docs/case studies/dashboard-factory.md (1,294 words, 9 sections)", "Wire caseStudyUrl in apps/dashboard-factory/portfolio.meta.json", "Refresh portfolioCard.problem/approach/impact strings to match case study framing"] },
+            { num: "W5.D6", weekday: "Sat", name: "Project 1 Close · v1.0-dashboard-factory tagged", tasks: ["Polish READMEs (root + apps/dashboard-factory). cross-link to case study, reflect current product", "Cross-viewport visual QA via Playwright at 1440 / 1280 / 768 (zero overflow, funnel cones centered, zero console errors)", "Cat A tech debt: --color-accent RGB-triplet migration (a5efc9c) + visual regression baseline for Dialog (d028a40) + fresh Lighthouse audit (≥96 perf, ≥98 a11y, 100/100 BP+SEO)", "Cat B polish: resumeBullet text precision (e7bb441) + design-system-docs Dialog demo verified centered + annotated git tag v1.0-dashboard-factory pushed"] }
           ],
           deliverables: ["6 new wireframe-mode datasets (different verticals from ad-hoc mode)", "Data-driven wireframe engine replacing hardcoded templates", "5 production-feedback UX fixes from W5.D4.x saga (transparent bg-accent, funnel cone shape, Dialog centering)", "Case study at docs/case-studies/dashboard-factory.md (1,294 words)", "Project 1 SHIPPED v1.0-dashboard-factory (Cat A tech debt + Cat B polish all closed)", "Lighthouse desktop ≥96 perf / ≥98 a11y / 100/100 BP+SEO across 6 demo routes", "Visual regression test suite baseline for Dialog primitive", "Loom video & automation infrastructure deferred — captured in case study + v2 backlog"]
         },
@@ -2132,12 +2137,12 @@
           goal: "Scaffold the app, ship fixtures + library + streaming narrative panel, hand off to deck rendering in W7",
           days: [
             { num: "W6.D1", weekday: "Mon", name: "App scaffold (Next.js 15, design-system wired)", tasks: ["Create apps/narrative-generator/ with package.json + next.config + tailwind preset + tsconfig + postcss + .gitignore", "App shell: layout.tsx (root layout matching dashboard-factory pattern), globals.css, Nav component", "Stub the 4 route surfaces: / (home), /dashboards (gallery), /generate/[slug] (streaming), /deck/[slug] (deck preview)", "portfolio.meta.json skeleton with empty liveUrl/caseStudyUrl/deployedAt slots + resumeBullet + portfolioCard wording", "Build verified: 5 routes, 3 static + 2 dynamic, 105 kB First Load JS"] },
-            { num: "W6.D2", weekday: "Tue", name: "Vercel deploy + Lighthouse smoke", tasks: ["Create Vercel project via CLI: vercel link --project ai-portfolio-narrative-generator", "Connect to GitHub repo for auto-deploys on push", "Set Root Directory = apps/narrative-generator via REST API (CLI doesn't expose it)", "Deploy from monorepo root — production URL alive at ai-portfolio-narrative-generator.vercel.app", "Lighthouse desktop sweep across 4 routes (home 100/98/96/100, /dashboards 100/100/96/100, dynamic routes 100/100/96/90)", "Update portfolio.meta.json with liveUrl + deployedAt 2026-05-15 + README live link"] },
-            { num: "W6.D3", weekday: "Wed", name: "Sample dashboard fixtures + loaders + gallery wired", tasks: ["6 dashboard JSON fixtures authored (revops/marketing/ops/finance/hr/cx) — each 5 KPIs + 3 charts + sample rows, ~120 lines", "index.json manifest with title, tagline, domain, colorToken, icon, thumbnail, KPI/chart/row counts per dashboard", "lib/dashboards.ts (manifest-only, ~6 kB) + lib/full-dashboards.ts (static-imports the 6 JSONs, tree-shaken per route) — same split pattern as Project 1", "/dashboards renders 6 real cards in 3-column grid; /generate/[slug] + /deck/[slug] add generateStaticParams to prerender all 6 slugs — 16 routes total prerendered (was 5)"] },
-            { num: "W6.D4", weekday: "Thu", name: "Narrative fixtures + streaming panel wired", tasks: ["6 narrative JSON fixtures authored, each ~3 KB exec-readout voice with 5 markdown sections (Headline / What moved / So what / Talking points / Risks)", "lib/narratives.ts loader: static-imports 6 JSONs, exports getNarrativeFixture + NARRATIVE_SECTIONS metadata + heading-marker constants", "_streaming-panel.tsx client component using @rishi/ai-core replayFixture + @rishi/design-system AiNarrativeBlock — 5-step progress strip, Cancel/Replay buttons, Generate-deck CTA after completion", "/generate/[slug] page wired: loads dashboard + narrative fixture, passes to <StreamingPanel>, 404 on unknown slug", "Production-verified via Playwright at /generate/marketing-q3-performance: streaming indicator, cancel button, 5-step progress strip, AiNarrativeBlock all rendering"] },
-            { num: "W6.D5", weekday: "Fri", name: "/deck/[slug] preview wired end-to-end", tasks: ["lib/parse-narrative.ts markdown-section parser (parseNarrativeSections + extractBullets), no remark/unified at module level", "_slide-preview.tsx 7-slide server component (Title / Headline / What moved / So what / Talking points / Risks / Closing recap), 16:9 themed cards, formatKpiValue helper", "_pptx-modal.tsx Radix Dialog stub mirroring Project 1's Figma future-state modal — 'Download PPTX' CTA + W7.D1 explanation", "/deck/[slug] page wired with getFullDashboard + getNarrativeFixture, react-markdown + remark-gfm added to deps, build clean at 14.2 kB / 127 kB First Load"] },
-            { num: "W6.D6", weekday: "Sat", name: "Cross-viewport QA + Lighthouse + polish", tasks: ["Cross-viewport Playwright sweep at 1440/1280/768 across all 4 routes — no overflow, 7 slides hold 16:9 at all widths, closing-recap KPI strip fits at 768 tablet", "Fresh Lighthouse desktop audit on 4 routes — found 3 issues: favicon 404 (BP 96), card-footer text-text-dim contrast (a11y 94 on /dashboards), H1 → H3 heading-order skip", "Polish commit 65f0806 — added app/icon.tsx + app/apple-icon.tsx (NG wordmark on teal gradient), card footer text-text-muted, card title h3 → h2", "Re-audit confirms 100/100/100/100 on 3 of 4 routes; home 98/98/100/100 (run-to-run perf variance). Project 2 meets Project 1's Lighthouse baseline."] },
-            { num: "W6.D7", weekday: "Sun", name: "Narrative → Deck handoff stub", tasks: ["When streaming completes, enable 'Generate deck' CTA on /generate/[slug]", "/deck/[slug] receives the narrative + dashboard fixture, renders a static slide preview (no PPTX export yet — that's W7.D2)", "Slide preview uses design-system tokens: title slide, hero metric slide, per-bullet slides", "Smoke test: every dashboard → narrative → deck preview round-trip works"] }
+            { num: "W6.D2", weekday: "Tue", name: "Vercel deploy + Lighthouse smoke", tasks: ["Create Vercel project via CLI: vercel link --project ai-portfolio-narrative-generator", "Connect to GitHub repo for auto-deploys on push", "Set Root Directory = apps/narrative-generator via REST API (CLI does not expose it)", "Deploy from monorepo root. production URL alive at ai-portfolio-narrative-generator.vercel.app", "Lighthouse desktop sweep across 4 routes (home 100/98/96/100, /dashboards 100/100/96/100, dynamic routes 100/100/96/90)", "Update portfolio.meta.json with liveUrl + deployedAt 2026-05-15 + README live link"] },
+            { num: "W6.D3", weekday: "Wed", name: "Sample dashboard fixtures + loaders + gallery wired", tasks: ["6 dashboard JSON fixtures authored (revops/marketing/ops/finance/hr/cx). each 5 KPIs + 3 charts + sample rows, ~120 lines", "index.json manifest with title, tagline, domain, colorToken, icon, thumbnail, KPI/chart/row counts per dashboard", "lib/dashboards.ts (manifest-only, ~6 kB) + lib/full-dashboards.ts (static-imports the 6 JSONs, tree-shaken per route). same split pattern as Project 1", "/dashboards renders 6 real cards in 3-column grid. /generate/[slug] + /deck/[slug] add generateStaticParams to prerender all 6 slugs. 16 routes total prerendered (was 5)"] },
+            { num: "W6.D4", weekday: "Thu", name: "Narrative fixtures + streaming panel wired", tasks: ["6 narrative JSON fixtures authored, each ~3 KB exec readout voice with 5 markdown sections (Headline / What moved / So what / Talking points / Risks)", "lib/narratives.ts loader: static-imports 6 JSONs, exports getNarrativeFixture + NARRATIVE_SECTIONS metadata + heading-marker constants", "_streaming-panel.tsx client component using @rishi/ai-core replayFixture + @rishi/design-system AiNarrativeBlock. 5-step progress strip, Cancel/Replay buttons, Generate-deck CTA after completion", "/generate/[slug] page wired: loads dashboard + narrative fixture, passes to <StreamingPanel>, 404 on unknown slug", "Production-verified via Playwright at /generate/marketing-q3-performance: streaming indicator, cancel button, 5-step progress strip, AiNarrativeBlock all rendering"] },
+            { num: "W6.D5", weekday: "Fri", name: "/deck/[slug] preview wired end to end", tasks: ["lib/parse-narrative.ts markdown-section parser (parseNarrativeSections + extractBullets), no remark/unified at module level", "_slide-preview.tsx 7-slide server component (Title / Headline / What moved / So what / Talking points / Risks / Closing recap), 16:9 themed cards, formatKpiValue helper", "_pptx-modal.tsx Radix Dialog stub mirroring Project 1's Figma future-state modal. 'Download PPTX' CTA + W7.D1 explanation", "/deck/[slug] page wired with getFullDashboard + getNarrativeFixture, react-markdown + remark-gfm added to deps, build clean at 14.2 kB / 127 kB First Load"] },
+            { num: "W6.D6", weekday: "Sat", name: "Cross-viewport QA + Lighthouse + polish", tasks: ["Cross-viewport Playwright sweep at 1440/1280/768 across all 4 routes. no overflow, 7 slides hold 16:9 at all widths, closing-recap KPI strip fits at 768 tablet", "Fresh Lighthouse desktop audit on 4 routes. found 3 issues: favicon 404 (BP 96), card-footer text-text-dim contrast (a11y 94 on /dashboards), H1 → H3 heading-order skip", "Polish commit 65f0806. added app/icon.tsx + app/apple-icon.tsx (NG wordmark on teal gradient), card footer text-text-muted, card title h3 → h2", "Re-audit confirms 100/100/100/100 on 3 of 4 routes. home 98/98/100/100 (run-to-run perf variance). Project 2 meets Project 1's Lighthouse baseline."] },
+            { num: "W6.D7", weekday: "Sun", name: "Narrative → Deck handoff stub", tasks: ["When streaming completes, enable 'Generate deck' CTA on /generate/[slug]", "/deck/[slug] receives the narrative + dashboard fixture, renders a static slide preview (no PPTX export yet. that is W7.D2)", "Slide preview uses design-system tokens: title slide, hero metric slide, per bullet slides", "Smoke test: every dashboard → narrative → deck preview round-trip works"] }
           ],
           deliverables: ["apps/narrative-generator/ scaffold (commit: W6.D1)", "Vercel project live (W6.D2)", "6 dashboard fixtures + 6 narrative fixtures (W6.D3-D4)", "Gallery + streaming narrative panel (W6.D5-D6)", "Narrative → Deck preview round-trip (W6.D7)"]
         },
@@ -2149,13 +2154,13 @@
           name: "Week 7 — Project 2 Polish, PPTX export, deploy, close",
           goal: "PPTX export wired, Lighthouse green across routes, case study shipped, v1.0-narrative-generator tagged",
           days: [
-            { num: "W7.D1", weekday: "Mon", name: "PPTX export wired end-to-end via pptxgenjs", tasks: ["pptxgenjs dep + lib/format-kpi.ts extraction (formatKpiValue + formatKpiDelta + HEX_BY_TOKEN now shared between on-screen preview and PPTX builder)", "lib/build-pptx.ts (~330 lines): 7 slide builders mirroring _slide-preview.tsx, LAYOUT_WIDE 16:9, Space Grotesk + JetBrains Mono typography, themed accent color via colorToken, flattenMarkdown helper", "app/api/deck/[slug]/route.ts: GET handler, runtime='nodejs' (pptxgenjs needs Buffer + zip), dynamic='force-static' + generateStaticParams over 6 slugs (PPTX bytes prerender at build time, served from cache)", "_pptx-modal.tsx rewritten from Radix Dialog stub to plain <a href download> — /deck/[slug] drops 14.2 kB → 167 B First Load JS (now pure server component). 24 prerendered routes, was 18."] },
-            { num: "W7.D2", weekday: "Tue", name: "PPTX visual QA + Lighthouse re-audit (no regression)", tasks: ["Download all 6 PPTXs from /api/deck/<slug>: HTTP 200, valid PPTX MIME, 109-114 KB each, ZIP magic PK\\x03\\x04 confirmed, 7 slides per archive", "Slide XML content audit: hero KPI values + subtext callouts + narrative prose + 5 numbered talking-point bullets + 5-KPI closing-recap strip all verified across fixtures. flattenMarkdown audit: 0 markdown leaks (literal **) across 42 slide XMLs", "Lighthouse re-audit: home 99/98/100/100, /dashboards 100/100/100/100, /generate/[slug] 100/100/100/100, /deck/[slug] 100/100/100/100 — /deck/[slug] held perfect 100 after W7.D1 modal-to-anchor 14.2 kB → 167 B reduction. No polish items needed."] },
-            { num: "W7.D3", weekday: "Wed", name: "README polish + portfolio metadata finalization", tasks: ["apps/narrative-generator/README.md rewritten from scratch — Production · v1.0 in flight header, three-step product pitch, routes table with First Load JS + Lighthouse scores, ASCII architecture diagram with Shared/Unique-to-Project-2 callouts, Vercel CLI rootDirectory + REST API gotcha documented", "Root README.md flipped Project 2 row to 'Live · case study W7.D4', status line refreshed to 'Project 2 v1.0 in flight · 201/172 tasks', live demos list adds Project 2", "apps/narrative-generator/portfolio.meta.json refined: description tightened (drop vestigial 'PDF' framing), resumeBullet names the actual shipped surface (5-section narrative + 7-slide PPTX via pptxgenjs + 6 domains), portfolioCard.approach updated to 'Three-step factory sharing engine with Project 1', portfolioCard.impact adds Lighthouse + 167 B First Load signals"] },
-            { num: "W7.D4", weekday: "Thu", name: "Narrative Generator case study shipped", tasks: ["docs/case-studies/narrative-generator.md written (1,570 words, 9 sections, mirrors Project 1 case study voice + structure)", "Sections cover problem, three-step approach, architecture diagram, 4 key decisions (pptxgenjs/flattenMarkdown/modal-to-anchor/force-static), 3 engineering moments (Vercel CLI rootDirectory/Lighthouse a11y regression/14.2kB→167B reduction), lessons, future work", "caseStudyUrl wired in portfolio.meta.json, portfolioCard.impact refined to name the engineering moments, W7.D4 forward-references swept from READMEs"] },
-            { num: "W7.D5", weekday: "Fri", name: "Project 2 SHIPPED v1.0 + Cat A/B/C audit + tag", tasks: ["Project 2 — Pending Follow-ups section added to master-plan.md with Cat A (flattenMarkdown rich-text upgrade, Lighthouse-in-CI shared infra) / Cat B (font embedding, OG thumbnail, modal rename) / Cat C (dynamic dashboards, ML narrative, multi-format export, custom domain)", "Phase Progress Overview Project 2 row flipped to '✅ Shipped v1.0' with tag + case-study + live links; status surfaces (Phase / Week / Day / Status / Next Action / Blockers / Progress) all updated to close state; status row collapsed from ~2,000 chars of accumulated history to a clean close-state summary", "Annotated git tag v1.0-narrative-generator pushed to origin with full release notes (production URL, 14-day shipping arc, 4-route product surface, PPTX endpoint design, Lighthouse 100/100/100/100 on 3 routes, the three engineering moments, Cat A/B/C close-state)"] },
-            { num: "W7.D6", weekday: "Sat", name: "Project 2 v1.0 tag + close", tasks: ["Annotated git tag v1.0-narrative-generator at the final commit with full release notes", "Cat A / Cat B / Cat C audit (mirrors Project 1's pending-follow-ups pattern)", "Update master-plan.md Phase Progress Overview: Project 2 row flipped to Shipped v1.0"] },
-            { num: "W7.D7", weekday: "Sun", name: "Phase 2 wrap + Phase 3 prep", tasks: ["Buffer day for any spillover", "Lessons-learned note in master-plan activity log", "Preview Phase 3 (Sprint Intelligence) at Week 8"] }
+            { num: "W7.D1", weekday: "Mon", name: "PPTX export wired via pptxgenjs", tasks: ["Add pptxgenjs dependency", "Extract format-kpi.ts helpers shared with the preview", "Build lib/build-pptx.ts with seven slide builders", "Wire /api/deck/[slug] route handler", "Swap _pptx-modal.tsx to a plain a href download"] },
+            { num: "W7.D2", weekday: "Tue", name: "PPTX visual QA and Lighthouse re audit", tasks: ["Download and ZIP magic verify all six PPTXs", "Audit slide XML for KPI values and narrative integrity", "Lighthouse re audit across the four routes", "Confirm /deck/[slug] holds 100 across the board"] },
+            { num: "W7.D3", weekday: "Wed", name: "README polish and portfolio metadata", tasks: ["Rewrite apps/narrative-generator/README.md", "Flip the Project 2 row to Live in the root README", "Refine portfolio.meta.json portfolioCard wording", "Refresh the live demos list"] },
+            { num: "W7.D4", weekday: "Thu", name: "Narrative Generator case study", tasks: ["Write docs/case studies/narrative-generator.md", "Wire caseStudyUrl in portfolio.meta.json", "Refine portfolioCard.impact to name the engineering moments", "Sweep W7.D4 forward references from READMEs"] },
+            { num: "W7.D5", weekday: "Fri", name: "Project 2 SHIPPED v1.0 and Cat A B C audit", tasks: ["Add Project 2 Pending Follow ups section to master plan", "Flip Project 2 row to Shipped v1.0 in Phase Progress Overview", "Refresh status surfaces to the close state", "Push annotated git tag v1.0-narrative-generator"] },
+            { num: "W7.D6", weekday: "Sat", name: "Post v1.0 polish and plan website hardening", tasks: ["Production UX fixes from the v1.0 review", "Richer PPTX deck with leadership grade insights", "Writing style sweep across fixtures and the builder", "Plan website sync hook plus repo CLAUDE.md"] },
+            { num: "W7.D7", weekday: "Sun", name: "Phase 2 wrap and Phase 3 prep", tasks: ["Buffer day for any spillover", "Lessons learned note in the master plan activity log", "Preview Phase 3 Sprint Intelligence at Week 8"] }
           ],
           deliverables: ["PPTX export wired across 6 dashboards", "All routes Lighthouse green (≥95 perf)", "Case study published at docs/case-studies/narrative-generator.md", "Project 2 v1.0 tagged + portfolio metadata finalized"]
         },
@@ -2251,7 +2256,7 @@
           name: "Week 14 — Project 5 Core Build",
           goal: "Failure gallery + streaming diagnosis + PySpark patch display",
           days: [
-            { num: "W14.D1", weekday: "Mon", name: "App Scaffold + Scenarios", tasks: ["Create apps/pipeline-healer/", "SCHEMA_DRIFT (Informatica rename — Q14)", "NULL_EXPLOSION", "DATA_SKEW (partition imbalance — Q17)", "TYPE_MISMATCH", "RESOURCE_LIMIT (OOM)", "LOGIC_ERROR", "DEPENDENCY_FAIL", "FILE_CORRUPT"] },
+            { num: "W14.D1", weekday: "Mon", name: "App Scaffold + Scenarios", tasks: ["Create apps/pipeline-healer/", "SCHEMA_DRIFT (Informatica rename. Q14)", "NULL_EXPLOSION", "DATA_SKEW (partition imbalance. Q17)", "TYPE_MISMATCH", "RESOURCE_LIMIT (OOM)", "LOGIC_ERROR", "DEPENDENCY_FAIL", "FILE_CORRUPT"] },
             { num: "W14.D2", weekday: "Tue", name: "Scenario Gallery", tasks: ["Gallery with 8 scenario cards", "Card shows category, pipeline, timestamp, severity", "Click → /scenario/[slug]"] },
             { num: "W14.D3", weekday: "Wed", name: "Failure Detail View", tasks: ["Mock Spark driver logs (highlighted)", "Failing notebook code snippet", "Run history last 10 runs"] },
             { num: "W14.D4", weekday: "Thu", name: "Schema Diff Viz", tasks: ["Visual diff of schema (today vs last successful)", "Added/removed/renamed/type-changed highlighted"] },
@@ -2288,8 +2293,8 @@
             { num: "W16.D3", weekday: "Wed", name: "Loom", tasks: ["Record 90s video"] },
             { num: "W16.D4", weekday: "Thu", name: "Case Study + Automation", tasks: ["MDX", "Trigger sync, merge PRs"] },
             { num: "W16.D5", weekday: "Fri", name: "Final Portfolio Review", tasks: ["Click-test all 5 deployed apps", "Verify all cards on portfolio-site", "Verify resume PDF reflects 5 projects"] },
-            { num: "W16.D6", weekday: "Sat", name: "Monorepo Documentation", tasks: ["Update root README — all 5 live", "Portfolio overview video (optional 3-min tour)", "LinkedIn post draft"] },
-            { num: "W16.D7", weekday: "Sun", name: "Retrospective", tasks: ["Lessons learned document", "Plan next chapter (blog posts, talks)", "Tag Phase 5 complete — portfolio shipped"] }
+            { num: "W16.D6", weekday: "Sat", name: "Monorepo Documentation", tasks: ["Update root README. all 5 live", "Portfolio overview video (optional 3-min tour)", "LinkedIn post draft"] },
+            { num: "W16.D7", weekday: "Sun", name: "Retrospective", tasks: ["Lessons learned document", "Plan next chapter (blog posts, talks)", "Tag Phase 5 complete. portfolio shipped"] }
           ],
           deliverables: ["All 5 AI projects live on Vercel", "Portfolio-site has 5 new cards", "Resume has new Personal Projects category", "Monorepo publicly showcases the whole system"]
         }
@@ -2413,7 +2418,7 @@
         }
 
         return `
-          <div class="phase-card ${isActive ? 'active' : ''}">
+          <a href="#plan-phase-${phase.id}" class="phase-card ${isActive ? 'active' : ''}" onclick="return navigateToPhase(${phase.id})">
             <div class="phase-card-header">
               <span class="phase-num">${escapeHtml(phase.code)}</span>
               <span class="phase-status ${status}">${statusLabel}</span>
@@ -2427,7 +2432,7 @@
               <span>${pp.done} / ${pp.total} tasks</span>
               <span>${pct}%</span>
             </div>
-          </div>
+          </a>
         `;
       }).join('');
     }
@@ -2615,7 +2620,7 @@
         }).join('');
 
         return `
-          <div class="phase-block ${expanded ? 'expanded' : ''} ${isCurrentPhase ? 'active' : ''}">
+          <div class="phase-block ${expanded ? 'expanded' : ''} ${isCurrentPhase ? 'active' : ''}" id="plan-phase-${phaseId}">
             <div class="phase-block-header" onclick="togglePhase(this)">
               <div class="phase-block-title">
                 <span class="phase-block-num">${phaseInfo.code}</span>
@@ -2661,6 +2666,24 @@
 
     window.togglePhase = function(headerEl) {
       headerEl.parentElement.classList.toggle('expanded');
+    };
+
+    // Click handler for the current status phase tiles. Expands the
+    // matching phase block in the plan accordion before letting the
+    // anchor scroll the page to it, so the user lands on the open
+    // block rather than the closed header alone.
+    window.navigateToPhase = function(phaseId) {
+      const block = document.getElementById('plan-phase-' + phaseId);
+      if (block) {
+        block.classList.add('expanded');
+        const firstWeek = block.querySelector('.week-block');
+        if (firstWeek) firstWeek.classList.add('expanded');
+        requestAnimationFrame(() => {
+          block.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        return false;
+      }
+      return true;
     };
 
     window.toggleWeek = function(headerEl) {

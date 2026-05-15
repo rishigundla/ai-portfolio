@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Pre commit gate for the plan website. Runs the plan validator when
+# either of the canonical plan files is part of the staged change set.
+# Refuses the commit on any validation error so the website cannot
+# drift quietly. Bypass with `git commit --no-verify` if a fix is in
+# progress and you know what you are doing.
+
+set -euo pipefail
+
+if git diff --cached --name-only \
+    | grep -qE '^docs/(master-plan\.md|plan\.html)$'; then
+  python3 "$(git rev-parse --show-toplevel)/scripts/validate-plan.py" || {
+    echo ""
+    echo "Plan validation failed. See errors above."
+    echo "Bypass (not recommended): git commit --no-verify"
+    exit 1
+  }
+fi
