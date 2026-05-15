@@ -1362,6 +1362,10 @@ function shadeAccent(hex: string, mix: number): string {
 // Prose helpers
 // ============================================================
 
+// Retained for compatibility with any future caller that wants a hard
+// length budget on a prose body. Not currently invoked since every
+// prose slide moved to drawBulletList. Safe to remove if no slide
+// reintroduces a prose only layout.
 function condenseProse(body: string, maxChars: number): string {
   const cleaned = body.replace(/\r/g, '').trim()
   if (cleaned.length <= maxChars) return cleaned
