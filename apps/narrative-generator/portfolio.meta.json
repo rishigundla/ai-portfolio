@@ -3,7 +3,7 @@
   "title": "Dashboard-to-Deck Narrative Generator",
   "category": "AI",
   "tags": ["AI", "Narrative", "PPTX", "React", "Next.js", "Claude"],
-  "description": "Pick a sample dashboard PDF, watch Claude write the executive narrative, get a polished PPTX-ready deck. The other half of the BI workflow — turning visuals back into story.",
+  "description": "Pick a sample dashboard, watch Claude write the executive readout, download a themed 7-slide PPTX. The other half of the BI workflow — turning visuals back into story.",
   "thumbnail": "/projects/ai-narrative-generator.png",
   "liveUrl": "https://ai-portfolio-narrative-generator.vercel.app",
   "githubUrl": "https://github.com/rishigundla/ai-portfolio/tree/main/apps/narrative-generator",
@@ -12,11 +12,11 @@
   "deployedAt": "2026-05-15",
   "resumeBullet": {
     "category": "AI-Powered Analytics & Data Engineering Projects",
-    "text": "Built a Dashboard-to-Deck Narrative Generator on Next.js + Vercel — consumes sample BI dashboards, streams an AI-authored executive narrative explaining what the data means, and emits a polished PPTX-ready deck. Closes the loop on the BI workflow: dashboards out, stories back in."
+    "text": "Built a Dashboard-to-Deck Narrative Generator on Next.js + Vercel — consumes finished BI dashboards across six business domains, streams an AI-authored executive readout with a 5-section structure (headline / movement / so-what / talking points / risks), and emits a themed 7-slide PPTX via pptxgenjs. Shares the streaming primitive + design system with the Dashboard Factory; together they close the loop on the BI workflow."
   },
   "portfolioCard": {
     "problem": "Once a BI engineer ships a dashboard, the analyst's real work begins: writing the executive readout. Pulling the headline insight, drafting the bullet narrative, formatting a PPTX that survives the Monday review. This is the part nobody outsources well — vendor narrative tools generate generic captions, manual writing eats hours per week, and the dashboard-to-deck handoff is where insight quality gets lost.",
-    "approach": "Two-step factory mirroring the Project 1 pattern. (1) Pick a sample dashboard from a curated library, watch Claude stream the executive narrative live — hero metric, week-over-week movement, the contextual one-liner that explains why it matters. (2) Get a polished slide deck themed to the same design system, ready to download as PPTX or hand off to a designer. Same shared streaming primitive as Project 1, different output medium.",
-    "impact": "Analyst readout-writing time drops from hours to minutes. Narrative quality stays consistent because the AI works off the same hand-curated voice as Project 1's profiling fixtures. The deck is themed, accessible, and matches the company's design system out of the box — no separate template wrangling. See the case study (coming with v1.0) for architecture and engineering decisions."
+    "approach": "Three-step factory sharing its engine with Project 1. (1) Pick a sample dashboard from a curated library of six (RevOps, Marketing, Ops, Finance, HR, CX) — each a finished BI artifact with 5 KPIs + 3 charts + supporting rows. (2) Watch Claude stream the executive readout word-by-word, structured around 5 sections (Headline / What moved / So what / Talking points / Risks + caveats) that map 1:1 to slides. (3) Download a 7-slide PPTX themed to the dashboard's accent color, generated server-side by pptxgenjs and served as a static asset (built at compile time, cached at the CDN edge with Cache-Control: immutable). Streaming primitive (@rishi/ai-core/replayFixture) + AiNarrativeBlock + Dialog primitive all shared with Project 1 — zero code duplication.",
+    "impact": "Analyst readout-writing time drops from hours to minutes. Narrative quality stays consistent because the hand-curated narrative fixtures share the AI voice with Project 1's profiling fixtures. The downloaded PPTX is themed (Space Grotesk + JetBrains Mono typography, per-dashboard accent color, design-system palette) so the deck matches the company's brand out of the box — no separate template wrangling. Three of four routes ship at perfect Lighthouse 100/100/100/100, /deck/[slug] at 167 B First Load JS thanks to pure server-rendered slide preview. See the case study (W7.D4) for architecture, key decisions, and the Vercel-CLI-vs-monorepo deployment gotcha."
   }
 }

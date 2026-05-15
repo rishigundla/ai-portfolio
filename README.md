@@ -4,10 +4,11 @@
 > Built on Next.js + Vercel with a shared design system. Designed to complete the Senior BI Engineer → Data / Analytics Engineer transition.
 
 **Author**: Rishikesh Gundla — [rishikeshgundla.com](https://rishikeshgundla.com)
-**Status**: Phase 1 · Project 1 (Dashboard Factory) closing · 159 / 150 tasks · case study shipped
+**Status**: Phase 2 · Project 2 (Narrative Generator) v1.0 in flight · 201 / 172 tasks · Project 1 shipped v1.0, Project 2 case study lands W7.D4
 **Live demos**:
 - Project 0 (Design System) — [ai-portfolio-design-system-docs.vercel.app](https://ai-portfolio-design-system-docs.vercel.app)
 - Project 1 (Dashboard Factory) — [ai-portfolio-dashboard-factory.vercel.app](https://ai-portfolio-dashboard-factory.vercel.app) · [case study](./docs/case-studies/dashboard-factory.md)
+- Project 2 (Narrative Generator) — [ai-portfolio-narrative-generator.vercel.app](https://ai-portfolio-narrative-generator.vercel.app)
 
 **Plan**: [docs/master-plan.md](./docs/master-plan.md) · [docs/plan.html](./docs/plan.html) (interactive)
 
@@ -19,7 +20,7 @@
 |---|---------|--------------|--------|------|
 | 0 | [Design System Docs](./apps/design-system-docs/) | Showcase of tokens, primitives, AI components | **Live** | [link](https://ai-portfolio-design-system-docs.vercel.app) |
 | 1 | [Instant Analytics Dashboard Factory](./apps/dashboard-factory/) | Pick a sample dataset → streaming AI profiling → interactive dashboard | **Live** · [case study](./docs/case-studies/dashboard-factory.md) | [link](https://ai-portfolio-dashboard-factory.vercel.app) |
-| 2 | Dashboard-to-Deck Narrative Generator | Sample dashboard PDF → AI narrative → polished PPTX | Not started | — |
+| 2 | [Dashboard-to-Deck Narrative Generator](./apps/narrative-generator/) | Sample dashboard → streaming AI readout → themed PPTX download | **Live** · case study W7.D4 | [link](https://ai-portfolio-narrative-generator.vercel.app) |
 | 3 | Smart Metric Anomaly Alerting | Curated anomalies → AI root-cause narration with correlation analysis | Not started | — |
 | 4 | AI Sprint Intelligence Dashboard | Synthetic sprints → team + individual KPIs → AI meeting brief | Not started | — |
 | 5 | AI Pipeline Debugger & Self-Healer | PySpark failure scenarios → AI diagnosis + patch + mock Slack approval | Not started | — |
