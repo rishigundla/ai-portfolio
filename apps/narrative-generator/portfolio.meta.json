@@ -1,6 +1,6 @@
 {
   "slug": "narrative-generator",
-  "title": "Dashboard-to-Deck Narrative Generator",
+  "title": "Dashboard to Deck Narrative Generator",
   "category": "AI",
   "tags": ["AI", "Narrative", "PPTX", "React", "Next.js", "Claude"],
   "description": "Pick a sample dashboard, watch Claude write the executive readout, download a themed 7-slide PPTX. The other half of the BI workflow — turning visuals back into story.",

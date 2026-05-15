@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     template: '%s · Narrative Generator',
   },
   description:
-    'Pick a sample dashboard, watch Claude write the executive narrative, get a polished PPTX-ready deck. Built for analysts who spend hours writing readouts.',
+    'Pick a sample dashboard, watch Claude write the executive narrative, then download a polished deck as a PPTX file. Built for analysts who spend hours writing leadership readouts.',
   keywords: [
     'narrative generator',
     'AI',
@@ -56,13 +56,13 @@ export const metadata: Metadata = {
     siteName: 'Narrative Generator',
     title: 'Narrative Generator · AI Portfolio',
     description:
-      'Dashboard-to-Deck Narrative Generator. Pick a sample dashboard, get a polished AI-authored executive readout in PPTX form.',
+      'Dashboard to Deck Narrative Generator. Pick a sample dashboard, get a polished AI authored executive readout in PPTX form.',
     url: SITE_URL,
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Narrative Generator · AI Portfolio',
-    description: 'Dashboard-to-deck narratives in minutes, not hours. Powered by Claude + a unified design system.',
+    description: 'Dashboard to deck narratives in minutes, not hours. Powered by Claude and a unified design system.',
     creator: '@rishigundla',
   },
   formatDetection: {

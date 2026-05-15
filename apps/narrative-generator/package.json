@@ -2,7 +2,7 @@
   "name": "narrative-generator",
   "version": "0.1.0",
   "private": true,
-  "description": "Project 2 — Dashboard-to-Deck Narrative Generator. Pick a sample dashboard, watch Claude write the executive narrative, get a polished PPTX-ready deck.",
+  "description": "Project 2. Dashboard to Deck Narrative Generator. Pick a sample dashboard, watch Claude write the executive narrative, then download a polished deck as a PPTX file.",
   "scripts": {
     "dev": "next dev -p 3003",
     "build": "next build",
