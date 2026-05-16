@@ -1596,7 +1596,9 @@
         // Phase 3 · Week 9 · Day 1 (3 tasks - app scaffold, 4 sprint JSONs, manifest)
         "9-W9.D1-0", "9-W9.D1-1", "9-W9.D1-2",
         // Phase 3 · Week 9 · Day 2 (4 tasks - manifest loader, full sprint loader, gallery, dashboard shell)
-        "9-W9.D2-0", "9-W9.D2-1", "9-W9.D2-2", "9-W9.D2-3"
+        "9-W9.D2-0", "9-W9.D2-1", "9-W9.D2-2", "9-W9.D2-3",
+        // Phase 3 · Week 9 · Day 3 (4 tasks - burndown chart, velocity bar, status donut, blocked card)
+        "9-W9.D3-0", "9-W9.D3-1", "9-W9.D3-2", "9-W9.D3-3"
       ],
 
       phases: [
@@ -1609,6 +1611,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-05-18",
+          title: "📊 W9.D3 - Sprint Intelligence team KPI cards live",
+          desc: "Team level KPIs rendered. Four cards inside the Team KPIs section, two by two grid on the sprint detail page, every chart drawn from real fixture data. lib/kpi-calc.ts is the pure function module that converts a SprintFixture into the shapes each card needs. computeStatusDistribution groups tickets across done, in review, in progress, to do, and blocked with story point totals per bucket. computeVelocityComparison reads the velocity and fourSprintBaseline fields from the fixture and returns current versus baseline plus a delta percent and a beat flag. computeBlockedSummary filters status equals blocked, sums the story points, and exposes the freshest blockerNote plus an oldest age estimate. buildBurndownPoints zips ideal and actual arrays into day numbered points. Each sprint fixture now carries a burndown series, currentDay marker for the in flight sprint, fourSprintBaseline, and velocity field. Sprint 42 healthy at 67 SP versus a 58 SP baseline. Sprint 43 scope creep at 73 SP versus 60. Sprint 44 blocked at 41 SP versus 63. Sprint 45 in flight at 34 SP through day eight versus 60. Four card components live under app/sprint/[id]/_components/. BurndownChart draws an inline SVG with an ideal dashed line, an actual solid line, dots on each actual data point, and a current day vertical guide for the in flight sprint. VelocityBar stacks current and baseline bars with width proportional to capacity plus a colored delta line at the foot of the card. StatusDonut renders five arcs with the blocked segment forced to a rose tone so a stalled sprint pops out at a glance. BlockedCard handles both the all clear state (big green zero with a satisfied subtext) and the stalled state (count plus story points plus oldest age in days plus the freshest blockerNote). A KpiCard layout primitive wraps each chart with eyebrow, title, and subtitle so the dashboard reads as a coherent grid. /sprint/[id] page now passes the fixture through the calc helpers and into the cards. The W9.D2 placeholder grid is gone. BUILD CLEAN: nine routes prerendered, 102 kB First Load JS shared, four sprint pages all SSG.",
+          next: "W9.D4 - More KPIs and trends. Cycle time trend line, throughput per week bar, scope creep tracker (planned versus final), and carryover rate. Add a second KPI row below the existing four card grid."
+        },
         {
           date: "2026-05-17",
           title: "🧭 W9.D2 - Sprint Intelligence gallery, dashboard shell, typed loaders",

@@ -12,27 +12,346 @@
   "scopePlanned": 22,
   "scopeFinal": 22,
   "tickets": [
-    { "id": "ENG-1042", "title": "Dashboard hero redesign with new KPI strip", "type": "story", "assignee": "eng-1", "status": "done", "priority": "P1", "estimate": 5, "labels": ["frontend", "design"], "addedMidSprint": false },
-    { "id": "ENG-1043", "title": "Dashboard filter bar refactor with multi select", "type": "story", "assignee": "eng-1", "status": "done", "priority": "P1", "estimate": 5, "labels": ["frontend"], "addedMidSprint": false },
-    { "id": "ENG-1044", "title": "New auth flow with magic link signup", "type": "story", "assignee": "eng-2", "status": "done", "priority": "P1", "estimate": 8, "labels": ["backend", "auth"], "addedMidSprint": false },
-    { "id": "ENG-1045", "title": "Magic link email template and copy review", "type": "task", "assignee": "eng-6", "status": "done", "priority": "P2", "estimate": 3, "labels": ["frontend", "design"], "addedMidSprint": false },
-    { "id": "ENG-1046", "title": "Magic link rate limiting and abuse guard", "type": "task", "assignee": "eng-2", "status": "done", "priority": "P1", "estimate": 3, "labels": ["backend", "security"], "addedMidSprint": false },
-    { "id": "ENG-1047", "title": "Chart legend overflow on narrow viewports", "type": "bug", "assignee": "eng-3", "status": "done", "priority": "P2", "estimate": 2, "labels": ["frontend"], "addedMidSprint": false },
-    { "id": "ENG-1048", "title": "Search index spike for v2 filters", "type": "spike", "assignee": "eng-3", "status": "done", "priority": "P2", "estimate": 3, "labels": ["backend", "research"], "addedMidSprint": false },
-    { "id": "ENG-1049", "title": "Stripe webhook signature retry behavior", "type": "bug", "assignee": "eng-4", "status": "done", "priority": "P1", "estimate": 3, "labels": ["backend", "payments"], "addedMidSprint": false },
-    { "id": "ENG-1050", "title": "Drill down dialog focus trap accessibility fix", "type": "bug", "assignee": "eng-4", "status": "done", "priority": "P2", "estimate": 2, "labels": ["frontend", "a11y"], "addedMidSprint": false },
-    { "id": "ENG-1051", "title": "Drill down dialog ARIA labels and live region", "type": "task", "assignee": "eng-4", "status": "done", "priority": "P2", "estimate": 2, "labels": ["frontend", "a11y"], "addedMidSprint": false },
-    { "id": "ENG-1052", "title": "Cohort retention chart for dashboard tab two", "type": "story", "assignee": "eng-8", "status": "done", "priority": "P2", "estimate": 5, "labels": ["frontend", "data"], "addedMidSprint": false },
-    { "id": "ENG-1053", "title": "Backend query for cohort retention data", "type": "task", "assignee": "eng-8", "status": "done", "priority": "P2", "estimate": 5, "labels": ["backend", "data"], "addedMidSprint": false },
-    { "id": "ENG-1054", "title": "Dashboard PDF export header refresh", "type": "task", "assignee": "eng-6", "status": "done", "priority": "P2", "estimate": 2, "labels": ["frontend"], "addedMidSprint": false },
-    { "id": "ENG-1055", "title": "Cohort retention SQL performance pass", "type": "task", "assignee": "eng-8", "status": "done", "priority": "P2", "estimate": 3, "labels": ["backend", "data", "performance"], "addedMidSprint": false },
-    { "id": "ENG-1056", "title": "Light mode contrast audit and fixes", "type": "task", "assignee": "eng-5", "status": "done", "priority": "P2", "estimate": 3, "labels": ["frontend", "a11y", "design"], "addedMidSprint": false },
-    { "id": "ENG-1057", "title": "Light mode keyboard focus ring styling", "type": "task", "assignee": "eng-5", "status": "done", "priority": "P2", "estimate": 2, "labels": ["frontend", "a11y"], "addedMidSprint": false },
-    { "id": "ENG-1058", "title": "Engineering manager review of release notes", "type": "task", "assignee": "eng-7", "status": "done", "priority": "P2", "estimate": 2, "labels": ["docs"], "addedMidSprint": false },
-    { "id": "ENG-1059", "title": "Notifications service P99 latency dashboard", "type": "task", "assignee": "eng-7", "status": "done", "priority": "P2", "estimate": 3, "labels": ["infra", "observability"], "addedMidSprint": false },
-    { "id": "ENG-1060", "title": "P2 backlog burndown sweep, batch one of two", "type": "task", "assignee": "eng-3", "status": "done", "priority": "P2", "estimate": 3, "labels": ["maintenance"], "addedMidSprint": false },
-    { "id": "ENG-1061", "title": "P2 backlog burndown sweep, batch two of two", "type": "task", "assignee": "eng-6", "status": "done", "priority": "P2", "estimate": 3, "labels": ["maintenance"], "addedMidSprint": false },
-    { "id": "ENG-1062", "title": "Onboarding empty state copy refresh", "type": "task", "assignee": "eng-5", "status": "todo", "priority": "P3", "estimate": 2, "labels": ["frontend", "design"], "addedMidSprint": false },
-    { "id": "ENG-1063", "title": "Onboarding empty state illustration swap", "type": "task", "assignee": "eng-5", "status": "todo", "priority": "P3", "estimate": 3, "labels": ["frontend", "design"], "addedMidSprint": false }
-  ]
+    {
+      "id": "ENG-1042",
+      "title": "Dashboard hero redesign with new KPI strip",
+      "type": "story",
+      "assignee": "eng-1",
+      "status": "done",
+      "priority": "P1",
+      "estimate": 5,
+      "labels": [
+        "frontend",
+        "design"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1043",
+      "title": "Dashboard filter bar refactor with multi select",
+      "type": "story",
+      "assignee": "eng-1",
+      "status": "done",
+      "priority": "P1",
+      "estimate": 5,
+      "labels": [
+        "frontend"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1044",
+      "title": "New auth flow with magic link signup",
+      "type": "story",
+      "assignee": "eng-2",
+      "status": "done",
+      "priority": "P1",
+      "estimate": 8,
+      "labels": [
+        "backend",
+        "auth"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1045",
+      "title": "Magic link email template and copy review",
+      "type": "task",
+      "assignee": "eng-6",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "frontend",
+        "design"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1046",
+      "title": "Magic link rate limiting and abuse guard",
+      "type": "task",
+      "assignee": "eng-2",
+      "status": "done",
+      "priority": "P1",
+      "estimate": 3,
+      "labels": [
+        "backend",
+        "security"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1047",
+      "title": "Chart legend overflow on narrow viewports",
+      "type": "bug",
+      "assignee": "eng-3",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 2,
+      "labels": [
+        "frontend"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1048",
+      "title": "Search index spike for v2 filters",
+      "type": "spike",
+      "assignee": "eng-3",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "backend",
+        "research"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1049",
+      "title": "Stripe webhook signature retry behavior",
+      "type": "bug",
+      "assignee": "eng-4",
+      "status": "done",
+      "priority": "P1",
+      "estimate": 3,
+      "labels": [
+        "backend",
+        "payments"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1050",
+      "title": "Drill down dialog focus trap accessibility fix",
+      "type": "bug",
+      "assignee": "eng-4",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 2,
+      "labels": [
+        "frontend",
+        "a11y"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1051",
+      "title": "Drill down dialog ARIA labels and live region",
+      "type": "task",
+      "assignee": "eng-4",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 2,
+      "labels": [
+        "frontend",
+        "a11y"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1052",
+      "title": "Cohort retention chart for dashboard tab two",
+      "type": "story",
+      "assignee": "eng-8",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 5,
+      "labels": [
+        "frontend",
+        "data"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1053",
+      "title": "Backend query for cohort retention data",
+      "type": "task",
+      "assignee": "eng-8",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 5,
+      "labels": [
+        "backend",
+        "data"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1054",
+      "title": "Dashboard PDF export header refresh",
+      "type": "task",
+      "assignee": "eng-6",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 2,
+      "labels": [
+        "frontend"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1055",
+      "title": "Cohort retention SQL performance pass",
+      "type": "task",
+      "assignee": "eng-8",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "backend",
+        "data",
+        "performance"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1056",
+      "title": "Light mode contrast audit and fixes",
+      "type": "task",
+      "assignee": "eng-5",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "frontend",
+        "a11y",
+        "design"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1057",
+      "title": "Light mode keyboard focus ring styling",
+      "type": "task",
+      "assignee": "eng-5",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 2,
+      "labels": [
+        "frontend",
+        "a11y"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1058",
+      "title": "Engineering manager review of release notes",
+      "type": "task",
+      "assignee": "eng-7",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 2,
+      "labels": [
+        "docs"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1059",
+      "title": "Notifications service P99 latency dashboard",
+      "type": "task",
+      "assignee": "eng-7",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "infra",
+        "observability"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1060",
+      "title": "P2 backlog burndown sweep, batch one of two",
+      "type": "task",
+      "assignee": "eng-3",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "maintenance"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1061",
+      "title": "P2 backlog burndown sweep, batch two of two",
+      "type": "task",
+      "assignee": "eng-6",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "maintenance"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1062",
+      "title": "Onboarding empty state copy refresh",
+      "type": "task",
+      "assignee": "eng-5",
+      "status": "todo",
+      "priority": "P3",
+      "estimate": 2,
+      "labels": [
+        "frontend",
+        "design"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1063",
+      "title": "Onboarding empty state illustration swap",
+      "type": "task",
+      "assignee": "eng-5",
+      "status": "todo",
+      "priority": "P3",
+      "estimate": 3,
+      "labels": [
+        "frontend",
+        "design"
+      ],
+      "addedMidSprint": false
+    }
+  ],
+  "burndown": {
+    "ideal": [
+      70,
+      65,
+      60,
+      55,
+      50,
+      45,
+      40,
+      35,
+      30,
+      25,
+      20,
+      15,
+      10,
+      5
+    ],
+    "actual": [
+      70,
+      70,
+      67,
+      62,
+      58,
+      55,
+      50,
+      45,
+      38,
+      30,
+      22,
+      15,
+      10,
+      5
+    ]
+  },
+  "currentDay": null,
+  "fourSprintBaseline": 58,
+  "velocity": 67
 }

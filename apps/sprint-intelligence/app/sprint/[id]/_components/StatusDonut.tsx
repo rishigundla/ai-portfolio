@@ -1,0 +1,118 @@
+import type { StatusDistributionEntry } from '@/lib/kpi-calc'
+
+interface StatusDonutProps {
+  distribution: StatusDistributionEntry[]
+  accentHex: string
+}
+
+export function StatusDonut({ distribution, accentHex }: StatusDonutProps) {
+  const total = distribution.reduce((acc, e) => acc + e.count, 0)
+  if (total === 0) return null
+
+  const size = 140
+  const cx = size / 2
+  const cy = size / 2
+  const radius = 56
+  const inner = 36
+
+  let acc = 0
+  const arcs = distribution.map((entry, i) => {
+    const start = (acc / total) * 2 * Math.PI
+    acc += entry.count
+    const end = (acc / total) * 2 * Math.PI
+    const opacity = 1 - i * 0.15
+    return { ...entry, start, end, opacity: Math.max(0.25, opacity) }
+  })
+
+  return (
+    <div className="flex items-center gap-5">
+      <svg viewBox={`0 0 ${size} ${size}`} className="w-32 h-32 shrink-0">
+        {arcs.map((arc) => (
+          <path
+            key={arc.status}
+            d={arcPath(cx, cy, radius, inner, arc.start, arc.end)}
+            fill={arc.status === 'blocked' ? '#fb7185' : accentHex}
+            opacity={arc.status === 'blocked' ? 0.9 : arc.opacity}
+          />
+        ))}
+        <circle cx={cx} cy={cy} r={inner - 1} fill="#0d111c" />
+        <text
+          x={cx}
+          y={cy - 2}
+          textAnchor="middle"
+          fontSize="16"
+          fontFamily="Space Grotesk"
+          fontWeight="700"
+          fill="#f1f5f9"
+        >
+          {total}
+        </text>
+        <text
+          x={cx}
+          y={cy + 12}
+          textAnchor="middle"
+          fontSize="8"
+          fontFamily="JetBrains Mono"
+          fill="#94a3b8"
+        >
+          TICKETS
+        </text>
+      </svg>
+      <ul className="flex-1 space-y-1.5 min-w-0">
+        {arcs.map((arc) => {
+          const pct = Math.round((arc.count / total) * 100)
+          return (
+            <li
+              key={arc.status}
+              className="flex items-center gap-2 text-[11px] font-mono"
+            >
+              <span
+                className="h-2 w-2 rounded-sm shrink-0"
+                style={{
+                  backgroundColor: arc.status === 'blocked' ? '#fb7185' : accentHex,
+                  opacity: arc.status === 'blocked' ? 0.9 : arc.opacity,
+                }}
+              />
+              <span className="text-text-secondary truncate flex-1">
+                {arc.label}
+              </span>
+              <span className="text-text-primary font-semibold">
+                {arc.count}
+              </span>
+              <span className="text-text-muted">{pct}%</span>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
+}
+
+function arcPath(
+  cx: number,
+  cy: number,
+  outer: number,
+  inner: number,
+  startAngle: number,
+  endAngle: number,
+): string {
+  const startOuter = polar(cx, cy, outer, startAngle)
+  const endOuter = polar(cx, cy, outer, endAngle)
+  const startInner = polar(cx, cy, inner, endAngle)
+  const endInner = polar(cx, cy, inner, startAngle)
+  const largeArc = endAngle - startAngle > Math.PI ? 1 : 0
+  return [
+    `M ${startOuter.x} ${startOuter.y}`,
+    `A ${outer} ${outer} 0 ${largeArc} 1 ${endOuter.x} ${endOuter.y}`,
+    `L ${startInner.x} ${startInner.y}`,
+    `A ${inner} ${inner} 0 ${largeArc} 0 ${endInner.x} ${endInner.y}`,
+    'Z',
+  ].join(' ')
+}
+
+function polar(cx: number, cy: number, r: number, angleRad: number) {
+  return {
+    x: cx + r * Math.cos(angleRad - Math.PI / 2),
+    y: cy + r * Math.sin(angleRad - Math.PI / 2),
+  }
+}

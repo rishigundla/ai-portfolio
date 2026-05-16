@@ -12,33 +12,422 @@
   "scopePlanned": 22,
   "scopeFinal": 28,
   "tickets": [
-    { "id": "ENG-1064", "title": "Acme escalation root cause investigation", "type": "spike", "assignee": "eng-1", "status": "done", "priority": "P0", "estimate": 3, "labels": ["incident", "research"], "addedMidSprint": true },
-    { "id": "ENG-1065", "title": "Acme escalation hotfix for the API rate limit edge case", "type": "bug", "assignee": "eng-1", "status": "done", "priority": "P0", "estimate": 5, "labels": ["backend", "incident"], "addedMidSprint": true },
-    { "id": "ENG-1066", "title": "Acme escalation tenant level rate limit override", "type": "task", "assignee": "eng-2", "status": "done", "priority": "P1", "estimate": 5, "labels": ["backend", "incident"], "addedMidSprint": true },
-    { "id": "ENG-1067", "title": "Acme escalation customer communication and postmortem", "type": "task", "assignee": "eng-7", "status": "done", "priority": "P1", "estimate": 3, "labels": ["incident", "docs"], "addedMidSprint": true },
-    { "id": "ENG-1068", "title": "Bulk import retry logic for stuck jobs", "type": "bug", "assignee": "eng-2", "status": "done", "priority": "P0", "estimate": 5, "labels": ["backend", "incident"], "addedMidSprint": true },
-    { "id": "ENG-1069", "title": "Bulk import queue depth alert and runbook", "type": "task", "assignee": "eng-2", "status": "done", "priority": "P1", "estimate": 3, "labels": ["infra", "observability"], "addedMidSprint": true },
-    { "id": "ENG-1070", "title": "Auth migration staging dry run", "type": "story", "assignee": "eng-1", "status": "in-review", "priority": "P1", "estimate": 8, "labels": ["backend", "auth"], "addedMidSprint": false },
-    { "id": "ENG-1071", "title": "Auth migration rollback runbook", "type": "task", "assignee": "eng-1", "status": "todo", "priority": "P1", "estimate": 3, "labels": ["backend", "auth"], "addedMidSprint": false },
-    { "id": "ENG-1072", "title": "Dashboard tab three: usage heatmap by team", "type": "story", "assignee": "eng-3", "status": "done", "priority": "P2", "estimate": 5, "labels": ["frontend", "data"], "addedMidSprint": false },
-    { "id": "ENG-1073", "title": "Usage heatmap data query and caching", "type": "task", "assignee": "eng-3", "status": "done", "priority": "P2", "estimate": 3, "labels": ["backend", "data"], "addedMidSprint": false },
-    { "id": "ENG-1074", "title": "Sortable team column in usage heatmap", "type": "task", "assignee": "eng-3", "status": "done", "priority": "P2", "estimate": 2, "labels": ["frontend"], "addedMidSprint": false },
-    { "id": "ENG-1075", "title": "Login page redesign matching new dashboard hero", "type": "story", "assignee": "eng-4", "status": "done", "priority": "P2", "estimate": 5, "labels": ["frontend", "design"], "addedMidSprint": false },
-    { "id": "ENG-1076", "title": "Sign up page redesign matching new dashboard hero", "type": "story", "assignee": "eng-4", "status": "done", "priority": "P2", "estimate": 5, "labels": ["frontend", "design"], "addedMidSprint": false },
-    { "id": "ENG-1077", "title": "Onboarding empty state copy refresh", "type": "task", "assignee": "eng-5", "status": "done", "priority": "P3", "estimate": 2, "labels": ["frontend", "design"], "addedMidSprint": false },
-    { "id": "ENG-1078", "title": "Onboarding empty state illustration swap", "type": "task", "assignee": "eng-5", "status": "done", "priority": "P3", "estimate": 3, "labels": ["frontend", "design"], "addedMidSprint": false },
-    { "id": "ENG-1079", "title": "Settings page permission matrix table", "type": "story", "assignee": "eng-6", "status": "done", "priority": "P2", "estimate": 5, "labels": ["frontend"], "addedMidSprint": false },
-    { "id": "ENG-1080", "title": "Permission matrix audit log entry on change", "type": "task", "assignee": "eng-6", "status": "done", "priority": "P2", "estimate": 3, "labels": ["backend"], "addedMidSprint": false },
-    { "id": "ENG-1081", "title": "Notification preferences page redesign", "type": "story", "assignee": "eng-8", "status": "done", "priority": "P2", "estimate": 5, "labels": ["frontend", "design"], "addedMidSprint": false },
-    { "id": "ENG-1082", "title": "Notification preferences backend wiring", "type": "task", "assignee": "eng-8", "status": "done", "priority": "P2", "estimate": 3, "labels": ["backend"], "addedMidSprint": false },
-    { "id": "ENG-1083", "title": "Daily digest email layout cleanup", "type": "task", "assignee": "eng-8", "status": "in-progress", "priority": "P2", "estimate": 3, "labels": ["backend"], "addedMidSprint": false },
-    { "id": "ENG-1084", "title": "P2 backlog burndown sweep, batch one", "type": "task", "assignee": "eng-3", "status": "done", "priority": "P2", "estimate": 3, "labels": ["maintenance"], "addedMidSprint": false },
-    { "id": "ENG-1085", "title": "P2 backlog burndown sweep, batch two", "type": "task", "assignee": "eng-6", "status": "todo", "priority": "P2", "estimate": 3, "labels": ["maintenance"], "addedMidSprint": false },
-    { "id": "ENG-1086", "title": "P2 backlog burndown sweep, batch three", "type": "task", "assignee": "eng-5", "status": "todo", "priority": "P2", "estimate": 3, "labels": ["maintenance"], "addedMidSprint": false },
-    { "id": "ENG-1087", "title": "Search API spike for v3 filters", "type": "spike", "assignee": "eng-3", "status": "done", "priority": "P3", "estimate": 3, "labels": ["research"], "addedMidSprint": false },
-    { "id": "ENG-1088", "title": "Quarterly review report PDF refresh", "type": "task", "assignee": "eng-7", "status": "in-review", "priority": "P2", "estimate": 3, "labels": ["docs"], "addedMidSprint": false },
-    { "id": "ENG-1089", "title": "Quarterly review chart palette update", "type": "task", "assignee": "eng-7", "status": "in-progress", "priority": "P2", "estimate": 2, "labels": ["frontend", "design"], "addedMidSprint": false },
-    { "id": "ENG-1090", "title": "Engineering blog post for the new auth flow", "type": "task", "assignee": "eng-4", "status": "todo", "priority": "P3", "estimate": 2, "labels": ["docs"], "addedMidSprint": false },
-    { "id": "ENG-1091", "title": "Engineering offsite agenda prep", "type": "task", "assignee": "eng-7", "status": "done", "priority": "P3", "estimate": 2, "labels": ["team"], "addedMidSprint": false }
-  ]
+    {
+      "id": "ENG-1064",
+      "title": "Acme escalation root cause investigation",
+      "type": "spike",
+      "assignee": "eng-1",
+      "status": "done",
+      "priority": "P0",
+      "estimate": 3,
+      "labels": [
+        "incident",
+        "research"
+      ],
+      "addedMidSprint": true
+    },
+    {
+      "id": "ENG-1065",
+      "title": "Acme escalation hotfix for the API rate limit edge case",
+      "type": "bug",
+      "assignee": "eng-1",
+      "status": "done",
+      "priority": "P0",
+      "estimate": 5,
+      "labels": [
+        "backend",
+        "incident"
+      ],
+      "addedMidSprint": true
+    },
+    {
+      "id": "ENG-1066",
+      "title": "Acme escalation tenant level rate limit override",
+      "type": "task",
+      "assignee": "eng-2",
+      "status": "done",
+      "priority": "P1",
+      "estimate": 5,
+      "labels": [
+        "backend",
+        "incident"
+      ],
+      "addedMidSprint": true
+    },
+    {
+      "id": "ENG-1067",
+      "title": "Acme escalation customer communication and postmortem",
+      "type": "task",
+      "assignee": "eng-7",
+      "status": "done",
+      "priority": "P1",
+      "estimate": 3,
+      "labels": [
+        "incident",
+        "docs"
+      ],
+      "addedMidSprint": true
+    },
+    {
+      "id": "ENG-1068",
+      "title": "Bulk import retry logic for stuck jobs",
+      "type": "bug",
+      "assignee": "eng-2",
+      "status": "done",
+      "priority": "P0",
+      "estimate": 5,
+      "labels": [
+        "backend",
+        "incident"
+      ],
+      "addedMidSprint": true
+    },
+    {
+      "id": "ENG-1069",
+      "title": "Bulk import queue depth alert and runbook",
+      "type": "task",
+      "assignee": "eng-2",
+      "status": "done",
+      "priority": "P1",
+      "estimate": 3,
+      "labels": [
+        "infra",
+        "observability"
+      ],
+      "addedMidSprint": true
+    },
+    {
+      "id": "ENG-1070",
+      "title": "Auth migration staging dry run",
+      "type": "story",
+      "assignee": "eng-1",
+      "status": "in-review",
+      "priority": "P1",
+      "estimate": 8,
+      "labels": [
+        "backend",
+        "auth"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1071",
+      "title": "Auth migration rollback runbook",
+      "type": "task",
+      "assignee": "eng-1",
+      "status": "todo",
+      "priority": "P1",
+      "estimate": 3,
+      "labels": [
+        "backend",
+        "auth"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1072",
+      "title": "Dashboard tab three: usage heatmap by team",
+      "type": "story",
+      "assignee": "eng-3",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 5,
+      "labels": [
+        "frontend",
+        "data"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1073",
+      "title": "Usage heatmap data query and caching",
+      "type": "task",
+      "assignee": "eng-3",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "backend",
+        "data"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1074",
+      "title": "Sortable team column in usage heatmap",
+      "type": "task",
+      "assignee": "eng-3",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 2,
+      "labels": [
+        "frontend"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1075",
+      "title": "Login page redesign matching new dashboard hero",
+      "type": "story",
+      "assignee": "eng-4",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 5,
+      "labels": [
+        "frontend",
+        "design"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1076",
+      "title": "Sign up page redesign matching new dashboard hero",
+      "type": "story",
+      "assignee": "eng-4",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 5,
+      "labels": [
+        "frontend",
+        "design"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1077",
+      "title": "Onboarding empty state copy refresh",
+      "type": "task",
+      "assignee": "eng-5",
+      "status": "done",
+      "priority": "P3",
+      "estimate": 2,
+      "labels": [
+        "frontend",
+        "design"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1078",
+      "title": "Onboarding empty state illustration swap",
+      "type": "task",
+      "assignee": "eng-5",
+      "status": "done",
+      "priority": "P3",
+      "estimate": 3,
+      "labels": [
+        "frontend",
+        "design"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1079",
+      "title": "Settings page permission matrix table",
+      "type": "story",
+      "assignee": "eng-6",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 5,
+      "labels": [
+        "frontend"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1080",
+      "title": "Permission matrix audit log entry on change",
+      "type": "task",
+      "assignee": "eng-6",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "backend"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1081",
+      "title": "Notification preferences page redesign",
+      "type": "story",
+      "assignee": "eng-8",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 5,
+      "labels": [
+        "frontend",
+        "design"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1082",
+      "title": "Notification preferences backend wiring",
+      "type": "task",
+      "assignee": "eng-8",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "backend"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1083",
+      "title": "Daily digest email layout cleanup",
+      "type": "task",
+      "assignee": "eng-8",
+      "status": "in-progress",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "backend"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1084",
+      "title": "P2 backlog burndown sweep, batch one",
+      "type": "task",
+      "assignee": "eng-3",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "maintenance"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1085",
+      "title": "P2 backlog burndown sweep, batch two",
+      "type": "task",
+      "assignee": "eng-6",
+      "status": "todo",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "maintenance"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1086",
+      "title": "P2 backlog burndown sweep, batch three",
+      "type": "task",
+      "assignee": "eng-5",
+      "status": "todo",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "maintenance"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1087",
+      "title": "Search API spike for v3 filters",
+      "type": "spike",
+      "assignee": "eng-3",
+      "status": "done",
+      "priority": "P3",
+      "estimate": 3,
+      "labels": [
+        "research"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1088",
+      "title": "Quarterly review report PDF refresh",
+      "type": "task",
+      "assignee": "eng-7",
+      "status": "in-review",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "docs"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1089",
+      "title": "Quarterly review chart palette update",
+      "type": "task",
+      "assignee": "eng-7",
+      "status": "in-progress",
+      "priority": "P2",
+      "estimate": 2,
+      "labels": [
+        "frontend",
+        "design"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1090",
+      "title": "Engineering blog post for the new auth flow",
+      "type": "task",
+      "assignee": "eng-4",
+      "status": "todo",
+      "priority": "P3",
+      "estimate": 2,
+      "labels": [
+        "docs"
+      ],
+      "addedMidSprint": false
+    },
+    {
+      "id": "ENG-1091",
+      "title": "Engineering offsite agenda prep",
+      "type": "task",
+      "assignee": "eng-7",
+      "status": "done",
+      "priority": "P3",
+      "estimate": 2,
+      "labels": [
+        "team"
+      ],
+      "addedMidSprint": false
+    }
+  ],
+  "burndown": {
+    "ideal": [
+      95,
+      88,
+      81,
+      74,
+      67,
+      60,
+      53,
+      46,
+      39,
+      32,
+      25,
+      18,
+      11,
+      4
+    ],
+    "actual": [
+      70,
+      68,
+      66,
+      64,
+      62,
+      92,
+      87,
+      80,
+      72,
+      62,
+      50,
+      40,
+      30,
+      22
+    ]
+  },
+  "currentDay": null,
+  "fourSprintBaseline": 60,
+  "velocity": 73
 }

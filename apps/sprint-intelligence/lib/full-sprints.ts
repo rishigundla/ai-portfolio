@@ -54,12 +54,21 @@ export interface SprintMetadata {
   summary: string
 }
 
+export interface BurndownSeries {
+  ideal: number[]
+  actual: (number | null)[]
+}
+
 export interface SprintFixture {
   id: string
   metadata: SprintMetadata
   scopePlanned: number
   scopeFinal: number
   tickets: TicketSpec[]
+  burndown: BurndownSeries
+  currentDay: number | null
+  fourSprintBaseline: number
+  velocity: number
 }
 
 // ============================================================

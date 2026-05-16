@@ -10,8 +10,30 @@ import {
   getSprintStatusLabel,
   formatSprintDateRange,
   sprintDaysElapsed,
+  totalCapacity,
 } from '@/lib/sprints'
 import { getFullSprint } from '@/lib/full-sprints'
+import {
+  buildBurndownPoints,
+  computeBlockedSummary,
+  computeStatusDistribution,
+  computeVelocityComparison,
+} from '@/lib/kpi-calc'
+import { BurndownChart } from './_components/BurndownChart'
+import { VelocityBar } from './_components/VelocityBar'
+import { StatusDonut } from './_components/StatusDonut'
+import { BlockedCard } from './_components/BlockedCard'
+import { KpiCard } from './_components/KpiCard'
+
+const ACCENT_HEX: Record<string, string> = {
+  accent: '#2dd4bf',
+  purple: '#a78bfa',
+  blue: '#60a5fa',
+  amber: '#fbbf24',
+  rose: '#fb7185',
+  teal: '#2dd4bf',
+  green: '#34d399',
+}
 
 interface PageProps {
   params: Promise<{ id: string }>
@@ -47,6 +69,7 @@ export default async function SprintDetailPage({ params }: PageProps) {
   const colors = getColorClasses(summary.colorToken)
   const StatusIcon = getSprintStatusIcon(summary.status)
   const dayCount = sprintDaysElapsed(summary.startDate, summary.endDate)
+  const accentHex = ACCENT_HEX[summary.colorToken] ?? ACCENT_HEX.accent ?? '#2dd4bf'
 
   return (
     <section className="section-container pt-12 pb-24">
@@ -113,22 +136,47 @@ export default async function SprintDetailPage({ params }: PageProps) {
         <ShellSection
           eyebrow="Section 2 of 3"
           title="Team KPIs"
-          description="W9.D3 to D4 will render burndown, velocity, status distribution, blocked ticket counts, cycle time, throughput, scope creep, and carryover. The slots below are the placeholder grid that the real KPI cards will replace."
+          description="Sprint burndown with ideal versus actual, velocity versus the four sprint baseline, status distribution across the ticket mix, and a blocked tickets card with the freshest blocker note. Cycle time, throughput, scope creep, and carryover land alongside in W9.D4."
         >
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-            {['Burndown', 'Velocity', 'Status mix', 'Cycle time', 'Scope creep'].map((label) => (
-              <div
-                key={label}
-                className="rounded-lg border border-surface-border bg-surface p-4 text-center"
-              >
-                <p className="font-mono text-[10px] uppercase tracking-widest text-text-muted">
-                  {label}
-                </p>
-                <p className="mt-2 font-display text-xl font-semibold text-text-dim">
-                  arrives W9.D3
-                </p>
-              </div>
-            ))}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <KpiCard
+              eyebrow="Burndown"
+              title="Story points remaining"
+              subtitle="Ideal dashed line versus actual solid line, story points on the y axis, sprint day on the x axis."
+            >
+              <BurndownChart
+                points={buildBurndownPoints(fixture)}
+                accentHex={accentHex}
+                currentDay={fixture.currentDay}
+              />
+            </KpiCard>
+            <KpiCard
+              eyebrow="Velocity"
+              title="This sprint versus baseline"
+              subtitle="Current sprint completed story points compared with the trailing four sprint average. Capacity sits at the top for context."
+            >
+              <VelocityBar
+                velocity={computeVelocityComparison(fixture, totalCapacity)}
+                accentHex={accentHex}
+              />
+            </KpiCard>
+            <KpiCard
+              eyebrow="Status mix"
+              title="Tickets across the board"
+              subtitle="Distribution across done, in review, in progress, to do, and blocked. Center shows the total ticket count."
+            >
+              <StatusDonut
+                distribution={computeStatusDistribution(fixture.tickets)}
+                accentHex={accentHex}
+              />
+            </KpiCard>
+            <KpiCard
+              eyebrow="Blocked"
+              title="Tickets and the freshest blocker note"
+              subtitle="Counts plus story points plus the oldest age in days. The top note surfaces what to action first."
+            >
+              <BlockedCard summary={computeBlockedSummary(fixture)} />
+            </KpiCard>
           </div>
         </ShellSection>
 
