@@ -109,6 +109,14 @@ User scope call: Cat C items are real-resource-cost themes, not Project-1-close 
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
 
+### 2026-05-17 · 📝 W9.D6 - Sprint Intelligence meeting brief fixtures and loader
+- **Four meeting brief fixtures.** Hand curated, one per sprint, under `fixtures/sprint-intelligence/briefs/`. Same five section structure as the Project 2 narrative fixtures: Executive summary, Highlights, Watch list, Recommendations, Talking points.
+- **Fixture grounded prose.** Sprint 42 mentions the 67 SP velocity against a 58 SP baseline, the 1.8 day cycle time improvement, and the two P3 carryovers. Sprint 43 calls out the day four Acme escalation that expanded scope from 22 to 28 tickets with a 73 SP close. Sprint 44 frames the identity provider blocker as a process failure of the upstream provider rather than a team execution failure, salvaged value at 41 SP. Sprint 45 is mid flight with a concrete war room recommendation for the day twelve auth cutover.
+- **Leadership grade voice.** One to three sentence paragraphs, bold callouts on the headline metrics, a five bullet talking points section that reads as slide ready.
+- **`lib/briefs.ts` loader.** Follows Project 2's narratives loader pattern. Static imports the four JSONs, exports `BRIEF_SECTIONS` metadata with section heading markers, and exposes `getBrief` plus `getAllBriefs`. The `Fixture` shape is the same `@rishi/ai-core` type that `replayFixture` consumes so W9.D7 can stream the brief without any glue.
+- **Build clean.** Ten routes prerendered through `next build` directly (turbo parallelism was racing on `.next` writes during this run, direct `next build` sidesteps the issue). `/sprint/[id]` First Load JS is 108 kB after the EngineerTabs client bundle, baseline 102 kB shared. Type check clean.
+- **Next**: W9.D7 - `StreamingBriefPanel` client component on `/sprint/[id]`. Mirror Project 2 pattern: `replayFixture` streams the brief markdown into `AiNarrativeBlock`, five step progress strip advances as section headings appear, Cancel and Replay buttons available, panel sits as Section 0 above the team header so the brief lands first.
+
 ### 2026-05-20 · 👥 W9.D5 - Sprint Intelligence per engineer deep dive tabs
 - **EngineerTabs client component.** Tab strip over the eight team members, an engineer panel that swaps content on click. Section 3 of 3 placeholder replaced.
 - **Four stat tiles per engineer.** Workload score (priority weighted estimates as a percent of capacity, tone flips red over 110 percent and gray under 80). Completion rate (done over total assigned, tone amber under 80 percent and red under 50). Personal cycle time versus the team baseline with a colored delta percent. Review queue with in review count, in progress count, blocked count, and a Bottleneck label when more than one ticket sits in review.
