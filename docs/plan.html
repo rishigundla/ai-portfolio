@@ -1594,7 +1594,9 @@
         // Phase 2 · Week 7 · Day 7 (3 tasks - buffer day, lessons learned note, Phase 3 preview)
         "7-W7.D7-0", "7-W7.D7-1", "7-W7.D7-2",
         // Phase 3 · Week 9 · Day 1 (3 tasks - app scaffold, 4 sprint JSONs, manifest)
-        "9-W9.D1-0", "9-W9.D1-1", "9-W9.D1-2"
+        "9-W9.D1-0", "9-W9.D1-1", "9-W9.D1-2",
+        // Phase 3 · Week 9 · Day 2 (4 tasks - manifest loader, full sprint loader, gallery, dashboard shell)
+        "9-W9.D2-0", "9-W9.D2-1", "9-W9.D2-2", "9-W9.D2-3"
       ],
 
       phases: [
@@ -1607,6 +1609,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-05-17",
+          title: "🧭 W9.D2 - Sprint Intelligence gallery, dashboard shell, typed loaders",
+          desc: "Sprint Intelligence dashboard shell and typed loaders shipped. Mirrors Project 2 split: manifest only loader is light, full sprint loader is heavy, tree shaken per route. lib/sprints.ts wraps the manifest with TeamMember, SprintSummary, SprintStatus, ColorToken, status icon mapping, color class sets per token (accent, purple, blue, amber, rose, teal, green), formatSprintDateRange, and sprintDaysElapsed helpers. lib/full-sprints.ts static imports the four sprint JSONs, exports SprintFixture and TicketSpec with explicit TicketStatus, TicketType, and TicketPriority unions, plus ticketsByStatus, ticketsByAssignee, and sumEstimates helpers used by the KPI math landing in W9.D3 to D4. Real gallery at /sprints renders four cards in a two column responsive grid. Each card surfaces the sprint name, status badge with icon and pulsing dot for the in flight sprint, date range, tagline, ticket count, team size, and capacity. Hover lifts the border and slides the arrow. Dashboard shell at /sprint/[id] generates static params over all four sprint ids so each route prerenders. Header shows the status badge, sprint name, goal pulled from the fixture metadata, date range with elapsed days, ticket count, and the planned versus final scope split. Body is three labeled sections (Meeting brief, Team KPIs, Per engineer deep dive) with eyebrow numbering, descriptive subhead naming the future delivery day for each, and a placeholder zone where the real KPI cards arrive on W9.D3. BUILD CLEAN: nine routes prerendered (three static plus four SSG /sprint/[slug] plus two icons), 102 kB First Load JS shared. Type check clean after one strict null fix in ticketsByAssignee.",
+          next: "W9.D3 - Team level KPIs. Sprint burndown chart with ideal versus actual line, velocity bar versus four sprint baseline, status distribution donut, blocked ticket count and aging. Render inside the Team KPIs section. Drop the placeholder zone."
+        },
         {
           date: "2026-05-16",
           title: "🚀 W9.D1 - Project 3 (Sprint Intelligence) kickoff",
@@ -2191,7 +2199,7 @@
           goal: "User picks synthetic sprint → KPIs + streaming meeting brief",
           days: [
             { num: "W9.D1", weekday: "Mon", name: "App Scaffold + Sprint Data", tasks: ["Create apps/sprint-intelligence/", "Author 4 synthetic sprint JSONs", "Each: 20-30 tickets, status history, 8 engineers"] },
-            { num: "W9.D2", weekday: "Tue", name: "Sprint Selector + Shell", tasks: ["Dropdown to select sprint (42/43/44/45)", "Dashboard shell: brief panel (top), KPIs (middle), tabs (bottom)"] },
+            { num: "W9.D2", weekday: "Tue", name: "Sprint gallery, dashboard shell, typed loaders", tasks: ["lib/sprints.ts manifest loader with TeamMember, SprintSummary, status icons, and color classes", "lib/full-sprints.ts per id loader with SprintFixture and TicketSpec types plus ticketsByStatus and ticketsByAssignee helpers", "Sprint gallery at /sprints with four cards, status badges, date ranges, and ticket counts", "Dashboard shell at /sprint/[id] with brief panel, KPI slot grid, and per engineer deep dive sections plus generateStaticParams over four sprints"] },
             { num: "W9.D3", weekday: "Wed", name: "Team-Level KPIs", tasks: ["Sprint Burndown chart", "Velocity vs 4-sprint baseline", "Status Distribution donut", "Blocked Tickets count + aging"] },
             { num: "W9.D4", weekday: "Thu", name: "More KPIs + Trends", tasks: ["Cycle Time trend line", "Throughput per week", "Scope Creep tracker", "Carryover Rate"] },
             { num: "W9.D5", weekday: "Fri", name: "Individual Deep-Dive Tabs", tasks: ["Tab per engineer", "Workload Score (weighted priority)", "Completion Rate", "Personal vs team cycle time", "Review bottleneck"] },

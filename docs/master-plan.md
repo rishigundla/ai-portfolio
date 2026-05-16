@@ -109,6 +109,13 @@ User scope call: Cat C items are real-resource-cost themes, not Project-1-close 
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
 
+### 2026-05-17 · 🧭 W9.D2 - Sprint Intelligence gallery, dashboard shell, typed loaders
+- **Typed loaders.** `lib/sprints.ts` wraps the manifest with `TeamMember`, `SprintSummary`, `SprintStatus`, `ColorToken`, status icon mapping, color class sets per token (`accent`, `purple`, `blue`, `amber`, `rose`, `teal`, `green`), and `formatSprintDateRange` plus `sprintDaysElapsed` helpers. `lib/full-sprints.ts` static imports the four sprint JSONs, exports `SprintFixture` and `TicketSpec` with explicit `TicketStatus`, `TicketType`, and `TicketPriority` unions, plus `ticketsByStatus`, `ticketsByAssignee`, and `sumEstimates` helpers used by the KPI math landing in W9.D3 to D4.
+- **Real gallery at `/sprints`.** Four cards in a two column responsive grid. Each card surfaces the sprint name, status badge with icon and a pulsing dot for the in flight sprint, date range, tagline, ticket count, team size, and capacity. Hover lifts the border and slides the arrow.
+- **Dashboard shell at `/sprint/[id]`.** Generates static params over all four sprint ids so each route prerenders. Header shows the status badge, sprint name, goal pulled from the fixture metadata, date range with elapsed days, ticket count, and planned versus final scope. Body is three labeled sections (`Meeting brief`, `Team KPIs`, `Per engineer deep dive`) with eyebrow numbering, descriptive subhead naming the future delivery day for each, and a placeholder zone where the real KPI cards arrive on W9.D3.
+- **Build clean.** Nine routes prerendered (three static plus four SSG `/sprint/[id]` plus two icons), 102 kB First Load JS shared. Type check clean after one strict null fix in `ticketsByAssignee`.
+- **Next**: W9.D3 team level KPIs. Sprint burndown chart with ideal versus actual line, velocity bar versus four sprint baseline, status distribution donut, blocked ticket count and aging. Render inside the Team KPIs section. Drop the placeholder zone.
+
 ### 2026-05-16 · 🚀 W9.D1 - Project 3 (Sprint Intelligence) kickoff
 - **App scaffold shipped.** `apps/sprint-intelligence/` mirrors the narrative generator bootstrap pattern. `package.json` (port 3004), `next.config`, tailwind preset, tsconfig, postcss, `.gitignore`, `portfolio.meta.json` skeleton, `README`, and the app shell with `ParticleBackground`, `ThemeProvider`, `Nav`, and a footer credit row all in place.
 - **Four route surfaces stubbed.** `/` home with the three step pitch, `/sprints` placeholder gallery, `/sprint/[id]` placeholder detail, plus auto generated `/icon` and `/apple-icon` (SI wordmark on a teal accent gradient).
