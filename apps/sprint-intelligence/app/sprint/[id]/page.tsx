@@ -14,6 +14,7 @@ import {
   totalCapacity,
 } from '@/lib/sprints'
 import { getFullSprint } from '@/lib/full-sprints'
+import { getBrief } from '@/lib/briefs'
 import {
   buildBurndownPoints,
   buildCycleTimePoints,
@@ -36,6 +37,7 @@ import { ScopeCreepCard } from './_components/ScopeCreepCard'
 import { CarryoverCard } from './_components/CarryoverCard'
 import { EngineerTabs } from './_components/EngineerTabs'
 import { KpiCard } from './_components/KpiCard'
+import { StreamingBriefPanel } from './_components/StreamingBriefPanel'
 
 const ACCENT_HEX: Record<string, string> = {
   accent: '#2dd4bf',
@@ -77,6 +79,8 @@ export default async function SprintDetailPage({ params }: PageProps) {
 
   const fixture = getFullSprint(id)
   if (!fixture) notFound()
+
+  const brief = getBrief(id)
 
   const colors = getColorClasses(summary.colorToken)
   const StatusIcon = getSprintStatusIcon(summary.status)
@@ -138,11 +142,15 @@ export default async function SprintDetailPage({ params }: PageProps) {
         <ShellSection
           eyebrow="Section 1 of 3"
           title="Meeting brief"
-          description="A streaming AI authored brief lands here in W9.D7. Executive summary, highlights, watch list, recommendations, and talking points. For now this panel holds the sprint summary pulled from the fixture so the page has a top of fold story."
+          description="Claude streams the brief on page load. Five sections in order: executive summary, highlights, watch list, recommendations, talking points. The progress strip ticks through as each section heading lands."
         >
-          <p className="text-text-secondary leading-relaxed">
-            {fixture.metadata.summary}
-          </p>
+          {brief ? (
+            <StreamingBriefPanel brief={brief} />
+          ) : (
+            <p className="text-text-secondary leading-relaxed">
+              {fixture.metadata.summary}
+            </p>
+          )}
         </ShellSection>
 
         <ShellSection

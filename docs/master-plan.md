@@ -109,6 +109,15 @@ User scope call: Cat C items are real-resource-cost themes, not Project-1-close 
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
 
+### 2026-05-17 · 🎙️ W9.D7 - Sprint Intelligence streaming meeting brief panel
+- **`StreamingBriefPanel` client component.** Auto starts on mount. Calls `replayFixture` from `@rishi/ai-core` with the brief from `lib/briefs.ts` and pushes each streamed chunk into `AiNarrativeBlock` for the typed cursor animation. Same pattern as the Project 2 narrative generator panel, same primitives, same 60 chars per second cadence.
+- **Five step progress strip.** Sits above the narrative block. Advances as section markers (`Executive summary`, `Highlights`, `Watch list`, `Recommendations`, `Talking points`) appear in the streamed text. Status row reads `Claude is writing the brief...` while streaming, `Brief complete` on done.
+- **Controls.** A `Cancel` button is visible only while streaming, and a `Replay` button is visible only on completion.
+- **Wired into Section 1 of `/sprint/[id]`.** The brief lands above the team KPIs. The `fixture.metadata.summary` string still renders as a fallback if a brief is missing for a sprint id, but all four sprints have briefs in the loader so the streaming path is the default.
+- **Build clean** through direct `next build`. `/sprint/[id]` First Load JS jumped from 3.08 kB to 49.8 kB (162 kB total) because the panel pulls in `@rishi/ai-core` plus `react-markdown` via `AiNarrativeBlock`. Same scale as Project 2 (48 kB for the same primitive chain). Type check clean.
+- **Week 9 closed.** Project 3 core build complete (seven of seven days done). `/sprint/[id]` now reads as a coherent dashboard: streaming brief on top, eight KPI cards in the middle, eight engineer deep dive tabs at the bottom.
+- **Next**: W10.D1 - polish pass. Interactions plus drill downs. Click engineer name in `EngineerTabs` filters tickets to that person. Click a blocker shows the blocker history note in a dialog. Mobile responsive polish for the dashboard.
+
 ### 2026-05-17 · 📝 W9.D6 - Sprint Intelligence meeting brief fixtures and loader
 - **Four meeting brief fixtures.** Hand curated, one per sprint, under `fixtures/sprint-intelligence/briefs/`. Same five section structure as the Project 2 narrative fixtures: Executive summary, Highlights, Watch list, Recommendations, Talking points.
 - **Fixture grounded prose.** Sprint 42 mentions the 67 SP velocity against a 58 SP baseline, the 1.8 day cycle time improvement, and the two P3 carryovers. Sprint 43 calls out the day four Acme escalation that expanded scope from 22 to 28 tickets with a 73 SP close. Sprint 44 frames the identity provider blocker as a process failure of the upstream provider rather than a team execution failure, salvaged value at 41 SP. Sprint 45 is mid flight with a concrete war room recommendation for the day twelve auth cutover.

@@ -1604,7 +1604,9 @@
         // Phase 3 · Week 9 · Day 5 (5 tasks - engineer tabs, workload score, completion rate, personal cycle time, review queue)
         "9-W9.D5-0", "9-W9.D5-1", "9-W9.D5-2", "9-W9.D5-3", "9-W9.D5-4",
         // Phase 3 · Week 9 · Day 6 (4 tasks - four brief fixtures, five section structure, fixture grounded prose, loader)
-        "9-W9.D6-0", "9-W9.D6-1", "9-W9.D6-2", "9-W9.D6-3"
+        "9-W9.D6-0", "9-W9.D6-1", "9-W9.D6-2", "9-W9.D6-3",
+        // Phase 3 · Week 9 · Day 7 (4 tasks - StreamingBriefPanel component, progress strip, cancel and replay, page wiring)
+        "9-W9.D7-0", "9-W9.D7-1", "9-W9.D7-2", "9-W9.D7-3"
       ],
 
       phases: [
@@ -1617,6 +1619,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-05-17",
+          title: "🎙️ W9.D7 - Sprint Intelligence streaming meeting brief panel",
+          desc: "Streaming meeting brief panel landed on /sprint/[id]. StreamingBriefPanel is a small client component that auto starts on mount, calls replayFixture from @rishi/ai-core with the brief from lib/briefs.ts, and pushes each streamed chunk into AiNarrativeBlock for the typed cursor animation. Five step progress strip sits above the narrative block and advances as the section markers appear in the streamed text (Executive summary, Highlights, Watch list, Recommendations, Talking points). Same pattern as the Project 2 narrative generator panel, same primitives, same 60 chars per second cadence. Controls row above the strip shows the live status (Claude is writing the brief... while streaming, Brief complete on done), with a Cancel button visible only while streaming and a Replay button visible only on completion. Wired into Section 1 of the sprint detail page so the brief lands above the team KPIs. The fixture.metadata.summary string still renders as a fallback if a brief is missing for a sprint id, but all four sprints have briefs in the loader. BUILD CLEAN through direct next build. /sprint/[id] First Load JS jumped from 3.08 kB to 49.8 kB (162 kB total) because the panel pulls in @rishi/ai-core plus react-markdown via AiNarrativeBlock. Same scale as Project 2 (48 kB for the same primitive chain). Type check clean. Week 9 closes Project 3 core build (seven of seven days done). W10 covers polish plus deploy.",
+          next: "W10.D1 - polish pass. Interactions plus drill downs. Click engineer name in EngineerTabs filters tickets to that person. Click a blocker shows the blocker history note in a dialog. Mobile responsive polish for the dashboard."
+        },
         {
           date: "2026-05-17",
           title: "📝 W9.D6 - Sprint Intelligence meeting brief fixtures and loader",
@@ -2236,7 +2244,7 @@
             { num: "W9.D4", weekday: "Thu", name: "More KPIs + Trends", tasks: ["Cycle Time trend line", "Throughput per week", "Scope Creep tracker", "Carryover Rate"] },
             { num: "W9.D5", weekday: "Fri", name: "Per engineer deep dive tabs", tasks: ["EngineerTabs client component with one tab per engineer", "Workload score weighted by P0 to P3 priority versus per engineer capacity", "Completion rate per engineer with done versus total ticket count", "Personal cycle time compared with the team baseline plus delta percent", "Review queue tile with bottleneck flag when more than one ticket sits in review"] },
             { num: "W9.D6", weekday: "Sat", name: "Meeting brief fixtures and the brief loader", tasks: ["Four hand curated brief JSON fixtures under fixtures/sprint-intelligence/briefs/ (sprint 42 healthy, sprint 43 scope creep, sprint 44 blocked, sprint 45 in flight)", "Each brief carries five sections: Executive summary, Highlights, Watch list, Recommendations, Talking points", "References fixture values verbatim (velocity, baseline, carryover counts, blocker context) so the prose stays grounded", "lib/briefs.ts loader with section heading constants and a per id getBrief plus getAllBriefs export"] },
-            { num: "W9.D7", weekday: "Sun", name: "Streaming Brief Panel", tasks: ["Top panel streams brief on sprint load", "Regenerate button to replay streaming"] }
+            { num: "W9.D7", weekday: "Sun", name: "Streaming meeting brief panel", tasks: ["StreamingBriefPanel client component using replayFixture and AiNarrativeBlock", "Five step progress strip advancing as Executive summary, Highlights, Watch list, Recommendations, Talking points markers appear", "Cancel button during streaming plus Replay button on completion", "Wired into Section 1 of /sprint/[id] so the brief lands on page load above the KPIs"] }
           ],
           deliverables: ["4 sprints with full KPI breakdowns + AI briefs"]
         },
