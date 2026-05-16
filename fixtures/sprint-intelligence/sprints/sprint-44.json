@@ -403,5 +403,31 @@
     "weekOne": 5,
     "weekTwo": 10,
     "priorAverage": 9
+  },
+  "perEngineer": {
+    "eng-1": {
+      "personalCycleTime": 9.0
+    },
+    "eng-2": {
+      "personalCycleTime": 7.0
+    },
+    "eng-3": {
+      "personalCycleTime": 4.5
+    },
+    "eng-4": {
+      "personalCycleTime": 4.0
+    },
+    "eng-5": {
+      "personalCycleTime": 4.5
+    },
+    "eng-6": {
+      "personalCycleTime": 4.0
+    },
+    "eng-7": {
+      "personalCycleTime": 5.0
+    },
+    "eng-8": {
+      "personalCycleTime": 4.0
+    }
   }
 }

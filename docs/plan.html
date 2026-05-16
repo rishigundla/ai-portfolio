@@ -1600,7 +1600,9 @@
         // Phase 3 · Week 9 · Day 3 (4 tasks - burndown chart, velocity bar, status donut, blocked card)
         "9-W9.D3-0", "9-W9.D3-1", "9-W9.D3-2", "9-W9.D3-3",
         // Phase 3 · Week 9 · Day 4 (4 tasks - cycle time trend, throughput per week, scope creep, carryover rate)
-        "9-W9.D4-0", "9-W9.D4-1", "9-W9.D4-2", "9-W9.D4-3"
+        "9-W9.D4-0", "9-W9.D4-1", "9-W9.D4-2", "9-W9.D4-3",
+        // Phase 3 · Week 9 · Day 5 (5 tasks - engineer tabs, workload score, completion rate, personal cycle time, review queue)
+        "9-W9.D5-0", "9-W9.D5-1", "9-W9.D5-2", "9-W9.D5-3", "9-W9.D5-4"
       ],
 
       phases: [
@@ -1613,6 +1615,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-05-20",
+          title: "👥 W9.D5 - Sprint Intelligence per engineer deep dive tabs",
+          desc: "Per engineer deep dive landed. Section 3 of 3 placeholder replaced with a real tab strip (EngineerTabs client component) over the eight team members plus an engineer panel that swaps content on click. Each engineer panel renders four stat tiles. Workload score is a priority weighted sum of assigned ticket estimates (P0 weight 2.0, P1 1.5, P2 1.0, P3 0.5) divided against the engineer's capacity, with the load tone flipped to red when the index exceeds 1.1 and gray when it is under 0.8. Completion rate is the done count over the total assigned with the tone flipped to amber when under 80 percent and red when under 50. Personal cycle time pulls from the new perEngineer.personalCycleTime field on each sprint fixture (added through scripts/add-engineer-data.py) and compares against the team baseline cycleTime.teamBaseline with a colored delta percent. Review queue tile shows in review ticket count plus an in progress count and a blocked count, with the label switching between Queue clear, In review, and Bottleneck depending on the count. Below the stat tiles, a priority mix bar (P0/P1/P2/P3 with rose/amber/accent/gray) and the engineer's assigned ticket list with status color glyphs, priority, title, and estimate. New helpers under lib/kpi-calc.ts. computeWorkloadScore returns raw, index, capacity, tone, and label. computeCompletionRate returns done, total, percent. computePersonalCycleTime reads the perEngineer block and returns personal, team, delta percent, beatsTeam. computeReviewLoad counts in review, in progress, and blocked, then produces a tone tag. computePriorityMix groups tickets by P0 through P3 with story point totals. buildEngineerDeepDive aggregates all of the above per engineer. The page now passes team.map(member => buildEngineerDeepDive(fixture, member)) into EngineerTabs, so the eight engineer panels prerender as part of the SSG /sprint/[id] route. BUILD CLEAN: nine routes prerendered, /sprint/[id] now ships a small client bundle for the tab switching state, type check clean.",
+          next: "W9.D6 - generate four meeting brief fixtures (one per sprint). Each brief has executive summary, highlights, watch list, recommendations, and talking points. Stored under fixtures/sprint-intelligence/briefs/."
+        },
         {
           date: "2026-05-19",
           title: "📈 W9.D4 - Sprint Intelligence trend and scope KPI row",
@@ -2218,7 +2226,7 @@
             { num: "W9.D2", weekday: "Tue", name: "Sprint gallery, dashboard shell, typed loaders", tasks: ["lib/sprints.ts manifest loader with TeamMember, SprintSummary, status icons, and color classes", "lib/full-sprints.ts per id loader with SprintFixture and TicketSpec types plus ticketsByStatus and ticketsByAssignee helpers", "Sprint gallery at /sprints with four cards, status badges, date ranges, and ticket counts", "Dashboard shell at /sprint/[id] with brief panel, KPI slot grid, and per engineer deep dive sections plus generateStaticParams over four sprints"] },
             { num: "W9.D3", weekday: "Wed", name: "Team-Level KPIs", tasks: ["Sprint Burndown chart", "Velocity vs 4-sprint baseline", "Status Distribution donut", "Blocked Tickets count + aging"] },
             { num: "W9.D4", weekday: "Thu", name: "More KPIs + Trends", tasks: ["Cycle Time trend line", "Throughput per week", "Scope Creep tracker", "Carryover Rate"] },
-            { num: "W9.D5", weekday: "Fri", name: "Individual Deep-Dive Tabs", tasks: ["Tab per engineer", "Workload Score (weighted priority)", "Completion Rate", "Personal vs team cycle time", "Review bottleneck"] },
+            { num: "W9.D5", weekday: "Fri", name: "Per engineer deep dive tabs", tasks: ["EngineerTabs client component with one tab per engineer", "Workload score weighted by P0 to P3 priority versus per engineer capacity", "Completion rate per engineer with done versus total ticket count", "Personal cycle time compared with the team baseline plus delta percent", "Review queue tile with bottleneck flag when more than one ticket sits in review"] },
             { num: "W9.D6", weekday: "Sat", name: "Generate Meeting Brief Fixtures", tasks: ["Use Claude Code to generate brief per sprint", "Each: exec summary, highlights, watch list, recommendations, talking points"] },
             { num: "W9.D7", weekday: "Sun", name: "Streaming Brief Panel", tasks: ["Top panel streams brief on sprint load", "Regenerate button to replay streaming"] }
           ],

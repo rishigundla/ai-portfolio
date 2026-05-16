@@ -10,12 +10,14 @@ import {
   getSprintStatusLabel,
   formatSprintDateRange,
   sprintDaysElapsed,
+  team,
   totalCapacity,
 } from '@/lib/sprints'
 import { getFullSprint } from '@/lib/full-sprints'
 import {
   buildBurndownPoints,
   buildCycleTimePoints,
+  buildEngineerDeepDive,
   computeBlockedSummary,
   computeCarryoverSummary,
   computeCycleTimeSummary,
@@ -32,6 +34,7 @@ import { CycleTimeChart } from './_components/CycleTimeChart'
 import { ThroughputChart } from './_components/ThroughputChart'
 import { ScopeCreepCard } from './_components/ScopeCreepCard'
 import { CarryoverCard } from './_components/CarryoverCard'
+import { EngineerTabs } from './_components/EngineerTabs'
 import { KpiCard } from './_components/KpiCard'
 
 const ACCENT_HEX: Record<string, string> = {
@@ -235,17 +238,12 @@ export default async function SprintDetailPage({ params }: PageProps) {
         <ShellSection
           eyebrow="Section 3 of 3"
           title="Per engineer deep dive"
-          description="W9.D5 fills the bottom strip with a tab per engineer. Workload score, completion rate, personal versus team cycle time, and review bottleneck callouts. The team header below is live data from the manifest."
+          description="Tab strip per engineer. Each engineer card shows workload score (priority weighted estimates against capacity), completion rate, personal versus team cycle time, and a review queue tile with a bottleneck flag when more than one ticket is sitting in review. Below the stat tiles, a priority mix bar and the engineer's ticket list."
         >
-          <div className="rounded-lg border border-surface-border bg-surface p-6">
-            <p className="font-mono text-[10px] uppercase tracking-widest text-text-muted mb-3">
-              Sprint team
-            </p>
-            <p className="text-text-secondary text-sm leading-relaxed">
-              Eight engineers ship together in this sprint and across the
-              series. Deep dive tabs arrive on W9.D5 with per engineer KPIs.
-            </p>
-          </div>
+          <EngineerTabs
+            deepDives={team.map((member) => buildEngineerDeepDive(fixture, member))}
+            accentHex={accentHex}
+          />
         </ShellSection>
       </div>
     </section>

@@ -7,7 +7,13 @@
  * velocity comparison, and so on).
  */
 
-import type { SprintFixture, TicketSpec, TicketStatus } from './full-sprints'
+import type {
+  SprintFixture,
+  TicketPriority,
+  TicketSpec,
+  TicketStatus,
+} from './full-sprints'
+import type { TeamMember } from './sprints'
 
 export interface StatusDistributionEntry {
   status: TicketStatus
@@ -246,5 +252,163 @@ export function computeCarryoverSummary(
     carryoverPct,
     blockedInCarryover,
     projected: fixture.metadata.status === 'in-progress',
+  }
+}
+
+// ============================================================
+// Per engineer deep dive (W9.D5)
+// ============================================================
+
+const PRIORITY_WEIGHTS: Record<TicketPriority, number> = {
+  P0: 2.0,
+  P1: 1.5,
+  P2: 1.0,
+  P3: 0.5,
+}
+
+export interface PriorityMixEntry {
+  priority: TicketPriority
+  count: number
+  storyPoints: number
+}
+
+const PRIORITY_ORDER: TicketPriority[] = ['P0', 'P1', 'P2', 'P3']
+
+export function computePriorityMix(tickets: TicketSpec[]): PriorityMixEntry[] {
+  return PRIORITY_ORDER.map((priority) => {
+    const matching = tickets.filter((t) => t.priority === priority)
+    return {
+      priority,
+      count: matching.length,
+      storyPoints: matching.reduce((acc, t) => acc + t.estimate, 0),
+    }
+  }).filter((entry) => entry.count > 0)
+}
+
+export type WorkloadTone = 'light' | 'ideal' | 'heavy'
+
+export interface WorkloadScore {
+  raw: number
+  index: number
+  capacity: number
+  tone: WorkloadTone
+  label: string
+}
+
+export function computeWorkloadScore(
+  tickets: TicketSpec[],
+  capacity: number,
+): WorkloadScore {
+  const raw = tickets.reduce(
+    (acc, t) => acc + t.estimate * PRIORITY_WEIGHTS[t.priority],
+    0,
+  )
+  const index = capacity > 0 ? raw / capacity : 0
+  let tone: WorkloadTone = 'ideal'
+  let label = 'On capacity'
+  if (index < 0.8) {
+    tone = 'light'
+    label = 'Has headroom'
+  } else if (index > 1.1) {
+    tone = 'heavy'
+    label = 'Overloaded'
+  }
+  return { raw, index, capacity, tone, label }
+}
+
+export interface CompletionRate {
+  done: number
+  total: number
+  percent: number
+}
+
+export function computeCompletionRate(tickets: TicketSpec[]): CompletionRate {
+  const total = tickets.length
+  const done = tickets.filter((t) => t.status === 'done').length
+  const percent = total > 0 ? (done / total) * 100 : 0
+  return { done, total, percent }
+}
+
+export type ReviewBottleneckTone = 'clean' | 'queue' | 'bottleneck'
+
+export interface ReviewLoad {
+  inReviewCount: number
+  inProgressCount: number
+  blockedCount: number
+  tone: ReviewBottleneckTone
+  label: string
+}
+
+export function computeReviewLoad(tickets: TicketSpec[]): ReviewLoad {
+  const inReviewCount = tickets.filter((t) => t.status === 'in-review').length
+  const inProgressCount = tickets.filter((t) => t.status === 'in-progress').length
+  const blockedCount = tickets.filter((t) => t.status === 'blocked').length
+
+  let tone: ReviewBottleneckTone = 'clean'
+  let label = 'Queue clear'
+  if (inReviewCount >= 2) {
+    tone = 'bottleneck'
+    label = 'Bottleneck'
+  } else if (inReviewCount === 1) {
+    tone = 'queue'
+    label = 'In review'
+  }
+  if (blockedCount > 0 && tone === 'clean') {
+    tone = 'queue'
+    label = 'Blocked work'
+  }
+  return { inReviewCount, inProgressCount, blockedCount, tone, label }
+}
+
+export interface PersonalCycleTime {
+  personal: number | null
+  team: number
+  deltaPct: number | null
+  beatsTeam: boolean
+}
+
+export function computePersonalCycleTime(
+  fixture: SprintFixture,
+  engineerId: string,
+): PersonalCycleTime {
+  const personal = fixture.perEngineer[engineerId]?.personalCycleTime ?? null
+  const team = fixture.cycleTime.teamBaseline
+  if (personal === null) {
+    return { personal: null, team, deltaPct: null, beatsTeam: false }
+  }
+  const deltaPct = team > 0 ? ((personal - team) / team) * 100 : 0
+  return {
+    personal,
+    team,
+    deltaPct,
+    beatsTeam: personal <= team,
+  }
+}
+
+export interface EngineerDeepDive {
+  engineer: TeamMember
+  tickets: TicketSpec[]
+  workload: WorkloadScore
+  completion: CompletionRate
+  cycle: PersonalCycleTime
+  review: ReviewLoad
+  priorityMix: PriorityMixEntry[]
+  statusMix: StatusDistributionEntry[]
+}
+
+export function buildEngineerDeepDive(
+  fixture: SprintFixture,
+  engineer: TeamMember,
+): EngineerDeepDive {
+  const tickets = fixture.tickets.filter((t) => t.assignee === engineer.id)
+  return {
+    engineer,
+    tickets,
+    workload: computeWorkloadScore(tickets, engineer.capacity),
+    completion: computeCompletionRate(tickets),
+    cycle: computePersonalCycleTime(fixture, engineer.id),
+    review: computeReviewLoad(tickets),
+    priorityMix: computePriorityMix(tickets),
+    statusMix: computeStatusDistribution(tickets),
   }
 }

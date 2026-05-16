@@ -109,6 +109,16 @@ User scope call: Cat C items are real-resource-cost themes, not Project-1-close 
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
 
+### 2026-05-20 · 👥 W9.D5 - Sprint Intelligence per engineer deep dive tabs
+- **EngineerTabs client component.** Tab strip over the eight team members, an engineer panel that swaps content on click. Section 3 of 3 placeholder replaced.
+- **Four stat tiles per engineer.** Workload score (priority weighted estimates as a percent of capacity, tone flips red over 110 percent and gray under 80). Completion rate (done over total assigned, tone amber under 80 percent and red under 50). Personal cycle time versus the team baseline with a colored delta percent. Review queue with in review count, in progress count, blocked count, and a Bottleneck label when more than one ticket sits in review.
+- **Priority mix plus assigned tickets.** Below the tiles, a priority mix bar with rose for P0, amber for P1, accent for P2, gray for P3. Beside it, the engineer's full assigned ticket list with status color glyphs, priority, title, and estimate.
+- **Fixture enrichment.** Each sprint JSON gained a `perEngineer` block keyed by engineer id with a `personalCycleTime` field. `scripts/add-engineer-data.py` is the one time loader. The script also tunes the cycle time per sprint character (blocked sprint shows nine days for the auth engineers, healthy sprint shows three to four days across the team).
+- **New helpers in `lib/kpi-calc.ts`.** `computeWorkloadScore`, `computeCompletionRate`, `computePersonalCycleTime`, `computeReviewLoad`, `computePriorityMix`, and `buildEngineerDeepDive` aggregate all of the above per engineer.
+- **Wired in.** The page passes `team.map(member => buildEngineerDeepDive(fixture, member))` into `EngineerTabs`, so the eight engineer panels prerender as part of the SSG `/sprint/[id]` route. Tab switching is the only client side state.
+- **Build clean.** Nine routes prerendered. Type check clean.
+- **Next**: W9.D6 generate four meeting brief fixtures (one per sprint). Each brief has executive summary, highlights, watch list, recommendations, and talking points. Stored under `fixtures/sprint-intelligence/briefs/`.
+
 ### 2026-05-19 · 📈 W9.D4 - Sprint Intelligence trend and scope KPI row
 - **Second KPI row.** Eight cards now fill the Team KPIs section, split into the W9.D3 row (burndown, velocity, status mix, blocked) and the new W9.D4 row (cycle time trend, throughput per week, scope creep, carryover rate). All eight cards run off fixture data through `lib/kpi-calc.ts`.
 - **Fixture enrichment.** Each sprint JSON now carries `cycleTime.days` (rolling team cycle time per sprint day with nulls for future days on the in flight sprint), `cycleTime.teamBaseline` (trailing team norm shown as a dashed reference line on the chart), `cycleTime.trend` (improving, flat, or rising tag rendered as a colored chip), and `throughputPerWeek` (`weekOne`, `weekTwo`, `priorAverage` for the comparison bars).

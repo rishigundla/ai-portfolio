@@ -73,6 +73,10 @@ export interface ThroughputPerWeek {
   priorAverage: number
 }
 
+export interface EngineerSprintData {
+  personalCycleTime: number
+}
+
 export interface SprintFixture {
   id: string
   metadata: SprintMetadata
@@ -85,6 +89,7 @@ export interface SprintFixture {
   velocity: number
   cycleTime: CycleTimeSeries
   throughputPerWeek: ThroughputPerWeek
+  perEngineer: Record<string, EngineerSprintData>
 }
 
 // ============================================================
