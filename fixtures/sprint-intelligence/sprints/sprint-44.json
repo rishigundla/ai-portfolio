@@ -378,5 +378,30 @@
   },
   "currentDay": null,
   "fourSprintBaseline": 63,
-  "velocity": 41
+  "velocity": 41,
+  "cycleTime": {
+    "days": [
+      4.6,
+      4.5,
+      4.5,
+      4.6,
+      5.0,
+      6.0,
+      7.0,
+      7.5,
+      7.8,
+      8.0,
+      8.0,
+      7.8,
+      7.5,
+      7.2
+    ],
+    "teamBaseline": 4.5,
+    "trend": "rising"
+  },
+  "throughputPerWeek": {
+    "weekOne": 5,
+    "weekTwo": 10,
+    "priorAverage": 9
+  }
 }

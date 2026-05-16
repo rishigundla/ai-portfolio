@@ -1598,7 +1598,9 @@
         // Phase 3 · Week 9 · Day 2 (4 tasks - manifest loader, full sprint loader, gallery, dashboard shell)
         "9-W9.D2-0", "9-W9.D2-1", "9-W9.D2-2", "9-W9.D2-3",
         // Phase 3 · Week 9 · Day 3 (4 tasks - burndown chart, velocity bar, status donut, blocked card)
-        "9-W9.D3-0", "9-W9.D3-1", "9-W9.D3-2", "9-W9.D3-3"
+        "9-W9.D3-0", "9-W9.D3-1", "9-W9.D3-2", "9-W9.D3-3",
+        // Phase 3 · Week 9 · Day 4 (4 tasks - cycle time trend, throughput per week, scope creep, carryover rate)
+        "9-W9.D4-0", "9-W9.D4-1", "9-W9.D4-2", "9-W9.D4-3"
       ],
 
       phases: [
@@ -1611,6 +1613,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-05-19",
+          title: "📈 W9.D4 - Sprint Intelligence trend and scope KPI row",
+          desc: "Second KPI row landed. Eight cards now fill the Team KPIs section, split into the W9.D3 row (burndown, velocity, status mix, blocked) and the new W9.D4 row (cycle time trend, throughput per week, scope creep, carryover rate). All eight cards run off fixture data, no runtime computation outside lib/kpi-calc.ts. Fixture enrichment. Each sprint JSON now carries cycleTime.days (rolling team cycle time per sprint day with nulls for future days on the in flight sprint), cycleTime.teamBaseline (trailing team norm shown as a dashed reference line on the chart), cycleTime.trend (improving, flat, or rising tag rendered as a colored chip), and throughputPerWeek (weekOne, weekTwo, priorAverage for the comparison bars). New helpers in lib/kpi-calc.ts. buildCycleTimePoints and computeCycleTimeSummary expose latest, earliest, baseline, trend, and a delta percent for the day one to latest movement. computeThroughputSummary sums the week one and week two counts, divides against twice the priorAverage, and returns the delta percent against the prior baseline. computeScopeCreepSummary subtracts scopePlanned from scopeFinal, computes the creep percent, and counts addedMidSprint tickets. computeCarryoverSummary filters status equals done to compute the carry over share, flags the projected state for the in flight sprint, and surfaces the count of blocked tickets within the carry over. Four new card components under app/sprint/[id]/_components/. CycleTimeChart draws an inline SVG line over the day axis with the team baseline as a dashed reference and a trend chip colored green for improving, gray for flat, rose for rising. ThroughputChart stacks three bars (week one, week two, prior average) with a colored delta percent at the top right. ScopeCreepCard shows the headline percent, planned versus final bars, and the tickets added line. CarryoverCard shows a closed versus total ratio bar that fills accent for closed and tone color for carryover. Wired in. /sprint/[id] page renders both KPI rows back to back with a small gap, no extra section headers, so the eight cards read as one cohesive grid. Build clean. Nine routes prerendered, 102 kB First Load JS shared. Type check clean.",
+          next: "W9.D5 - Per engineer deep dive tabs. Tab strip per engineer with workload score (weighted priority), completion rate, personal versus team cycle time, and a review bottleneck callout when an engineer carries too many in-review tickets. Replace the Section 3 of 3 placeholder."
+        },
         {
           date: "2026-05-18",
           title: "📊 W9.D3 - Sprint Intelligence team KPI cards live",

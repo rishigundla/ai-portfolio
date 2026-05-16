@@ -59,6 +59,20 @@ export interface BurndownSeries {
   actual: (number | null)[]
 }
 
+export type CycleTimeTrend = 'improving' | 'flat' | 'rising'
+
+export interface CycleTimeSeries {
+  days: (number | null)[]
+  teamBaseline: number
+  trend: CycleTimeTrend
+}
+
+export interface ThroughputPerWeek {
+  weekOne: number
+  weekTwo: number
+  priorAverage: number
+}
+
 export interface SprintFixture {
   id: string
   metadata: SprintMetadata
@@ -69,6 +83,8 @@ export interface SprintFixture {
   currentDay: number | null
   fourSprintBaseline: number
   velocity: number
+  cycleTime: CycleTimeSeries
+  throughputPerWeek: ThroughputPerWeek
 }
 
 // ============================================================

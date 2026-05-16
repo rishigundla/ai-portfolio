@@ -137,3 +137,114 @@ export function buildBurndownPoints(fixture: SprintFixture): BurndownPoint[] {
 export function sprintScopeDelta(fixture: SprintFixture): number {
   return fixture.scopeFinal - fixture.scopePlanned
 }
+
+export interface CycleTimePoint {
+  day: number
+  value: number | null
+}
+
+export function buildCycleTimePoints(fixture: SprintFixture): CycleTimePoint[] {
+  return fixture.cycleTime.days.map((value, i) => ({ day: i + 1, value }))
+}
+
+export interface CycleTimeSummary {
+  latest: number | null
+  earliest: number | null
+  baseline: number
+  trend: 'improving' | 'flat' | 'rising'
+  deltaPct: number | null
+}
+
+export function computeCycleTimeSummary(
+  fixture: SprintFixture,
+): CycleTimeSummary {
+  const filled = fixture.cycleTime.days.filter(
+    (d): d is number => typeof d === 'number',
+  )
+  const earliest = filled[0] ?? null
+  const latest = filled[filled.length - 1] ?? null
+  const deltaPct =
+    earliest && latest && earliest > 0
+      ? ((latest - earliest) / earliest) * 100
+      : null
+  return {
+    latest,
+    earliest,
+    baseline: fixture.cycleTime.teamBaseline,
+    trend: fixture.cycleTime.trend,
+    deltaPct,
+  }
+}
+
+export interface ThroughputSummary {
+  weekOne: number
+  weekTwo: number
+  total: number
+  priorAverage: number
+  deltaPct: number
+}
+
+export function computeThroughputSummary(
+  fixture: SprintFixture,
+): ThroughputSummary {
+  const { weekOne, weekTwo, priorAverage } = fixture.throughputPerWeek
+  const total = weekOne + weekTwo
+  const deltaPct =
+    priorAverage > 0 ? ((total - priorAverage * 2) / (priorAverage * 2)) * 100 : 0
+  return { weekOne, weekTwo, total, priorAverage, deltaPct }
+}
+
+export interface ScopeCreepSummary {
+  planned: number
+  final: number
+  added: number
+  creepPct: number
+  midSprintAdditions: number
+}
+
+export function computeScopeCreepSummary(
+  fixture: SprintFixture,
+): ScopeCreepSummary {
+  const added = fixture.scopeFinal - fixture.scopePlanned
+  const creepPct =
+    fixture.scopePlanned > 0 ? (added / fixture.scopePlanned) * 100 : 0
+  const midSprintAdditions = fixture.tickets.filter(
+    (t) => t.addedMidSprint,
+  ).length
+  return {
+    planned: fixture.scopePlanned,
+    final: fixture.scopeFinal,
+    added,
+    creepPct,
+    midSprintAdditions,
+  }
+}
+
+export interface CarryoverSummary {
+  done: number
+  total: number
+  carryover: number
+  carryoverPct: number
+  blockedInCarryover: number
+  projected: boolean
+}
+
+export function computeCarryoverSummary(
+  fixture: SprintFixture,
+): CarryoverSummary {
+  const done = fixture.tickets.filter((t) => t.status === 'done').length
+  const total = fixture.tickets.length
+  const carryover = total - done
+  const carryoverPct = total > 0 ? (carryover / total) * 100 : 0
+  const blockedInCarryover = fixture.tickets.filter(
+    (t) => t.status === 'blocked',
+  ).length
+  return {
+    done,
+    total,
+    carryover,
+    carryoverPct,
+    blockedInCarryover,
+    projected: fixture.metadata.status === 'in-progress',
+  }
+}

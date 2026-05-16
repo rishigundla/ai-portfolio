@@ -15,14 +15,23 @@ import {
 import { getFullSprint } from '@/lib/full-sprints'
 import {
   buildBurndownPoints,
+  buildCycleTimePoints,
   computeBlockedSummary,
+  computeCarryoverSummary,
+  computeCycleTimeSummary,
+  computeScopeCreepSummary,
   computeStatusDistribution,
+  computeThroughputSummary,
   computeVelocityComparison,
 } from '@/lib/kpi-calc'
 import { BurndownChart } from './_components/BurndownChart'
 import { VelocityBar } from './_components/VelocityBar'
 import { StatusDonut } from './_components/StatusDonut'
 import { BlockedCard } from './_components/BlockedCard'
+import { CycleTimeChart } from './_components/CycleTimeChart'
+import { ThroughputChart } from './_components/ThroughputChart'
+import { ScopeCreepCard } from './_components/ScopeCreepCard'
+import { CarryoverCard } from './_components/CarryoverCard'
 import { KpiCard } from './_components/KpiCard'
 
 const ACCENT_HEX: Record<string, string> = {
@@ -136,7 +145,7 @@ export default async function SprintDetailPage({ params }: PageProps) {
         <ShellSection
           eyebrow="Section 2 of 3"
           title="Team KPIs"
-          description="Sprint burndown with ideal versus actual, velocity versus the four sprint baseline, status distribution across the ticket mix, and a blocked tickets card with the freshest blocker note. Cycle time, throughput, scope creep, and carryover land alongside in W9.D4."
+          description="Eight cards split into two rows. First row covers the headline sprint health (burndown, velocity, status mix, blocked). Second row covers the trend and scope signals (cycle time trend, throughput per week, scope creep, carryover rate)."
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <KpiCard
@@ -176,6 +185,49 @@ export default async function SprintDetailPage({ params }: PageProps) {
               subtitle="Counts plus story points plus the oldest age in days. The top note surfaces what to action first."
             >
               <BlockedCard summary={computeBlockedSummary(fixture)} />
+            </KpiCard>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+            <KpiCard
+              eyebrow="Cycle time"
+              title="Trend across the sprint"
+              subtitle="Rolling average days from ticket start to done. Dashed baseline is the trailing team norm. Trend chip on the right reads improving, flat, or rising."
+            >
+              <CycleTimeChart
+                points={buildCycleTimePoints(fixture)}
+                summary={computeCycleTimeSummary(fixture)}
+                accentHex={accentHex}
+              />
+            </KpiCard>
+            <KpiCard
+              eyebrow="Throughput"
+              title="Tickets closed per week"
+              subtitle="Week one and week two bars compared with the prior throughput average. Delta percent at the top right summarises the gap."
+            >
+              <ThroughputChart
+                summary={computeThroughputSummary(fixture)}
+                accentHex={accentHex}
+              />
+            </KpiCard>
+            <KpiCard
+              eyebrow="Scope creep"
+              title="Planned versus final scope"
+              subtitle="Headline percent and the absolute ticket delta. Mid sprint additions are pulled from the addedMidSprint flag on every ticket."
+            >
+              <ScopeCreepCard
+                summary={computeScopeCreepSummary(fixture)}
+                accentHex={accentHex}
+              />
+            </KpiCard>
+            <KpiCard
+              eyebrow="Carryover"
+              title="Tickets carrying into the next sprint"
+              subtitle="Closed versus total split. The in flight sprint marks the number as projected since the carryover state can still shift."
+            >
+              <CarryoverCard
+                summary={computeCarryoverSummary(fixture)}
+                accentHex={accentHex}
+              />
             </KpiCard>
           </div>
         </ShellSection>
