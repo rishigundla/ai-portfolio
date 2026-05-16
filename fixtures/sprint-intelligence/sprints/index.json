@@ -1,0 +1,57 @@
+{
+  "version": "1.0.0",
+  "generatedAt": "2026-05-16",
+  "team": [
+    { "id": "eng-1", "name": "Alex Chen", "role": "Senior Engineer", "capacity": 13 },
+    { "id": "eng-2", "name": "Priya Sharma", "role": "Senior Engineer", "capacity": 13 },
+    { "id": "eng-3", "name": "Marcus Johnson", "role": "Engineer", "capacity": 10 },
+    { "id": "eng-4", "name": "Sophia Rodriguez", "role": "Engineer", "capacity": 10 },
+    { "id": "eng-5", "name": "Kai Tanaka", "role": "Junior Engineer", "capacity": 7 },
+    { "id": "eng-6", "name": "Emma Williams", "role": "Engineer", "capacity": 10 },
+    { "id": "eng-7", "name": "Liam Sullivan", "role": "Engineering Manager", "capacity": 5 },
+    { "id": "eng-8", "name": "Zara Khan", "role": "Senior Engineer", "capacity": 13 }
+  ],
+  "totalCapacity": 81,
+  "sprints": [
+    {
+      "id": "sprint-42",
+      "name": "Sprint 42",
+      "tagline": "Healthy sprint. Dashboard redesign and auth flow shipped on schedule",
+      "startDate": "2026-02-16",
+      "endDate": "2026-03-01",
+      "status": "completed",
+      "ticketCount": 22,
+      "colorToken": "accent"
+    },
+    {
+      "id": "sprint-43",
+      "name": "Sprint 43",
+      "tagline": "Scope creep. Customer escalation added six P0 tickets mid sprint",
+      "startDate": "2026-03-02",
+      "endDate": "2026-03-15",
+      "status": "completed",
+      "ticketCount": 28,
+      "colorToken": "amber"
+    },
+    {
+      "id": "sprint-44",
+      "name": "Sprint 44",
+      "tagline": "Blocked sprint. Auth migration stalled, three engineers idled",
+      "startDate": "2026-03-16",
+      "endDate": "2026-03-29",
+      "status": "completed",
+      "ticketCount": 24,
+      "colorToken": "rose"
+    },
+    {
+      "id": "sprint-45",
+      "name": "Sprint 45",
+      "tagline": "Currently in flight. Onboarding redesign and the analytics revamp",
+      "startDate": "2026-03-30",
+      "endDate": "2026-04-12",
+      "status": "in-progress",
+      "ticketCount": 26,
+      "colorToken": "purple"
+    }
+  ]
+}

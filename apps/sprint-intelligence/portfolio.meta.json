@@ -1,0 +1,22 @@
+{
+  "slug": "sprint-intelligence",
+  "title": "AI Sprint Intelligence Dashboard",
+  "category": "AI",
+  "tags": ["AI", "Sprint Analytics", "Jira", "React", "Next.js", "Claude"],
+  "description": "Pick a synthetic sprint, watch the dashboard fill with team and individual KPIs, get a streaming AI authored meeting brief with workload rebalancing recommendations.",
+  "thumbnail": "/projects/ai-sprint-intelligence.png",
+  "liveUrl": "",
+  "githubUrl": "https://github.com/rishigundla/ai-portfolio/tree/main/apps/sprint-intelligence",
+  "caseStudyUrl": "",
+  "loomUrl": "",
+  "deployedAt": "",
+  "resumeBullet": {
+    "category": "AI-Powered Analytics & Data Engineering Projects",
+    "text": "Built an AI Sprint Intelligence Dashboard on Next.js + Vercel. Pick a synthetic sprint from a curated library, the dashboard fills with team and individual KPIs (burndown, velocity, cycle time, scope creep, carryover, workload distribution), and a streaming AI meeting brief appears with exec summary, watch list, and workload rebalancing recommendations. Shares the streaming primitive plus design system with the rest of the portfolio."
+  },
+  "portfolioCard": {
+    "problem": "Sprint review prep is one of the most expensive recurring meetings on an engineering team. The lead spends an hour every two weeks consolidating Jira, calling out blockers, and writing a one page summary the room can actually read. Standard Jira dashboards show the data but stop one step short of telling the story.",
+    "approach": "Pick a sprint, the dashboard fills with team KPIs (burndown, velocity vs four sprint baseline, status distribution, blocked tickets, cycle time, throughput, scope creep, carryover) plus per engineer deep dive tabs (workload score, completion rate, personal vs team cycle time, review bottleneck). When the page loads, a streaming AI meeting brief appears with executive summary, highlights, watch list, recommendations, and talking points. Same streaming primitive as Project 1 and Project 2, applied to a different domain.",
+    "impact": "Sprint review prep drops from an hour per cycle to a five minute review of the AI brief. The dashboard surfaces the right KPIs for the conversation, the AI brief gives the lead a starting structure, and the team comes into the room aligned on what shipped and what is at risk."
+  }
+}

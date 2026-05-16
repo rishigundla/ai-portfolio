@@ -15,7 +15,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Current Phase** | Phase 2 · CLOSED → Phase 3 (Sprint Intelligence) awaits |
+| **Current Phase** | Phase 3 · Project 3 (Sprint Intelligence) IN PROGRESS |
 | **Current Week** | Week 7 of 14 (closed) |
 | **Current Day** | Week 7 · CLOSED — Project 2 SHIPPED v1.0 (`v1.0-narrative-generator` tagged) plus post v1.0 polish round (W7.D6-D7 closed Cat A 1 plus deck redesign plus plan website hardening). **Awaiting confirmation to begin Project 3.** |
 | **Overall Progress** | 210 tasks of ~210 complete · **Project 1 SHIPPED v1.0** + **Project 2 SHIPPED v1.0** · Phase 0 ✓ · Weeks 1-7 ✓ · 14 of 14 Phase-2 days closed |
@@ -108,6 +108,15 @@ User scope call: Cat C items are real-resource-cost themes, not Project-1-close 
 ## Recent Activity Log
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
+
+### 2026-05-16 · 🚀 W9.D1 - Project 3 (Sprint Intelligence) kickoff
+- **App scaffold shipped.** `apps/sprint-intelligence/` mirrors the narrative generator bootstrap pattern. `package.json` (port 3004), `next.config`, tailwind preset, tsconfig, postcss, `.gitignore`, `portfolio.meta.json` skeleton, `README`, and the app shell with `ParticleBackground`, `ThemeProvider`, `Nav`, and a footer credit row all in place.
+- **Four route surfaces stubbed.** `/` home with the three step pitch, `/sprints` placeholder gallery, `/sprint/[id]` placeholder detail, plus auto generated `/icon` and `/apple-icon` (SI wordmark on a teal accent gradient).
+- **Four synthetic sprint fixtures authored.** `fixtures/sprint-intelligence/sprints/sprint-42.json` (healthy, 22 tickets, dashboard redesign plus auth flow shipped on plan). `sprint-43.json` (scope creep, 22 to 28 tickets after a day four customer escalation, velocity 73 SP). `sprint-44.json` (blocked, identity provider breaking change idled three engineers for nine days, velocity 41 SP). `sprint-45.json` (in flight, day eight of fourteen, onboarding redesign behind a flag plus analytics revamp plus auth migration retry).
+- **Ticket schema.** Each fixture carries 22 to 28 tickets with id, title, type (story/bug/task/spike), assignee, status (done/in-progress/in-review/todo/blocked), priority (P0 to P3), estimate (story points), labels, and `addedMidSprint` flag. Blocked tickets carry a `blockerNote`.
+- **Shared team of eight engineers.** Three senior, three mid, one junior, one engineering manager. Each with role and capacity. Total sprint capacity 81 SP. Manifest at `fixtures/sprint-intelligence/sprints/index.json` drives the gallery.
+- **Build verified.** `pnpm install` picked up the new workspace cleanly. `pnpm --filter sprint-intelligence build` emits seven routes (three static plus two dynamic for `/sprint/[id]` plus two icon routes), 102 kB First Load JS shared. Type check clean.
+- **Next**: W9.D2 sprint selector dropdown, dashboard shell with three column structure (brief panel top, KPIs middle, deep dive tabs bottom), `lib/sprints.ts` manifest loader and `lib/full-sprints.ts` per id loader mirroring the narrative generator split pattern.
 
 ### 2026-05-16 · 🎁 W7.D6-D7 - Project 2 post v1.0 polish round and final wrap
 - **Cat A 1 from W7.D5 shipped.** `flattenMarkdown` to `pptxgenjs` rich text array. `lib/build-pptx.ts` now uses `toRichText` plus a `parseInline` parser that converts bold, italic, and inline code markdown into the rich text array shape `pptxgenjs` accepts. Bold and italic emphasis survive end to end and match the on-screen preview.
