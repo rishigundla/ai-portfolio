@@ -280,9 +280,7 @@
 
     .phase-card {
       background: var(--surface-solid);
-      text-decoration: none;
       color: inherit;
-      display: block;
       cursor: pointer;
       border: 1px solid var(--border);
       border-radius: 12px;
@@ -385,6 +383,44 @@
       margin-top: 8px;
       display: flex;
       justify-content: space-between;
+    }
+
+    .phase-card-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    .phase-card-link {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 4px 8px;
+      border-radius: 5px;
+      border: 1px solid var(--border);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .phase-card-link:hover {
+      color: var(--accent);
+      border-color: var(--border-accent);
+      background: var(--accent-glow);
+    }
+
+    .phase-card-link svg {
+      flex-shrink: 0;
+    }
+
+    .phase-card:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
     }
 
     /* STATUS TABLE */
@@ -1611,8 +1647,8 @@
 
       phases: [
         { id: 0, name: "Pre-flight Setup", weeks: "—", totalDays: 5, done: 5, status: "completed", code: "P0" },
-        { id: 1, name: "Project 1 · Dashboard Factory", weeks: "1-5", totalDays: 32, done: 32, status: "completed", code: "P1", tag: "v1.0-dashboard-factory", liveUrl: "https://ai-portfolio-dashboard-factory.vercel.app", caseStudyUrl: "./case-studies/dashboard-factory.md" },
-        { id: 2, name: "Project 2 · Narrative Generator", weeks: "6-7", totalDays: 14, done: 43, status: "completed", code: "P2", tag: "v1.0-narrative-generator", liveUrl: "https://ai-portfolio-narrative-generator.vercel.app", caseStudyUrl: "./case-studies/narrative-generator.md" },
+        { id: 1, name: "Project 1 · Dashboard Factory", weeks: "1-5", totalDays: 32, done: 32, status: "completed", code: "P1", tag: "v1.0-dashboard-factory", liveUrl: "https://ai-portfolio-dashboard-factory.vercel.app", caseStudyUrl: "https://github.com/rishigundla/ai-portfolio/blob/main/docs/case-studies/dashboard-factory.md" },
+        { id: 2, name: "Project 2 · Narrative Generator", weeks: "6-7", totalDays: 14, done: 43, status: "completed", code: "P2", tag: "v1.0-narrative-generator", liveUrl: "https://ai-portfolio-narrative-generator.vercel.app", caseStudyUrl: "https://github.com/rishigundla/ai-portfolio/blob/main/docs/case-studies/narrative-generator.md" },
         { id: 3, name: "Project 3 · Sprint Intelligence", weeks: "8-9", totalDays: 14, done: 0, status: "not-started", code: "P3" },
         { id: 4, name: "Project 4 · Anomaly Alerting", weeks: "10-12", totalDays: 21, done: 0, status: "not-started", code: "P4" },
         { id: 5, name: "Project 5 · Pipeline Self-Healer", weeks: "13-14", totalDays: 21, done: 0, status: "not-started", code: "P5" }
@@ -2483,8 +2519,40 @@
           status = 'in-progress'; statusLabel = 'In Progress';
         }
 
+        const links = []
+        if (phase.liveUrl) {
+          links.push(`<a href="${escapeHtml(phase.liveUrl)}" target="_blank" rel="noopener noreferrer" class="phase-card-link" onclick="event.stopPropagation()">
+            <svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <path d="M9 3h4v4M13 3L7 9M5 4H3v9h9v-2"/>
+            </svg>
+            Live site
+          </a>`)
+        }
+        if (phase.caseStudyUrl) {
+          links.push(`<a href="${escapeHtml(phase.caseStudyUrl)}" target="_blank" rel="noopener noreferrer" class="phase-card-link" onclick="event.stopPropagation()">
+            <svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <path d="M9 2H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V6L9 2zM9 2v4h4M6 8h4M6 10h4M6 12h2"/>
+            </svg>
+            Case study
+          </a>`)
+        }
+        if (phase.tag) {
+          links.push(`<a href="https://github.com/rishigundla/ai-portfolio/releases/tag/${escapeHtml(phase.tag)}" target="_blank" rel="noopener noreferrer" class="phase-card-link" onclick="event.stopPropagation()">
+            <svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <path d="M2 6V2h4l8 8-4 4-8-8z"/>
+              <circle cx="5" cy="5" r="1" fill="currentColor"/>
+            </svg>
+            ${escapeHtml(phase.tag)}
+          </a>`)
+        }
+        const linksRow = links.length > 0
+          ? `<div class="phase-card-links">${links.join('')}</div>`
+          : ''
+
         return `
-          <a href="#plan-phase-${phase.id}" class="phase-card ${isActive ? 'active' : ''}" onclick="return navigateToPhase(${phase.id})">
+          <div class="phase-card ${isActive ? 'active' : ''}" role="link" tabindex="0"
+               onclick="navigateToPhase(${phase.id})"
+               onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();navigateToPhase(${phase.id})}">
             <div class="phase-card-header">
               <span class="phase-num">${escapeHtml(phase.code)}</span>
               <span class="phase-status ${status}">${statusLabel}</span>
@@ -2498,7 +2566,8 @@
               <span>${pp.done} / ${pp.total} tasks</span>
               <span>${pct}%</span>
             </div>
-          </a>
+            ${linksRow}
+          </div>
         `;
       }).join('');
     }
