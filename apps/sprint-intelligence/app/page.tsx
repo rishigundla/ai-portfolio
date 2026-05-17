@@ -17,13 +17,10 @@ export default function HomePage() {
             </span>
           </h1>
           <p className="mt-6 max-w-2xl text-lg sm:text-xl text-text-secondary leading-relaxed">
-            Pick a monthly sprint from a six-sprint roster (four completed, one
-            in flight, one already filling up with backlog). Filter by assignee
-            or ticket type. The dashboard fills with a wide KPI strip, a
-            priority breakdown, ETA discipline tiles, per-ticket cycle time
-            and aging bars, and a workload-by-assignee preview. An AI authored
-            meeting brief closes the page with the recommendations that go
-            into the room.
+            Pick a monthly sprint. The dashboard fills with a filterable KPI
+            strip, an activity heatmap, and a workload preview. A streaming
+            AI meeting brief closes the page with the recommendations that
+            go into the room.
           </p>
           <div className="mt-10 flex flex-wrap gap-3">
             <Link
@@ -42,17 +39,17 @@ export default function HomePage() {
           <StepCard
             num="01"
             title="Pick a sprint"
-            description="Six monthly sprints across the first half of 2026, themed around real BI and data engineering work (Pulse SSOT on Databricks, Jira SSOT, RevOps Sales SSOT, Microsoft Fabric, Tableau Server, Genie Space). Four completed sprints carry different stories (healthy, scope creep absorbed, blocked, recovered). One sprint is currently in flight at day 17 of 31. One sprint is already filling up with backlog tickets the manager has earmarked for next cycle."
+            description="Six monthly sprints across the first half of 2026, themed around BI and data engineering work. Four completed (healthy, scope creep absorbed, blocked, recovered), one in flight at day 17 of 31, one filling up with backlog for next cycle."
           />
           <StepCard
             num="02"
             title="Read the analysis"
-            description="Filter bar at the top (assignee, ticket type, status). Below it: a wide KPI strip and a story points strip, then avg time in current status plus a priority breakdown, then ETA discipline tiles (Missing ETA, Overdue), then per-ticket cycle time and aging bars, then workload by assignee. Standard sprint health cards (burndown, velocity, scope creep, carryover) sit below for the agile rituals. Per-engineer deep dive tabs at the bottom plus a six-sprint history table for context."
+            description="Filter by assignee, type, or status. A wide KPI strip, story points strip, priority breakdown, ETA discipline tiles, per-ticket cycle time and aging bars, and workload by assignee. Sprint health cards (burndown, velocity, scope creep, carryover) for the agile rituals. Per-engineer deep dive with an activity heatmap plus a six-sprint history table."
           />
           <StepCard
             num="03"
             title="Take the brief into the room"
-            description="A streaming AI meeting brief closes the page. Executive summary, highlights, watch list, recommendations, talking points. For the backlog sprint, the brief flips to a planning summary plus allocation highlights so the manager can walk into planning ready to lock etas."
+            description="A streaming AI meeting brief closes the page. Executive summary, highlights, watch list, recommendations, talking points. The backlog sprint flips to a planning brief with allocation highlights."
           />
         </div>
       </section>
