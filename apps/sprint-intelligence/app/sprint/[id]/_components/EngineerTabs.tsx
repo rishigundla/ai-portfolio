@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { AlertOctagon, CheckCircle2, Clock, GaugeCircle, ListChecks } from 'lucide-react'
 import type {
   EngineerDeepDive,
@@ -12,8 +13,20 @@ interface EngineerTabsProps {
 }
 
 export function EngineerTabs({ deepDives, accentHex }: EngineerTabsProps) {
-  const [activeId, setActiveId] = React.useState<string>(
-    deepDives[0]?.engineer.id ?? '',
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const urlEng = searchParams.get('eng')
+  const defaultId = deepDives[0]?.engineer.id ?? ''
+  const activeId = urlEng && deepDives.some((d) => d.engineer.id === urlEng)
+    ? urlEng
+    : defaultId
+  const setActiveId = React.useCallback(
+    (id: string) => {
+      const params = new URLSearchParams(Array.from(searchParams.entries()))
+      params.set('eng', id)
+      router.replace(`?${params.toString()}`, { scroll: false })
+    },
+    [router, searchParams],
   )
   const active = deepDives.find((d) => d.engineer.id === activeId) ?? deepDives[0]
   if (!active) {

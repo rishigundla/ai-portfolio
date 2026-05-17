@@ -1642,7 +1642,9 @@
         // Phase 3 · Week 9 · Day 6 (4 tasks - four brief fixtures, five section structure, fixture grounded prose, loader)
         "9-W9.D6-0", "9-W9.D6-1", "9-W9.D6-2", "9-W9.D6-3",
         // Phase 3 · Week 9 · Day 7 (4 tasks - StreamingBriefPanel component, progress strip, cancel and replay, page wiring)
-        "9-W9.D7-0", "9-W9.D7-1", "9-W9.D7-2", "9-W9.D7-3"
+        "9-W9.D7-0", "9-W9.D7-1", "9-W9.D7-2", "9-W9.D7-3",
+        // Phase 3 · Week 10 · Day 1 (4 tasks - team workload card, engineer tabs URL state, blocker history dialog, Suspense plus anchor)
+        "10-W10.D1-0", "10-W10.D1-1", "10-W10.D1-2", "10-W10.D1-3"
       ],
 
       phases: [
@@ -1655,6 +1657,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-05-17",
+          title: "🧭 W10.D1 - Sprint Intelligence polish interactions: workload drill and blocker history",
+          desc: "Two polish interactions landed on /sprint/[id]. New TeamWorkloadCard component renders eight engineer rows in Section 2 (a third KPI row below the existing eight cards), each row carries first name, role glyph (Sr, Jr, EM, Eng), a workload bar tinted by load tone (rose over 110 percent, gray under 80, accent in the middle band), and the percent against capacity at the right. Clicking any row sets the eng search param via router.replace and smooth scrolls down to a new id=per-engineer-section anchor. EngineerTabs reads the same eng search param via useSearchParams as its active engineer, with the first engineer as a fallback when the param is missing or invalid. Both components are wrapped in Suspense fallbacks because Next.js 15 refuses to prerender SSG pages whose consumers call useSearchParams outside a Suspense boundary. BlockedCard promoted from server to client component to host modal state. New View blocker history button opens an inline dialog (fixed inset zero, bg-base-900/80 backdrop-blur-sm overlay, stopPropagation on the inner card so backdrop click dismisses but content click does not) that lists every blocked ticket with id, priority, story points, assignee name (looked up from the team manifest), full blocker note rendered with a rose left border stripe, and the label chips. Escape key dismisses, body scroll lock while open. Sprint 44 surfaces five blockers with full context in the dialog, sprint 42 and 45 show the all clear state with no View history button needed. Build clean via direct next build. /sprint/[id] First Load JS now at 51.7 kB (up from 49.8 kB) because the dialog state lives in BlockedCard which became a client component. Type check clean.",
+          next: "W10.D2 - Responsive polish. Breakpoint testing across 1440 / 1280 / 768. Mobile collapse rules for the deep dive tabs (horizontal scroll on a narrow strip, or convert to an accordion). Mobile bottom sheet pattern for the blocker history dialog."
+        },
         {
           date: "2026-05-17",
           title: "🎙️ W9.D7 - Sprint Intelligence streaming meeting brief panel",
@@ -2290,7 +2298,7 @@
           name: "Week 10 — Project 3 Polish + Deploy",
           goal: "Project 3 live, automation fires",
           days: [
-            { num: "W10.D1", weekday: "Mon", name: "Interactions + Drill-Downs", tasks: ["Click engineer name → filter to that person", "Click blocker → show blocker history"] },
+            { num: "W10.D1", weekday: "Mon", name: "Polish interactions: team workload drill, blocker history", tasks: ["TeamWorkloadCard with per engineer bars in Section 2, click an engineer to update the eng URL search param and scroll to the deep dive section", "EngineerTabs now reads the eng search param as the active engineer so the drill in from the workload card lands on the right tab", "BlockedCard converted to a client component with a View blocker history button that opens an inline dialog listing every blocked ticket with id, priority, story points, assignee, full blocker note, and labels", "Section 3 wrapped in an id=per-engineer-section anchor for smooth scroll plus Suspense boundaries around the two useSearchParams consumers so SSG prerendering still works"] },
             { num: "W10.D2", weekday: "Tue", name: "Responsive Polish", tasks: ["Breakpoint testing", "Mobile: collapse deep-dive tabs to accordion"] },
             { num: "W10.D3", weekday: "Wed", name: "States + Errors", tasks: ["Skeleton states", "Error boundaries"] },
             { num: "W10.D4", weekday: "Thu", name: "Lighthouse + SEO", tasks: ["90+ audit"] },

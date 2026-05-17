@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { Suspense } from 'react'
 import { ArrowLeft, CalendarRange, Ticket } from 'lucide-react'
 import {
   getSprintSummary,
@@ -38,6 +39,7 @@ import { CarryoverCard } from './_components/CarryoverCard'
 import { EngineerTabs } from './_components/EngineerTabs'
 import { KpiCard } from './_components/KpiCard'
 import { StreamingBriefPanel } from './_components/StreamingBriefPanel'
+import { TeamWorkloadCard } from './_components/TeamWorkloadCard'
 
 const ACCENT_HEX: Record<string, string> = {
   accent: '#2dd4bf',
@@ -195,7 +197,7 @@ export default async function SprintDetailPage({ params }: PageProps) {
               title="Tickets and the freshest blocker note"
               subtitle="Counts plus story points plus the oldest age in days. The top note surfaces what to action first."
             >
-              <BlockedCard summary={computeBlockedSummary(fixture)} />
+              <BlockedCard summary={computeBlockedSummary(fixture)} team={team} />
             </KpiCard>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
@@ -241,18 +243,48 @@ export default async function SprintDetailPage({ params }: PageProps) {
               />
             </KpiCard>
           </div>
+          <div className="mt-4">
+            <KpiCard
+              eyebrow="Team workload"
+              title="Per engineer load against capacity"
+              subtitle="Priority weighted estimates as a share of each engineer's capacity. Click an engineer to drop into their deep dive panel below."
+            >
+              <Suspense
+                fallback={
+                  <div className="text-[11px] font-mono text-text-muted">
+                    Loading team workload...
+                  </div>
+                }
+              >
+                <TeamWorkloadCard
+                  deepDives={team.map((member) => buildEngineerDeepDive(fixture, member))}
+                  accentHex={accentHex}
+                />
+              </Suspense>
+            </KpiCard>
+          </div>
         </ShellSection>
 
-        <ShellSection
-          eyebrow="Section 3 of 3"
-          title="Per engineer deep dive"
-          description="Tab strip per engineer. Each engineer card shows workload score (priority weighted estimates against capacity), completion rate, personal versus team cycle time, and a review queue tile with a bottleneck flag when more than one ticket is sitting in review. Below the stat tiles, a priority mix bar and the engineer's ticket list."
-        >
-          <EngineerTabs
-            deepDives={team.map((member) => buildEngineerDeepDive(fixture, member))}
-            accentHex={accentHex}
-          />
-        </ShellSection>
+        <div id="per-engineer-section">
+          <ShellSection
+            eyebrow="Section 3 of 3"
+            title="Per engineer deep dive"
+            description="Tab strip per engineer. Each engineer card shows workload score (priority weighted estimates against capacity), completion rate, personal versus team cycle time, and a review queue tile with a bottleneck flag when more than one ticket is sitting in review. Below the stat tiles, a priority mix bar and the engineer's ticket list."
+          >
+            <Suspense
+              fallback={
+                <div className="text-[11px] font-mono text-text-muted">
+                  Loading engineer tabs...
+                </div>
+              }
+            >
+              <EngineerTabs
+                deepDives={team.map((member) => buildEngineerDeepDive(fixture, member))}
+                accentHex={accentHex}
+              />
+            </Suspense>
+          </ShellSection>
+        </div>
       </div>
     </section>
   )
