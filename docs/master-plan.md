@@ -15,13 +15,13 @@
 
 | Field | Value |
 |-------|-------|
-| **Current Phase** | Phase 3 · Project 3 (Sprint Intelligence) IN PROGRESS |
-| **Current Week** | Week 12 of 18 (Project 3 wrap-up in flight, 3 of 4 days closed) |
-| **Current Day** | Week 12 · Day 3 - Sprint Intelligence case study published at docs/case-studies/sprint-intelligence.md (~1500 words, nine sections, three engineering moments). caseStudyUrl wired in portfolio.meta.json. READMEs updated to link the published case study. Chart palette tokens added to the design system, 17 chart components swept from hardcoded hex literals to `var(--chart-*)` references. KPI tiles + heatmap + sprint gallery cards all theme cleanly in both light and dark. Project 3 case study + `v1.0-sprint-intelligence` git tag still pending. |
-| **Overall Progress** | 210 tasks of ~210 complete · **Project 1 SHIPPED v1.0** + **Project 2 SHIPPED v1.0** · Phase 0 ✓ · Weeks 1-7 ✓ · 14 of 14 Phase-2 days closed |
-| **Status** | **🏁 PROJECT 2 CLOSED · `v1.0-narrative-generator` tagged · awaiting confirmation to begin Project 3.** Closed across Week 6-7 in 14 days: scaffold (W6.D1) → Vercel deploy (W6.D2) → dashboard fixtures + loaders + gallery (W6.D3) → narrative fixtures + streaming panel (W6.D4) → 7-slide deck preview (W6.D5) → cross-viewport QA + Lighthouse polish (W6.D6, 3 of 4 routes at 100/100/100/100) → PPTX export wired (W7.D1, 14.2 kB → 167 B First Load on /deck/[slug]) → PPTX visual + Lighthouse re-audit (W7.D2) → README + portfolioCard polish (W7.D3) → 1,570-word case study (W7.D4) → v1.0 tag + Cat A/B/C audit (W7.D5). **No Project 3 work has started.** Prior milestone: **🏁 PROJECT 1 CLOSED · `v1.0-dashboard-factory` tagged** (W5.D6.2). Full week-by-week history lives in the activity log below. |
-| **Next Action** | **Awaiting user confirmation before starting Project 3 (Sprint Intelligence).** Per the 14-week plan, Project 3 is synthetic sprints → team + individual KPIs → AI meeting brief. W8.D1 would scaffold `apps/sprint-intelligence/` (new Next.js 15 app, mirror narrative-generator's bootstrap pattern: `workspace:*` deps, design-system Tailwind preset, route-shell stubs). Cat A items from Project 2 (`flattenMarkdown` rich-text upgrade for PPTX emphasis fidelity, Lighthouse-in-CI as shared infra for Projects 3-5) are also reasonable W8 starting work if you want Project 2 v1.0 to settle further first. |
-| **Blockers** | None. Projects 1 + 2 both shipped at v1.0; Project 3 awaits confirmation. |
+| **Current Phase** | Phase 3 · Project 3 (Sprint Intelligence) SHIPPED v1.0 |
+| **Current Week** | Week 12 of 18 closed. Phase 4 (Project 4 · Anomaly Alerting) starts at Week 13. |
+| **Current Day** | Week 12 · Day 4 - Project 3 SHIPPED v1.0 (`v1.0-sprint-intelligence` tagged). Cat A tech debt prune (TeamWorkloadCard.tsx removed). Pending Follow-ups section in master plan plus Phase Progress Overview row flipped to Shipped v1.0. Status surfaces updated to signal Phase 4 readiness. |
+| **Overall Progress** | 332 tasks of 436 complete · **Project 1 SHIPPED v1.0** + **Project 2 SHIPPED v1.0** + **Project 3 SHIPPED v1.0** · Phase 0 plus Weeks 1 through 12 closed |
+| **Status** | **🏁 PROJECT 3 CLOSED · `v1.0-sprint-intelligence` tagged · awaiting confirmation to begin Project 4.** Closed across Weeks 9 through 12 in 25 days. Six monthly sprint fixtures with 138 hand curated tickets, filter bar feeding every dashboard surface (KPI strip plus story points strip plus time in status plus priority breakdown plus ETA discipline plus per ticket cycle time plus aging plus workload plus sprint health cards plus per engineer deep dive with activity heatmap plus cross sprint history plus trend charts plus streaming AI brief). Case study at approximately 1500 words across nine sections. Light and dark mode theming via chart palette tokens lifted into the design system. **No Project 4 work has started.** Prior milestones: 🏁 PROJECT 1 CLOSED (`v1.0-dashboard-factory`, W5.D6.2) and 🏁 PROJECT 2 CLOSED (`v1.0-narrative-generator`, W7.D5). Full week by week history lives in the activity log below. |
+| **Next Action** | **Awaiting user confirmation before starting Project 4 (Anomaly Alerting).** Per the 18 week plan, Project 4 is synthetic historical time series → curated anomaly scenarios → streaming AI root cause narration. W13.D1 would scaffold `apps/anomaly-alerting/` (new Next.js 15 app, mirror sprint-intelligence's bootstrap pattern: `workspace:*` deps, design-system Tailwind preset, route shell stubs, fixture loaders). Cat A items inherited from Project 3 (Lighthouse in CI shared infrastructure) are reasonable W13 setup work to land before Project 4 ramps up. |
+| **Blockers** | None. Projects 1, 2, and 3 all shipped at v1.0. Project 4 awaits confirmation. |
 
 ### Phase Progress Overview
 
@@ -30,7 +30,7 @@
 | 0 | Pre-flight setup | — | — | 5 / 5 | Completed |
 | 1 | Project 1 · Dashboard Factory | 1-5 | 32 | 32 / 28 | **✅ Shipped v1.0** (`v1.0-dashboard-factory`, [case study](./case-studies/dashboard-factory.md), [live](https://ai-portfolio-dashboard-factory.vercel.app)) |
 | 2 | Project 2 · Narrative Generator | 6-7 | 14 | 14 / 14 | **✅ Shipped v1.0** (`v1.0-narrative-generator`, [case study](./case-studies/narrative-generator.md), [live](https://ai-portfolio-narrative-generator.vercel.app)) |
-| 3 | Project 3 · Sprint Intelligence | 9-12 | 25 | 22 / 25 | **In Wrap-up** (live at <https://ai-portfolio-sprint-intelligence.vercel.app>, 3 wrap-up days planned: README + case study + v1.0 tag) |
+| 3 | Project 3 · Sprint Intelligence | 9-12 | 25 | 25 / 25 | **✅ Shipped v1.0** (`v1.0-sprint-intelligence`, [case study](./case-studies/sprint-intelligence.md), [live](https://ai-portfolio-sprint-intelligence.vercel.app)) |
 | 4 | Project 4 · Anomaly Alerting | 13-15 | 21 | 0 / 21 | Not Started |
 | 5 | Project 5 · Pipeline Self-Healer | 16-18 | 21 | 0 / 21 | Not Started |
 
@@ -102,6 +102,34 @@ User scope call: Cat C items are real-resource-cost themes, not Project-1-close 
 - ML-driven narrative generation — today the 6 narratives are hand-curated markdown. A real implementation would feed the dashboard fixture (KPIs + charts + rows) to a model and generate the narrative on the server, then stream it via the same `replayFixture` primitive. Bigger architectural shift; v2 territory.
 - Multi-format export — PPTX is the right primitive for exec readouts; PDF for distribution; Google Slides for collaboration. Same fixture, three export endpoints. Project 3+ infrastructure.
 - Custom domain mapping for the live demo and case study — needs domain registration + Vercel domain config (same item as Project 1's Cat C).
+
+---
+
+## Project 3 (Sprint Intelligence) — SHIPPED v1.0 · 2026-05-17
+
+**Tag**: `v1.0-sprint-intelligence` &nbsp;·&nbsp; **Live**: <https://ai-portfolio-sprint-intelligence.vercel.app> &nbsp;·&nbsp; **Case study**: [`docs/case-studies/sprint-intelligence.md`](./case-studies/sprint-intelligence.md)
+
+**Status**: Project 3 fully closed. Six monthly sprint fixtures (138 hand curated tickets), filter bar feeding every dashboard surface, KPI strip plus story points strip plus time in status plus priority breakdown plus ETA discipline plus per ticket cycle time plus aging tickets plus workload by assignee plus the standard sprint health cards plus per engineer deep dive with an activity heatmap plus the cross sprint history table plus trend charts plus the streaming AI brief at the bottom. Case study at approximately 1500 words across nine sections. Closed across Weeks 9 through 12 in 25 days.
+
+### Category A · Known tech debt (blocks "really done", not v1)
+
+- [x] **`TeamWorkloadCard.tsx` pruned** (W12.D4). The dead-code component left over from the W11.D1 swap to `WorkloadByAssignee` was deleted. No source references remained, only stale `.next` cache entries.
+- [x] **Section eyebrow audit on `/sprint/[id]/page.tsx`** (W12.D4). Confirmed the dashboard already uses descriptive eyebrows (Status and priority, ETA discipline, Per ticket signals, Workload, Sprint health, Per engineer, Sprint history, Cross sprint trend, Meeting brief). No numbered Section N of M eyebrows are still in the page after the W11 restructure.
+- [ ] **Lighthouse in CI** — same gap inherited from Project 2 Cat A #2. The W10.D4 a11y plus SEO pass ran a one shot audit (heading order, ARIA, contrast, focus order all clean) but a GitHub Action running `npx lighthouse` against preview URLs on every PR would catch structural regressions automatically. Shared infrastructure for Projects 4 and 5.
+
+### Category B · Polish (nice to have, will not change the story)
+
+- [ ] **`accentHex` prop cleanup on `DeepDivePanel`** — after the W10.D15 light-mode theming pass, most chart components stopped consuming `accentHex` in favor of `var(--chart-*)` tokens. The prop still flows through `DeepDivePanel` plus a handful of leaf components for backward compatibility. A small sweep can remove the prop from the call chain and tighten the surface area. Cosmetic but cheap.
+- [ ] **`getColorClasses` deprecation pass** — the `purple`, `blue`, `rose`, `teal`, and `accent` entries in `COLOR_CLASSES` are no longer referenced by any sprint in the new monthly model (status driven colors only use `green`, `amber`, `slate`). Keeping the unused entries is harmless but the map could be trimmed.
+- [ ] **`/sprints` gallery card hover state for the planned sprint** — completed and in flight cards have a subtle hover lift, but the planned (slate) card uses the same lift and the muted color makes the effect barely visible. A slightly stronger ring on hover would help.
+
+### Category C · Future work (documented in case study, deferred by design)
+
+- Per sprint comparison view — the cross sprint trend charts show per sprint counts but do not let the user pivot on the engineer or ticket axis. A real product would let the user pick two sprints and overlay them side by side.
+- Activity heatmap drill in — today the heatmap row shows a ticket id label and a hover title. Clicking through to a ticket detail page (or a Jira deep link) would be the natural next move.
+- Real time Jira API integration — the fixture pattern keeps the demo at zero ongoing dollars and lets the project ship narrative variety. A production version would consume the Jira API directly. The streaming primitive plus the design system would carry over unchanged.
+- Tooltip primitive lifted into `@rishi/design-system` — every chart surface uses native `title` attributes for hover details. Native tooltips work on desktop but are invisible on mobile. A real Tooltip primitive would close that gap.
+- Custom domain mapping for the live demo and case study — same item as Projects 1 and 2.
 
 ---
 
