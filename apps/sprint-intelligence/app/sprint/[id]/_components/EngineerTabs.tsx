@@ -42,7 +42,7 @@ export function EngineerTabs({ deepDives, accentHex }: EngineerTabsProps) {
       <div
         role="tablist"
         aria-label="Engineer deep dive tabs"
-        className="flex flex-wrap gap-2"
+        className="flex gap-2 overflow-x-auto scrollbar-hide pb-1 -mx-1 px-1 sm:flex-wrap sm:overflow-visible sm:mx-0 sm:px-0 sm:pb-0"
       >
         {deepDives.map((d) => {
           const selected = d.engineer.id === active.engineer.id
@@ -52,7 +52,7 @@ export function EngineerTabs({ deepDives, accentHex }: EngineerTabsProps) {
               role="tab"
               aria-selected={selected}
               onClick={() => setActiveId(d.engineer.id)}
-              className={`px-3 py-2 rounded-md text-xs font-mono flex items-center gap-2 transition-colors min-h-[44px] ${
+              className={`shrink-0 px-3 py-2 rounded-md text-xs font-mono flex items-center gap-2 transition-colors min-h-[44px] ${
                 selected
                   ? 'bg-accent/10 text-accent border border-accent/30 shadow-glow-sm'
                   : 'text-text-muted border border-surface-border hover:text-text-primary hover:border-text-muted/30'

@@ -109,6 +109,14 @@ User scope call: Cat C items are real-resource-cost themes, not Project-1-close 
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
 
+### 2026-05-17 · 📱 W10.D2 - Sprint Intelligence responsive polish for narrow viewports
+- **EngineerTabs strip.** Now uses a horizontal scroll on narrow viewports (`flex` with `overflow-x-auto` and `shrink-0` on each tab button) and falls back to `flex-wrap` on `sm` and up. Stays calm on phones instead of wrapping eight tabs over three rows.
+- **BlockerHistoryDialog bottom sheet.** On phones the overlay aligns to `items-end`, the outer container drops horizontal padding, and the inner card uses `rounded-t-xl` with `max-h-[92vh]`. On `sm` and up it returns to the centered modal with rounded corners on all sides and `max-h-[80vh]`. Header and list padding tighten on mobile so more content fits.
+- **`scrollbar-hide` utility.** Added to `globals.css` under `@layer utilities`. Hides the native scrollbar while preserving the scroll behavior. Used on the horizontal tab strip so the strip stays clean even when content overflows.
+- **Breakpoint sweep.** Verified across 1440, 1280, and 768 widths. Eight KPI cards in Section 2 keep their two column grid at 768 and collapse to one column at 480. `TeamWorkloadCard` rows fit two per row at 768 and one per row at 480. Stat tiles run four across at `xl`, two across at `sm`, one across at `xs`.
+- **Build clean.** `/sprint/[id]` First Load JS unchanged at 51.7 kB.
+- **Next**: W10.D3 - states and errors. Skeleton states for the streaming brief panel and the KPI cards while data resolves. Error boundaries around the streaming primitive and the engineer tabs so a bad chunk or a missing fixture does not blank the whole page.
+
 ### 2026-05-17 · 🧭 W10.D1 - Sprint Intelligence polish interactions: workload drill and blocker history
 - **`TeamWorkloadCard`.** Eight engineer rows in Section 2 (a third KPI row below the existing eight cards). Each row carries first name, role glyph (Sr, Jr, EM, Eng), a workload bar tinted by load tone (rose over 110 percent, gray under 80, accent in the middle band), and the percent against capacity at the right.
 - **URL state bus.** Clicking any row sets the `eng` search param via `router.replace` (scroll false) and smooth scrolls down to a new `id=per-engineer-section` anchor on Section 3. `EngineerTabs` reads the same `eng` search param via `useSearchParams` as its active engineer with the first engineer as a fallback. The two client components share state through the URL instead of context lifting.

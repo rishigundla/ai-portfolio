@@ -41,3 +41,16 @@
     @apply max-w-content mx-auto px-5 sm:px-8 lg:px-16;
   }
 }
+
+@layer utilities {
+  /* Hides the native scrollbar while preserving scroll behavior. Used on
+     horizontal tab strips so the strip stays clean even when content
+     overflows the viewport edge. */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}

@@ -120,13 +120,13 @@ function BlockerHistoryDialog({ summary, team, onClose }: BlockerHistoryDialogPr
       aria-modal="true"
       aria-labelledby="blocker-history-title"
       onClick={onClose}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-base-900/80 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-base-900/80 backdrop-blur-sm"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-2xl max-h-[80vh] overflow-hidden rounded-xl border border-surface-border bg-surface-elevated shadow-2xl flex flex-col"
+        className="w-full max-w-2xl max-h-[92vh] sm:max-h-[80vh] overflow-hidden rounded-t-xl sm:rounded-xl border border-surface-border bg-surface-elevated shadow-2xl flex flex-col"
       >
-        <header className="flex items-start justify-between gap-4 p-5 border-b border-surface-border">
+        <header className="flex items-start justify-between gap-4 p-4 sm:p-5 border-b border-surface-border">
           <div>
             <p className="font-mono text-[10px] uppercase tracking-widest text-rose-300 mb-1">
               Blocker history
@@ -153,7 +153,7 @@ function BlockerHistoryDialog({ summary, team, onClose }: BlockerHistoryDialogPr
             <X className="h-4 w-4" />
           </button>
         </header>
-        <ul className="overflow-y-auto p-5 space-y-4">
+        <ul className="overflow-y-auto p-4 sm:p-5 space-y-3 sm:space-y-4">
           {summary.tickets.map((ticket) => (
             <li
               key={ticket.id}

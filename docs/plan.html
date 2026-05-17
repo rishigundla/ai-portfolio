@@ -1644,7 +1644,9 @@
         // Phase 3 · Week 9 · Day 7 (4 tasks - StreamingBriefPanel component, progress strip, cancel and replay, page wiring)
         "9-W9.D7-0", "9-W9.D7-1", "9-W9.D7-2", "9-W9.D7-3",
         // Phase 3 · Week 10 · Day 1 (4 tasks - team workload card, engineer tabs URL state, blocker history dialog, Suspense plus anchor)
-        "10-W10.D1-0", "10-W10.D1-1", "10-W10.D1-2", "10-W10.D1-3"
+        "10-W10.D1-0", "10-W10.D1-1", "10-W10.D1-2", "10-W10.D1-3",
+        // Phase 3 · Week 10 · Day 2 (4 tasks - horizontal scroll tab strip, mobile bottom sheet dialog, scrollbar-hide utility, breakpoint sweep)
+        "10-W10.D2-0", "10-W10.D2-1", "10-W10.D2-2", "10-W10.D2-3"
       ],
 
       phases: [
@@ -1657,6 +1659,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-05-17",
+          title: "📱 W10.D2 - Sprint Intelligence responsive polish for narrow viewports",
+          desc: "Responsive polish landed on the sprint dashboard. EngineerTabs strip now uses a horizontal scroll on narrow viewports (flex with overflow-x-auto and shrink-0 on each tab button) and falls back to flex-wrap on sm and up. Tab strip stays calm on phones instead of wrapping eight tabs over three rows. BlockerHistoryDialog now snaps to a bottom sheet pattern on phones: items-end alignment, no horizontal padding on the outer container, max-h-92vh on the inner card with rounded-t-xl corners. On sm and up it returns to the centered modal with rounded corners on all sides and max-h-80vh. Dialog header and list padding tighten on mobile (p-4 instead of p-5, gap-3 instead of gap-4 between blocker rows) so more content fits without scrolling. New scrollbar-hide utility class in globals.css hides the native scrollbar on the horizontal tab strip while preserving the scroll behavior. Breakpoint sweep verified across 1440, 1280, and 768 widths. Eight KPI cards in Section 2 keep their two column grid at 768 and collapse to one column at 480. TeamWorkloadCard rows fit two per row at 768 and one per row at 480. EngineerPanel stat tiles run four across at xl, two across at sm, one across at xs. The streaming brief panel scales naturally because AiNarrativeBlock uses a max width prose container. Build clean. /sprint/[id] First Load JS unchanged at 51.7 kB.",
+          next: "W10.D3 - states and errors. Skeleton states for the streaming brief panel and the KPI cards while data resolves. Error boundaries around the streaming primitive and the engineer tabs so a bad chunk or a missing fixture does not blank the whole page."
+        },
         {
           date: "2026-05-17",
           title: "🧭 W10.D1 - Sprint Intelligence polish interactions: workload drill and blocker history",
@@ -2299,7 +2307,7 @@
           goal: "Project 3 live, automation fires",
           days: [
             { num: "W10.D1", weekday: "Mon", name: "Polish interactions: team workload drill, blocker history", tasks: ["TeamWorkloadCard with per engineer bars in Section 2, click an engineer to update the eng URL search param and scroll to the deep dive section", "EngineerTabs now reads the eng search param as the active engineer so the drill in from the workload card lands on the right tab", "BlockedCard converted to a client component with a View blocker history button that opens an inline dialog listing every blocked ticket with id, priority, story points, assignee, full blocker note, and labels", "Section 3 wrapped in an id=per-engineer-section anchor for smooth scroll plus Suspense boundaries around the two useSearchParams consumers so SSG prerendering still works"] },
-            { num: "W10.D2", weekday: "Tue", name: "Responsive Polish", tasks: ["Breakpoint testing", "Mobile: collapse deep-dive tabs to accordion"] },
+            { num: "W10.D2", weekday: "Tue", name: "Responsive polish for narrow viewports", tasks: ["EngineerTabs strip now horizontally scrolls on phones with shrink-0 tab buttons, returns to flex-wrap on sm and up", "BlockerHistoryDialog snaps to a bottom sheet pattern on phones (max-h-92vh, rounded-t-xl, no horizontal padding) then returns to a centered modal on sm and up", "New scrollbar-hide utility class in globals.css hides the native scrollbar on the horizontal tab strip while preserving scroll", "Breakpoint sweep verified across 1440, 1280, and 768 widths against the dashboard, gallery, and sprint home routes"] },
             { num: "W10.D3", weekday: "Wed", name: "States + Errors", tasks: ["Skeleton states", "Error boundaries"] },
             { num: "W10.D4", weekday: "Thu", name: "Lighthouse + SEO", tasks: ["90+ audit"] },
             { num: "W10.D5", weekday: "Fri", name: "Deploy + Loom", tasks: ["Vercel production deploy", "portfolio.meta.json", "Record 90s Loom"] },
