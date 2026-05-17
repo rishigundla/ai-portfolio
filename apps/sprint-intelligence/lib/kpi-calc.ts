@@ -554,3 +554,176 @@ export const TICKET_STATUS_OPTIONS: { value: TicketStatus; label: string }[] = [
   { value: 'todo', label: 'To do' },
   { value: 'blocked', label: 'Blocked' },
 ]
+
+// ============================================================
+// Per ticket signals (W10.D8)
+// ============================================================
+
+const TODAY = '2026-05-17'
+
+function daysBetween(fromIso: string, toIso: string): number {
+  const a = new Date(fromIso).getTime()
+  const b = new Date(toIso).getTime()
+  return Math.max(0, (b - a) / (1000 * 60 * 60 * 24))
+}
+
+export interface AvgDaysInStatusEntry {
+  status: TicketStatus
+  label: string
+  averageDays: number
+  count: number
+}
+
+export function computeAvgDaysInStatus(
+  tickets: TicketSpec[],
+): AvgDaysInStatusEntry[] {
+  const buckets: Record<TicketStatus, { total: number; count: number }> = {
+    done: { total: 0, count: 0 },
+    'in-review': { total: 0, count: 0 },
+    'in-progress': { total: 0, count: 0 },
+    todo: { total: 0, count: 0 },
+    blocked: { total: 0, count: 0 },
+  }
+  for (const t of tickets) {
+    const days = daysBetween(t.createdAt, TODAY)
+    buckets[t.status].total += days
+    buckets[t.status].count += 1
+  }
+  return STATUS_ORDER.map((status) => ({
+    status,
+    label: STATUS_LABELS[status],
+    averageDays:
+      buckets[status].count > 0
+        ? buckets[status].total / buckets[status].count
+        : 0,
+    count: buckets[status].count,
+  })).filter((entry) => entry.count > 0)
+}
+
+export interface PriorityBreakdownEntry {
+  priority: TicketPriority
+  done: number
+  remaining: number
+  total: number
+}
+
+export function computePriorityBreakdown(
+  tickets: TicketSpec[],
+): PriorityBreakdownEntry[] {
+  return PRIORITY_ORDER.map((priority) => {
+    const subset = tickets.filter((t) => t.priority === priority)
+    const done = subset.filter((t) => t.status === 'done').length
+    return {
+      priority,
+      done,
+      remaining: subset.length - done,
+      total: subset.length,
+    }
+  }).filter((entry) => entry.total > 0)
+}
+
+export interface EtaSummary {
+  missingEta: number
+  overdue: number
+  total: number
+}
+
+export function computeEtaSummary(tickets: TicketSpec[]): EtaSummary {
+  let missingEta = 0
+  let overdue = 0
+  const now = new Date(TODAY).getTime()
+  for (const t of tickets) {
+    if (t.eta === null) {
+      missingEta += 1
+      continue
+    }
+    if (t.status === 'done') continue
+    if (new Date(t.eta).getTime() < now) overdue += 1
+  }
+  return { missingEta, overdue, total: tickets.length }
+}
+
+export type CycleTone = 'fast' | 'on-track' | 'slow'
+
+export interface PerTicketCycleEntry {
+  ticketId: string
+  title: string
+  assignee: string
+  days: number
+  tone: CycleTone
+}
+
+export function computePerTicketCycleTime(
+  tickets: TicketSpec[],
+  teamBaseline: number,
+): PerTicketCycleEntry[] {
+  const done = tickets.filter((t) => t.status === 'done')
+  const entries = done.map((t) => {
+    const days = daysBetween(t.createdAt, TODAY)
+    let tone: CycleTone = 'on-track'
+    if (days < teamBaseline * 1.5) tone = 'fast'
+    else if (days > teamBaseline * 5) tone = 'slow'
+    return {
+      ticketId: t.id,
+      title: t.title,
+      assignee: t.assignee,
+      days,
+      tone,
+    }
+  })
+  return entries.sort((a, b) => b.days - a.days)
+}
+
+export type AgingTone = 'fresh' | 'aging' | 'stale'
+
+export interface AgingTicketEntry {
+  ticketId: string
+  title: string
+  status: TicketStatus
+  assignee: string
+  ageDays: number
+  tone: AgingTone
+}
+
+export function computeAgingTickets(tickets: TicketSpec[]): AgingTicketEntry[] {
+  const open = tickets.filter((t) => t.status !== 'done')
+  const entries = open.map((t) => {
+    const ageDays = daysBetween(t.createdAt, TODAY)
+    let tone: AgingTone = 'fresh'
+    if (ageDays > 60) tone = 'stale'
+    else if (ageDays > 20) tone = 'aging'
+    return {
+      ticketId: t.id,
+      title: t.title,
+      status: t.status,
+      assignee: t.assignee,
+      ageDays,
+      tone,
+    }
+  })
+  return entries.sort((a, b) => b.ageDays - a.ageDays)
+}
+
+export interface WorkloadByAssigneeEntry {
+  engineer: TeamMember
+  done: number
+  total: number
+  ratio: number
+}
+
+export function computeWorkloadByAssignee(
+  tickets: TicketSpec[],
+  team: TeamMember[],
+): WorkloadByAssigneeEntry[] {
+  return team.map((member) => {
+    const own = tickets.filter((t) => t.assignee === member.id)
+    const done = own.filter((t) => t.status === 'done').length
+    const total = own.length
+    return {
+      engineer: member,
+      done,
+      total,
+      ratio: total > 0 ? done / total : 0,
+    }
+  })
+}

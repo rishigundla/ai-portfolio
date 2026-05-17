@@ -10,6 +10,7 @@
   "caseStudyUrl": "",
   "loomUrl": "",
   "deployedAt": "2026-05-17",
+  "lastUpdatedAt": "2026-05-17",
   "resumeBullet": {
     "category": "AI-Powered Analytics & Data Engineering Projects",
     "text": "Built an AI Sprint Intelligence Dashboard on Next.js + Vercel. Pick a synthetic sprint from a curated library, the dashboard fills with team and individual KPIs (burndown, velocity, cycle time, scope creep, carryover, workload distribution), and a streaming AI meeting brief appears with exec summary, watch list, and workload rebalancing recommendations. Shares the streaming primitive plus design system with the rest of the portfolio."

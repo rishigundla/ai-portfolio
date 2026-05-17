@@ -61,7 +61,11 @@
       "startDate": "2026-01-01",
       "endDate": "2026-01-31",
       "status": "completed",
-      "ticketCount": 22
+      "ticketCount": 22,
+      "closedCount": 20,
+      "openCount": 2,
+      "spCompleted": 69,
+      "spTotal": 74
     },
     {
       "id": "feb-2026",
@@ -71,7 +75,11 @@
       "startDate": "2026-02-01",
       "endDate": "2026-02-28",
       "status": "completed",
-      "ticketCount": 28
+      "ticketCount": 28,
+      "closedCount": 23,
+      "openCount": 5,
+      "spCompleted": 77,
+      "spTotal": 91
     },
     {
       "id": "mar-2026",
@@ -81,7 +89,11 @@
       "startDate": "2026-03-01",
       "endDate": "2026-03-31",
       "status": "completed",
-      "ticketCount": 24
+      "ticketCount": 24,
+      "closedCount": 16,
+      "openCount": 8,
+      "spCompleted": 39,
+      "spTotal": 70
     },
     {
       "id": "apr-2026",
@@ -91,7 +103,11 @@
       "startDate": "2026-04-01",
       "endDate": "2026-04-30",
       "status": "completed",
-      "ticketCount": 22
+      "ticketCount": 22,
+      "closedCount": 22,
+      "openCount": 0,
+      "spCompleted": 66,
+      "spTotal": 66
     },
     {
       "id": "may-2026",
@@ -101,7 +117,11 @@
       "startDate": "2026-05-01",
       "endDate": "2026-05-31",
       "status": "in-progress",
-      "ticketCount": 26
+      "ticketCount": 26,
+      "closedCount": 7,
+      "openCount": 19,
+      "spCompleted": 28,
+      "spTotal": 83
     },
     {
       "id": "jun-2026",
@@ -111,7 +131,11 @@
       "startDate": "2026-06-01",
       "endDate": "2026-06-30",
       "status": "planned",
-      "ticketCount": 16
+      "ticketCount": 16,
+      "closedCount": 0,
+      "openCount": 16,
+      "spCompleted": 0,
+      "spTotal": 69
     }
   ]
 }

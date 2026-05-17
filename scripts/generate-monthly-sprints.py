@@ -534,6 +534,9 @@ def main() -> None:
         out = SPRINT_DIR / f"{spec['id']}.json"
         out.write_text(json.dumps(fixture, indent=2) + "\n", encoding="utf-8")
         print(f"wrote {out.relative_to(REPO)}")
+        closed = sum(1 for t in spec["tickets"] if t["status"] == "done")
+        sp_completed = sum(t["estimate"] for t in spec["tickets"] if t["status"] == "done")
+        sp_total = sum(t["estimate"] for t in spec["tickets"])
         summaries.append(
             {
                 "id": spec["id"],
@@ -544,6 +547,10 @@ def main() -> None:
                 "endDate": spec["endDate"],
                 "status": spec["status"],
                 "ticketCount": len(spec["tickets"]),
+                "closedCount": closed,
+                "openCount": len(spec["tickets"]) - closed,
+                "spCompleted": sp_completed,
+                "spTotal": sp_total,
             }
         )
 

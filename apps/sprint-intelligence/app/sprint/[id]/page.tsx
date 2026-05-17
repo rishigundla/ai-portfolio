@@ -12,6 +12,7 @@ import {
   getStatusColorToken,
   formatSprintDateRange,
   sprintDaysElapsed,
+  sprints,
   team,
   totalCapacity,
 } from '@/lib/sprints'
@@ -22,15 +23,21 @@ import {
   buildBurndownPoints,
   buildCycleTimePoints,
   buildEngineerDeepDive,
+  computeAgingTickets,
+  computeAvgDaysInStatus,
   computeBlockedSummary,
   computeCarryoverSummary,
   computeCycleTimeSummary,
+  computeEtaSummary,
+  computePerTicketCycleTime,
+  computePriorityBreakdown,
   computeScopeCreepSummary,
   computeStatusDistribution,
   computeStoryPointsKpis,
   computeThroughputSummary,
   computeTopKpis,
   computeVelocityComparison,
+  computeWorkloadByAssignee,
   hasActiveFilter,
 } from '@/lib/kpi-calc'
 import { BurndownChart } from './_components/BurndownChart'
@@ -44,15 +51,21 @@ import { CarryoverCard } from './_components/CarryoverCard'
 import { EngineerTabs } from './_components/EngineerTabs'
 import { KpiCard } from './_components/KpiCard'
 import { StreamingBriefPanel } from './_components/StreamingBriefPanel'
-import { TeamWorkloadCard } from './_components/TeamWorkloadCard'
 import { SprintErrorBoundary } from './_components/SprintErrorBoundary'
 import { SprintFilters } from './_components/SprintFilters'
 import { TopKpiStrip } from './_components/TopKpiStrip'
 import { StoryPointsStrip } from './_components/StoryPointsStrip'
+import { AvgDaysInStatusChart } from './_components/AvgDaysInStatusChart'
+import { PriorityBreakdownChart } from './_components/PriorityBreakdownChart'
+import { EtaCard } from './_components/EtaCard'
+import { CycleTimeBars } from './_components/CycleTimeBars'
+import { AgingTicketsCard } from './_components/AgingTicketsCard'
+import { WorkloadByAssignee } from './_components/WorkloadByAssignee'
+import { SprintHistoryTable } from './_components/SprintHistoryTable'
+import { SprintTrendCharts } from './_components/SprintTrendCharts'
 import {
   BriefSkeleton,
   EngineerTabsSkeleton,
-  TeamWorkloadSkeleton,
 } from './_components/skeletons'
 
 const ACCENT_HEX: Record<string, string> = {
@@ -119,9 +132,6 @@ export default async function SprintDetailPage({ params, searchParams }: PagePro
   const filters = await searchParams
   const filteredTickets = applyTicketFilters(fixture.tickets, filters)
   const filtered = hasActiveFilter(filters)
-  // Engineer deep dives respect the type and status filters but always
-  // bucket per assignee. The workload card and tabs both consume the
-  // same deep dive list.
   const filteredFixtureForEngineers = { ...fixture, tickets: filteredTickets }
   const deepDives = team.map((member) =>
     buildEngineerDeepDive(filteredFixtureForEngineers, member),
@@ -133,8 +143,18 @@ export default async function SprintDetailPage({ params, searchParams }: PagePro
   const dayCount = sprintDaysElapsed(summary.startDate, summary.endDate)
   const accentHex = ACCENT_HEX[colorToken] ?? ACCENT_HEX.accent ?? '#2dd4bf'
 
+  const isPlanned = summary.status === 'planned'
   const topKpis = computeTopKpis(filteredTickets, fixture)
   const spKpis = computeStoryPointsKpis(filteredTickets)
+  const avgDays = computeAvgDaysInStatus(filteredTickets)
+  const priorityBreakdown = computePriorityBreakdown(filteredTickets)
+  const eta = computeEtaSummary(filteredTickets)
+  const perTicketCycle = computePerTicketCycleTime(
+    filteredTickets,
+    fixture.cycleTime.teamBaseline,
+  )
+  const aging = computeAgingTickets(filteredTickets)
+  const workloadRows = computeWorkloadByAssignee(filteredTickets, team)
 
   return (
     <section className="section-container pt-12 pb-24">
@@ -178,12 +198,17 @@ export default async function SprintDetailPage({ params, searchParams }: PagePro
             <span className="inline-flex items-center gap-1.5">
               <Ticket className="h-3.5 w-3.5" />
               {filteredTickets.length}
-              {filtered ? ` of ${fixture.tickets.length}` : ''} tickets
+              {filtered ? ` of ${fixture.tickets.length}` : ''}{' '}
+              {isPlanned ? 'backlog' : 'tickets'}
             </span>
-            <span className="text-text-dim">·</span>
-            <span>
-              Scope {fixture.scopePlanned} planned, {fixture.scopeFinal} final
-            </span>
+            {!isPlanned && (
+              <>
+                <span className="text-text-dim">·</span>
+                <span>
+                  Scope {fixture.scopePlanned} planned, {fixture.scopeFinal} final
+                </span>
+              </>
+            )}
           </div>
         </div>
       </header>
@@ -197,116 +222,148 @@ export default async function SprintDetailPage({ params, searchParams }: PagePro
         <StoryPointsStrip kpis={spKpis} />
 
         <ShellSection
-          eyebrow="Section 1 of 3"
-          title="Team KPIs"
-          description="Eight cards split into two rows. First row covers the headline sprint health (burndown, velocity, status mix, blocked). Second row covers the trend and scope signals (cycle time trend, throughput per week, scope creep, carryover rate). Status mix, blocked, and workload respect the filter bar above."
+          eyebrow="Status and priority"
+          title="Avg days in status plus priority breakdown"
+          description="Average days in each status alongside a priority weighted Done versus Remaining stack. Both honor the filter bar above."
         >
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <KpiCard
-              eyebrow="Burndown"
-              title="Story points remaining"
-              subtitle="Ideal dashed line versus actual solid line, story points on the y axis, sprint day on the x axis. Sprint level signal, not filter aware."
-            >
-              <BurndownChart
-                points={buildBurndownPoints(fixture)}
-                accentHex={accentHex}
-                currentDay={fixture.currentDay}
-              />
-            </KpiCard>
-            <KpiCard
-              eyebrow="Velocity"
-              title="This sprint versus baseline"
-              subtitle="Current sprint completed story points compared with the trailing four sprint average. Sprint level signal, not filter aware."
-            >
-              <VelocityBar
-                velocity={computeVelocityComparison(fixture, totalCapacity)}
-                accentHex={accentHex}
-              />
-            </KpiCard>
-            <KpiCard
-              eyebrow="Status mix"
-              title="Tickets across the board"
-              subtitle="Distribution across done, in review, in progress, to do, and blocked. Honors the filter bar above."
-            >
-              <StatusDonut
-                distribution={computeStatusDistribution(filteredTickets)}
-                accentHex={accentHex}
-              />
-            </KpiCard>
-            <KpiCard
-              eyebrow="Blocked"
-              title="Tickets and the freshest blocker note"
-              subtitle="Counts plus story points plus the oldest age in days. The top note surfaces what to action first. Honors the filter bar above."
-            >
-              <BlockedCard
-                summary={computeBlockedSummary(filteredFixtureForEngineers)}
-                team={team}
-              />
-            </KpiCard>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-            <KpiCard
-              eyebrow="Cycle time"
-              title="Trend across the sprint"
-              subtitle="Rolling average days from ticket start to done. Dashed baseline is the trailing team norm. Sprint level signal, not filter aware."
-            >
-              <CycleTimeChart
-                points={buildCycleTimePoints(fixture)}
-                summary={computeCycleTimeSummary(fixture)}
-                accentHex={accentHex}
-              />
-            </KpiCard>
-            <KpiCard
-              eyebrow="Throughput"
-              title="Tickets closed per week"
-              subtitle="Week one and week two bars compared with the prior throughput average. Sprint level signal, not filter aware."
-            >
-              <ThroughputChart
-                summary={computeThroughputSummary(fixture)}
-                accentHex={accentHex}
-              />
-            </KpiCard>
-            <KpiCard
-              eyebrow="Scope creep"
-              title="Planned versus final scope"
-              subtitle="Headline percent and the absolute ticket delta. Mid sprint additions are pulled from the addedMidSprint flag on every ticket. Sprint level signal, not filter aware."
-            >
-              <ScopeCreepCard
-                summary={computeScopeCreepSummary(fixture)}
-                accentHex={accentHex}
-              />
-            </KpiCard>
-            <KpiCard
-              eyebrow="Carryover"
-              title="Tickets carrying into the next sprint"
-              subtitle="Closed versus total split. The in flight sprint marks the number as projected since the carryover state can still shift. Sprint level signal, not filter aware."
-            >
-              <CarryoverCard
-                summary={computeCarryoverSummary(fixture)}
-                accentHex={accentHex}
-              />
-            </KpiCard>
-          </div>
-          <div className="mt-4">
-            <KpiCard
-              eyebrow="Team workload"
-              title="Per engineer load against capacity"
-              subtitle="Priority weighted estimates as a share of each engineer's capacity. Click an engineer to drop into their deep dive panel below. Honors the type plus status filters above."
-            >
-              <SprintErrorBoundary label="Team workload unavailable">
-                <Suspense fallback={<TeamWorkloadSkeleton />}>
-                  <TeamWorkloadCard deepDives={deepDives} accentHex={accentHex} />
-                </Suspense>
-              </SprintErrorBoundary>
-            </KpiCard>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <AvgDaysInStatusChart entries={avgDays} />
+            <PriorityBreakdownChart entries={priorityBreakdown} />
           </div>
         </ShellSection>
 
+        <ShellSection
+          eyebrow="ETA discipline"
+          title="Missing ETA and overdue"
+          description="Tickets without a committed ETA and tickets where the ETA has passed but the work is not done. Honors the filter bar above."
+        >
+          <EtaCard summary={eta} />
+        </ShellSection>
+
+        {!isPlanned && (
+          <ShellSection
+            eyebrow="Per ticket signals"
+            title="Cycle time and aging tickets"
+            description="Per ticket cycle time on the closed tickets (left) and per ticket age on the still open tickets (right). Top eight of each, color graded against the team baseline."
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <CycleTimeBars
+                entries={perTicketCycle}
+                baseline={fixture.cycleTime.teamBaseline}
+              />
+              <AgingTicketsCard entries={aging} />
+            </div>
+          </ShellSection>
+        )}
+
+        <ShellSection
+          eyebrow="Workload"
+          title="Workload by assignee"
+          description="Completed share of each engineer's ticket allocation. Useful as a sprint allocation preview on the backlog sprint and as a completion progress check on active sprints."
+        >
+          <WorkloadByAssignee entries={workloadRows} />
+        </ShellSection>
+
+        {!isPlanned && (
+          <ShellSection
+            eyebrow="Sprint health"
+            title="Burndown, velocity, scope, and trend"
+            description="Eight cards. First row covers headline sprint health (burndown, velocity, status mix, blocked). Second row covers the trend and scope signals (cycle time, throughput, scope creep, carryover). Burndown, velocity, cycle time, throughput, scope creep, and carryover are sprint level signals, not filter aware. Status mix and blocked honor filters."
+          >
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <KpiCard
+                eyebrow="Burndown"
+                title="Story points remaining"
+                subtitle="Ideal dashed line versus actual solid line."
+              >
+                <BurndownChart
+                  points={buildBurndownPoints(fixture)}
+                  accentHex={accentHex}
+                  currentDay={fixture.currentDay}
+                />
+              </KpiCard>
+              <KpiCard
+                eyebrow="Velocity"
+                title="This sprint versus baseline"
+                subtitle="Completed SP compared with the trailing four sprint average."
+              >
+                <VelocityBar
+                  velocity={computeVelocityComparison(fixture, totalCapacity)}
+                  accentHex={accentHex}
+                />
+              </KpiCard>
+              <KpiCard
+                eyebrow="Status mix"
+                title="Tickets across the board"
+                subtitle="Distribution across done, in review, in progress, to do, and blocked. Honors filters."
+              >
+                <StatusDonut
+                  distribution={computeStatusDistribution(filteredTickets)}
+                  accentHex={accentHex}
+                />
+              </KpiCard>
+              <KpiCard
+                eyebrow="Blocked"
+                title="Tickets and freshest blocker note"
+                subtitle="Counts plus story points plus the oldest age. Honors filters."
+              >
+                <BlockedCard
+                  summary={computeBlockedSummary(filteredFixtureForEngineers)}
+                  team={team}
+                />
+              </KpiCard>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+              <KpiCard
+                eyebrow="Cycle time"
+                title="Trend across the sprint"
+                subtitle="Rolling average days from start to done. Sprint level signal."
+              >
+                <CycleTimeChart
+                  points={buildCycleTimePoints(fixture)}
+                  summary={computeCycleTimeSummary(fixture)}
+                  accentHex={accentHex}
+                />
+              </KpiCard>
+              <KpiCard
+                eyebrow="Throughput"
+                title="Tickets closed per week"
+                subtitle="Week one and week two compared with the prior average."
+              >
+                <ThroughputChart
+                  summary={computeThroughputSummary(fixture)}
+                  accentHex={accentHex}
+                />
+              </KpiCard>
+              <KpiCard
+                eyebrow="Scope creep"
+                title="Planned versus final scope"
+                subtitle="Mid sprint additions from the addedMidSprint flag."
+              >
+                <ScopeCreepCard
+                  summary={computeScopeCreepSummary(fixture)}
+                  accentHex={accentHex}
+                />
+              </KpiCard>
+              <KpiCard
+                eyebrow="Carryover"
+                title="Tickets carrying into the next sprint"
+                subtitle="Closed versus total. In flight sprint marks the number as projected."
+              >
+                <CarryoverCard
+                  summary={computeCarryoverSummary(fixture)}
+                  accentHex={accentHex}
+                />
+              </KpiCard>
+            </div>
+          </ShellSection>
+        )}
+
         <div id="per-engineer-section">
           <ShellSection
-            eyebrow="Section 2 of 3"
-            title="Per engineer deep dive"
-            description="Tab strip per engineer. Each engineer card shows workload score (priority weighted estimates against capacity), completion rate, personal versus team cycle time, and a review queue tile with a bottleneck flag when more than one ticket is sitting in review. Below the stat tiles, a priority mix bar and the engineer's ticket list. Honors the type plus status filters above."
+            eyebrow="Per engineer"
+            title="Deep dive"
+            description="Tab strip per engineer. Workload score (priority weighted estimates against capacity), completion rate, personal versus team cycle time, review queue tile with a bottleneck flag when more than one ticket sits in review. Honors filters."
           >
             <SprintErrorBoundary label="Engineer deep dive unavailable">
               <Suspense fallback={<EngineerTabsSkeleton />}>
@@ -317,9 +374,29 @@ export default async function SprintDetailPage({ params, searchParams }: PagePro
         </div>
 
         <ShellSection
-          eyebrow="Section 3 of 3"
-          title="Meeting brief"
-          description="Claude streams the brief on page load. Five sections in order: executive summary, highlights, watch list, recommendations, talking points. The progress strip ticks through as each section heading lands. Brief reads the full sprint fixture, not the filtered slice."
+          eyebrow="Sprint history"
+          title="All six sprints at a glance"
+          description="Closed plus open ticket counts, completion percent, and story points per sprint across jan to jun 2026. Click a row to navigate."
+        >
+          <SprintHistoryTable sprints={sprints} activeId={summary.id} />
+        </ShellSection>
+
+        <ShellSection
+          eyebrow="Cross sprint trend"
+          title="Tickets and story points per sprint"
+          description="Stacked column charts side by side. Closed versus open ticket counts on the left, completed versus remaining story points on the right."
+        >
+          <SprintTrendCharts sprints={sprints} />
+        </ShellSection>
+
+        <ShellSection
+          eyebrow={isPlanned ? 'Planning brief' : 'Meeting brief'}
+          title={isPlanned ? 'AI planning brief' : 'AI meeting brief'}
+          description={
+            isPlanned
+              ? 'Claude streams the planning brief on page load. Forward looking sections: planning summary, allocation highlights, watch list before sprint start, recommendations, talking points.'
+              : 'Claude streams the brief on page load. Five sections in order: executive summary, highlights, watch list, recommendations, talking points.'
+          }
         >
           {brief ? (
             <SprintErrorBoundary

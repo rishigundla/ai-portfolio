@@ -50,6 +50,10 @@ export interface SprintSummary {
   endDate: string
   status: SprintStatus
   ticketCount: number
+  closedCount?: number
+  openCount?: number
+  spCompleted?: number
+  spTotal?: number
   /**
    * Optional per sprint color override. New monthly sprints rely on
    * status driven colors (see getStatusColorToken). Kept for back
