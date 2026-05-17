@@ -223,10 +223,10 @@ export default async function SprintDetailPage({ params, searchParams }: PagePro
 
         <ShellSection
           eyebrow="Status and priority"
-          title="Avg days in status plus priority breakdown"
-          description="Average days in each status alongside a priority weighted Done versus Remaining stack. Both honor the filter bar above."
+          title="Avg time in current status plus priority breakdown"
+          description="Average days each ticket has spent in its current status alongside a priority weighted Done versus Remaining stack. Both honor the filter bar above."
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
             <AvgDaysInStatusChart entries={avgDays} />
             <PriorityBreakdownChart entries={priorityBreakdown} />
           </div>
@@ -246,7 +246,7 @@ export default async function SprintDetailPage({ params, searchParams }: PagePro
             title="Cycle time and aging tickets"
             description="Per ticket cycle time on the closed tickets (left) and per ticket age on the still open tickets (right). Top eight of each, color graded against the team baseline."
           >
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
               <CycleTimeBars
                 entries={perTicketCycle}
                 baseline={fixture.cycleTime.teamBaseline}
@@ -270,7 +270,7 @@ export default async function SprintDetailPage({ params, searchParams }: PagePro
             title="Burndown, velocity, scope, and trend"
             description="Eight cards. First row covers headline sprint health (burndown, velocity, status mix, blocked). Second row covers the trend and scope signals (cycle time, throughput, scope creep, carryover). Burndown, velocity, cycle time, throughput, scope creep, and carryover are sprint level signals, not filter aware. Status mix and blocked honor filters."
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
               <KpiCard
                 eyebrow="Burndown"
                 title="Story points remaining"
@@ -313,7 +313,7 @@ export default async function SprintDetailPage({ params, searchParams }: PagePro
                 />
               </KpiCard>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 items-start">
               <KpiCard
                 eyebrow="Cycle time"
                 title="Trend across the sprint"

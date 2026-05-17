@@ -75,6 +75,7 @@ export default function SprintsPage() {
             <Link
               key={sprint.id}
               href={`/sprint/${sprint.id}`}
+              title={`${sprint.name} · ${sprint.tagline}`}
               className={`group relative rounded-xl border ${colors.cardBorder} ${colors.cardBg} p-6 lg:p-8 transition-all hover:border-text-muted/30 hover:shadow-glow-sm overflow-hidden`}
             >
               <div className={`absolute top-0 left-0 right-0 h-0.5 ${colors.accentLine} opacity-60`} />

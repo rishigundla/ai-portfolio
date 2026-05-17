@@ -2,393 +2,426 @@
   "id": "mar-2026",
   "metadata": {
     "name": "Mar 2026 Sprint",
-    "goal": "Cut over auth to the v2 session table. Ship workspace templates and search v2.",
+    "goal": "Cut over the Fabric Marketing Budget Tracker from the legacy ETL to OneLake plus ADF. Ship the Sales Rep QBR redesign and the Supply Chain dashboard refresh.",
     "startDate": "2026-03-01",
     "endDate": "2026-03-31",
     "status": "completed",
-    "summary": "Blocked sprint. Auth migration stalled on day four waiting on a database team sign off, three engineers idled on the dependency. Workspace templates and search v2 shipped on plan but auth carries cleanly into apr. Velocity 46 SP, the lowest of the four trailing sprints."
+    "summary": "Blocked sprint. Fabric Marketing migration stalled on day four waiting on a NextGen team sign-off, three engineers idled on the ADF dependency. Sales Rep QBR redesign and the Supply Chain dashboard refresh shipped on plan but the Fabric migration carries cleanly into apr. Velocity 46 SP, the lowest of the four trailing sprints."
   },
   "scopePlanned": 24,
   "scopeFinal": 24,
   "tickets": [
     {
-      "id": "ENG-2201",
-      "title": "Auth migration: cutover schema for v2 sessions",
+      "id": "DE-2201",
+      "title": "Fabric Marketing: OneLake to ADF cutover for the Budget Tracker",
       "type": "development",
       "assignee": "eng-2",
       "status": "blocked",
       "priority": "P0",
       "estimate": 8,
       "labels": [
-        "backend",
-        "auth"
+        "fabric-marketing",
+        "adf"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
       "eta": "2026-03-30",
-      "blockerNote": "Migration script needs database team sign off, blocked since day 4. Owner: eng-2, manager escalation in progress."
+      "blockerNote": "ADF pipeline needs NextGen team sign-off, blocked since day 4. Owner: eng-2, manager escalation in progress.",
+      "daysInStatus": 8.5
     },
     {
-      "id": "ENG-2202",
-      "title": "Auth migration: dual write to old and new tables",
+      "id": "DE-2202",
+      "title": "Fabric Marketing: Bronze to Silver PySpark notebook refactor",
       "type": "development",
       "assignee": "eng-2",
       "status": "blocked",
       "priority": "P0",
       "estimate": 5,
       "labels": [
-        "backend",
-        "auth"
+        "fabric-marketing",
+        "databricks"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
       "eta": "2026-03-30",
-      "blockerNote": "Depends on ENG-2201 cutover. Currently parked."
+      "blockerNote": "Depends on DE-2201 cutover. Currently parked.",
+      "daysInStatus": 6.8
     },
     {
-      "id": "ENG-2203",
-      "title": "Auth migration: dual read fallback in API",
+      "id": "DE-2203",
+      "title": "Fabric Marketing: Silver to Gold semantic model in Power BI",
       "type": "development",
       "assignee": "eng-8",
       "status": "blocked",
       "priority": "P0",
       "estimate": 5,
       "labels": [
-        "backend",
-        "auth"
+        "fabric-marketing",
+        "power-bi"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
       "eta": "2026-03-30",
-      "blockerNote": "Depends on ENG-2201 cutover. Currently parked."
+      "blockerNote": "Depends on DE-2201 cutover. Currently parked.",
+      "daysInStatus": 9.4
     },
     {
-      "id": "ENG-2204",
-      "title": "Workspace template gallery polish",
+      "id": "DE-2204",
+      "title": "Sales Rep QBR redesign polish: new tile order plus icons",
       "type": "development",
       "assignee": "eng-1",
       "status": "done",
       "priority": "P1",
       "estimate": 5,
       "labels": [
-        "frontend"
+        "revops-qbr",
+        "tableau"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
-      "eta": "2026-03-30"
+      "eta": "2026-03-30",
+      "daysInStatus": 2.7
     },
     {
-      "id": "ENG-2205",
-      "title": "Workspace template card hover states",
+      "id": "DE-2205",
+      "title": "Sales Rep QBR tooltip hover states fix",
       "type": "enhancement",
       "assignee": "eng-3",
       "status": "done",
       "priority": "P2",
       "estimate": 2,
       "labels": [
-        "frontend",
-        "design"
+        "revops-qbr",
+        "figma"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
-      "eta": "2026-03-30"
+      "eta": "2026-03-30",
+      "daysInStatus": 2.4
     },
     {
-      "id": "ENG-2206",
-      "title": "Workspace template card bug: bad accent on dark",
+      "id": "DE-2206",
+      "title": "Sales Rep QBR bug: bad color token on dark mode",
       "type": "bug",
       "assignee": "eng-3",
       "status": "done",
       "priority": "P2",
       "estimate": 1,
       "labels": [
-        "frontend"
+        "revops-qbr",
+        "figma"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
-      "eta": "2026-03-30"
+      "eta": "2026-03-30",
+      "daysInStatus": 3.5
     },
     {
-      "id": "ENG-2207",
-      "title": "Search ranking improvements v2 ship",
+      "id": "DE-2207",
+      "title": "Genie Space adoption pack for Sales Rep QBR (10 sample questions)",
       "type": "development",
       "assignee": "eng-4",
       "status": "done",
       "priority": "P1",
       "estimate": 5,
       "labels": [
-        "backend",
-        "search"
+        "genie-space",
+        "revops-qbr"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
-      "eta": "2026-03-30"
+      "eta": "2026-03-30",
+      "daysInStatus": 5.7
     },
     {
-      "id": "ENG-2208",
-      "title": "Notification preference toggles UI",
+      "id": "DE-2208",
+      "title": "Tableau Supply Chain dashboard refresh: new SKU drilldown",
       "type": "development",
       "assignee": "eng-6",
       "status": "done",
       "priority": "P2",
       "estimate": 3,
       "labels": [
-        "frontend"
+        "supply-chain",
+        "tableau"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
-      "eta": "2026-03-30"
+      "eta": "2026-03-30",
+      "daysInStatus": 2.7
     },
     {
-      "id": "ENG-2209",
-      "title": "Notification preference toggles wiring to backend",
+      "id": "DE-2209",
+      "title": "Supply Chain dashboard backend: weekly SKU rollup",
       "type": "development",
       "assignee": "eng-4",
       "status": "done",
       "priority": "P2",
       "estimate": 3,
       "labels": [
-        "frontend",
-        "backend"
+        "supply-chain",
+        "databricks"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
-      "eta": "2026-03-30"
+      "eta": "2026-03-30",
+      "daysInStatus": 1.8
     },
     {
-      "id": "ENG-2210",
-      "title": "Lighthouse SEO regression on /report fix",
+      "id": "DE-2210",
+      "title": "CFD trend bug: spikes from late-arriving defect ingestion",
       "type": "bug",
       "assignee": "eng-8",
       "status": "blocked",
       "priority": "P2",
       "estimate": 3,
       "labels": [
-        "frontend",
-        "seo"
+        "cfd",
+        "databricks"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
       "eta": "2026-03-30",
-      "blockerNote": "Owner pulled to auth migration cleanup. Carrying to apr."
+      "blockerNote": "Owner pulled to Fabric migration. Carrying to apr.",
+      "daysInStatus": 7.1
     },
     {
-      "id": "ENG-2211",
-      "title": "PDF export drops trailing newline",
+      "id": "DE-2211",
+      "title": "PDF export drops trailing newline on the CX OKR readout",
       "type": "bug",
       "assignee": "eng-6",
       "status": "done",
       "priority": "P2",
       "estimate": 2,
       "labels": [
-        "frontend",
-        "pdf"
+        "cx-okr",
+        "tableau"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
-      "eta": "2026-03-30"
+      "eta": "2026-03-30",
+      "daysInStatus": 1.8
     },
     {
-      "id": "ENG-2212",
-      "title": "Audit log retention policy doc finalise",
+      "id": "DE-2212",
+      "title": "Pipeline coverage audit log retention policy doc finalise",
       "type": "enhancement",
       "assignee": "eng-7",
       "status": "done",
       "priority": "P2",
       "estimate": 1,
       "labels": [
+        "revops-qbr",
         "docs"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
-      "eta": "2026-03-30"
+      "eta": "2026-03-30",
+      "daysInStatus": 2.8
     },
     {
-      "id": "ENG-2213",
-      "title": "Sentry alert rules tune for noisy frontend",
+      "id": "DE-2213",
+      "title": "Sentry alert rules tune for the noisy Tableau Server warmup",
       "type": "enhancement",
       "assignee": "eng-8",
       "status": "blocked",
       "priority": "P2",
       "estimate": 2,
       "labels": [
+        "tableau-server",
         "observability"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
       "eta": "2026-03-30",
-      "blockerNote": "Owner pulled to auth migration. Carrying."
+      "blockerNote": "Owner pulled to Fabric migration. Carrying.",
+      "daysInStatus": 9.9
     },
     {
-      "id": "ENG-2214",
-      "title": "P2 backlog burndown one of two",
+      "id": "DE-2214",
+      "title": "P2 maintenance batch one of two: legacy NCI Pulse view cleanup",
       "type": "enhancement",
       "assignee": "eng-6",
       "status": "done",
       "priority": "P2",
       "estimate": 3,
       "labels": [
-        "maintenance"
+        "pulse-nci",
+        "tableau"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
-      "eta": "2026-03-30"
+      "eta": "2026-03-30",
+      "daysInStatus": 3.9
     },
     {
-      "id": "ENG-2215",
-      "title": "P2 backlog burndown two of two",
+      "id": "DE-2215",
+      "title": "P2 maintenance batch two of two: Genie Space saved view bulk migrate",
       "type": "enhancement",
       "assignee": "eng-6",
       "status": "done",
       "priority": "P2",
       "estimate": 3,
       "labels": [
-        "maintenance"
+        "genie-space"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
-      "eta": "2026-03-30"
+      "eta": "2026-03-30",
+      "daysInStatus": 5.6
     },
     {
-      "id": "ENG-2216",
-      "title": "Promote search v2 to prod",
+      "id": "DE-2216",
+      "title": "Promote Sales Rep QBR redesign to prod",
       "type": "deployment",
       "assignee": "eng-7",
       "status": "done",
       "priority": "P1",
       "estimate": 2,
       "labels": [
-        "devops",
-        "search"
+        "revops-qbr",
+        "tableau-server"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
-      "eta": "2026-03-30"
+      "eta": "2026-03-30",
+      "daysInStatus": 1.8
     },
     {
-      "id": "ENG-2217",
-      "title": "Promote workspace templates to prod",
+      "id": "DE-2217",
+      "title": "Promote Supply Chain dashboard refresh to prod",
       "type": "deployment",
       "assignee": "eng-7",
       "status": "done",
       "priority": "P1",
       "estimate": 2,
       "labels": [
-        "devops"
+        "supply-chain",
+        "tableau-server"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
-      "eta": "2026-03-30"
+      "eta": "2026-03-30",
+      "daysInStatus": 6.9
     },
     {
-      "id": "ENG-2218",
-      "title": "Notifications backend perf cleanup",
+      "id": "DE-2218",
+      "title": "Notification subscription perf cleanup",
       "type": "enhancement",
       "assignee": "eng-4",
       "status": "in-review",
       "priority": "P2",
       "estimate": 3,
       "labels": [
-        "backend",
+        "tableau-server",
         "perf"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
-      "eta": "2026-03-30"
+      "eta": "2026-03-30",
+      "daysInStatus": 3.7
     },
     {
-      "id": "ENG-2219",
-      "title": "Bulk archive confirm dialog rewrite",
+      "id": "DE-2219",
+      "title": "Bulk archive confirm dialog rewrite on the Jira SSOT portal",
       "type": "enhancement",
       "assignee": "eng-5",
       "status": "done",
       "priority": "P3",
       "estimate": 2,
       "labels": [
-        "frontend"
+        "jira-ssot",
+        "figma"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
-      "eta": "2026-03-30"
+      "eta": "2026-03-30",
+      "daysInStatus": 4.5
     },
     {
-      "id": "ENG-2220",
-      "title": "Onboarding video step three swap",
+      "id": "DE-2220",
+      "title": "Jira SSOT onboarding video step three swap",
       "type": "enhancement",
       "assignee": "eng-5",
       "status": "done",
       "priority": "P3",
       "estimate": 2,
       "labels": [
-        "frontend",
-        "design"
+        "jira-ssot",
+        "figma"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
-      "eta": "2026-03-30"
+      "eta": "2026-03-30",
+      "daysInStatus": 4.0
     },
     {
-      "id": "ENG-2221",
-      "title": "Empty state copy on /reports zero state",
+      "id": "DE-2221",
+      "title": "Empty state copy on the CFD zero-defect view",
       "type": "enhancement",
       "assignee": "eng-5",
       "status": "done",
       "priority": "P3",
       "estimate": 1,
       "labels": [
-        "frontend",
-        "copy"
+        "cfd",
+        "tableau"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
-      "eta": "2026-03-30"
+      "eta": "2026-03-30",
+      "daysInStatus": 2.2
     },
     {
-      "id": "ENG-2222",
-      "title": "Investigate slow gallery render at 1000 items",
+      "id": "DE-2222",
+      "title": "Investigate slow render at 1000+ rows on Procurement Open PO",
       "type": "development",
       "assignee": "eng-1",
       "status": "in-review",
       "priority": "P2",
       "estimate": 3,
       "labels": [
-        "frontend",
+        "fabric-procurement",
         "perf"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
-      "eta": "2026-03-30"
+      "eta": "2026-03-30",
+      "daysInStatus": 3.3
     },
     {
-      "id": "ENG-2223",
-      "title": "Add presence service to staging cron warmup",
+      "id": "DE-2223",
+      "title": "Tableau Server cron warmup for the Sales Rep QBR workbook",
       "type": "deployment",
       "assignee": "eng-7",
       "status": "done",
       "priority": "P2",
       "estimate": 2,
       "labels": [
-        "devops"
+        "tableau-server",
+        "revops-qbr"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
-      "eta": "2026-03-30"
+      "eta": "2026-03-30",
+      "daysInStatus": 6.2
     },
     {
-      "id": "ENG-2224",
-      "title": "Auth migration: rollback plan doc",
+      "id": "DE-2224",
+      "title": "Fabric migration rollback plan doc",
       "type": "enhancement",
       "assignee": "eng-2",
       "status": "todo",
       "priority": "P0",
       "estimate": 2,
       "labels": [
-        "docs",
-        "auth"
+        "fabric-marketing",
+        "docs"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
-      "eta": null
+      "eta": null,
+      "daysInStatus": 3.0
     }
   ],
   "burndown": {
@@ -506,13 +539,13 @@
   },
   "perEngineer": {
     "eng-1": {
-      "personalCycleTime": 4.0
+      "personalCycleTime": 4.1
     },
     "eng-2": {
       "personalCycleTime": 5.5
     },
     "eng-3": {
-      "personalCycleTime": 4.5
+      "personalCycleTime": 4.4
     },
     "eng-4": {
       "personalCycleTime": 4.5

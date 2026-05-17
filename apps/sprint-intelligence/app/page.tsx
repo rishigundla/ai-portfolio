@@ -11,17 +11,19 @@ export default function HomePage() {
             Project 03 · Sprint Intelligence
           </div>
           <h1 className="font-display text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight leading-[1.05]">
-            Sprint review prep,{' '}
+            Sprint review prep for a BI team,{' '}
             <span className="bg-gradient-to-r from-accent-light to-accent bg-clip-text text-transparent">
               in five minutes.
             </span>
           </h1>
           <p className="mt-6 max-w-2xl text-lg sm:text-xl text-text-secondary leading-relaxed">
-            Pick a synthetic sprint. The dashboard fills with team and individual
-            KPIs. A streaming AI meeting brief lands on top with executive summary,
-            watch list, and workload rebalancing recommendations. Same streaming
-            primitive as the other portfolio projects, applied to engineering
-            analytics this time.
+            Pick a monthly sprint from a six-sprint roster (four completed, one
+            in flight, one already filling up with backlog). Filter by assignee
+            or ticket type. The dashboard fills with a wide KPI strip, a
+            priority breakdown, ETA discipline tiles, per-ticket cycle time
+            and aging bars, and a workload-by-assignee preview. An AI authored
+            meeting brief closes the page with the recommendations that go
+            into the room.
           </p>
           <div className="mt-10 flex flex-wrap gap-3">
             <Link
@@ -40,17 +42,17 @@ export default function HomePage() {
           <StepCard
             num="01"
             title="Pick a sprint"
-            description="Six monthly sprints across the first half of 2026. Four completed sprints carry different stories (healthy, scope creep, blocked, recovered). One sprint is currently in flight at day 17 of 31. One sprint is already filling up with backlog tickets the manager has earmarked for the next cycle."
+            description="Six monthly sprints across the first half of 2026, themed around real BI and data engineering work (Pulse SSOT on Databricks, Jira SSOT, RevOps Sales SSOT, Microsoft Fabric, Tableau Server, Genie Space). Four completed sprints carry different stories (healthy, scope creep absorbed, blocked, recovered). One sprint is currently in flight at day 17 of 31. One sprint is already filling up with backlog tickets the manager has earmarked for next cycle."
           />
           <StepCard
             num="02"
-            title="Read the dashboard"
-            description="Team level KPIs at the top (burndown, velocity, cycle time, scope creep, carryover) and individual deep dive tabs at the bottom (workload score, completion rate, review bottleneck). The dashboard fills the moment you land on the page."
+            title="Read the analysis"
+            description="Filter bar at the top (assignee, ticket type, status). Below it: a wide KPI strip and a story points strip, then avg time in current status plus a priority breakdown, then ETA discipline tiles (Missing ETA, Overdue), then per-ticket cycle time and aging bars, then workload by assignee. Standard sprint health cards (burndown, velocity, scope creep, carryover) sit below for the agile rituals. Per-engineer deep dive tabs at the bottom plus a six-sprint history table for context."
           />
           <StepCard
             num="03"
             title="Take the brief into the room"
-            description="A streaming AI meeting brief writes itself on top of the dashboard. Executive summary, highlights, watch list, recommendations, talking points. Five minute read instead of an hour of prep."
+            description="A streaming AI meeting brief closes the page. Executive summary, highlights, watch list, recommendations, talking points. For the backlog sprint, the brief flips to a planning summary plus allocation highlights so the manager can walk into planning ready to lock etas."
           />
         </div>
       </section>

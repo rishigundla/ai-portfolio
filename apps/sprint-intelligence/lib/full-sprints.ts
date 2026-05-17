@@ -45,6 +45,7 @@ export interface TicketSpec {
   addedMidSprint: boolean
   createdAt: string
   eta: string | null
+  daysInStatus: number
   blockerNote?: string
 }
 

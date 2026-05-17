@@ -577,6 +577,10 @@ export interface AvgDaysInStatusEntry {
 export function computeAvgDaysInStatus(
   tickets: TicketSpec[],
 ): AvgDaysInStatusEntry[] {
+  // Reads each ticket's per-status duration (daysInStatus) directly.
+  // This is the time the ticket has spent in its CURRENT status, not
+  // the total age. Synthesized at fixture generation time with realistic
+  // per-status distributions.
   const buckets: Record<TicketStatus, { total: number; count: number }> = {
     done: { total: 0, count: 0 },
     'in-review': { total: 0, count: 0 },
@@ -585,8 +589,7 @@ export function computeAvgDaysInStatus(
     blocked: { total: 0, count: 0 },
   }
   for (const t of tickets) {
-    const days = daysBetween(t.createdAt, TODAY)
-    buckets[t.status].total += days
+    buckets[t.status].total += t.daysInStatus
     buckets[t.status].count += 1
   }
   return STATUS_ORDER.map((status) => ({

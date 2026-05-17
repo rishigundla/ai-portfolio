@@ -33,16 +33,21 @@ export function PriorityBreakdownChart({ entries }: PriorityBreakdownChartProps)
           Remaining
         </span>
       </div>
-      <div className="grid grid-cols-4 gap-3 items-end h-44">
+      <div className="grid grid-cols-4 gap-3 h-56">
         {entries.map((entry) => {
           const totalHeightPct = (entry.total / max) * 100
           const doneShare = entry.total > 0 ? entry.done / entry.total : 0
+          const titleText = `${PRIORITY_LABEL[entry.priority] ?? entry.priority}: ${entry.done} done / ${entry.total - entry.done} remaining (${entry.total} total)`
           return (
-            <div key={entry.priority} className="flex flex-col items-center gap-2">
+            <div
+              key={entry.priority}
+              className="flex flex-col items-center h-full"
+              title={titleText}
+            >
               <div className="flex-1 w-full flex items-end justify-center">
                 <div
                   className="w-12 rounded-t-sm overflow-hidden flex flex-col-reverse"
-                  style={{ height: `${totalHeightPct}%` }}
+                  style={{ height: `${totalHeightPct}%`, minHeight: '4px' }}
                 >
                   <div
                     className="w-full"
@@ -60,10 +65,10 @@ export function PriorityBreakdownChart({ entries }: PriorityBreakdownChartProps)
                   />
                 </div>
               </div>
-              <span className="text-[11px] font-mono text-text-secondary">
+              <span className="text-[11px] font-mono text-text-secondary mt-2">
                 {PRIORITY_LABEL[entry.priority] ?? entry.priority}
               </span>
-              <span className="text-[10px] font-mono text-text-muted">
+              <span className="text-[10px] font-mono text-text-muted mt-0.5">
                 {entry.done}/{entry.total}
               </span>
             </div>

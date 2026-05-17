@@ -2,266 +2,285 @@
   "id": "jun-2026",
   "metadata": {
     "name": "Jun 2026 Sprint",
-    "goal": "Backlog allocation for next cycle. Payments v2, mobile app v2 scaffold, and the telemetry pipeline groundwork.",
+    "goal": "Backlog allocation for next cycle. Pulse v2 unified semantic layer, Genie Space adoption across RevOps, and the Tableau Server 2024.3 upgrade.",
     "startDate": "2026-06-01",
     "endDate": "2026-06-30",
     "status": "planned",
-    "summary": "Backlog sprint. Manager has earmarked sixteen tickets across payments v2, mobile app v2 scaffold, and the telemetry pipeline groundwork. Some etas committed, some open. Work has not started."
+    "summary": "Backlog sprint. Manager has earmarked sixteen tickets across Pulse v2 (unified NAI / NC2 / NCI semantic layer), Genie Space adoption (ACV Weekly plus Sales QBR plus Balanced Scorecard), and the Tableau Server 2024.3 upgrade. Some etas committed, some open. Work has not started."
   },
   "scopePlanned": 16,
   "scopeFinal": 16,
   "tickets": [
     {
-      "id": "ENG-2501",
-      "title": "Payments v2: new pricing tier engine",
+      "id": "DE-2501",
+      "title": "Pulse v2 unified semantic layer: NAI / NC2 / NCI schema reconcile",
       "type": "development",
       "assignee": "eng-2",
       "status": "todo",
       "priority": "P0",
       "estimate": 8,
       "labels": [
-        "backend",
-        "billing"
+        "pulse-nai",
+        "pulse-nc2",
+        "pulse-nci"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
-      "eta": "2026-06-29"
+      "eta": "2026-06-29",
+      "daysInStatus": 4.4
     },
     {
-      "id": "ENG-2502",
-      "title": "Payments v2: usage metering ingest",
+      "id": "DE-2502",
+      "title": "Pulse v2 unified semantic layer: shared Gold mart definition",
       "type": "development",
       "assignee": "eng-2",
       "status": "todo",
       "priority": "P0",
       "estimate": 5,
       "labels": [
-        "backend",
-        "billing"
+        "pulse-nai",
+        "databricks"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
-      "eta": "2026-06-29"
+      "eta": "2026-06-29",
+      "daysInStatus": 10.7
     },
     {
-      "id": "ENG-2503",
-      "title": "Payments v2: invoice render template",
+      "id": "DE-2503",
+      "title": "Pulse v2 unified executive dashboard shell",
       "type": "development",
       "assignee": "eng-1",
       "status": "todo",
       "priority": "P1",
       "estimate": 5,
       "labels": [
-        "frontend",
-        "billing"
+        "pulse-nai",
+        "tableau"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
-      "eta": "2026-06-29"
+      "eta": "2026-06-29",
+      "daysInStatus": 1.3
     },
     {
-      "id": "ENG-2504",
-      "title": "Payments v2: pricing page redesign",
+      "id": "DE-2504",
+      "title": "Pulse v2 unified executive dashboard tiles",
       "type": "development",
       "assignee": "eng-1",
       "status": "todo",
       "priority": "P1",
       "estimate": 5,
       "labels": [
-        "frontend",
-        "design"
+        "pulse-nai",
+        "tableau"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
-      "eta": "2026-06-29"
+      "eta": "2026-06-29",
+      "daysInStatus": 4.8
     },
     {
-      "id": "ENG-2505",
-      "title": "Mobile app v2: shell scaffold",
+      "id": "DE-2505",
+      "title": "Genie Space adoption pack for RevOps ACV Weekly",
       "type": "development",
       "assignee": "eng-4",
       "status": "todo",
       "priority": "P1",
       "estimate": 8,
       "labels": [
-        "mobile"
+        "genie-space",
+        "revops-acv"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
-      "eta": null
+      "eta": null,
+      "daysInStatus": 6.2
     },
     {
-      "id": "ENG-2506",
-      "title": "Mobile app v2: auth flow port",
+      "id": "DE-2506",
+      "title": "Genie Space adoption pack for RevOps Sales QBR",
       "type": "development",
       "assignee": "eng-4",
       "status": "todo",
       "priority": "P1",
       "estimate": 5,
       "labels": [
-        "mobile",
-        "auth"
+        "genie-space",
+        "revops-qbr"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
-      "eta": null
+      "eta": null,
+      "daysInStatus": 6.7
     },
     {
-      "id": "ENG-2507",
-      "title": "Mobile app v2: dashboard read only",
+      "id": "DE-2507",
+      "title": "Genie Space starter board for the Balanced Scorecard",
       "type": "development",
       "assignee": "eng-3",
       "status": "todo",
       "priority": "P2",
       "estimate": 5,
       "labels": [
-        "mobile"
+        "genie-space",
+        "balanced-scorecard"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
-      "eta": null
+      "eta": null,
+      "daysInStatus": 2.0
     },
     {
-      "id": "ENG-2508",
-      "title": "Telemetry pipeline: event schema doc",
+      "id": "DE-2508",
+      "title": "Tableau Server 2024.3 upgrade plan doc",
       "type": "enhancement",
       "assignee": "eng-8",
       "status": "todo",
       "priority": "P1",
       "estimate": 3,
       "labels": [
-        "docs",
-        "observability"
+        "tableau-server",
+        "docs"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
-      "eta": "2026-06-29"
+      "eta": "2026-06-29",
+      "daysInStatus": 3.6
     },
     {
-      "id": "ENG-2509",
-      "title": "Telemetry pipeline: producer SDK",
+      "id": "DE-2509",
+      "title": "Tableau Server 2024.3 upgrade staging pass",
       "type": "development",
       "assignee": "eng-8",
       "status": "todo",
       "priority": "P1",
       "estimate": 5,
       "labels": [
-        "backend",
-        "observability"
+        "tableau-server"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
-      "eta": "2026-06-29"
+      "eta": "2026-06-29",
+      "daysInStatus": 7.0
     },
     {
-      "id": "ENG-2510",
-      "title": "Telemetry pipeline: consumer in BigQuery",
+      "id": "DE-2510",
+      "title": "dbt model coverage for the CFD dashboard backend",
       "type": "development",
       "assignee": "eng-2",
       "status": "todo",
       "priority": "P2",
       "estimate": 5,
       "labels": [
-        "backend",
-        "observability"
+        "dbt",
+        "cfd"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
-      "eta": null
+      "eta": null,
+      "daysInStatus": 6.3
     },
     {
-      "id": "ENG-2511",
-      "title": "Promote payments v2 to staging",
+      "id": "DE-2511",
+      "title": "Promote Pulse v2 unified mart to staging",
       "type": "deployment",
       "assignee": "eng-7",
       "status": "todo",
       "priority": "P0",
       "estimate": 2,
       "labels": [
-        "devops",
-        "billing"
+        "pulse-nai",
+        "databricks"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
-      "eta": "2026-06-29"
+      "eta": "2026-06-29",
+      "daysInStatus": 11.2
     },
     {
-      "id": "ENG-2512",
-      "title": "Promote telemetry producer to staging",
+      "id": "DE-2512",
+      "title": "Promote Tableau Server upgrade to staging",
       "type": "deployment",
       "assignee": "eng-7",
       "status": "todo",
       "priority": "P1",
       "estimate": 2,
       "labels": [
-        "devops"
+        "tableau-server"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
-      "eta": "2026-06-29"
+      "eta": "2026-06-29",
+      "daysInStatus": 7.4
     },
     {
-      "id": "ENG-2513",
-      "title": "Customer onboarding video v2 record",
+      "id": "DE-2513",
+      "title": "Figma design tokens refresh for executive readouts",
       "type": "enhancement",
       "assignee": "eng-5",
       "status": "todo",
       "priority": "P2",
       "estimate": 3,
       "labels": [
-        "copy",
-        "design"
+        "figma",
+        "tableau"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
-      "eta": null
+      "eta": null,
+      "daysInStatus": 10.3
     },
     {
-      "id": "ENG-2514",
-      "title": "Bug sweep on the analytics revamp post may",
+      "id": "DE-2514",
+      "title": "Bug sweep on the Sales Rep QBR redesign post may rollout",
       "type": "bug",
       "assignee": "eng-6",
       "status": "todo",
       "priority": "P2",
       "estimate": 3,
       "labels": [
-        "frontend",
-        "analytics"
+        "revops-qbr",
+        "tableau"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
-      "eta": "2026-06-29"
+      "eta": "2026-06-29",
+      "daysInStatus": 9.8
     },
     {
-      "id": "ENG-2515",
-      "title": "P2 backlog burndown one of one",
+      "id": "DE-2515",
+      "title": "P2 maintenance batch: stale NCI Pulse views cleanup",
       "type": "enhancement",
       "assignee": "eng-6",
       "status": "todo",
       "priority": "P3",
       "estimate": 3,
       "labels": [
-        "maintenance"
+        "pulse-nci",
+        "tableau"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
-      "eta": "2026-06-29"
+      "eta": "2026-06-29",
+      "daysInStatus": 4.8
     },
     {
-      "id": "ENG-2516",
-      "title": "Investigate Lighthouse perf drift on /home",
+      "id": "DE-2516",
+      "title": "Investigate Lighthouse perf drift on the Jira SSOT data portal",
       "type": "bug",
       "assignee": "eng-8",
       "status": "todo",
       "priority": "P2",
       "estimate": 2,
       "labels": [
-        "frontend",
+        "jira-ssot",
         "perf"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
-      "eta": null
+      "eta": null,
+      "daysInStatus": 1.4
     }
   ],
   "burndown": {

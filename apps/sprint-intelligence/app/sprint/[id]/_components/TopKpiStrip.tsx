@@ -14,6 +14,7 @@ export function TopKpiStrip({ kpis, filtered }: TopKpiStripProps) {
         value={kpis.totalTickets}
         accent="text-text-primary"
         icon={Ticket}
+        title="Total tickets in the current filter scope"
       />
       <Tile
         label="Completion"
@@ -21,36 +22,42 @@ export function TopKpiStrip({ kpis, filtered }: TopKpiStripProps) {
         accent="text-accent"
         icon={CheckCircle2}
         progress={kpis.completionPct}
+        title={`Completion = Done / Total = ${kpis.done} / ${kpis.totalTickets}`}
       />
       <Tile
         label="Done"
         value={kpis.done}
         accent="text-emerald-300"
         icon={CheckCircle2}
+        title={`${kpis.done} tickets in the Done status`}
       />
       <Tile
         label="In review"
         value={kpis.inReview}
         accent="text-violet-300"
         icon={Eye}
+        title={`${kpis.inReview} tickets sitting in code review`}
       />
       <Tile
         label="In progress"
         value={kpis.inProgress}
         accent="text-amber-300"
         icon={Activity}
+        title={`${kpis.inProgress} tickets actively in progress`}
       />
       <Tile
         label={filtered ? 'Open' : 'Open / To do'}
         value={kpis.open}
         accent="text-slate-300"
         icon={Circle}
+        title={`${kpis.open} tickets in To do or Blocked status`}
       />
       <Tile
         label="Avg cycle time"
         value={kpis.avgCycleDays === null ? '—' : `${kpis.avgCycleDays.toFixed(1)}d`}
         accent="text-accent-light"
         icon={Clock}
+        title="Rolling team cycle time at the latest sprint day. Sprint level signal, not filter aware."
       />
     </div>
   )
@@ -62,15 +69,20 @@ function Tile({
   accent,
   icon: Icon,
   progress,
+  title,
 }: {
   label: string
   value: number | string
   accent: string
   icon: React.ComponentType<{ className?: string; strokeWidth?: number }>
   progress?: number
+  title?: string
 }) {
   return (
-    <div className="rounded-lg border border-surface-border bg-surface px-3 py-3">
+    <div
+      className="rounded-lg border border-surface-border bg-surface px-3 py-3"
+      title={title}
+    >
       <div className="flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-widest text-text-muted">
         <Icon className="h-3 w-3" strokeWidth={1.5} />
         {label}

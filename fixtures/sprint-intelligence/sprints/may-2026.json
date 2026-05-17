@@ -2,301 +2,322 @@
   "id": "may-2026",
   "metadata": {
     "name": "May 2026 Sprint",
-    "goal": "Ship the onboarding redesign plus the analytics revamp. Hold cycle time at the four day mark.",
+    "goal": "Ship the CX OKR quarterly refresh and the Sales Rep QBR redesign v2. Land the Genie Space embed for the Balanced Scorecard. Hold cycle time at the four day mark.",
     "startDate": "2026-05-01",
     "endDate": "2026-05-31",
     "status": "in-progress",
-    "summary": "Currently in flight. Day 17 of 31. Onboarding redesign shipped, analytics revamp in review, notifications inbox in flight. One blocker on the cohort retention a11y audit, unblocked friday. Velocity tracking on baseline."
+    "summary": "Currently in flight. Day 17 of 31. CX OKR quarterly refresh shipped, Sales Rep QBR redesign v2 in review, Balanced Scorecard Genie Space embed in flight. One blocker on the cohort retention accessibility audit, unblocked friday. Velocity tracking on baseline."
   },
   "scopePlanned": 26,
   "scopeFinal": 26,
   "tickets": [
     {
-      "id": "ENG-2401",
-      "title": "Onboarding redesign hero refresh",
+      "id": "DE-2401",
+      "title": "CX OKR quarterly refresh: new business KPI tiles",
       "type": "development",
       "assignee": "eng-1",
       "status": "done",
       "priority": "P1",
       "estimate": 5,
       "labels": [
-        "frontend",
-        "design"
+        "cx-okr",
+        "tableau"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-04-26",
-      "eta": "2026-05-30"
+      "eta": "2026-05-30",
+      "daysInStatus": 6.9
     },
     {
-      "id": "ENG-2402",
-      "title": "Onboarding step strip new component",
+      "id": "DE-2402",
+      "title": "CX OKR quarterly refresh: per-product breakdown tabs",
       "type": "development",
       "assignee": "eng-1",
       "status": "done",
       "priority": "P1",
       "estimate": 5,
       "labels": [
-        "frontend"
+        "cx-okr",
+        "tableau"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-04-26",
-      "eta": "2026-05-30"
+      "eta": "2026-05-30",
+      "daysInStatus": 6.0
     },
     {
-      "id": "ENG-2403",
-      "title": "Onboarding step three video swap",
+      "id": "DE-2403",
+      "title": "CX OKR readout PDF template swap",
       "type": "enhancement",
       "assignee": "eng-5",
       "status": "done",
       "priority": "P2",
       "estimate": 2,
       "labels": [
-        "frontend",
-        "design"
+        "cx-okr",
+        "figma"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-04-26",
-      "eta": "2026-05-30"
+      "eta": "2026-05-30",
+      "daysInStatus": 4.2
     },
     {
-      "id": "ENG-2404",
-      "title": "Analytics revamp: new cohort retention API",
+      "id": "DE-2404",
+      "title": "Sales Rep QBR redesign v2: new cohort retention API",
       "type": "development",
       "assignee": "eng-2",
       "status": "done",
       "priority": "P1",
       "estimate": 8,
       "labels": [
-        "backend",
-        "analytics"
+        "revops-qbr",
+        "databricks"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-04-26",
-      "eta": "2026-05-30"
+      "eta": "2026-05-30",
+      "daysInStatus": 2.5
     },
     {
-      "id": "ENG-2405",
-      "title": "Analytics revamp: cohort retention chart",
+      "id": "DE-2405",
+      "title": "Sales Rep QBR redesign v2: cohort retention chart",
       "type": "development",
       "assignee": "eng-1",
       "status": "in-review",
       "priority": "P1",
       "estimate": 5,
       "labels": [
-        "frontend",
-        "analytics"
+        "revops-qbr",
+        "tableau"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-04-26",
-      "eta": "2026-05-30"
+      "eta": "2026-05-30",
+      "daysInStatus": 2.4
     },
     {
-      "id": "ENG-2406",
-      "title": "Analytics revamp: funnel chart redesign",
+      "id": "DE-2406",
+      "title": "Sales Rep QBR redesign v2: funnel chart redesign",
       "type": "development",
       "assignee": "eng-3",
       "status": "in-progress",
       "priority": "P1",
       "estimate": 5,
       "labels": [
-        "frontend",
-        "analytics"
+        "revops-qbr",
+        "tableau"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-04-26",
-      "eta": "2026-05-30"
+      "eta": "2026-05-30",
+      "daysInStatus": 4.2
     },
     {
-      "id": "ENG-2407",
-      "title": "Analytics revamp: funnel chart backend API",
+      "id": "DE-2407",
+      "title": "Sales Rep QBR redesign v2: funnel chart backend rollup",
       "type": "development",
       "assignee": "eng-2",
       "status": "in-review",
       "priority": "P1",
       "estimate": 5,
       "labels": [
-        "backend",
-        "analytics"
+        "revops-qbr",
+        "databricks"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-04-26",
-      "eta": "2026-05-30"
+      "eta": "2026-05-30",
+      "daysInStatus": 3.4
     },
     {
-      "id": "ENG-2408",
-      "title": "Bulk export CSV on the analytics gallery",
+      "id": "DE-2408",
+      "title": "Bulk export CSV on the RevOps analytics gallery",
       "type": "development",
       "assignee": "eng-4",
       "status": "in-progress",
       "priority": "P2",
       "estimate": 5,
       "labels": [
-        "frontend",
-        "analytics"
+        "revops-qbr",
+        "tableau"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-04-26",
-      "eta": "2026-05-30"
+      "eta": "2026-05-30",
+      "daysInStatus": 6.0
     },
     {
-      "id": "ENG-2409",
-      "title": "Search index v3 spike",
+      "id": "DE-2409",
+      "title": "Snowflake to Databricks workspace migration discovery doc",
       "type": "development",
       "assignee": "eng-8",
       "status": "todo",
       "priority": "P2",
       "estimate": 3,
       "labels": [
-        "backend",
-        "search"
+        "databricks",
+        "docs"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-04-26",
-      "eta": "2026-05-30"
+      "eta": "2026-05-30",
+      "daysInStatus": 2.3
     },
     {
-      "id": "ENG-2410",
-      "title": "Notifications inbox redesign shell",
+      "id": "DE-2410",
+      "title": "Genie Space embed shell for the Balanced Scorecard",
       "type": "development",
       "assignee": "eng-3",
       "status": "done",
       "priority": "P2",
       "estimate": 5,
       "labels": [
-        "frontend"
+        "genie-space",
+        "balanced-scorecard"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-04-26",
-      "eta": "2026-05-30"
+      "eta": "2026-05-30",
+      "daysInStatus": 2.2
     },
     {
-      "id": "ENG-2411",
-      "title": "Notifications inbox redesign rows",
+      "id": "DE-2411",
+      "title": "Genie Space embed rows for the Balanced Scorecard",
       "type": "development",
       "assignee": "eng-6",
       "status": "in-review",
       "priority": "P2",
       "estimate": 3,
       "labels": [
-        "frontend"
+        "genie-space",
+        "balanced-scorecard"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-04-26",
-      "eta": "2026-05-30"
+      "eta": "2026-05-30",
+      "daysInStatus": 3.1
     },
     {
-      "id": "ENG-2412",
-      "title": "PDF export font fallback regression",
+      "id": "DE-2412",
+      "title": "CX OKR PDF font fallback regression on Windows",
       "type": "bug",
       "assignee": "eng-6",
       "status": "done",
       "priority": "P2",
       "estimate": 2,
       "labels": [
-        "frontend",
-        "pdf"
+        "cx-okr",
+        "tableau"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-04-26",
-      "eta": "2026-05-30"
+      "eta": "2026-05-30",
+      "daysInStatus": 2.9
     },
     {
-      "id": "ENG-2413",
-      "title": "Workspace switcher keyboard nav fix",
+      "id": "DE-2413",
+      "title": "Workbook switcher keyboard navigation fix on Tableau Server",
       "type": "bug",
       "assignee": "eng-3",
       "status": "done",
       "priority": "P2",
       "estimate": 1,
       "labels": [
-        "frontend",
-        "a11y"
+        "tableau-server"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-04-26",
-      "eta": "2026-05-30"
+      "eta": "2026-05-30",
+      "daysInStatus": 2.4
     },
     {
-      "id": "ENG-2414",
-      "title": "Cohort retention chart accessibility audit",
+      "id": "DE-2414",
+      "title": "Balanced Scorecard Genie Space accessibility audit",
       "type": "enhancement",
       "assignee": "eng-8",
       "status": "blocked",
       "priority": "P2",
       "estimate": 2,
       "labels": [
-        "frontend",
-        "a11y"
+        "genie-space",
+        "balanced-scorecard"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-04-26",
       "eta": "2026-05-30",
-      "blockerNote": "Waiting on design tokens refresh from eng-6 by friday."
+      "blockerNote": "Waiting on the Figma design tokens refresh from eng-6 by friday.",
+      "daysInStatus": 9.7
     },
     {
-      "id": "ENG-2415",
-      "title": "Funnel chart accessibility audit",
+      "id": "DE-2415",
+      "title": "Sales Rep QBR funnel chart accessibility audit",
       "type": "enhancement",
       "assignee": "eng-8",
       "status": "todo",
       "priority": "P2",
       "estimate": 2,
       "labels": [
-        "frontend",
-        "a11y"
+        "revops-qbr",
+        "figma"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-04-26",
-      "eta": "2026-05-30"
+      "eta": "2026-05-30",
+      "daysInStatus": 8.5
     },
     {
-      "id": "ENG-2416",
-      "title": "Onboarding empty state copy refresh",
+      "id": "DE-2416",
+      "title": "Jira SSOT onboarding empty state copy refresh",
       "type": "enhancement",
       "assignee": "eng-5",
       "status": "in-review",
       "priority": "P3",
       "estimate": 2,
       "labels": [
-        "frontend",
-        "copy"
+        "jira-ssot",
+        "figma"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-04-26",
-      "eta": "2026-05-30"
+      "eta": "2026-05-30",
+      "daysInStatus": 3.5
     },
     {
-      "id": "ENG-2417",
-      "title": "Onboarding video transcript file",
+      "id": "DE-2417",
+      "title": "Jira SSOT onboarding video transcript file",
       "type": "enhancement",
       "assignee": "eng-5",
       "status": "in-progress",
       "priority": "P3",
       "estimate": 1,
       "labels": [
-        "copy"
+        "jira-ssot",
+        "docs"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-04-26",
-      "eta": "2026-05-30"
+      "eta": "2026-05-30",
+      "daysInStatus": 4.8
     },
     {
-      "id": "ENG-2418",
-      "title": "Audit log search filter",
+      "id": "DE-2418",
+      "title": "Audit log search filter on the Tableau Server admin",
       "type": "development",
       "assignee": "eng-4",
       "status": "in-progress",
       "priority": "P2",
       "estimate": 3,
       "labels": [
-        "backend"
+        "tableau-server"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-04-26",
-      "eta": "2026-05-30"
+      "eta": "2026-05-30",
+      "daysInStatus": 5.1
     },
     {
-      "id": "ENG-2419",
+      "id": "DE-2419",
       "title": "Audit log retention dashboard polish",
       "type": "enhancement",
       "assignee": "eng-7",
@@ -304,117 +325,132 @@
       "priority": "P2",
       "estimate": 2,
       "labels": [
+        "tableau-server",
         "observability"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-04-26",
-      "eta": null
+      "eta": null,
+      "daysInStatus": 11.1
     },
     {
-      "id": "ENG-2420",
-      "title": "Promote analytics revamp to staging",
+      "id": "DE-2420",
+      "title": "Promote Sales Rep QBR redesign v2 to staging",
       "type": "deployment",
       "assignee": "eng-7",
       "status": "todo",
       "priority": "P1",
       "estimate": 2,
       "labels": [
-        "devops",
-        "analytics"
+        "revops-qbr",
+        "tableau-server"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-04-26",
-      "eta": "2026-05-30"
+      "eta": "2026-05-30",
+      "daysInStatus": 0.3
     },
     {
-      "id": "ENG-2421",
-      "title": "Promote onboarding redesign to staging",
+      "id": "DE-2421",
+      "title": "Promote CX OKR quarterly refresh to staging",
       "type": "deployment",
       "assignee": "eng-7",
       "status": "todo",
       "priority": "P1",
       "estimate": 2,
       "labels": [
-        "devops"
+        "cx-okr",
+        "tableau-server"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-04-26",
-      "eta": "2026-05-30"
+      "eta": "2026-05-30",
+      "daysInStatus": 6.4
     },
     {
-      "id": "ENG-2422",
-      "title": "Promote notifications inbox to staging",
+      "id": "DE-2422",
+      "title": "Promote Balanced Scorecard Genie Space embed to staging",
       "type": "deployment",
       "assignee": "eng-7",
       "status": "todo",
       "priority": "P2",
       "estimate": 2,
       "labels": [
-        "devops"
+        "genie-space",
+        "balanced-scorecard"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-04-26",
-      "eta": "2026-05-30"
+      "eta": "2026-05-30",
+      "daysInStatus": 4.6
     },
     {
-      "id": "ENG-2423",
-      "title": "Sentry alert tune for analytics rollout",
+      "id": "DE-2423",
+      "title": "Sentry alert rules tune for the Sales Rep QBR rollout",
       "type": "enhancement",
       "assignee": "eng-8",
       "status": "todo",
       "priority": "P2",
       "estimate": 2,
       "labels": [
+        "revops-qbr",
         "observability"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-04-26",
-      "eta": "2026-05-30"
+      "eta": "2026-05-30",
+      "daysInStatus": 1.3
     },
     {
-      "id": "ENG-2424",
-      "title": "Investigate flaky e2e on workspace switcher",
+      "id": "DE-2424",
+      "title": "Investigate flaky e2e on the Tableau Server workbook switcher",
       "type": "bug",
       "assignee": "eng-3",
       "status": "in-progress",
       "priority": "P2",
       "estimate": 3,
       "labels": [
+        "tableau-server",
         "ci"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-04-26",
-      "eta": "2026-05-30"
+      "eta": "2026-05-30",
+      "daysInStatus": 5.0
     },
     {
-      "id": "ENG-2425",
-      "title": "P2 backlog burndown one of two",
+      "id": "DE-2425",
+      "title": "P2 maintenance batch one of two: stale CFD view cleanup",
       "type": "enhancement",
       "assignee": "eng-6",
       "status": "in-progress",
       "priority": "P2",
       "estimate": 3,
       "labels": [
-        "maintenance"
+        "cfd",
+        "tableau"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-04-26",
-      "eta": "2026-05-30"
+      "eta": "2026-05-30",
+      "daysInStatus": 4.3
     },
     {
-      "id": "ENG-2426",
-      "title": "P2 backlog burndown two of two",
+      "id": "DE-2426",
+      "title": "P2 maintenance batch two of two: Supply Chain backlog burndown",
       "type": "enhancement",
       "assignee": "eng-6",
       "status": "todo",
       "priority": "P2",
       "estimate": 3,
       "labels": [
-        "maintenance"
+        "supply-chain",
+        "tableau"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-04-26",
-      "eta": null
+      "eta": null,
+      "daysInStatus": 0.2
     }
   ],
   "burndown": {
@@ -532,13 +568,13 @@
   },
   "perEngineer": {
     "eng-1": {
-      "personalCycleTime": 3.5
+      "personalCycleTime": 3.6
     },
     "eng-2": {
       "personalCycleTime": 3.5
     },
     "eng-3": {
-      "personalCycleTime": 4.0
+      "personalCycleTime": 3.9
     },
     "eng-4": {
       "personalCycleTime": 5.0

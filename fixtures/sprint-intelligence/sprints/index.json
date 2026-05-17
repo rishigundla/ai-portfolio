@@ -1,53 +1,53 @@
 {
-  "version": "2.0.0",
+  "version": "3.0.0",
   "generatedAt": "2026-05-17",
   "team": [
     {
       "id": "eng-1",
       "name": "Alex Chen",
-      "role": "Senior Engineer",
+      "role": "Senior BI Engineer",
       "capacity": 13
     },
     {
       "id": "eng-2",
       "name": "Priya Sharma",
-      "role": "Senior Engineer",
+      "role": "Senior Data Engineer",
       "capacity": 13
     },
     {
       "id": "eng-3",
       "name": "Marcus Johnson",
-      "role": "Engineer",
+      "role": "Analytics Engineer",
       "capacity": 10
     },
     {
       "id": "eng-4",
       "name": "Sophia Rodriguez",
-      "role": "Engineer",
+      "role": "BI Engineer",
       "capacity": 10
     },
     {
       "id": "eng-5",
       "name": "Kai Tanaka",
-      "role": "Junior Engineer",
+      "role": "Junior Analytics Engineer",
       "capacity": 7
     },
     {
       "id": "eng-6",
       "name": "Emma Williams",
-      "role": "Engineer",
+      "role": "BI Engineer",
       "capacity": 10
     },
     {
       "id": "eng-7",
       "name": "Liam Sullivan",
-      "role": "Engineering Manager",
+      "role": "Data Engineering Manager",
       "capacity": 5
     },
     {
       "id": "eng-8",
       "name": "Zara Khan",
-      "role": "Senior Engineer",
+      "role": "Senior Data Engineer",
       "capacity": 13
     }
   ],
@@ -57,7 +57,8 @@
       "id": "jan-2026",
       "name": "Jan 2026 Sprint",
       "monthLabel": "Jan 2026",
-      "tagline": "Healthy sprint.",
+      "tagline": "Healthy sprint. 67 SP delivered, beat baseline by 16 percent.",
+      "goal": "Ship the NAI Pulse quarterly KPI refresh, the Jira SSOT data portal v1, and the RevOps ACV Weekly drillthrough. Burn down the P2 maintenance backlog by ten tickets.",
       "startDate": "2026-01-01",
       "endDate": "2026-01-31",
       "status": "completed",
@@ -71,7 +72,8 @@
       "id": "feb-2026",
       "name": "Feb 2026 Sprint",
       "monthLabel": "Feb 2026",
-      "tagline": "Scope creep.",
+      "tagline": "Scope creep absorbed. CFO escalation added 6 P0/P1 tickets mid sprint, all closed.",
+      "goal": "Ship the Pulse NAI real-time license tile and the RevOps GRR Weekly quarterly view. Hold cycle time inside the 4.5 day baseline.",
       "startDate": "2026-02-01",
       "endDate": "2026-02-28",
       "status": "completed",
@@ -85,7 +87,8 @@
       "id": "mar-2026",
       "name": "Mar 2026 Sprint",
       "monthLabel": "Mar 2026",
-      "tagline": "Blocked sprint.",
+      "tagline": "Blocked sprint. Fabric migration stalled day 4, 3 engineers idled, velocity 46 SP.",
+      "goal": "Cut over the Fabric Marketing Budget Tracker from the legacy ETL to OneLake plus ADF. Ship the Sales Rep QBR redesign and the Supply Chain dashboard refresh.",
       "startDate": "2026-03-01",
       "endDate": "2026-03-31",
       "status": "completed",
@@ -99,7 +102,8 @@
       "id": "apr-2026",
       "name": "Apr 2026 Sprint",
       "monthLabel": "Apr 2026",
-      "tagline": "Recovery sprint.",
+      "tagline": "Recovery sprint. Fabric migration shipped, every mar carryover closed, velocity 65 SP.",
+      "goal": "Close out the Fabric Marketing migration cleanly. Burn down the mar carryover. Ship the Fabric Procurement Open PO plus AP Invoice Accrual dashboards.",
       "startDate": "2026-04-01",
       "endDate": "2026-04-30",
       "status": "completed",
@@ -113,7 +117,8 @@
       "id": "may-2026",
       "name": "May 2026 Sprint",
       "monthLabel": "May 2026",
-      "tagline": "Currently in flight.",
+      "tagline": "In flight. Day 17 of 31. Sales Rep QBR redesign in review, 1 blocker on a11y audit.",
+      "goal": "Ship the CX OKR quarterly refresh and the Sales Rep QBR redesign v2. Land the Genie Space embed for the Balanced Scorecard. Hold cycle time at the four day mark.",
       "startDate": "2026-05-01",
       "endDate": "2026-05-31",
       "status": "in-progress",
@@ -127,7 +132,8 @@
       "id": "jun-2026",
       "name": "Jun 2026 Sprint",
       "monthLabel": "Jun 2026",
-      "tagline": "Backlog sprint.",
+      "tagline": "Backlog. 16 tickets earmarked across Pulse v2, Genie Space, Tableau upgrade.",
+      "goal": "Backlog allocation for next cycle. Pulse v2 unified semantic layer, Genie Space adoption across RevOps, and the Tableau Server 2024.3 upgrade.",
       "startDate": "2026-06-01",
       "endDate": "2026-06-30",
       "status": "planned",

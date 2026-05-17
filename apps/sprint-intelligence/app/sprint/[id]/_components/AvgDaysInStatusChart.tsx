@@ -24,8 +24,13 @@ export function AvgDaysInStatusChart({ entries }: AvgDaysInStatusChartProps) {
       {entries.map((entry) => {
         const widthPct = Math.min(100, (entry.averageDays / max) * 100)
         const color = STATUS_COLOR[entry.status] ?? '#94a3b8'
+        const title = `${entry.label}: ${entry.count} ticket${entry.count === 1 ? '' : 's'} averaging ${entry.averageDays.toFixed(1)} days in this status`
         return (
-          <div key={entry.status} className="flex items-center gap-3">
+          <div
+            key={entry.status}
+            className="flex items-center gap-3"
+            title={title}
+          >
             <span className="w-24 text-[11px] font-mono text-text-secondary shrink-0">
               {entry.label}
             </span>

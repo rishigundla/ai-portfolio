@@ -2,284 +2,306 @@
   "id": "apr-2026",
   "metadata": {
     "name": "Apr 2026 Sprint",
-    "goal": "Close out the auth migration cleanly. Burn down the carryover from mar. Ship the workspace template create plus delete flows.",
+    "goal": "Close out the Fabric Marketing migration cleanly. Burn down the mar carryover. Ship the Fabric Procurement Open PO plus AP Invoice Accrual dashboards.",
     "startDate": "2026-04-01",
     "endDate": "2026-04-30",
     "status": "completed",
-    "summary": "Recovery sprint. Auth migration shipped end to end with rollback plan filed. Every mar carryover closed. Workspace template create plus delete shipped on plan. Velocity 65 SP, cycle time held at 4.1 days against a 4.5 day baseline."
+    "summary": "Recovery sprint. Fabric Marketing migration shipped end to end with the rollback plan filed. Every mar carryover closed. Fabric Procurement Open PO plus AP Invoice Accrual dashboards shipped on plan. Velocity 65 SP, cycle time held at 4.1 days under the 4.5 day baseline."
   },
   "scopePlanned": 22,
   "scopeFinal": 22,
   "tickets": [
     {
-      "id": "ENG-2301",
-      "title": "Auth migration: cutover schema for v2 sessions",
+      "id": "DE-2301",
+      "title": "Fabric Marketing: OneLake to ADF cutover for the Budget Tracker",
       "type": "development",
       "assignee": "eng-2",
       "status": "done",
       "priority": "P0",
       "estimate": 8,
       "labels": [
-        "backend",
-        "auth"
+        "fabric-marketing",
+        "adf"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-03-25",
-      "eta": "2026-04-29"
+      "eta": "2026-04-29",
+      "daysInStatus": 3.9
     },
     {
-      "id": "ENG-2302",
-      "title": "Auth migration: dual write to old and new tables",
+      "id": "DE-2302",
+      "title": "Fabric Marketing: Bronze to Silver PySpark notebook refactor",
       "type": "development",
       "assignee": "eng-2",
       "status": "done",
       "priority": "P0",
       "estimate": 5,
       "labels": [
-        "backend",
-        "auth"
+        "fabric-marketing",
+        "databricks"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-03-25",
-      "eta": "2026-04-29"
+      "eta": "2026-04-29",
+      "daysInStatus": 2.6
     },
     {
-      "id": "ENG-2303",
-      "title": "Auth migration: dual read fallback in API",
+      "id": "DE-2303",
+      "title": "Fabric Marketing: Silver to Gold semantic model in Power BI",
       "type": "development",
       "assignee": "eng-8",
       "status": "done",
       "priority": "P0",
       "estimate": 5,
       "labels": [
-        "backend",
-        "auth"
+        "fabric-marketing",
+        "power-bi"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-03-25",
-      "eta": "2026-04-29"
+      "eta": "2026-04-29",
+      "daysInStatus": 6.5
     },
     {
-      "id": "ENG-2304",
-      "title": "Auth migration: rollback plan doc",
+      "id": "DE-2304",
+      "title": "Fabric Marketing rollback plan doc",
       "type": "enhancement",
       "assignee": "eng-2",
       "status": "done",
       "priority": "P0",
       "estimate": 2,
       "labels": [
-        "docs",
-        "auth"
+        "fabric-marketing",
+        "docs"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-03-25",
-      "eta": "2026-04-29"
+      "eta": "2026-04-29",
+      "daysInStatus": 6.4
     },
     {
-      "id": "ENG-2305",
-      "title": "Promote auth v2 to staging",
+      "id": "DE-2305",
+      "title": "Promote Fabric Marketing Budget Tracker to staging",
       "type": "deployment",
       "assignee": "eng-7",
       "status": "done",
       "priority": "P0",
       "estimate": 2,
       "labels": [
-        "devops",
-        "auth"
+        "fabric-marketing",
+        "adf"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-03-25",
-      "eta": "2026-04-29"
+      "eta": "2026-04-29",
+      "daysInStatus": 5.6
     },
     {
-      "id": "ENG-2306",
-      "title": "Promote auth v2 to prod",
+      "id": "DE-2306",
+      "title": "Promote Fabric Marketing Budget Tracker to prod",
       "type": "deployment",
       "assignee": "eng-7",
       "status": "done",
       "priority": "P0",
       "estimate": 2,
       "labels": [
-        "devops",
-        "auth"
+        "fabric-marketing",
+        "adf"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-03-25",
-      "eta": "2026-04-29"
+      "eta": "2026-04-29",
+      "daysInStatus": 5.5
     },
     {
-      "id": "ENG-2307",
-      "title": "Decommission old session table",
+      "id": "DE-2307",
+      "title": "Decommission legacy Marketing Budget Tracker pipeline",
       "type": "deployment",
       "assignee": "eng-7",
       "status": "done",
       "priority": "P1",
       "estimate": 1,
       "labels": [
-        "devops",
-        "auth"
+        "fabric-marketing",
+        "adf"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-03-25",
-      "eta": "2026-04-29"
+      "eta": "2026-04-29",
+      "daysInStatus": 3.4
     },
     {
-      "id": "ENG-2308",
-      "title": "Lighthouse SEO regression on /report fix",
+      "id": "DE-2308",
+      "title": "CFD trend bug fix: late-arriving defect ingestion handler",
       "type": "bug",
       "assignee": "eng-8",
       "status": "done",
       "priority": "P2",
       "estimate": 3,
       "labels": [
-        "frontend",
-        "seo"
+        "cfd",
+        "databricks"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-03-25",
-      "eta": "2026-04-29"
+      "eta": "2026-04-29",
+      "daysInStatus": 1.8
     },
     {
-      "id": "ENG-2309",
-      "title": "Sentry alert rules tune for noisy frontend",
+      "id": "DE-2309",
+      "title": "Sentry alert rules tune for the Tableau Server warmup",
       "type": "enhancement",
       "assignee": "eng-8",
       "status": "done",
       "priority": "P2",
       "estimate": 2,
       "labels": [
+        "tableau-server",
         "observability"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-03-25",
-      "eta": "2026-04-29"
+      "eta": "2026-04-29",
+      "daysInStatus": 2.1
     },
     {
-      "id": "ENG-2310",
-      "title": "Notifications backend perf cleanup ship",
+      "id": "DE-2310",
+      "title": "Notification subscription perf cleanup ship",
       "type": "enhancement",
       "assignee": "eng-4",
       "status": "done",
       "priority": "P2",
       "estimate": 3,
       "labels": [
-        "backend",
+        "tableau-server",
         "perf"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-03-25",
-      "eta": "2026-04-29"
+      "eta": "2026-04-29",
+      "daysInStatus": 3.3
     },
     {
-      "id": "ENG-2311",
-      "title": "Slow gallery render fix at 1000 items",
+      "id": "DE-2311",
+      "title": "Procurement Open PO render perf fix at 1000+ rows",
       "type": "development",
       "assignee": "eng-1",
       "status": "done",
       "priority": "P2",
       "estimate": 3,
       "labels": [
-        "frontend",
+        "fabric-procurement",
         "perf"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-03-25",
-      "eta": "2026-04-29"
+      "eta": "2026-04-29",
+      "daysInStatus": 5.5
     },
     {
-      "id": "ENG-2312",
-      "title": "Workspace template create flow",
+      "id": "DE-2312",
+      "title": "Fabric Procurement: Open PO dashboard build",
       "type": "development",
       "assignee": "eng-3",
       "status": "done",
       "priority": "P1",
       "estimate": 5,
       "labels": [
-        "frontend"
+        "fabric-procurement",
+        "power-bi"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-03-25",
-      "eta": "2026-04-29"
+      "eta": "2026-04-29",
+      "daysInStatus": 3.5
     },
     {
-      "id": "ENG-2313",
-      "title": "Workspace template delete flow",
+      "id": "DE-2313",
+      "title": "Fabric Procurement: AP Invoice Accrual dashboard build",
       "type": "development",
       "assignee": "eng-3",
       "status": "done",
       "priority": "P1",
       "estimate": 3,
       "labels": [
-        "frontend"
+        "fabric-procurement",
+        "power-bi"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-03-25",
-      "eta": "2026-04-29"
+      "eta": "2026-04-29",
+      "daysInStatus": 4.3
     },
     {
-      "id": "ENG-2314",
-      "title": "Bulk move workspace items",
+      "id": "DE-2314",
+      "title": "RevOps Partner Focus dashboard rollup (Q1 view)",
       "type": "development",
       "assignee": "eng-4",
       "status": "done",
       "priority": "P2",
       "estimate": 5,
       "labels": [
-        "frontend"
+        "revops-qbr",
+        "tableau"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-03-25",
-      "eta": "2026-04-29"
+      "eta": "2026-04-29",
+      "daysInStatus": 5.9
     },
     {
-      "id": "ENG-2315",
-      "title": "Bulk move backend wiring",
+      "id": "DE-2315",
+      "title": "RevOps Partner Focus backend: weekly partner aggregate",
       "type": "development",
       "assignee": "eng-4",
       "status": "done",
       "priority": "P2",
       "estimate": 3,
       "labels": [
-        "backend"
+        "revops-qbr",
+        "databricks"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-03-25",
-      "eta": "2026-04-29"
+      "eta": "2026-04-29",
+      "daysInStatus": 6.3
     },
     {
-      "id": "ENG-2316",
-      "title": "Update onboarding step copy",
+      "id": "DE-2316",
+      "title": "Jira SSOT onboarding step copy refresh",
       "type": "enhancement",
       "assignee": "eng-5",
       "status": "done",
       "priority": "P3",
       "estimate": 2,
       "labels": [
-        "frontend",
-        "copy"
+        "jira-ssot",
+        "figma"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-03-25",
-      "eta": "2026-04-29"
+      "eta": "2026-04-29",
+      "daysInStatus": 3.1
     },
     {
-      "id": "ENG-2317",
-      "title": "Onboarding step illustrations refresh",
+      "id": "DE-2317",
+      "title": "Jira SSOT onboarding illustrations refresh",
       "type": "enhancement",
       "assignee": "eng-5",
       "status": "done",
       "priority": "P3",
       "estimate": 3,
       "labels": [
-        "frontend",
-        "design"
+        "jira-ssot",
+        "figma"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-03-25",
-      "eta": "2026-04-29"
+      "eta": "2026-04-29",
+      "daysInStatus": 2.0
     },
     {
-      "id": "ENG-2318",
+      "id": "DE-2318",
       "title": "Audit log retention metric dashboard",
       "type": "enhancement",
       "assignee": "eng-6",
@@ -287,74 +309,80 @@
       "priority": "P2",
       "estimate": 3,
       "labels": [
+        "revops-qbr",
         "observability"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-03-25",
-      "eta": "2026-04-29"
+      "eta": "2026-04-29",
+      "daysInStatus": 3.6
     },
     {
-      "id": "ENG-2319",
-      "title": "Promote audit dashboard to prod",
+      "id": "DE-2319",
+      "title": "Promote audit log retention dashboard to prod",
       "type": "deployment",
       "assignee": "eng-7",
       "status": "done",
       "priority": "P2",
       "estimate": 1,
       "labels": [
-        "devops"
+        "tableau-server"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-03-25",
-      "eta": "2026-04-29"
+      "eta": "2026-04-29",
+      "daysInStatus": 2.7
     },
     {
-      "id": "ENG-2320",
-      "title": "PDF export header refresh",
+      "id": "DE-2320",
+      "title": "CX OKR readout PDF header refresh",
       "type": "enhancement",
       "assignee": "eng-6",
       "status": "done",
       "priority": "P3",
       "estimate": 2,
       "labels": [
-        "frontend",
-        "pdf"
+        "cx-okr",
+        "figma"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-03-25",
-      "eta": "2026-04-29"
+      "eta": "2026-04-29",
+      "daysInStatus": 3.9
     },
     {
-      "id": "ENG-2321",
-      "title": "Empty state on /search zero matches",
+      "id": "DE-2321",
+      "title": "Empty state on the Genie Space zero-match answer",
       "type": "enhancement",
       "assignee": "eng-5",
       "status": "done",
       "priority": "P3",
       "estimate": 1,
       "labels": [
-        "frontend",
-        "copy"
+        "genie-space",
+        "figma"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-03-25",
-      "eta": "2026-04-29"
+      "eta": "2026-04-29",
+      "daysInStatus": 4.5
     },
     {
-      "id": "ENG-2322",
-      "title": "Lighthouse SEO sweep across /reports family",
+      "id": "DE-2322",
+      "title": "Lighthouse SEO sweep across the public Genie Space landing",
       "type": "enhancement",
       "assignee": "eng-8",
       "status": "done",
       "priority": "P2",
       "estimate": 2,
       "labels": [
-        "frontend",
-        "seo"
+        "genie-space",
+        "perf"
       ],
       "addedMidSprint": false,
       "createdAt": "2026-03-25",
-      "eta": "2026-04-29"
+      "eta": "2026-04-29",
+      "daysInStatus": 2.2
     }
   ],
   "burndown": {
@@ -469,13 +497,13 @@
   },
   "perEngineer": {
     "eng-1": {
-      "personalCycleTime": 4.0
+      "personalCycleTime": 4.1
     },
     "eng-2": {
       "personalCycleTime": 4.0
     },
     "eng-3": {
-      "personalCycleTime": 4.5
+      "personalCycleTime": 4.4
     },
     "eng-4": {
       "personalCycleTime": 4.5

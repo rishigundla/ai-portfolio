@@ -2,359 +2,387 @@
   "id": "jan-2026",
   "metadata": {
     "name": "Jan 2026 Sprint",
-    "goal": "Ship the dashboard redesign and the magic link auth flow. Burn down the P2 backlog by ten tickets.",
+    "goal": "Ship the NAI Pulse quarterly KPI refresh, the Jira SSOT data portal v1, and the RevOps ACV Weekly drillthrough. Burn down the P2 maintenance backlog by ten tickets.",
     "startDate": "2026-01-01",
     "endDate": "2026-01-31",
     "status": "completed",
-    "summary": "Healthy sprint. Team hit the goal, velocity at 67 story points (well within capacity), only two tickets carried over. Cycle time and review bottleneck both improved versus the four sprint baseline."
+    "summary": "Healthy sprint. Team hit the goal, velocity at 67 story points (well within capacity), only two onboarding tour tickets carried over by design. Cycle time and review queue both improved versus the four sprint baseline."
   },
   "scopePlanned": 22,
   "scopeFinal": 22,
   "tickets": [
     {
-      "id": "ENG-2001",
-      "title": "Dashboard hero redesign with KPI strip",
+      "id": "DE-2001",
+      "title": "NAI Pulse quarterly KPI refresh: 6 new tiles on the executive dashboard",
       "type": "development",
       "assignee": "eng-1",
       "status": "done",
       "priority": "P1",
       "estimate": 5,
       "labels": [
-        "frontend",
-        "design"
+        "pulse-nai",
+        "tableau"
       ],
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
-      "eta": "2026-01-30"
+      "eta": "2026-01-30",
+      "daysInStatus": 4.0
     },
     {
-      "id": "ENG-2002",
-      "title": "Filter bar refactor with multi select",
-      "type": "development",
-      "assignee": "eng-1",
-      "status": "done",
-      "priority": "P1",
-      "estimate": 5,
-      "labels": [
-        "frontend"
-      ],
-      "addedMidSprint": false,
-      "createdAt": "2025-12-22",
-      "eta": "2026-01-30"
-    },
-    {
-      "id": "ENG-2003",
-      "title": "Magic link signup auth flow",
+      "id": "DE-2002",
+      "title": "NAI Pulse Gold layer schema review for the new tiles",
       "type": "development",
       "assignee": "eng-2",
+      "status": "done",
+      "priority": "P1",
+      "estimate": 5,
+      "labels": [
+        "pulse-nai",
+        "databricks"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2025-12-22",
+      "eta": "2026-01-30",
+      "daysInStatus": 3.5
+    },
+    {
+      "id": "DE-2003",
+      "title": "Jira SSOT data portal v1 ship: project list plus search",
+      "type": "development",
+      "assignee": "eng-3",
       "status": "done",
       "priority": "P1",
       "estimate": 8,
       "labels": [
-        "backend",
-        "auth"
+        "jira-ssot",
+        "dbt"
       ],
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
-      "eta": "2026-01-30"
+      "eta": "2026-01-30",
+      "daysInStatus": 2.9
     },
     {
-      "id": "ENG-2004",
-      "title": "Magic link email template copy review",
+      "id": "DE-2004",
+      "title": "Jira SSOT data portal filter bar plus export to CSV",
       "type": "enhancement",
       "assignee": "eng-6",
       "status": "done",
       "priority": "P2",
       "estimate": 3,
       "labels": [
-        "frontend",
-        "design"
+        "jira-ssot",
+        "tableau"
       ],
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
-      "eta": "2026-01-30"
+      "eta": "2026-01-30",
+      "daysInStatus": 2.5
     },
     {
-      "id": "ENG-2005",
-      "title": "Magic link rate limiting plus abuse guard",
+      "id": "DE-2005",
+      "title": "Jira SSOT incremental backfill for the closed-tickets table",
       "type": "development",
       "assignee": "eng-2",
       "status": "done",
       "priority": "P1",
       "estimate": 3,
       "labels": [
-        "backend",
-        "security"
+        "jira-ssot",
+        "databricks"
       ],
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
-      "eta": "2026-01-30"
+      "eta": "2026-01-30",
+      "daysInStatus": 6.2
     },
     {
-      "id": "ENG-2006",
-      "title": "Chart legend overflow on narrow viewports",
-      "type": "bug",
-      "assignee": "eng-3",
-      "status": "done",
-      "priority": "P2",
-      "estimate": 2,
-      "labels": [
-        "frontend"
-      ],
-      "addedMidSprint": false,
-      "createdAt": "2025-12-22",
-      "eta": "2026-01-30"
-    },
-    {
-      "id": "ENG-2007",
-      "title": "Search index spike for v2 filters",
-      "type": "development",
-      "assignee": "eng-4",
-      "status": "done",
-      "priority": "P2",
-      "estimate": 3,
-      "labels": [
-        "backend",
-        "search"
-      ],
-      "addedMidSprint": false,
-      "createdAt": "2025-12-22",
-      "eta": "2026-01-30"
-    },
-    {
-      "id": "ENG-2008",
-      "title": "Cohort retention chart on the dashboard",
+      "id": "DE-2006",
+      "title": "RevOps ACV Weekly drillthrough on the segment view",
       "type": "development",
       "assignee": "eng-1",
       "status": "done",
       "priority": "P1",
       "estimate": 5,
       "labels": [
-        "frontend",
-        "analytics"
+        "revops-acv",
+        "tableau"
       ],
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
-      "eta": "2026-01-30"
+      "eta": "2026-01-30",
+      "daysInStatus": 6.6
     },
     {
-      "id": "ENG-2009",
-      "title": "Bulk export CSV regression on the gallery",
+      "id": "DE-2007",
+      "title": "Tooltip overflow on the Balanced Scorecard at 1280 width",
       "type": "bug",
       "assignee": "eng-3",
       "status": "done",
       "priority": "P2",
       "estimate": 2,
       "labels": [
-        "frontend"
+        "balanced-scorecard",
+        "tableau"
       ],
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
-      "eta": "2026-01-30"
+      "eta": "2026-01-30",
+      "daysInStatus": 6.4
     },
     {
-      "id": "ENG-2010",
-      "title": "Light mode contrast audit fixes",
+      "id": "DE-2008",
+      "title": "Pulse NC2 spike: rolling 30 day cohort heatmap feasibility",
+      "type": "development",
+      "assignee": "eng-4",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "pulse-nc2",
+        "databricks"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2025-12-22",
+      "eta": "2026-01-30",
+      "daysInStatus": 2.4
+    },
+    {
+      "id": "DE-2009",
+      "title": "Bulk export CSV regression on the CX OKR gallery",
+      "type": "bug",
+      "assignee": "eng-3",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 2,
+      "labels": [
+        "cx-okr",
+        "tableau"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2025-12-22",
+      "eta": "2026-01-30",
+      "daysInStatus": 5.7
+    },
+    {
+      "id": "DE-2010",
+      "title": "Dark mode contrast audit on the executive dashboards",
       "type": "enhancement",
       "assignee": "eng-6",
       "status": "done",
       "priority": "P2",
       "estimate": 3,
       "labels": [
-        "frontend",
-        "design"
+        "figma",
+        "tableau"
       ],
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
-      "eta": "2026-01-30"
+      "eta": "2026-01-30",
+      "daysInStatus": 2.4
     },
     {
-      "id": "ENG-2011",
-      "title": "Auth session refresh edge case patch",
+      "id": "DE-2011",
+      "title": "Genie Space follow-up: column lineage glitch on RevOps",
       "type": "bug",
       "assignee": "eng-2",
       "status": "done",
       "priority": "P1",
       "estimate": 2,
       "labels": [
-        "backend",
-        "auth"
+        "genie-space",
+        "revops-qbr"
       ],
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
-      "eta": "2026-01-30"
+      "eta": "2026-01-30",
+      "daysInStatus": 3.2
     },
     {
-      "id": "ENG-2012",
-      "title": "Notifications panel pagination",
+      "id": "DE-2012",
+      "title": "Jira SSOT activity feed on the project page",
       "type": "development",
       "assignee": "eng-4",
       "status": "done",
       "priority": "P2",
       "estimate": 5,
       "labels": [
-        "frontend"
+        "jira-ssot",
+        "tableau"
       ],
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
-      "eta": "2026-01-30"
+      "eta": "2026-01-30",
+      "daysInStatus": 6.8
     },
     {
-      "id": "ENG-2013",
-      "title": "Promote auth migration to staging",
+      "id": "DE-2013",
+      "title": "Promote NAI Pulse Gold tiles to prod",
       "type": "deployment",
       "assignee": "eng-7",
       "status": "done",
       "priority": "P2",
       "estimate": 2,
       "labels": [
-        "devops",
-        "auth"
+        "pulse-nai",
+        "databricks"
       ],
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
-      "eta": "2026-01-30"
+      "eta": "2026-01-30",
+      "daysInStatus": 1.9
     },
     {
-      "id": "ENG-2014",
-      "title": "Vercel edge config sync job",
+      "id": "DE-2014",
+      "title": "Tableau Server warmup cron for the executive workbook",
       "type": "deployment",
       "assignee": "eng-7",
       "status": "done",
       "priority": "P2",
       "estimate": 3,
       "labels": [
-        "devops"
+        "tableau-server",
+        "tableau"
       ],
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
-      "eta": "2026-01-30"
+      "eta": "2026-01-30",
+      "daysInStatus": 6.3
     },
     {
-      "id": "ENG-2015",
-      "title": "Reduce home page bundle by 8 kB",
+      "id": "DE-2015",
+      "title": "Reduce Balanced Scorecard load time by 1.4s (query tuning)",
       "type": "enhancement",
       "assignee": "eng-8",
       "status": "done",
       "priority": "P2",
       "estimate": 3,
       "labels": [
-        "frontend",
-        "perf"
+        "balanced-scorecard",
+        "databricks"
       ],
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
-      "eta": "2026-01-30"
+      "eta": "2026-01-30",
+      "daysInStatus": 4.5
     },
     {
-      "id": "ENG-2016",
-      "title": "Empty state copy refresh on /workspace",
+      "id": "DE-2016",
+      "title": "Empty state copy on the Jira SSOT project list",
       "type": "enhancement",
       "assignee": "eng-5",
       "status": "done",
       "priority": "P3",
       "estimate": 2,
       "labels": [
-        "frontend",
-        "copy"
+        "jira-ssot",
+        "figma"
       ],
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
-      "eta": "2026-01-30"
+      "eta": "2026-01-30",
+      "daysInStatus": 3.3
     },
     {
-      "id": "ENG-2017",
-      "title": "Lighthouse SEO regression on /report",
+      "id": "DE-2017",
+      "title": "Lighthouse SEO regression on the Genie Space landing",
       "type": "bug",
       "assignee": "eng-8",
       "status": "done",
       "priority": "P2",
       "estimate": 2,
       "labels": [
-        "frontend",
-        "seo"
+        "genie-space"
       ],
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
-      "eta": "2026-01-30"
+      "eta": "2026-01-30",
+      "daysInStatus": 3.8
     },
     {
-      "id": "ENG-2018",
-      "title": "Cohort retention API endpoint",
+      "id": "DE-2018",
+      "title": "NC2 Pulse Silver to Gold transformation refactor",
       "type": "development",
       "assignee": "eng-2",
       "status": "done",
       "priority": "P1",
       "estimate": 5,
       "labels": [
-        "backend",
-        "analytics"
+        "pulse-nc2",
+        "databricks"
       ],
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
-      "eta": "2026-01-30"
+      "eta": "2026-01-30",
+      "daysInStatus": 3.8
     },
     {
-      "id": "ENG-2019",
-      "title": "P2 backlog burndown sweep one of two",
+      "id": "DE-2019",
+      "title": "P2 maintenance batch one of two: legacy CFD view cleanup",
       "type": "enhancement",
       "assignee": "eng-6",
       "status": "done",
       "priority": "P2",
       "estimate": 3,
       "labels": [
-        "maintenance"
+        "cfd",
+        "tableau"
       ],
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
-      "eta": "2026-01-30"
+      "eta": "2026-01-30",
+      "daysInStatus": 2.2
     },
     {
-      "id": "ENG-2020",
-      "title": "P2 backlog burndown sweep two of two",
+      "id": "DE-2020",
+      "title": "P2 maintenance batch two of two: Supply Chain dashboard refresh",
       "type": "enhancement",
       "assignee": "eng-6",
       "status": "done",
       "priority": "P2",
       "estimate": 3,
       "labels": [
-        "maintenance"
+        "supply-chain",
+        "tableau"
       ],
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
-      "eta": "2026-01-30"
+      "eta": "2026-01-30",
+      "daysInStatus": 2.8
     },
     {
-      "id": "ENG-2021",
-      "title": "Onboarding empty state copy refresh",
+      "id": "DE-2021",
+      "title": "Onboarding tour copy refresh on the Jira SSOT portal",
       "type": "enhancement",
       "assignee": "eng-5",
       "status": "todo",
       "priority": "P3",
       "estimate": 2,
       "labels": [
-        "frontend",
-        "design"
+        "jira-ssot",
+        "figma"
       ],
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
-      "eta": null
+      "eta": null,
+      "daysInStatus": 7.6
     },
     {
-      "id": "ENG-2022",
-      "title": "Onboarding empty state illustration swap",
+      "id": "DE-2022",
+      "title": "Onboarding tour screenshots swap on the Jira SSOT portal",
       "type": "enhancement",
       "assignee": "eng-5",
       "status": "todo",
       "priority": "P3",
       "estimate": 3,
       "labels": [
-        "frontend",
-        "design"
+        "jira-ssot",
+        "figma"
       ],
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
-      "eta": null
+      "eta": null,
+      "daysInStatus": 11.5
     }
   ],
   "burndown": {
@@ -472,13 +500,13 @@
   },
   "perEngineer": {
     "eng-1": {
-      "personalCycleTime": 4.0
+      "personalCycleTime": 4.1
     },
     "eng-2": {
       "personalCycleTime": 4.0
     },
     "eng-3": {
-      "personalCycleTime": 4.5
+      "personalCycleTime": 4.4
     },
     "eng-4": {
       "personalCycleTime": 4.5

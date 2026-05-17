@@ -44,19 +44,25 @@ export function SprintHistoryTable({ sprints, activeId }: SprintHistoryTableProp
             const open = s.openCount ?? Math.max(0, total - closed)
             const completionPct = total > 0 ? (closed / total) * 100 : 0
             const isActive = s.id === activeId
+            const rowTitle = `${s.name} · ${s.tagline}`
             return (
               <tr
                 key={s.id}
                 className={`border-b border-surface-border/40 ${
                   isActive ? 'bg-base-700/40' : 'hover:bg-base-700/20'
                 } transition-colors`}
+                title={rowTitle}
               >
                 <td className="px-2 py-2">
                   <Link
                     href={`/sprint/${s.id}`}
                     className="inline-flex items-center gap-2 text-text-primary hover:text-accent transition-colors"
+                    title={`Open ${s.name}`}
                   >
-                    <Icon className={`h-3.5 w-3.5 ${tone}`} strokeWidth={1.5} />
+                    <Icon
+                      className={`h-3.5 w-3.5 ${tone}`}
+                      strokeWidth={1.5}
+                    />
                     <span>{s.name}</span>
                     {isActive && (
                       <span className="ml-1 inline-flex items-center text-[9px] uppercase tracking-widest text-accent">

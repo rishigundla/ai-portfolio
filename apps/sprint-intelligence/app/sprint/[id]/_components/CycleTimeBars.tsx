@@ -28,8 +28,13 @@ export function CycleTimeBars({ entries, baseline }: CycleTimeBarsProps) {
       {top.map((entry) => {
         const widthPct = Math.min(100, (entry.days / max) * 100)
         const color = TONE_COLOR[entry.tone] ?? '#94a3b8'
+        const title = `${entry.ticketId} · ${entry.title} · ${entry.days.toFixed(1)}d (${entry.tone})`
         return (
-          <div key={entry.ticketId} className="flex items-center gap-3">
+          <div
+            key={entry.ticketId}
+            className="flex items-center gap-3"
+            title={title}
+          >
             <span className="w-20 text-[11px] font-mono text-accent shrink-0">
               {entry.ticketId}
             </span>

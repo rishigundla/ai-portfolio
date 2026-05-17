@@ -31,8 +31,13 @@ export function WorkloadByAssignee({ entries }: WorkloadByAssigneeProps) {
         {entries.map((entry) => {
           const donePct = entry.total > 0 ? entry.ratio * 100 : 0
           const openPct = 100 - donePct
+          const title = `${entry.engineer.name} · ${entry.engineer.role} · ${entry.done} of ${entry.total} tickets done${entry.total > 0 ? ` (${donePct.toFixed(0)}%)` : ''}`
           return (
-            <li key={entry.engineer.id} className="flex items-center gap-3">
+            <li
+              key={entry.engineer.id}
+              className="flex items-center gap-3"
+              title={title}
+            >
               <span className="w-36 font-display text-[13px] font-semibold text-text-primary truncate">
                 {entry.engineer.name}
               </span>
