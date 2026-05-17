@@ -5,11 +5,11 @@
   "tags": ["AI", "Sprint Analytics", "Jira", "React", "Next.js", "Claude"],
   "description": "Pick a synthetic sprint, watch the dashboard fill with team and individual KPIs, get a streaming AI authored meeting brief with workload rebalancing recommendations.",
   "thumbnail": "/projects/ai-sprint-intelligence.png",
-  "liveUrl": "",
+  "liveUrl": "https://ai-portfolio-sprint-intelligence.vercel.app",
   "githubUrl": "https://github.com/rishigundla/ai-portfolio/tree/main/apps/sprint-intelligence",
   "caseStudyUrl": "",
   "loomUrl": "",
-  "deployedAt": "",
+  "deployedAt": "2026-05-17",
   "resumeBullet": {
     "category": "AI-Powered Analytics & Data Engineering Projects",
     "text": "Built an AI Sprint Intelligence Dashboard on Next.js + Vercel. Pick a synthetic sprint from a curated library, the dashboard fills with team and individual KPIs (burndown, velocity, cycle time, scope creep, carryover, workload distribution), and a streaming AI meeting brief appears with exec summary, watch list, and workload rebalancing recommendations. Shares the streaming primitive plus design system with the rest of the portfolio."

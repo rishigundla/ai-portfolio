@@ -2,7 +2,9 @@
 
 **Project 03 of 5**. AI Sprint Intelligence Dashboard. Pick a synthetic sprint, the dashboard fills with team and individual KPIs, watch a streaming AI authored meeting brief land on top.
 
-**Status**: Scaffold shipped (W9.D1). Production deploy in W10.D5.
+**Status**: Live in production. Deployed 2026-05-17.
+
+**Live**: <https://ai-portfolio-sprint-intelligence.vercel.app>
 
 ## What it does
 

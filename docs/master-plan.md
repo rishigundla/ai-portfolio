@@ -109,6 +109,15 @@ User scope call: Cat C items are real-resource-cost themes, not Project-1-close 
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
 
+### 2026-05-17 · 🚀 W10.D5 - Sprint Intelligence live on production
+- **Live URL**: <https://ai-portfolio-sprint-intelligence.vercel.app>. All four sprint slugs prerendered, every route returns 200.
+- **Vercel project**. Created `ai-portfolio-sprint-intelligence` on the `rishigundlas-projects` team via `vercel project add`. First deploy attempt from inside `apps/sprint-intelligence/` failed because the upload context did not include the workspace root and pnpm could not resolve `@rishi/design-system` or `@rishi/ai-core`.
+- **Monorepo rootDirectory pattern**. Moved the link file to the repo root `.vercel/` folder (each app keeps a copy at `apps/<name>/.vercel/` so the link is recoverable). PATCH the project via the Vercel REST API to set `rootDirectory: apps/sprint-intelligence` plus `framework: nextjs`. Same workaround used for Project 2, because the CLI does not surface `rootDirectory` as a flag.
+- **Production deploy**. Second `vercel --prod --yes` from the repo root ran clean. Vercel detected `pnpm-workspace.yaml` at the upload root, ran `pnpm install` for the whole workspace, then `cd` into `apps/sprint-intelligence` and ran the `next build` through turbo. 38 second build on Node 24 in iad1 with a cold cache. Eleven static pages, `/sprint/[id]` at 52.2 kB First Load JS, four sprint slugs SSG.
+- **`portfolio.meta.json`**. Populated `liveUrl: https://ai-portfolio-sprint-intelligence.vercel.app` and `deployedAt: 2026-05-17`. `caseStudyUrl` and `loomUrl` left empty (case study lands W10.D6, Loom skipped same as Projects 1 and 2 per the W5.D5 scope call).
+- **README** header updated to point at the live link.
+- **Next**: W10.D6 - Write the Project 3 case study at `docs/case-studies/sprint-intelligence.md`. Mirror the narrative-generator case study structure: problem framing, approach, architecture, three engineering moments (the monorepo rootDirectory workaround, the streaming brief panel reuse, the per engineer deep dive URL state pattern), tech stack, impact. Then wire `caseStudyUrl` in `portfolio.meta.json`.
+
 ### 2026-05-17 · 🔍 W10.D4 - Sprint Intelligence structural a11y plus SEO pass
 - **Heading order fix.** Home page `StepCard` used `h3` directly under the hero `h1`, which skipped `h2` and would fail the Lighthouse heading-order rule. Promoted to `h2`. All three routes (`/`, `/sprints`, `/sprint/[id]`) now have a valid `h1` to `h2` to `h3` chain.
 - **`/sprint/[id]` metadata.** `generateMetadata` reads the `SprintSummary` from the manifest loader and renders the page title as `Sprint 42 · Completed` style. Description pulls the tagline plus the ticket count plus the eight engineer roster. Added matching OpenGraph (`type: 'article'`) and Twitter card metadata so a shared link in Slack or Twitter shows the sprint name and a one line description.
@@ -2229,10 +2238,9 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 #### Day 4 (Thu) · Lighthouse + SEO
 - [ ] 90+ audit
 
-#### Day 5 (Fri) · Deploy + Loom
+#### Day 5 (Fri) · Deploy
 - [ ] Vercel production deploy
 - [ ] `portfolio.meta.json`
-- [ ] Record 90s Loom
 
 #### Day 6 (Sat) · Case Study + Automation
 - [ ] Write case study MDX
@@ -2242,8 +2250,8 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 - [ ] Buffer day, lessons learned, prep Phase 4
 
 **Week 8 Deliverables**:
-- Project 4 live on production
-- Loom + case study published
+- Project 3 live on production
+- Case study published
 - Automation fires
 
 ---

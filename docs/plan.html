@@ -1650,7 +1650,9 @@
         // Phase 3 · Week 10 · Day 3 (4 tasks - three skeletons, error boundary class, wired across three panels, streaming brief fallback)
         "10-W10.D3-0", "10-W10.D3-1", "10-W10.D3-2", "10-W10.D3-3",
         // Phase 3 · Week 10 · Day 4 (4 tasks - heading order fix, sprint detail metadata, gallery metadata, structural audit)
-        "10-W10.D4-0", "10-W10.D4-1", "10-W10.D4-2", "10-W10.D4-3"
+        "10-W10.D4-0", "10-W10.D4-1", "10-W10.D4-2", "10-W10.D4-3",
+        // Phase 3 · Week 10 · Day 5 (4 tasks - vercel project add, rootDirectory PATCH, production deploy from repo root, portfolio.meta.json plus README)
+        "10-W10.D5-0", "10-W10.D5-1", "10-W10.D5-2", "10-W10.D5-3"
       ],
 
       phases: [
@@ -1663,6 +1665,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-05-17",
+          title: "🚀 W10.D5 - Sprint Intelligence live on production",
+          desc: "Project 3 is live in production at https://ai-portfolio-sprint-intelligence.vercel.app. New Vercel project ai-portfolio-sprint-intelligence created on the rishigundlas-projects team via vercel project add. First deploy attempt from inside apps/sprint-intelligence failed because the upload context did not include the workspace root and pnpm could not resolve @rishi/design-system or @rishi/ai-core. Swapped to the monorepo pattern: moved the link file to the repo root .vercel folder (each app keeps a copy at apps/<name>/.vercel for future swaps), then PATCH the project via the Vercel REST API to set rootDirectory to apps/sprint-intelligence plus framework to nextjs. Same workaround used for Project 2, because the CLI does not surface rootDirectory as a flag. Second deploy from the repo root ran clean. Vercel detected pnpm-workspace.yaml at the upload root, ran pnpm install for the whole workspace, then cd into apps/sprint-intelligence and ran the next build through turbo (38 second build, cold cache, Node 24 on iad1). Eleven static pages generated, /sprint/[id] First Load JS at 52.2 kB unchanged from the local build, all four sprint slugs prerendered. Aliased to the stable https://ai-portfolio-sprint-intelligence.vercel.app URL automatically. Smoke checks via curl on /, /sprints, /sprint/sprint-42, /sprint/sprint-44 all returned HTTP 200. Updated apps/sprint-intelligence/portfolio.meta.json with the live URL and deployedAt 2026-05-17, plus the app README header now points at the live link.",
+          next: "W10.D6 - Write the Project 3 case study at docs/case-studies/sprint-intelligence.md. Mirror the narrative-generator case study structure: problem framing, approach, architecture, three engineering moments (the monorepo rootDirectory workaround, the streaming brief panel reuse, the per engineer deep dive URL state pattern), tech stack, impact. Then wire caseStudyUrl in portfolio.meta.json."
+        },
         {
           date: "2026-05-17",
           title: "🔍 W10.D4 - Sprint Intelligence structural a11y plus SEO pass",
@@ -2326,11 +2334,11 @@
             { num: "W10.D2", weekday: "Tue", name: "Responsive polish for narrow viewports", tasks: ["EngineerTabs strip now horizontally scrolls on phones with shrink-0 tab buttons, returns to flex-wrap on sm and up", "BlockerHistoryDialog snaps to a bottom sheet pattern on phones (max-h-92vh, rounded-t-xl, no horizontal padding) then returns to a centered modal on sm and up", "New scrollbar-hide utility class in globals.css hides the native scrollbar on the horizontal tab strip while preserving scroll", "Breakpoint sweep verified across 1440, 1280, and 768 widths against the dashboard, gallery, and sprint home routes"] },
             { num: "W10.D3", weekday: "Wed", name: "Skeleton states and error boundary", tasks: ["Three skeleton components (BriefSkeleton, TeamWorkloadSkeleton, EngineerTabsSkeleton) replace the plain text Suspense fallbacks", "SprintErrorBoundary class component with a graceful fallback card plus a Try again reset button", "Streaming brief panel, TeamWorkloadCard, and EngineerTabs each wrapped in SprintErrorBoundary so a render error cannot blank the whole page", "Streaming brief panel falls back to the fixture.metadata.summary text inside an inline rose tinted card if the streaming render fails"] },
             { num: "W10.D4", weekday: "Thu", name: "Structural a11y plus SEO pass", tasks: ["Heading order fix on the home page: StepCard h3 promoted to h2 to close the h1 to h3 skip", "/sprint/[id] generateMetadata enriched with sprint name plus status label plus OpenGraph plus Twitter card", "/sprints generateMetadata extended with OpenGraph plus Twitter card so the gallery shares cleanly", "Structural audit pass: heading order on /, /sprints, /sprint/[id] all valid h1 to h2 to h3 chain. Interactive elements carry accessible names (aria-selected on tabs, aria-label on icon only buttons, visible text on others). Browser default focus rings preserved on all custom buttons. Color contrast checked against bg-base-900 for every text-* token used"] },
-            { num: "W10.D5", weekday: "Fri", name: "Deploy + Loom", tasks: ["Vercel production deploy", "portfolio.meta.json", "Record 90s Loom"] },
+            { num: "W10.D5", weekday: "Fri", name: "Vercel production deploy", tasks: ["New Vercel project ai-portfolio-sprint-intelligence created via vercel project add, link file lives at the repo root .vercel folder with each app keeping a copy in apps/<name>/.vercel for future swaps", "REST API PATCH set rootDirectory to apps/sprint-intelligence plus framework to nextjs so the monorepo deploy resolves pnpm workspace packages from the repo root then builds from the app subdir", "vercel --prod --yes from the repo root, build clean in Washington DC iad1 on Node 24 with turbo cache cold, 11 static pages generated, /sprint/[id] at 52.2 kB First Load JS, all four sprint slugs prerendered", "portfolio.meta.json populated with liveUrl https://ai-portfolio-sprint-intelligence.vercel.app and deployedAt 2026-05-17, README header updated with the live link, every route verified to return HTTP 200 via curl"] },
             { num: "W10.D6", weekday: "Sat", name: "Case Study + Automation", tasks: ["Write case study MDX", "Trigger automation, merge PRs"] },
             { num: "W10.D7", weekday: "Sun", name: "Phase 3 Wrap", tasks: ["Buffer", "Lessons learned", "Prep Phase 4"] }
           ],
-          deliverables: ["Project 3 live", "Loom + case study", "Automation fires"]
+          deliverables: ["Project 3 live", "Case study published", "Automation fires"]
         },
 
         // ========== PHASE 4 — PROJECT 4 ==========
