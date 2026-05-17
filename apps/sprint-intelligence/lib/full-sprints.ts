@@ -46,6 +46,12 @@ export interface TicketSpec {
   createdAt: string
   eta: string | null
   daysInStatus: number
+  /**
+   * 1-indexed sprint days the engineer was actively working on the ticket.
+   * Sparse (gaps allowed) so the heatmap and Gantt reflect real cadence.
+   * Empty for todo tickets.
+   */
+  workSchedule: number[]
   blockerNote?: string
 }
 

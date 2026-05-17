@@ -27,7 +27,8 @@
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
       "eta": "2026-06-29",
-      "daysInStatus": 4.4
+      "daysInStatus": 4.4,
+      "workSchedule": []
     },
     {
       "id": "DE-2502",
@@ -44,7 +45,8 @@
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
       "eta": "2026-06-29",
-      "daysInStatus": 10.7
+      "daysInStatus": 10.7,
+      "workSchedule": []
     },
     {
       "id": "DE-2503",
@@ -61,7 +63,8 @@
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
       "eta": "2026-06-29",
-      "daysInStatus": 1.3
+      "daysInStatus": 1.3,
+      "workSchedule": []
     },
     {
       "id": "DE-2504",
@@ -78,7 +81,8 @@
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
       "eta": "2026-06-29",
-      "daysInStatus": 4.8
+      "daysInStatus": 4.8,
+      "workSchedule": []
     },
     {
       "id": "DE-2505",
@@ -95,7 +99,8 @@
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
       "eta": null,
-      "daysInStatus": 6.2
+      "daysInStatus": 6.2,
+      "workSchedule": []
     },
     {
       "id": "DE-2506",
@@ -112,7 +117,8 @@
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
       "eta": null,
-      "daysInStatus": 6.7
+      "daysInStatus": 6.7,
+      "workSchedule": []
     },
     {
       "id": "DE-2507",
@@ -129,7 +135,8 @@
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
       "eta": null,
-      "daysInStatus": 2.0
+      "daysInStatus": 2.0,
+      "workSchedule": []
     },
     {
       "id": "DE-2508",
@@ -146,7 +153,8 @@
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
       "eta": "2026-06-29",
-      "daysInStatus": 3.6
+      "daysInStatus": 3.6,
+      "workSchedule": []
     },
     {
       "id": "DE-2509",
@@ -162,7 +170,8 @@
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
       "eta": "2026-06-29",
-      "daysInStatus": 7.0
+      "daysInStatus": 7.0,
+      "workSchedule": []
     },
     {
       "id": "DE-2510",
@@ -179,7 +188,8 @@
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
       "eta": null,
-      "daysInStatus": 6.3
+      "daysInStatus": 6.3,
+      "workSchedule": []
     },
     {
       "id": "DE-2511",
@@ -196,7 +206,8 @@
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
       "eta": "2026-06-29",
-      "daysInStatus": 11.2
+      "daysInStatus": 11.2,
+      "workSchedule": []
     },
     {
       "id": "DE-2512",
@@ -212,7 +223,8 @@
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
       "eta": "2026-06-29",
-      "daysInStatus": 7.4
+      "daysInStatus": 7.4,
+      "workSchedule": []
     },
     {
       "id": "DE-2513",
@@ -229,7 +241,8 @@
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
       "eta": null,
-      "daysInStatus": 10.3
+      "daysInStatus": 10.3,
+      "workSchedule": []
     },
     {
       "id": "DE-2514",
@@ -246,7 +259,8 @@
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
       "eta": "2026-06-29",
-      "daysInStatus": 9.8
+      "daysInStatus": 9.8,
+      "workSchedule": []
     },
     {
       "id": "DE-2515",
@@ -263,7 +277,8 @@
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
       "eta": "2026-06-29",
-      "daysInStatus": 4.8
+      "daysInStatus": 4.8,
+      "workSchedule": []
     },
     {
       "id": "DE-2516",
@@ -280,7 +295,8 @@
       "addedMidSprint": false,
       "createdAt": "2026-05-15",
       "eta": null,
-      "daysInStatus": 1.4
+      "daysInStatus": 1.4,
+      "workSchedule": []
     }
   ],
   "burndown": {

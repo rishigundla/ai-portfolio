@@ -31,7 +31,7 @@ function ClosedPerSprintChart({ sprints }: { sprints: SprintSummary[] }) {
           <Legend color={COLOR_OPEN} label="Open" />
         </div>
       </div>
-      <div className="grid grid-cols-6 gap-3 h-48">
+      <div className="grid grid-cols-6 gap-3 h-56">
         {sprints.map((s) => {
           const total = s.ticketCount
           const closed = s.closedCount ?? 0
@@ -45,6 +45,21 @@ function ClosedPerSprintChart({ sprints }: { sprints: SprintSummary[] }) {
               className="flex flex-col items-center h-full"
               title={title}
             >
+              <div className="flex items-baseline gap-1.5 mb-1 font-mono text-[11px]">
+                <span
+                  className="font-display text-sm font-bold"
+                  style={{ color: COLOR_CLOSED }}
+                >
+                  {closed}
+                </span>
+                <span className="text-text-dim">/</span>
+                <span
+                  className="font-display text-sm font-bold"
+                  style={{ color: COLOR_OPEN }}
+                >
+                  {open}
+                </span>
+              </div>
               <div className="flex-1 w-full flex items-end justify-center">
                 <div
                   className="w-9 rounded-t-sm overflow-hidden flex flex-col-reverse"
@@ -56,6 +71,7 @@ function ClosedPerSprintChart({ sprints }: { sprints: SprintSummary[] }) {
                       height: `${closedShare * 100}%`,
                       backgroundColor: COLOR_CLOSED,
                     }}
+                    title={`Closed: ${closed}`}
                   />
                   <div
                     className="w-full"
@@ -64,14 +80,12 @@ function ClosedPerSprintChart({ sprints }: { sprints: SprintSummary[] }) {
                       backgroundColor: COLOR_OPEN,
                       opacity: 0.85,
                     }}
+                    title={`Open: ${open}`}
                   />
                 </div>
               </div>
               <span className="text-[10px] font-mono text-text-muted mt-1.5">
                 {s.id.slice(0, 3)}
-              </span>
-              <span className="text-[10px] font-mono text-text-secondary mt-0.5">
-                {closed}/{total}
               </span>
             </div>
           )
@@ -94,19 +108,35 @@ function StoryPointsPerSprintChart({ sprints }: { sprints: SprintSummary[] }) {
           <Legend color={COLOR_SP_REMAIN} label="Remaining" />
         </div>
       </div>
-      <div className="grid grid-cols-6 gap-3 h-48">
+      <div className="grid grid-cols-6 gap-3 h-56">
         {sprints.map((s) => {
           const total = s.spTotal ?? 0
           const done = s.spCompleted ?? 0
+          const remaining = total - done
           const totalHeightPct = (total / max) * 100
           const doneShare = total > 0 ? done / total : 0
-          const title = `${s.name}: ${done} completed SP / ${total - done} remaining SP (${total} total)`
+          const title = `${s.name}: ${done} completed SP / ${remaining} remaining SP (${total} total)`
           return (
             <div
               key={s.id}
               className="flex flex-col items-center h-full"
               title={title}
             >
+              <div className="flex items-baseline gap-1.5 mb-1 font-mono text-[11px]">
+                <span
+                  className="font-display text-sm font-bold"
+                  style={{ color: COLOR_SP_DONE }}
+                >
+                  {done}
+                </span>
+                <span className="text-text-dim">/</span>
+                <span
+                  className="font-display text-sm font-bold"
+                  style={{ color: COLOR_SP_REMAIN }}
+                >
+                  {remaining}
+                </span>
+              </div>
               <div className="flex-1 w-full flex items-end justify-center">
                 <div
                   className="w-9 rounded-t-sm overflow-hidden flex flex-col-reverse"
@@ -118,6 +148,7 @@ function StoryPointsPerSprintChart({ sprints }: { sprints: SprintSummary[] }) {
                       height: `${doneShare * 100}%`,
                       backgroundColor: COLOR_SP_DONE,
                     }}
+                    title={`Completed SP: ${done}`}
                   />
                   <div
                     className="w-full"
@@ -126,14 +157,12 @@ function StoryPointsPerSprintChart({ sprints }: { sprints: SprintSummary[] }) {
                       backgroundColor: COLOR_SP_REMAIN,
                       opacity: 0.85,
                     }}
+                    title={`Remaining SP: ${remaining}`}
                   />
                 </div>
               </div>
               <span className="text-[10px] font-mono text-text-muted mt-1.5">
                 {s.id.slice(0, 3)}
-              </span>
-              <span className="text-[10px] font-mono text-text-secondary mt-0.5">
-                {done}/{total}
               </span>
             </div>
           )

@@ -27,7 +27,12 @@
       "createdAt": "2026-02-22",
       "eta": "2026-03-30",
       "blockerNote": "ADF pipeline needs NextGen team sign-off, blocked since day 4. Owner: eng-2, manager escalation in progress.",
-      "daysInStatus": 8.5
+      "daysInStatus": 8.5,
+      "workSchedule": [
+        2,
+        3,
+        4
+      ]
     },
     {
       "id": "DE-2202",
@@ -45,7 +50,10 @@
       "createdAt": "2026-02-22",
       "eta": "2026-03-30",
       "blockerNote": "Depends on DE-2201 cutover. Currently parked.",
-      "daysInStatus": 6.8
+      "daysInStatus": 6.8,
+      "workSchedule": [
+        2
+      ]
     },
     {
       "id": "DE-2203",
@@ -63,7 +71,11 @@
       "createdAt": "2026-02-22",
       "eta": "2026-03-30",
       "blockerNote": "Depends on DE-2201 cutover. Currently parked.",
-      "daysInStatus": 9.4
+      "daysInStatus": 9.4,
+      "workSchedule": [
+        2,
+        3
+      ]
     },
     {
       "id": "DE-2204",
@@ -80,7 +92,13 @@
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
       "eta": "2026-03-30",
-      "daysInStatus": 2.7
+      "daysInStatus": 2.7,
+      "workSchedule": [
+        3,
+        4,
+        5,
+        6
+      ]
     },
     {
       "id": "DE-2205",
@@ -97,7 +115,11 @@
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
       "eta": "2026-03-30",
-      "daysInStatus": 2.4
+      "daysInStatus": 2.4,
+      "workSchedule": [
+        5,
+        6
+      ]
     },
     {
       "id": "DE-2206",
@@ -114,7 +136,10 @@
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
       "eta": "2026-03-30",
-      "daysInStatus": 3.5
+      "daysInStatus": 3.5,
+      "workSchedule": [
+        4
+      ]
     },
     {
       "id": "DE-2207",
@@ -131,7 +156,13 @@
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
       "eta": "2026-03-30",
-      "daysInStatus": 5.7
+      "daysInStatus": 5.7,
+      "workSchedule": [
+        2,
+        4,
+        5,
+        6
+      ]
     },
     {
       "id": "DE-2208",
@@ -148,7 +179,11 @@
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
       "eta": "2026-03-30",
-      "daysInStatus": 2.7
+      "daysInStatus": 2.7,
+      "workSchedule": [
+        6,
+        10
+      ]
     },
     {
       "id": "DE-2209",
@@ -165,7 +200,11 @@
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
       "eta": "2026-03-30",
-      "daysInStatus": 1.8
+      "daysInStatus": 1.8,
+      "workSchedule": [
+        5,
+        9
+      ]
     },
     {
       "id": "DE-2210",
@@ -183,7 +222,11 @@
       "createdAt": "2026-02-22",
       "eta": "2026-03-30",
       "blockerNote": "Owner pulled to Fabric migration. Carrying to apr.",
-      "daysInStatus": 7.1
+      "daysInStatus": 7.1,
+      "workSchedule": [
+        6,
+        9
+      ]
     },
     {
       "id": "DE-2211",
@@ -200,7 +243,11 @@
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
       "eta": "2026-03-30",
-      "daysInStatus": 1.8
+      "daysInStatus": 1.8,
+      "workSchedule": [
+        5,
+        6
+      ]
     },
     {
       "id": "DE-2212",
@@ -217,7 +264,10 @@
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
       "eta": "2026-03-30",
-      "daysInStatus": 2.8
+      "daysInStatus": 2.8,
+      "workSchedule": [
+        2
+      ]
     },
     {
       "id": "DE-2213",
@@ -235,7 +285,11 @@
       "createdAt": "2026-02-22",
       "eta": "2026-03-30",
       "blockerNote": "Owner pulled to Fabric migration. Carrying.",
-      "daysInStatus": 9.9
+      "daysInStatus": 9.9,
+      "workSchedule": [
+        5,
+        6
+      ]
     },
     {
       "id": "DE-2214",
@@ -252,7 +306,11 @@
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
       "eta": "2026-03-30",
-      "daysInStatus": 3.9
+      "daysInStatus": 3.9,
+      "workSchedule": [
+        5,
+        9
+      ]
     },
     {
       "id": "DE-2215",
@@ -268,7 +326,11 @@
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
       "eta": "2026-03-30",
-      "daysInStatus": 5.6
+      "daysInStatus": 5.6,
+      "workSchedule": [
+        4,
+        5
+      ]
     },
     {
       "id": "DE-2216",
@@ -285,7 +347,11 @@
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
       "eta": "2026-03-30",
-      "daysInStatus": 1.8
+      "daysInStatus": 1.8,
+      "workSchedule": [
+        5,
+        6
+      ]
     },
     {
       "id": "DE-2217",
@@ -302,7 +368,11 @@
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
       "eta": "2026-03-30",
-      "daysInStatus": 6.9
+      "daysInStatus": 6.9,
+      "workSchedule": [
+        2,
+        3
+      ]
     },
     {
       "id": "DE-2218",
@@ -319,7 +389,12 @@
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
       "eta": "2026-03-30",
-      "daysInStatus": 3.7
+      "daysInStatus": 3.7,
+      "workSchedule": [
+        9,
+        10,
+        11
+      ]
     },
     {
       "id": "DE-2219",
@@ -336,7 +411,11 @@
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
       "eta": "2026-03-30",
-      "daysInStatus": 4.5
+      "daysInStatus": 4.5,
+      "workSchedule": [
+        10,
+        11
+      ]
     },
     {
       "id": "DE-2220",
@@ -353,7 +432,11 @@
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
       "eta": "2026-03-30",
-      "daysInStatus": 4.0
+      "daysInStatus": 4.0,
+      "workSchedule": [
+        6,
+        9
+      ]
     },
     {
       "id": "DE-2221",
@@ -370,7 +453,10 @@
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
       "eta": "2026-03-30",
-      "daysInStatus": 2.2
+      "daysInStatus": 2.2,
+      "workSchedule": [
+        11
+      ]
     },
     {
       "id": "DE-2222",
@@ -387,7 +473,12 @@
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
       "eta": "2026-03-30",
-      "daysInStatus": 3.3
+      "daysInStatus": 3.3,
+      "workSchedule": [
+        4,
+        5,
+        6
+      ]
     },
     {
       "id": "DE-2223",
@@ -404,7 +495,11 @@
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
       "eta": "2026-03-30",
-      "daysInStatus": 6.2
+      "daysInStatus": 6.2,
+      "workSchedule": [
+        4,
+        5
+      ]
     },
     {
       "id": "DE-2224",
@@ -421,7 +516,8 @@
       "addedMidSprint": false,
       "createdAt": "2026-02-22",
       "eta": null,
-      "daysInStatus": 3.0
+      "daysInStatus": 3.0,
+      "workSchedule": []
     }
   ],
   "burndown": {

@@ -19,7 +19,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -57,6 +57,126 @@ def days_in_status_for(sprint_id: str, ticket_id: str, status: str) -> float:
     digest = hashlib.md5(f"{sprint_id}:{ticket_id}".encode()).digest()
     bucket = digest[0] / 255.0
     return round(lo + (hi - lo) * bucket, 1)
+
+
+def _hash_bytes(sprint_id: str, ticket_id: str, salt: str) -> bytes:
+    return hashlib.md5(f"{sprint_id}:{ticket_id}:{salt}".encode()).digest()
+
+
+def _hash_float(sprint_id: str, ticket_id: str, salt: str, idx: int = 0) -> float:
+    """Return a deterministic float in [0, 1) for this (ticket, salt, idx)."""
+    digest = _hash_bytes(sprint_id, ticket_id, salt)
+    return digest[idx % len(digest)] / 255.0
+
+
+def _is_weekend(sprint_start_iso: str, sprint_day: int) -> bool:
+    """Day 1 == sprint_start. Saturday or Sunday is a weekend."""
+    start = date.fromisoformat(sprint_start_iso)
+    weekday = (start + timedelta(days=sprint_day - 1)).weekday()
+    return weekday >= 5
+
+
+def _next_weekday(sprint_start_iso: str, sprint_day: int, sprint_length: int) -> int:
+    """Slide a candidate day forward to the next weekday inside the sprint."""
+    day = sprint_day
+    while day <= sprint_length and _is_weekend(sprint_start_iso, day):
+        day += 1
+    return day
+
+
+def work_schedule_for(
+    sprint_id: str,
+    ticket: dict[str, Any],
+    sprint_start_iso: str,
+    sprint_length: int,
+    today_day: int,
+    is_in_flight: bool,
+) -> list[int]:
+    """Return the 1-indexed sprint days the engineer actively worked on the ticket.
+
+    Deterministic via the (sprint_id, ticket_id) MD5 sampler. Weekends are
+    skipped (work slides to the next weekday). The synthesis matches realistic
+    engineering cadence: bugs and mid sprint additions start at createdDay,
+    P0 / P1 ramp up faster than P2 / P3, blocked tickets see a brief burst
+    then idle.
+    """
+    status = ticket["status"]
+    if status == "todo":
+        return []
+
+    estimate = max(1, ticket.get("estimate") or 1)
+    priority = ticket.get("priority", "P2")
+    added_mid = bool(ticket.get("addedMidSprint", False))
+    tid = ticket["id"]
+
+    # Day-of-sprint for createdAt, clamped to [1, sprint_length].
+    created = date.fromisoformat(ticket["createdAt"])
+    sprint_start = date.fromisoformat(sprint_start_iso)
+    created_day = max(1, min(sprint_length, (created - sprint_start).days + 1))
+
+    # Priority-aware delay before the engineer picks up the ticket.
+    if added_mid or priority == "P0":
+        delay_lo, delay_hi = 0, 0
+    elif priority == "P1":
+        delay_lo, delay_hi = 0, 2
+    elif priority == "P2":
+        delay_lo, delay_hi = 1, 5
+    else:  # P3
+        delay_lo, delay_hi = 3, 10
+
+    delay = delay_lo + int(_hash_float(sprint_id, tid, "delay") * (delay_hi - delay_lo + 1))
+    start_day = min(sprint_length, created_day + delay)
+    start_day = _next_weekday(sprint_start_iso, start_day, sprint_length)
+
+    # Work count by status.
+    if status == "done":
+        work_count = max(1, round(estimate * 0.8))
+    elif status in ("in-progress", "in-review"):
+        days_in_status = float(ticket.get("daysInStatus", 1))
+        work_count = max(1, int(round(min(estimate, days_in_status + 1))))
+    elif status == "blocked":
+        # Engineer started, then hit the blocker. 1 to 3 active days.
+        work_count = 1 + int(_hash_float(sprint_id, tid, "blocked-count") * 3)
+    else:
+        work_count = max(1, estimate)
+
+    # Anchor end day for in-flight tickets.
+    if status in ("in-progress", "in-review") and is_in_flight:
+        end_day = min(sprint_length, today_day)
+    else:
+        end_day = min(sprint_length, start_day + work_count + 2)
+
+    # Window of candidate days: from start_day to end_day inclusive.
+    window: list[int] = []
+    d = start_day
+    while d <= end_day and len(window) < (end_day - start_day + 1):
+        if not _is_weekend(sprint_start_iso, d):
+            window.append(d)
+        d += 1
+
+    if not window:
+        return []
+
+    if status == "blocked":
+        # Contiguous run from start_day for work_count weekdays.
+        return window[:work_count]
+
+    if status == "done":
+        # Pick work_count days from the window. Use hash bytes to decide
+        # which candidate days are active vs context-switched.
+        if work_count >= len(window):
+            return window
+        digest = _hash_bytes(sprint_id, tid, "done-mask")
+        scored = [(digest[i % len(digest)], day) for i, day in enumerate(window)]
+        scored.sort(key=lambda x: x[0])
+        picked = sorted(day for _, day in scored[:work_count])
+        return picked
+
+    # in-progress / in-review: pick work_count weekdays ending at end_day.
+    if work_count >= len(window):
+        return window
+    picked = window[-work_count:]
+    return picked
 
 
 def ticket(
@@ -181,10 +301,20 @@ def build_fixture(spec: dict[str, Any]) -> dict[str, Any]:
     day_count = days_in_month(start, end)
 
     # Stamp daysInStatus into every ticket using the deterministic sampler.
+    is_in_flight = spec["status"] == "in-progress"
+    today_day = spec.get("currentDay") or day_count if is_in_flight else day_count
     tickets = []
     for t in spec["tickets"]:
         enriched = dict(t)
         enriched["daysInStatus"] = days_in_status_for(spec["id"], t["id"], t["status"])
+        enriched["workSchedule"] = work_schedule_for(
+            spec["id"],
+            enriched,
+            spec["startDate"],
+            day_count,
+            today_day,
+            is_in_flight,
+        )
         tickets.append(enriched)
 
     velocity = compute_velocity(tickets)

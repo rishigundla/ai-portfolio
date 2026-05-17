@@ -559,21 +559,50 @@ export const TICKET_STATUS_OPTIONS: { value: TicketStatus; label: string }[] = [
 // Per-ticket timelines (W10.D10) — feeds heatmap + gantt
 // ============================================================
 
+export interface TicketTimelineRun {
+  start: number
+  end: number
+}
+
 export interface TicketTimeline {
   ticketId: string
   title: string
   status: TicketStatus
   assignee: string
   estimate: number
-  /** 1-indexed sprint day where the ticket entered active work, null if todo. */
+  /** 1-indexed sprint days the engineer actively worked on the ticket. */
+  activeDays: number[]
+  /** Contiguous runs derived from activeDays. */
+  runs: TicketTimelineRun[]
+  /** First active day, null if none. */
   startDay: number | null
-  /** 1-indexed sprint day where work ended (today for in-flight, closure day for done). */
+  /** Last active day, null if none. */
   endDay: number | null
-  /** Number of days the ticket spans inside the sprint window. */
+  /** Total count of active days. */
   spanDays: number
   /** Plan ghost range used for todo tickets (start to start+estimate) regardless of work. */
   plannedStartDay: number
   plannedEndDay: number
+}
+
+function collapseRuns(days: number[]): TicketTimelineRun[] {
+  if (days.length === 0) return []
+  const sorted = [...days].sort((a, b) => a - b)
+  const runs: TicketTimelineRun[] = []
+  let runStart = sorted[0]!
+  let runEnd = sorted[0]!
+  for (let i = 1; i < sorted.length; i += 1) {
+    const day = sorted[i]!
+    if (day === runEnd + 1) {
+      runEnd = day
+    } else {
+      runs.push({ start: runStart, end: runEnd })
+      runStart = day
+      runEnd = day
+    }
+  }
+  runs.push({ start: runStart, end: runEnd })
+  return runs
 }
 
 function dayOfSprint(iso: string, sprintStartIso: string, sprintLength: number): number {
@@ -594,10 +623,6 @@ export function computeTicketTimelines(
     fixture.metadata.endDate,
   )
   const sprintLengthInt = Math.max(1, Math.round(sprintLength) + 1)
-  const isInFlight = fixture.metadata.status === 'in-progress'
-  const todayDay = isInFlight
-    ? Math.min(sprintLengthInt, fixture.currentDay ?? sprintLengthInt)
-    : sprintLengthInt
 
   const entries: TicketTimeline[] = tickets.map((t) => {
     const createdDay = dayOfSprint(t.createdAt, sprintStart, sprintLengthInt)
@@ -605,38 +630,30 @@ export function computeTicketTimelines(
     const plannedStartDay = Math.min(sprintLengthInt, createdDay)
     const plannedEndDay = Math.min(sprintLengthInt, plannedStartDay + plannedSpan)
 
-    let startDay: number | null
-    let endDay: number | null
+    const schedule = (t.workSchedule ?? [])
+      .filter((d) => d >= 1 && d <= sprintLengthInt)
+      .slice()
+      .sort((a, b) => a - b)
+    const runs = collapseRuns(schedule)
 
-    if (t.status === 'todo') {
-      startDay = null
-      endDay = null
-    } else if (t.status === 'done') {
-      startDay = plannedStartDay
-      endDay = Math.min(sprintLengthInt, plannedStartDay + plannedSpan)
-    } else {
-      // in-progress / in-review / blocked: span from start to today
-      startDay = plannedStartDay
-      endDay = Math.max(startDay, todayDay)
-    }
-
-    const span = startDay !== null && endDay !== null ? endDay - startDay + 1 : 0
     return {
       ticketId: t.id,
       title: t.title,
       status: t.status,
       assignee: t.assignee,
       estimate: t.estimate,
-      startDay,
-      endDay,
-      spanDays: span,
+      activeDays: schedule,
+      runs,
+      startDay: schedule.length > 0 ? (schedule[0] ?? null) : null,
+      endDay:
+        schedule.length > 0 ? (schedule[schedule.length - 1] ?? null) : null,
+      spanDays: schedule.length,
       plannedStartDay,
       plannedEndDay,
     }
   })
 
   return entries.sort((a, b) => {
-    // Active tickets first (those with a non-null startDay), longest span first.
     if (a.startDay === null && b.startDay !== null) return 1
     if (b.startDay === null && a.startDay !== null) return -1
     return b.spanDays - a.spanDays

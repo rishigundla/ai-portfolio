@@ -40,35 +40,63 @@ export function TicketGantt({ timelines, sprintLength }: TicketGanttProps) {
   return (
     <div className="flex flex-col gap-2">
       {top.map((entry) => {
-        const isActive = entry.startDay !== null && entry.endDay !== null
-        const start = isActive ? entry.startDay! : entry.plannedStartDay
-        const end = isActive ? entry.endDay! : entry.plannedEndDay
-        const leftPct = ((start - 1) / sprintLength) * 100
-        const widthPct = Math.max(2, ((end - start + 1) / sprintLength) * 100)
         const fill = STATUS_FILL[entry.status] ?? '#475569'
-        const title = isActive
-          ? `${entry.ticketId} · ${entry.title} · days ${start}–${end} (${STATUS_LABEL[entry.status] ?? entry.status})`
-          : `${entry.ticketId} · ${entry.title} · planned days ${start}–${end} (${STATUS_LABEL[entry.status] ?? entry.status})`
+        const hasRuns = entry.runs.length > 0
+        const rowTitle = hasRuns
+          ? `${entry.ticketId} · ${entry.title} · ${entry.spanDays} active day${entry.spanDays === 1 ? '' : 's'} across ${entry.runs.length} run${entry.runs.length === 1 ? '' : 's'} (${STATUS_LABEL[entry.status] ?? entry.status})`
+          : `${entry.ticketId} · ${entry.title} · planned days ${entry.plannedStartDay}–${entry.plannedEndDay} (${STATUS_LABEL[entry.status] ?? entry.status})`
         return (
           <div
             key={entry.ticketId}
             className="grid grid-cols-[7rem_1fr] gap-3 items-center"
-            title={title}
+            title={rowTitle}
           >
             <span className="text-[11px] font-mono text-accent truncate">
               {entry.ticketId}
             </span>
             <div className="relative h-3 rounded-sm bg-base-800/70">
-              <div
-                className="absolute top-0 bottom-0 rounded-sm"
-                style={{
-                  left: `${leftPct}%`,
-                  width: `${widthPct}%`,
-                  backgroundColor: fill,
-                  opacity: isActive ? 0.85 : 0.35,
-                  border: isActive ? undefined : `1px dashed ${fill}`,
-                }}
-              />
+              {hasRuns
+                ? entry.runs.map((run, idx) => {
+                    const leftPct = ((run.start - 1) / sprintLength) * 100
+                    const widthPct = Math.max(
+                      1.5,
+                      ((run.end - run.start + 1) / sprintLength) * 100,
+                    )
+                    return (
+                      <div
+                        key={idx}
+                        className="absolute top-0 bottom-0 rounded-sm"
+                        style={{
+                          left: `${leftPct}%`,
+                          width: `${widthPct}%`,
+                          backgroundColor: fill,
+                          opacity: 0.85,
+                        }}
+                        title={`${entry.ticketId} · day${run.start === run.end ? '' : 's'} ${run.start}${run.start === run.end ? '' : `–${run.end}`} (${STATUS_LABEL[entry.status] ?? entry.status})`}
+                      />
+                    )
+                  })
+                : (() => {
+                    const leftPct =
+                      ((entry.plannedStartDay - 1) / sprintLength) * 100
+                    const widthPct = Math.max(
+                      2,
+                      ((entry.plannedEndDay - entry.plannedStartDay + 1) /
+                        sprintLength) *
+                        100,
+                    )
+                    return (
+                      <div
+                        className="absolute top-0 bottom-0 rounded-sm"
+                        style={{
+                          left: `${leftPct}%`,
+                          width: `${widthPct}%`,
+                          opacity: 0.35,
+                          border: `1px dashed ${fill}`,
+                        }}
+                      />
+                    )
+                  })()}
             </div>
           </div>
         )

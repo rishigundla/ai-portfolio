@@ -26,7 +26,13 @@
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
       "eta": "2026-01-30",
-      "daysInStatus": 4.0
+      "daysInStatus": 4.0,
+      "workSchedule": [
+        2,
+        5,
+        7,
+        8
+      ]
     },
     {
       "id": "DE-2002",
@@ -43,7 +49,13 @@
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
       "eta": "2026-01-30",
-      "daysInStatus": 3.5
+      "daysInStatus": 3.5,
+      "workSchedule": [
+        2,
+        6,
+        7,
+        8
+      ]
     },
     {
       "id": "DE-2003",
@@ -60,7 +72,15 @@
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
       "eta": "2026-01-30",
-      "daysInStatus": 2.9
+      "daysInStatus": 2.9,
+      "workSchedule": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        12
+      ]
     },
     {
       "id": "DE-2004",
@@ -77,7 +97,11 @@
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
       "eta": "2026-01-30",
-      "daysInStatus": 2.5
+      "daysInStatus": 2.5,
+      "workSchedule": [
+        2,
+        5
+      ]
     },
     {
       "id": "DE-2005",
@@ -94,7 +118,11 @@
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
       "eta": "2026-01-30",
-      "daysInStatus": 6.2
+      "daysInStatus": 6.2,
+      "workSchedule": [
+        2,
+        5
+      ]
     },
     {
       "id": "DE-2006",
@@ -111,7 +139,13 @@
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
       "eta": "2026-01-30",
-      "daysInStatus": 6.6
+      "daysInStatus": 6.6,
+      "workSchedule": [
+        1,
+        2,
+        5,
+        6
+      ]
     },
     {
       "id": "DE-2007",
@@ -128,7 +162,11 @@
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
       "eta": "2026-01-30",
-      "daysInStatus": 6.4
+      "daysInStatus": 6.4,
+      "workSchedule": [
+        2,
+        6
+      ]
     },
     {
       "id": "DE-2008",
@@ -145,7 +183,11 @@
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
       "eta": "2026-01-30",
-      "daysInStatus": 2.4
+      "daysInStatus": 2.4,
+      "workSchedule": [
+        5,
+        6
+      ]
     },
     {
       "id": "DE-2009",
@@ -162,7 +204,11 @@
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
       "eta": "2026-01-30",
-      "daysInStatus": 5.7
+      "daysInStatus": 5.7,
+      "workSchedule": [
+        5,
+        6
+      ]
     },
     {
       "id": "DE-2010",
@@ -179,7 +225,11 @@
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
       "eta": "2026-01-30",
-      "daysInStatus": 2.4
+      "daysInStatus": 2.4,
+      "workSchedule": [
+        7,
+        8
+      ]
     },
     {
       "id": "DE-2011",
@@ -196,7 +246,11 @@
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
       "eta": "2026-01-30",
-      "daysInStatus": 3.2
+      "daysInStatus": 3.2,
+      "workSchedule": [
+        5,
+        6
+      ]
     },
     {
       "id": "DE-2012",
@@ -213,7 +267,13 @@
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
       "eta": "2026-01-30",
-      "daysInStatus": 6.8
+      "daysInStatus": 6.8,
+      "workSchedule": [
+        5,
+        6,
+        8,
+        9
+      ]
     },
     {
       "id": "DE-2013",
@@ -230,7 +290,11 @@
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
       "eta": "2026-01-30",
-      "daysInStatus": 1.9
+      "daysInStatus": 1.9,
+      "workSchedule": [
+        2,
+        6
+      ]
     },
     {
       "id": "DE-2014",
@@ -247,7 +311,11 @@
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
       "eta": "2026-01-30",
-      "daysInStatus": 6.3
+      "daysInStatus": 6.3,
+      "workSchedule": [
+        8,
+        9
+      ]
     },
     {
       "id": "DE-2015",
@@ -264,7 +332,11 @@
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
       "eta": "2026-01-30",
-      "daysInStatus": 4.5
+      "daysInStatus": 4.5,
+      "workSchedule": [
+        8,
+        9
+      ]
     },
     {
       "id": "DE-2016",
@@ -281,7 +353,11 @@
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
       "eta": "2026-01-30",
-      "daysInStatus": 3.3
+      "daysInStatus": 3.3,
+      "workSchedule": [
+        7,
+        8
+      ]
     },
     {
       "id": "DE-2017",
@@ -297,7 +373,11 @@
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
       "eta": "2026-01-30",
-      "daysInStatus": 3.8
+      "daysInStatus": 3.8,
+      "workSchedule": [
+        7,
+        9
+      ]
     },
     {
       "id": "DE-2018",
@@ -314,7 +394,13 @@
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
       "eta": "2026-01-30",
-      "daysInStatus": 3.8
+      "daysInStatus": 3.8,
+      "workSchedule": [
+        5,
+        6,
+        7,
+        8
+      ]
     },
     {
       "id": "DE-2019",
@@ -331,7 +417,11 @@
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
       "eta": "2026-01-30",
-      "daysInStatus": 2.2
+      "daysInStatus": 2.2,
+      "workSchedule": [
+        2,
+        5
+      ]
     },
     {
       "id": "DE-2020",
@@ -348,7 +438,11 @@
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
       "eta": "2026-01-30",
-      "daysInStatus": 2.8
+      "daysInStatus": 2.8,
+      "workSchedule": [
+        6,
+        9
+      ]
     },
     {
       "id": "DE-2021",
@@ -365,7 +459,8 @@
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
       "eta": null,
-      "daysInStatus": 7.6
+      "daysInStatus": 7.6,
+      "workSchedule": []
     },
     {
       "id": "DE-2022",
@@ -382,7 +477,8 @@
       "addedMidSprint": false,
       "createdAt": "2025-12-22",
       "eta": null,
-      "daysInStatus": 11.5
+      "daysInStatus": 11.5,
+      "workSchedule": []
     }
   ],
   "burndown": {

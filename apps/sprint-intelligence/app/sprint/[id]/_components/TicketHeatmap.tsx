@@ -73,11 +73,12 @@ export function TicketHeatmap({ timelines, sprintLength }: TicketHeatmapProps) {
         </div>
 
         {top.map((entry) => {
-          const isActive = entry.startDay !== null && entry.endDay !== null
+          const activeSet = new Set(entry.activeDays)
           const fill = STATUS_FILL[entry.status] ?? '#475569'
-          const rowTitle = isActive
-            ? `${entry.ticketId} · ${entry.title} · days ${entry.startDay}–${entry.endDay} (${STATUS_LABEL[entry.status] ?? entry.status})`
-            : `${entry.ticketId} · ${entry.title} · not started (${STATUS_LABEL[entry.status] ?? entry.status})`
+          const rowTitle =
+            entry.spanDays > 0
+              ? `${entry.ticketId} · ${entry.title} · ${entry.spanDays} active day${entry.spanDays === 1 ? '' : 's'} (${STATUS_LABEL[entry.status] ?? entry.status})`
+              : `${entry.ticketId} · ${entry.title} · not started (${STATUS_LABEL[entry.status] ?? entry.status})`
           return (
             <div
               key={entry.ticketId}
@@ -91,22 +92,17 @@ export function TicketHeatmap({ timelines, sprintLength }: TicketHeatmapProps) {
                 {entry.ticketId}
               </span>
               {Array.from({ length: sprintLength }, (_, i) => i + 1).map((d) => {
-                const inRange =
-                  isActive &&
-                  entry.startDay !== null &&
-                  entry.endDay !== null &&
-                  d >= entry.startDay &&
-                  d <= entry.endDay
+                const isActive = activeSet.has(d)
                 return (
                   <div
                     key={d}
                     className="h-4 rounded-sm"
                     style={{
-                      backgroundColor: inRange ? fill : '#1a1f2e',
-                      opacity: inRange ? 0.8 : 1,
+                      backgroundColor: isActive ? fill : '#1a1f2e',
+                      opacity: isActive ? 0.85 : 1,
                     }}
                     title={
-                      inRange
+                      isActive
                         ? `${entry.ticketId} · day ${d} · ${STATUS_LABEL[entry.status] ?? entry.status}`
                         : undefined
                     }
