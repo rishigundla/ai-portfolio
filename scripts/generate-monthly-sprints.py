@@ -84,99 +84,111 @@ def _next_weekday(sprint_start_iso: str, sprint_day: int, sprint_length: int) ->
     return day
 
 
-def work_schedule_for(
+PRIORITY_RANK = {"P0": 0, "P1": 1, "P2": 2, "P3": 3}
+
+
+def _contiguous_weekday_run(
+    start_day: int, sprint_start_iso: str, sprint_length: int, work_count: int
+) -> list[int]:
+    """Return up to work_count weekdays starting at start_day, weekends rolled over."""
+    days: list[int] = []
+    d = start_day
+    while len(days) < work_count and d <= sprint_length:
+        if not _is_weekend(sprint_start_iso, d):
+            days.append(d)
+        d += 1
+    return days
+
+
+def schedule_engineer_queue(
     sprint_id: str,
-    ticket: dict[str, Any],
+    engineer_tickets: list[dict[str, Any]],
     sprint_start_iso: str,
     sprint_length: int,
     today_day: int,
     is_in_flight: bool,
-) -> list[int]:
-    """Return the 1-indexed sprint days the engineer actively worked on the ticket.
+) -> dict[str, list[int]]:
+    """Schedule one engineer's tickets sequentially.
 
-    Deterministic via the (sprint_id, ticket_id) MD5 sampler. Weekends are
-    skipped (work slides to the next weekday). The synthesis matches realistic
-    engineering cadence: bugs and mid sprint additions start at createdDay,
-    P0 / P1 ramp up faster than P2 / P3, blocked tickets see a brief burst
-    then idle.
+    Tickets are sorted by priority (P0 first) then createdAt ascending. A
+    currentDay cursor walks forward as each ticket consumes weekdays. The
+    engineer focuses on one ticket at a time. Mid sprint additions are
+    naturally interleaved because their priority + createdDay clamps their
+    start day forward when reached.
+
+    Returns: dict mapping ticket_id to its workSchedule list.
     """
-    status = ticket["status"]
-    if status == "todo":
-        return []
+    schedules: dict[str, list[int]] = {}
+    queue = sorted(
+        engineer_tickets,
+        key=lambda t: (
+            PRIORITY_RANK.get(t.get("priority", "P2"), 3),
+            t.get("createdAt", ""),
+            t.get("id", ""),
+        ),
+    )
 
-    estimate = max(1, ticket.get("estimate") or 1)
-    priority = ticket.get("priority", "P2")
-    added_mid = bool(ticket.get("addedMidSprint", False))
-    tid = ticket["id"]
-
-    # Day-of-sprint for createdAt, clamped to [1, sprint_length].
-    created = date.fromisoformat(ticket["createdAt"])
     sprint_start = date.fromisoformat(sprint_start_iso)
-    created_day = max(1, min(sprint_length, (created - sprint_start).days + 1))
+    current_day = 1
 
-    # Priority-aware delay before the engineer picks up the ticket.
-    if added_mid or priority == "P0":
-        delay_lo, delay_hi = 0, 0
-    elif priority == "P1":
-        delay_lo, delay_hi = 0, 2
-    elif priority == "P2":
-        delay_lo, delay_hi = 1, 5
-    else:  # P3
-        delay_lo, delay_hi = 3, 10
+    for ticket in queue:
+        tid = ticket["id"]
+        status = ticket["status"]
+        if status == "todo":
+            schedules[tid] = []
+            continue
 
-    delay = delay_lo + int(_hash_float(sprint_id, tid, "delay") * (delay_hi - delay_lo + 1))
-    start_day = min(sprint_length, created_day + delay)
-    start_day = _next_weekday(sprint_start_iso, start_day, sprint_length)
+        estimate = max(1, ticket.get("estimate") or 1)
+        created = date.fromisoformat(ticket["createdAt"])
+        created_day = max(1, min(sprint_length, (created - sprint_start).days + 1))
 
-    # Work count by status.
-    if status == "done":
-        work_count = max(1, round(estimate * 0.8))
-    elif status in ("in-progress", "in-review"):
-        days_in_status = float(ticket.get("daysInStatus", 1))
-        work_count = max(1, int(round(min(estimate, days_in_status + 1))))
-    elif status == "blocked":
-        # Engineer started, then hit the blocker. 1 to 3 active days.
-        work_count = 1 + int(_hash_float(sprint_id, tid, "blocked-count") * 3)
-    else:
-        work_count = max(1, estimate)
+        effective_start = max(current_day, created_day)
+        effective_start = _next_weekday(sprint_start_iso, effective_start, sprint_length)
+        if effective_start > sprint_length:
+            schedules[tid] = []
+            continue
 
-    # Anchor end day for in-flight tickets.
-    if status in ("in-progress", "in-review") and is_in_flight:
-        end_day = min(sprint_length, today_day)
-    else:
-        end_day = min(sprint_length, start_day + work_count + 2)
+        if status == "done":
+            work_count = max(1, round(estimate * 0.8))
+        elif status in ("in-progress", "in-review"):
+            days_in_status = float(ticket.get("daysInStatus", 1))
+            work_count = max(1, int(round(min(estimate, days_in_status + 1))))
+        elif status == "blocked":
+            work_count = 1 + int(_hash_float(sprint_id, tid, "blocked-count") * 3)
+        else:
+            work_count = estimate
 
-    # Window of candidate days: from start_day to end_day inclusive.
-    window: list[int] = []
-    d = start_day
-    while d <= end_day and len(window) < (end_day - start_day + 1):
-        if not _is_weekend(sprint_start_iso, d):
-            window.append(d)
-        d += 1
+        run = _contiguous_weekday_run(
+            effective_start, sprint_start_iso, sprint_length, work_count
+        )
 
-    if not window:
-        return []
+        # Shift in-flight in-progress/in-review tickets so their last active
+        # day lands at or near today.
+        if status in ("in-progress", "in-review") and is_in_flight and run:
+            last_day = run[-1]
+            if last_day < today_day:
+                # Try to shift the run forward without overlapping prior work.
+                target_last = min(sprint_length, today_day)
+                shift = target_last - last_day
+                shifted_start = max(current_day, run[0] + shift)
+                shifted_start = _next_weekday(
+                    sprint_start_iso, shifted_start, sprint_length
+                )
+                # Cap the start so the run fits within sprint_length.
+                new_run = _contiguous_weekday_run(
+                    shifted_start, sprint_start_iso, sprint_length, work_count
+                )
+                if new_run and new_run[-1] <= sprint_length:
+                    run = new_run
+            elif last_day > today_day:
+                # Truncate to today.
+                run = [d for d in run if d <= today_day]
 
-    if status == "blocked":
-        # Contiguous run from start_day for work_count weekdays.
-        return window[:work_count]
+        schedules[tid] = run
+        if run:
+            current_day = run[-1] + 1
 
-    if status == "done":
-        # Pick work_count days from the window. Use hash bytes to decide
-        # which candidate days are active vs context-switched.
-        if work_count >= len(window):
-            return window
-        digest = _hash_bytes(sprint_id, tid, "done-mask")
-        scored = [(digest[i % len(digest)], day) for i, day in enumerate(window)]
-        scored.sort(key=lambda x: x[0])
-        picked = sorted(day for _, day in scored[:work_count])
-        return picked
-
-    # in-progress / in-review: pick work_count weekdays ending at end_day.
-    if work_count >= len(window):
-        return window
-    picked = window[-work_count:]
-    return picked
+    return schedules
 
 
 def ticket(
@@ -303,19 +315,35 @@ def build_fixture(spec: dict[str, Any]) -> dict[str, Any]:
     # Stamp daysInStatus into every ticket using the deterministic sampler.
     is_in_flight = spec["status"] == "in-progress"
     today_day = spec.get("currentDay") or day_count if is_in_flight else day_count
-    tickets = []
+    enriched_tickets: list[dict[str, Any]] = []
     for t in spec["tickets"]:
-        enriched = dict(t)
-        enriched["daysInStatus"] = days_in_status_for(spec["id"], t["id"], t["status"])
-        enriched["workSchedule"] = work_schedule_for(
+        e = dict(t)
+        e["daysInStatus"] = days_in_status_for(spec["id"], t["id"], t["status"])
+        enriched_tickets.append(e)
+
+    # Group by assignee and schedule each engineer's queue sequentially so
+    # the heatmap and Gantt reflect realistic week-by-week focus rather
+    # than five tickets running in parallel from day 1.
+    by_assignee: dict[str, list[dict[str, Any]]] = {}
+    for e in enriched_tickets:
+        by_assignee.setdefault(e["assignee"], []).append(e)
+
+    schedule_map: dict[str, list[int]] = {}
+    for assignee, eng_tickets in by_assignee.items():
+        per_engineer = schedule_engineer_queue(
             spec["id"],
-            enriched,
+            eng_tickets,
             spec["startDate"],
             day_count,
             today_day,
             is_in_flight,
         )
-        tickets.append(enriched)
+        schedule_map.update(per_engineer)
+
+    tickets = []
+    for e in enriched_tickets:
+        e["workSchedule"] = schedule_map.get(e["id"], [])
+        tickets.append(e)
 
     velocity = compute_velocity(tickets)
     total_sp = sum(t["estimate"] for t in tickets)

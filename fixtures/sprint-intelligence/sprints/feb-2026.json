@@ -33,7 +33,7 @@
         4,
         5,
         6,
-        10
+        9
       ]
     },
     {
@@ -53,10 +53,10 @@
       "eta": "2026-02-26",
       "daysInStatus": 1.8,
       "workSchedule": [
-        3,
-        4,
-        5,
-        6
+        19,
+        20,
+        23,
+        24
       ]
     },
     {
@@ -76,8 +76,8 @@
       "eta": "2026-02-26",
       "daysInStatus": 3.1,
       "workSchedule": [
-        3,
-        5
+        2,
+        3
       ]
     },
     {
@@ -97,10 +97,10 @@
       "eta": "2026-02-26",
       "daysInStatus": 5.6,
       "workSchedule": [
+        2,
         3,
         4,
-        6,
-        9
+        5
       ]
     },
     {
@@ -120,8 +120,8 @@
       "eta": "2026-02-26",
       "daysInStatus": 2.3,
       "workSchedule": [
-        2,
-        3
+        18,
+        19
       ]
     },
     {
@@ -141,8 +141,8 @@
       "eta": "2026-02-26",
       "daysInStatus": 2.7,
       "workSchedule": [
-        4,
-        5
+        2,
+        3
       ]
     },
     {
@@ -162,8 +162,8 @@
       "eta": "2026-02-26",
       "daysInStatus": 1.7,
       "workSchedule": [
-        5,
-        6
+        2,
+        3
       ]
     },
     {
@@ -183,8 +183,8 @@
       "eta": "2026-02-26",
       "daysInStatus": 4.7,
       "workSchedule": [
-        12,
-        13
+        2,
+        3
       ]
     },
     {
@@ -204,8 +204,8 @@
       "eta": "2026-02-26",
       "daysInStatus": 3.2,
       "workSchedule": [
-        10,
-        12
+        4,
+        5
       ]
     },
     {
@@ -226,7 +226,7 @@
       "daysInStatus": 3.8,
       "workSchedule": [
         4,
-        6
+        5
       ]
     },
     {
@@ -246,8 +246,8 @@
       "eta": "2026-02-26",
       "daysInStatus": 2.1,
       "workSchedule": [
-        5,
-        6
+        17,
+        18
       ]
     },
     {
@@ -267,8 +267,8 @@
       "eta": "2026-02-26",
       "daysInStatus": 5.5,
       "workSchedule": [
-        6,
-        9
+        19,
+        20
       ]
     },
     {
@@ -290,8 +290,8 @@
       "workSchedule": [
         9,
         10,
-        12,
-        13
+        11,
+        12
       ]
     },
     {
@@ -311,10 +311,10 @@
       "eta": "2026-02-26",
       "daysInStatus": 2.9,
       "workSchedule": [
-        10,
-        12,
         13,
-        16
+        16,
+        17,
+        18
       ]
     },
     {
@@ -335,7 +335,7 @@
       "daysInStatus": 2.6,
       "workSchedule": [
         10,
-        13
+        11
       ]
     },
     {
@@ -355,10 +355,10 @@
       "eta": "2026-02-26",
       "daysInStatus": 4.1,
       "workSchedule": [
-        11,
         12,
         13,
-        16
+        16,
+        17
       ]
     },
     {
@@ -420,9 +420,9 @@
       "eta": "2026-02-26",
       "daysInStatus": 1.9,
       "workSchedule": [
-        9,
-        10,
-        11
+        4,
+        5,
+        6
       ]
     },
     {
@@ -442,10 +442,10 @@
       "eta": "2026-02-26",
       "daysInStatus": 4.3,
       "workSchedule": [
-        4,
-        5,
-        6,
-        10
+        16,
+        17,
+        18,
+        19
       ]
     },
     {
@@ -465,9 +465,9 @@
       "eta": "2026-02-26",
       "daysInStatus": 2.1,
       "workSchedule": [
-        5,
-        6,
-        9
+        9,
+        10,
+        11
       ]
     },
     {
@@ -487,8 +487,8 @@
       "eta": "2026-02-26",
       "daysInStatus": 5.9,
       "workSchedule": [
-        4,
-        5
+        25,
+        26
       ]
     },
     {
@@ -508,7 +508,7 @@
       "eta": "2026-02-26",
       "daysInStatus": 4.6,
       "workSchedule": [
-        5
+        6
       ]
     },
     {
@@ -528,7 +528,7 @@
       "daysInStatus": 6.9,
       "workSchedule": [
         4,
-        6
+        5
       ]
     },
     {

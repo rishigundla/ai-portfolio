@@ -65,6 +65,8 @@ export function DeepDivePanel(props: DeepDivePanelProps) {
       team={team}
       totalCapacity={totalCapacity}
       fixture={fixture}
+      timelines={timelines}
+      sprintLength={sprintLength}
       accentHex={accentHex}
     />
   )
@@ -261,11 +263,11 @@ function EngineerView({
       <section className="space-y-3">
         <div>
           <p className="font-mono text-[10px] uppercase tracking-widest text-text-muted">
-            Ticket Gantt
+            Ticket progress
           </p>
           <p className="text-[11px] text-text-muted mt-0.5">
-            Same data as the heatmap, rendered as continuous bars. To-do tickets show a
-            dashed planned range.
+            Same data as the heatmap, rendered as continuous progress bars per
+            ticket. To-do tickets show a dashed planned range.
           </p>
         </div>
         <TicketGantt timelines={timelines} sprintLength={sprintLength} />
@@ -283,12 +285,16 @@ function TeamView({
   team,
   totalCapacity,
   fixture,
+  timelines,
+  sprintLength,
   accentHex,
 }: {
   filteredTickets: TicketSpec[]
   team: TeamMember[]
   totalCapacity: number
   fixture: SprintFixture
+  timelines: TicketTimeline[]
+  sprintLength: number
   accentHex: string
 }) {
   const workload = computeWorkloadScore(filteredTickets, totalCapacity)
@@ -470,6 +476,33 @@ function TeamView({
             </ul>
           )}
         </div>
+      </section>
+
+      <section className="space-y-3">
+        <div>
+          <p className="font-mono text-[10px] uppercase tracking-widest text-text-muted">
+            Activity heatmap
+          </p>
+          <p className="text-[11px] text-text-muted mt-0.5">
+            Top twelve tickets across the team by active span. Sprint days
+            across columns, filled cells mark days the ticket was actively
+            worked on.
+          </p>
+        </div>
+        <TicketHeatmap timelines={timelines} sprintLength={sprintLength} />
+      </section>
+
+      <section className="space-y-3">
+        <div>
+          <p className="font-mono text-[10px] uppercase tracking-widest text-text-muted">
+            Ticket progress
+          </p>
+          <p className="text-[11px] text-text-muted mt-0.5">
+            Same data as the heatmap, rendered as continuous progress bars per
+            ticket. To-do tickets show a dashed planned range.
+          </p>
+        </div>
+        <TicketGantt timelines={timelines} sprintLength={sprintLength} />
       </section>
     </div>
   )

@@ -52,7 +52,7 @@
       "blockerNote": "Depends on DE-2201 cutover. Currently parked.",
       "daysInStatus": 6.8,
       "workSchedule": [
-        2
+        5
       ]
     },
     {
@@ -94,10 +94,10 @@
       "eta": "2026-03-30",
       "daysInStatus": 2.7,
       "workSchedule": [
+        2,
         3,
         4,
-        5,
-        6
+        5
       ]
     },
     {
@@ -117,8 +117,8 @@
       "eta": "2026-03-30",
       "daysInStatus": 2.4,
       "workSchedule": [
-        5,
-        6
+        2,
+        3
       ]
     },
     {
@@ -159,9 +159,9 @@
       "daysInStatus": 5.7,
       "workSchedule": [
         2,
+        3,
         4,
-        5,
-        6
+        5
       ]
     },
     {
@@ -181,8 +181,8 @@
       "eta": "2026-03-30",
       "daysInStatus": 2.7,
       "workSchedule": [
-        6,
-        10
+        2,
+        3
       ]
     },
     {
@@ -202,7 +202,7 @@
       "eta": "2026-03-30",
       "daysInStatus": 1.8,
       "workSchedule": [
-        5,
+        6,
         9
       ]
     },
@@ -224,8 +224,8 @@
       "blockerNote": "Owner pulled to Fabric migration. Carrying to apr.",
       "daysInStatus": 7.1,
       "workSchedule": [
-        6,
-        9
+        4,
+        5
       ]
     },
     {
@@ -245,8 +245,8 @@
       "eta": "2026-03-30",
       "daysInStatus": 1.8,
       "workSchedule": [
-        5,
-        6
+        4,
+        5
       ]
     },
     {
@@ -266,7 +266,7 @@
       "eta": "2026-03-30",
       "daysInStatus": 2.8,
       "workSchedule": [
-        2
+        6
       ]
     },
     {
@@ -287,8 +287,8 @@
       "blockerNote": "Owner pulled to Fabric migration. Carrying.",
       "daysInStatus": 9.9,
       "workSchedule": [
-        5,
-        6
+        6,
+        9
       ]
     },
     {
@@ -308,7 +308,7 @@
       "eta": "2026-03-30",
       "daysInStatus": 3.9,
       "workSchedule": [
-        5,
+        6,
         9
       ]
     },
@@ -328,8 +328,8 @@
       "eta": "2026-03-30",
       "daysInStatus": 5.6,
       "workSchedule": [
-        4,
-        5
+        10,
+        11
       ]
     },
     {
@@ -349,8 +349,8 @@
       "eta": "2026-03-30",
       "daysInStatus": 1.8,
       "workSchedule": [
-        5,
-        6
+        2,
+        3
       ]
     },
     {
@@ -370,8 +370,8 @@
       "eta": "2026-03-30",
       "daysInStatus": 6.9,
       "workSchedule": [
-        2,
-        3
+        4,
+        5
       ]
     },
     {
@@ -391,9 +391,9 @@
       "eta": "2026-03-30",
       "daysInStatus": 3.7,
       "workSchedule": [
-        9,
         10,
-        11
+        11,
+        12
       ]
     },
     {
@@ -413,8 +413,8 @@
       "eta": "2026-03-30",
       "daysInStatus": 4.5,
       "workSchedule": [
-        10,
-        11
+        2,
+        3
       ]
     },
     {
@@ -434,8 +434,8 @@
       "eta": "2026-03-30",
       "daysInStatus": 4.0,
       "workSchedule": [
-        6,
-        9
+        4,
+        5
       ]
     },
     {
@@ -455,7 +455,7 @@
       "eta": "2026-03-30",
       "daysInStatus": 2.2,
       "workSchedule": [
-        11
+        6
       ]
     },
     {
@@ -475,9 +475,9 @@
       "eta": "2026-03-30",
       "daysInStatus": 3.3,
       "workSchedule": [
-        4,
-        5,
-        6
+        6,
+        9,
+        10
       ]
     },
     {
@@ -497,8 +497,8 @@
       "eta": "2026-03-30",
       "daysInStatus": 6.2,
       "workSchedule": [
-        4,
-        5
+        9,
+        10
       ]
     },
     {

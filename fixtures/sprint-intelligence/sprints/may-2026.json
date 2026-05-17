@@ -28,10 +28,10 @@
       "eta": "2026-05-30",
       "daysInStatus": 6.9,
       "workSchedule": [
+        1,
+        4,
         5,
-        6,
-        7,
-        8
+        6
       ]
     },
     {
@@ -51,10 +51,10 @@
       "eta": "2026-05-30",
       "daysInStatus": 6.0,
       "workSchedule": [
-        5,
-        6,
         7,
-        8
+        8,
+        11,
+        12
       ]
     },
     {
@@ -74,8 +74,8 @@
       "eta": "2026-05-30",
       "daysInStatus": 4.2,
       "workSchedule": [
-        6,
-        8
+        1,
+        4
       ]
     },
     {
@@ -120,9 +120,9 @@
       "eta": "2026-05-30",
       "daysInStatus": 2.4,
       "workSchedule": [
-        13,
-        14,
-        15
+        15,
+        18,
+        19
       ]
     },
     {
@@ -166,10 +166,10 @@
       "eta": "2026-05-30",
       "daysInStatus": 3.4,
       "workSchedule": [
-        12,
-        13,
         14,
-        15
+        15,
+        18,
+        19
       ]
     },
     {
@@ -231,10 +231,10 @@
       "eta": "2026-05-30",
       "daysInStatus": 2.2,
       "workSchedule": [
-        4,
-        5,
-        6,
-        7
+        18,
+        19,
+        20,
+        21
       ]
     },
     {
@@ -276,8 +276,8 @@
       "eta": "2026-05-30",
       "daysInStatus": 2.9,
       "workSchedule": [
-        5,
-        8
+        18,
+        19
       ]
     },
     {
@@ -296,7 +296,7 @@
       "eta": "2026-05-30",
       "daysInStatus": 2.4,
       "workSchedule": [
-        4
+        22
       ]
     },
     {
@@ -317,8 +317,8 @@
       "blockerNote": "Waiting on the Figma design tokens refresh from eng-6 by friday.",
       "daysInStatus": 9.7,
       "workSchedule": [
-        6,
-        7
+        1,
+        4
       ]
     },
     {
@@ -356,8 +356,8 @@
       "eta": "2026-05-30",
       "daysInStatus": 3.5,
       "workSchedule": [
-        14,
-        15
+        18,
+        19
       ]
     },
     {
@@ -376,9 +376,7 @@
       "createdAt": "2026-04-26",
       "eta": "2026-05-30",
       "daysInStatus": 4.8,
-      "workSchedule": [
-        15
-      ]
+      "workSchedule": []
     },
     {
       "id": "DE-2418",
@@ -395,11 +393,7 @@
       "createdAt": "2026-04-26",
       "eta": "2026-05-30",
       "daysInStatus": 5.1,
-      "workSchedule": [
-        13,
-        14,
-        15
-      ]
+      "workSchedule": []
     },
     {
       "id": "DE-2419",
@@ -507,11 +501,7 @@
       "createdAt": "2026-04-26",
       "eta": "2026-05-30",
       "daysInStatus": 5.0,
-      "workSchedule": [
-        13,
-        14,
-        15
-      ]
+      "workSchedule": []
     },
     {
       "id": "DE-2425",
@@ -529,11 +519,7 @@
       "createdAt": "2026-04-26",
       "eta": "2026-05-30",
       "daysInStatus": 4.3,
-      "workSchedule": [
-        13,
-        14,
-        15
-      ]
+      "workSchedule": []
     },
     {
       "id": "DE-2426",

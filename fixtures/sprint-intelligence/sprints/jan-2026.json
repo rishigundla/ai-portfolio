@@ -28,10 +28,10 @@
       "eta": "2026-01-30",
       "daysInStatus": 4.0,
       "workSchedule": [
+        1,
         2,
         5,
-        7,
-        8
+        6
       ]
     },
     {
@@ -51,10 +51,10 @@
       "eta": "2026-01-30",
       "daysInStatus": 3.5,
       "workSchedule": [
+        1,
         2,
-        6,
-        7,
-        8
+        5,
+        6
       ]
     },
     {
@@ -74,12 +74,12 @@
       "eta": "2026-01-30",
       "daysInStatus": 2.9,
       "workSchedule": [
+        1,
+        2,
         5,
         6,
         7,
-        8,
-        9,
-        12
+        8
       ]
     },
     {
@@ -99,8 +99,8 @@
       "eta": "2026-01-30",
       "daysInStatus": 2.5,
       "workSchedule": [
-        2,
-        5
+        1,
+        2
       ]
     },
     {
@@ -120,8 +120,8 @@
       "eta": "2026-01-30",
       "daysInStatus": 6.2,
       "workSchedule": [
-        2,
-        5
+        7,
+        8
       ]
     },
     {
@@ -141,10 +141,10 @@
       "eta": "2026-01-30",
       "daysInStatus": 6.6,
       "workSchedule": [
-        1,
-        2,
-        5,
-        6
+        7,
+        8,
+        9,
+        12
       ]
     },
     {
@@ -164,8 +164,8 @@
       "eta": "2026-01-30",
       "daysInStatus": 6.4,
       "workSchedule": [
-        2,
-        6
+        9,
+        12
       ]
     },
     {
@@ -185,8 +185,8 @@
       "eta": "2026-01-30",
       "daysInStatus": 2.4,
       "workSchedule": [
-        5,
-        6
+        1,
+        2
       ]
     },
     {
@@ -206,8 +206,8 @@
       "eta": "2026-01-30",
       "daysInStatus": 5.7,
       "workSchedule": [
-        5,
-        6
+        13,
+        14
       ]
     },
     {
@@ -227,8 +227,8 @@
       "eta": "2026-01-30",
       "daysInStatus": 2.4,
       "workSchedule": [
-        7,
-        8
+        5,
+        6
       ]
     },
     {
@@ -248,8 +248,8 @@
       "eta": "2026-01-30",
       "daysInStatus": 3.2,
       "workSchedule": [
-        5,
-        6
+        9,
+        12
       ]
     },
     {
@@ -271,8 +271,8 @@
       "workSchedule": [
         5,
         6,
-        8,
-        9
+        7,
+        8
       ]
     },
     {
@@ -292,8 +292,8 @@
       "eta": "2026-01-30",
       "daysInStatus": 1.9,
       "workSchedule": [
-        2,
-        6
+        1,
+        2
       ]
     },
     {
@@ -313,8 +313,8 @@
       "eta": "2026-01-30",
       "daysInStatus": 6.3,
       "workSchedule": [
-        8,
-        9
+        5,
+        6
       ]
     },
     {
@@ -334,8 +334,8 @@
       "eta": "2026-01-30",
       "daysInStatus": 4.5,
       "workSchedule": [
-        8,
-        9
+        1,
+        2
       ]
     },
     {
@@ -355,8 +355,8 @@
       "eta": "2026-01-30",
       "daysInStatus": 3.3,
       "workSchedule": [
-        7,
-        8
+        1,
+        2
       ]
     },
     {
@@ -375,8 +375,8 @@
       "eta": "2026-01-30",
       "daysInStatus": 3.8,
       "workSchedule": [
-        7,
-        9
+        5,
+        6
       ]
     },
     {
@@ -396,10 +396,10 @@
       "eta": "2026-01-30",
       "daysInStatus": 3.8,
       "workSchedule": [
-        5,
-        6,
-        7,
-        8
+        13,
+        14,
+        15,
+        16
       ]
     },
     {
@@ -419,8 +419,8 @@
       "eta": "2026-01-30",
       "daysInStatus": 2.2,
       "workSchedule": [
-        2,
-        5
+        7,
+        8
       ]
     },
     {
@@ -440,8 +440,8 @@
       "eta": "2026-01-30",
       "daysInStatus": 2.8,
       "workSchedule": [
-        6,
-        9
+        9,
+        12
       ]
     },
     {
