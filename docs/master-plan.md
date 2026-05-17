@@ -30,7 +30,7 @@
 | 0 | Pre-flight setup | — | — | 5 / 5 | Completed |
 | 1 | Project 1 · Dashboard Factory | 1-5 | 32 | 32 / 28 | **✅ Shipped v1.0** (`v1.0-dashboard-factory`, [case study](./case-studies/dashboard-factory.md), [live](https://ai-portfolio-dashboard-factory.vercel.app)) |
 | 2 | Project 2 · Narrative Generator | 6-7 | 14 | 14 / 14 | **✅ Shipped v1.0** (`v1.0-narrative-generator`, [case study](./case-studies/narrative-generator.md), [live](https://ai-portfolio-narrative-generator.vercel.app)) |
-| 3 | Project 3 · Sprint Intelligence | 9-12 | 22 | 22 / 22 | **In Wrap-up** (live at <https://ai-portfolio-sprint-intelligence.vercel.app>, case study + v1.0 tag pending) |
+| 3 | Project 3 · Sprint Intelligence | 9-12 | 25 | 22 / 25 | **In Wrap-up** (live at <https://ai-portfolio-sprint-intelligence.vercel.app>, 3 wrap-up days planned: README + case study + v1.0 tag) |
 | 4 | Project 4 · Anomaly Alerting | 13-15 | 21 | 0 / 21 | Not Started |
 | 5 | Project 5 · Pipeline Self-Healer | 16-18 | 21 | 0 / 21 | Not Started |
 
