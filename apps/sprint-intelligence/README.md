@@ -6,7 +6,7 @@
 
 **Live**: <https://ai-portfolio-sprint-intelligence.vercel.app>
 
-**Case study**: [`docs/case-studies/sprint-intelligence.md`](../../docs/case-studies/sprint-intelligence.md) (lands W12.D3)
+**Case study**: [`docs/case-studies/sprint-intelligence.md`](../../docs/case-studies/sprint-intelligence.md)
 
 ## What it does
 
