@@ -30,6 +30,7 @@ export type ColorToken =
   | 'rose'
   | 'teal'
   | 'green'
+  | 'slate'
 
 export type SprintStatus = 'completed' | 'in-progress' | 'planned'
 
@@ -43,12 +44,18 @@ export interface TeamMember {
 export interface SprintSummary {
   id: string
   name: string
+  monthLabel?: string
   tagline: string
   startDate: string
   endDate: string
   status: SprintStatus
   ticketCount: number
-  colorToken: ColorToken
+  /**
+   * Optional per sprint color override. New monthly sprints rely on
+   * status driven colors (see getStatusColorToken). Kept for back
+   * compat with any older fixture that still ships a token.
+   */
+  colorToken?: ColorToken
 }
 
 export interface SprintManifest {
@@ -185,10 +192,34 @@ const COLOR_CLASSES: Record<ColorToken, ColorClassSet> = {
     badgeBorder: 'border-green-500/30',
     accentLine: 'bg-green-400',
   },
+  slate: {
+    cardBg: 'bg-gradient-to-br from-slate-500/15 via-slate-500/5 to-base-800',
+    cardBorder: 'border-slate-500/30',
+    iconColor: 'text-slate-300',
+    badgeBg: 'bg-slate-500/10',
+    badgeText: 'text-slate-200',
+    badgeBorder: 'border-slate-500/40',
+    accentLine: 'bg-slate-400',
+  },
 }
 
 export function getColorClasses(token: ColorToken): ColorClassSet {
   return COLOR_CLASSES[token] ?? COLOR_CLASSES.accent
+}
+
+/**
+ * Status driven color binding for sprint cards. Completed sprints are
+ * green, in flight sprints are amber, planned sprints are slate.
+ */
+export function getStatusColorToken(status: SprintStatus): ColorToken {
+  switch (status) {
+    case 'completed':
+      return 'green'
+    case 'in-progress':
+      return 'amber'
+    case 'planned':
+      return 'slate'
+  }
 }
 
 // ============================================================

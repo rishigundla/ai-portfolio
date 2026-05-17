@@ -10,11 +10,13 @@
  * ticket level data.
  */
 
-import sprint42 from '../../../fixtures/sprint-intelligence/sprints/sprint-42.json'
-import sprint43 from '../../../fixtures/sprint-intelligence/sprints/sprint-43.json'
-import sprint44 from '../../../fixtures/sprint-intelligence/sprints/sprint-44.json'
-import sprint45 from '../../../fixtures/sprint-intelligence/sprints/sprint-45.json'
-import type { ColorToken, SprintStatus } from './sprints'
+import jan2026 from '../../../fixtures/sprint-intelligence/sprints/jan-2026.json'
+import feb2026 from '../../../fixtures/sprint-intelligence/sprints/feb-2026.json'
+import mar2026 from '../../../fixtures/sprint-intelligence/sprints/mar-2026.json'
+import apr2026 from '../../../fixtures/sprint-intelligence/sprints/apr-2026.json'
+import may2026 from '../../../fixtures/sprint-intelligence/sprints/may-2026.json'
+import jun2026 from '../../../fixtures/sprint-intelligence/sprints/jun-2026.json'
+import type { SprintStatus } from './sprints'
 
 // ============================================================
 // Types
@@ -27,7 +29,7 @@ export type TicketStatus =
   | 'done'
   | 'blocked'
 
-export type TicketType = 'story' | 'bug' | 'task' | 'spike'
+export type TicketType = 'bug' | 'development' | 'enhancement' | 'deployment'
 
 export type TicketPriority = 'P0' | 'P1' | 'P2' | 'P3'
 
@@ -41,6 +43,8 @@ export interface TicketSpec {
   estimate: number
   labels: string[]
   addedMidSprint: boolean
+  createdAt: string
+  eta: string | null
   blockerNote?: string
 }
 
@@ -50,7 +54,6 @@ export interface SprintMetadata {
   startDate: string
   endDate: string
   status: SprintStatus
-  colorToken: ColorToken
   summary: string
 }
 
@@ -66,6 +69,9 @@ export interface CycleTimeSeries {
   teamBaseline: number
   trend: CycleTimeTrend
 }
+
+export type FilterableTicketStatus = TicketStatus | 'all'
+export type FilterableTicketType = TicketType | 'all'
 
 export interface ThroughputPerWeek {
   weekOne: number
@@ -97,10 +103,12 @@ export interface SprintFixture {
 // ============================================================
 
 const FIXTURES: Record<string, SprintFixture> = {
-  'sprint-42': sprint42 as SprintFixture,
-  'sprint-43': sprint43 as SprintFixture,
-  'sprint-44': sprint44 as SprintFixture,
-  'sprint-45': sprint45 as SprintFixture,
+  'jan-2026': jan2026 as SprintFixture,
+  'feb-2026': feb2026 as SprintFixture,
+  'mar-2026': mar2026 as SprintFixture,
+  'apr-2026': apr2026 as SprintFixture,
+  'may-2026': may2026 as SprintFixture,
+  'jun-2026': jun2026 as SprintFixture,
 }
 
 export function getFullSprint(id: string): SprintFixture | undefined {

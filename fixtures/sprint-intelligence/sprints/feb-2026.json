@@ -1,0 +1,584 @@
+{
+  "id": "feb-2026",
+  "metadata": {
+    "name": "Feb 2026 Sprint",
+    "goal": "Ship the real time presence indicator and the quarterly billing rollup. Hold cycle time inside the 4.5 day baseline.",
+    "startDate": "2026-02-01",
+    "endDate": "2026-02-28",
+    "status": "completed",
+    "summary": "Scope creep. A customer escalation on day nine added six P0 and P1 tickets mid sprint. The team absorbed the load and still closed the original scope but velocity finished six points under capacity and three tickets carried over."
+  },
+  "scopePlanned": 22,
+  "scopeFinal": 28,
+  "tickets": [
+    {
+      "id": "ENG-2101",
+      "title": "Real time presence indicator",
+      "type": "development",
+      "assignee": "eng-1",
+      "status": "done",
+      "priority": "P1",
+      "estimate": 8,
+      "labels": [
+        "frontend",
+        "realtime"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-01-25",
+      "eta": "2026-02-26"
+    },
+    {
+      "id": "ENG-2102",
+      "title": "Presence indicator websocket fallback",
+      "type": "development",
+      "assignee": "eng-2",
+      "status": "done",
+      "priority": "P1",
+      "estimate": 5,
+      "labels": [
+        "backend",
+        "realtime"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-01-25",
+      "eta": "2026-02-26"
+    },
+    {
+      "id": "ENG-2103",
+      "title": "Analytics tracking on new dashboard widgets",
+      "type": "development",
+      "assignee": "eng-4",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "frontend",
+        "analytics"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-01-25",
+      "eta": "2026-02-26"
+    },
+    {
+      "id": "ENG-2104",
+      "title": "Quarterly billing rollup report",
+      "type": "development",
+      "assignee": "eng-8",
+      "status": "done",
+      "priority": "P1",
+      "estimate": 5,
+      "labels": [
+        "backend",
+        "billing"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-01-25",
+      "eta": "2026-02-26"
+    },
+    {
+      "id": "ENG-2105",
+      "title": "Billing rollup CSV export",
+      "type": "development",
+      "assignee": "eng-8",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "backend",
+        "billing"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-01-25",
+      "eta": "2026-02-26"
+    },
+    {
+      "id": "ENG-2106",
+      "title": "Workspace switcher keyboard nav",
+      "type": "enhancement",
+      "assignee": "eng-3",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 2,
+      "labels": [
+        "frontend",
+        "a11y"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-01-25",
+      "eta": "2026-02-26"
+    },
+    {
+      "id": "ENG-2107",
+      "title": "Lighthouse perf regression on /reports",
+      "type": "bug",
+      "assignee": "eng-6",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "frontend",
+        "perf"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-01-25",
+      "eta": "2026-02-26"
+    },
+    {
+      "id": "ENG-2108",
+      "title": "Onboarding empty state illustrations",
+      "type": "enhancement",
+      "assignee": "eng-5",
+      "status": "done",
+      "priority": "P3",
+      "estimate": 3,
+      "labels": [
+        "frontend",
+        "design"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-01-25",
+      "eta": "2026-02-26"
+    },
+    {
+      "id": "ENG-2109",
+      "title": "Onboarding empty state copy refresh",
+      "type": "enhancement",
+      "assignee": "eng-5",
+      "status": "done",
+      "priority": "P3",
+      "estimate": 2,
+      "labels": [
+        "frontend",
+        "copy"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-01-25",
+      "eta": "2026-02-26"
+    },
+    {
+      "id": "ENG-2110",
+      "title": "Notifications mark all as read",
+      "type": "development",
+      "assignee": "eng-4",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "frontend"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-01-25",
+      "eta": "2026-02-26"
+    },
+    {
+      "id": "ENG-2111",
+      "title": "Push presence service to staging",
+      "type": "deployment",
+      "assignee": "eng-7",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 2,
+      "labels": [
+        "devops"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-01-25",
+      "eta": "2026-02-26"
+    },
+    {
+      "id": "ENG-2112",
+      "title": "Promote billing rollup to staging",
+      "type": "deployment",
+      "assignee": "eng-7",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 2,
+      "labels": [
+        "devops",
+        "billing"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-01-25",
+      "eta": "2026-02-26"
+    },
+    {
+      "id": "ENG-2113",
+      "title": "Customer escalation: workspace data leak on cross account share",
+      "type": "bug",
+      "assignee": "eng-2",
+      "status": "done",
+      "priority": "P0",
+      "estimate": 5,
+      "labels": [
+        "backend",
+        "security"
+      ],
+      "addedMidSprint": true,
+      "createdAt": "2026-02-09",
+      "eta": "2026-02-26"
+    },
+    {
+      "id": "ENG-2114",
+      "title": "Audit log of cross account share events",
+      "type": "development",
+      "assignee": "eng-2",
+      "status": "done",
+      "priority": "P0",
+      "estimate": 5,
+      "labels": [
+        "backend",
+        "security"
+      ],
+      "addedMidSprint": true,
+      "createdAt": "2026-02-10",
+      "eta": "2026-02-26"
+    },
+    {
+      "id": "ENG-2115",
+      "title": "Customer escalation: billing rollup wrong tax line",
+      "type": "bug",
+      "assignee": "eng-8",
+      "status": "done",
+      "priority": "P1",
+      "estimate": 3,
+      "labels": [
+        "backend",
+        "billing"
+      ],
+      "addedMidSprint": true,
+      "createdAt": "2026-02-10",
+      "eta": "2026-02-26"
+    },
+    {
+      "id": "ENG-2116",
+      "title": "Billing rollup retroactive recalculation",
+      "type": "development",
+      "assignee": "eng-8",
+      "status": "done",
+      "priority": "P1",
+      "estimate": 5,
+      "labels": [
+        "backend",
+        "billing"
+      ],
+      "addedMidSprint": true,
+      "createdAt": "2026-02-11",
+      "eta": "2026-02-26"
+    },
+    {
+      "id": "ENG-2117",
+      "title": "Customer escalation: presence indicator stuck on logout",
+      "type": "bug",
+      "assignee": "eng-1",
+      "status": "done",
+      "priority": "P1",
+      "estimate": 3,
+      "labels": [
+        "frontend",
+        "realtime"
+      ],
+      "addedMidSprint": true,
+      "createdAt": "2026-02-12",
+      "eta": "2026-02-26"
+    },
+    {
+      "id": "ENG-2118",
+      "title": "Presence service incident postmortem",
+      "type": "enhancement",
+      "assignee": "eng-7",
+      "status": "done",
+      "priority": "P1",
+      "estimate": 2,
+      "labels": [
+        "docs"
+      ],
+      "addedMidSprint": true,
+      "createdAt": "2026-02-12",
+      "eta": "2026-02-26"
+    },
+    {
+      "id": "ENG-2119",
+      "title": "Search ranking improvements v2",
+      "type": "enhancement",
+      "assignee": "eng-3",
+      "status": "in-review",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "backend",
+        "search"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-01-25",
+      "eta": "2026-02-26"
+    },
+    {
+      "id": "ENG-2120",
+      "title": "Workspace template gallery shell",
+      "type": "development",
+      "assignee": "eng-1",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 5,
+      "labels": [
+        "frontend"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-01-25",
+      "eta": "2026-02-26"
+    },
+    {
+      "id": "ENG-2121",
+      "title": "Workspace template gallery cards",
+      "type": "development",
+      "assignee": "eng-3",
+      "status": "in-review",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "frontend"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-01-25",
+      "eta": "2026-02-26"
+    },
+    {
+      "id": "ENG-2122",
+      "title": "Resolve presence websocket flake in CI",
+      "type": "bug",
+      "assignee": "eng-2",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 2,
+      "labels": [
+        "ci",
+        "realtime"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-01-25",
+      "eta": "2026-02-26"
+    },
+    {
+      "id": "ENG-2123",
+      "title": "Update onboarding video thumbnails",
+      "type": "enhancement",
+      "assignee": "eng-5",
+      "status": "done",
+      "priority": "P3",
+      "estimate": 1,
+      "labels": [
+        "frontend"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-01-25",
+      "eta": "2026-02-26"
+    },
+    {
+      "id": "ENG-2124",
+      "title": "Bulk delete confirm dialog rewrite",
+      "type": "enhancement",
+      "assignee": "eng-6",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "frontend"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-01-25",
+      "eta": "2026-02-26"
+    },
+    {
+      "id": "ENG-2125",
+      "title": "Notification preference toggles backend",
+      "type": "development",
+      "assignee": "eng-4",
+      "status": "in-review",
+      "priority": "P2",
+      "estimate": 5,
+      "labels": [
+        "backend"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-01-25",
+      "eta": "2026-02-26"
+    },
+    {
+      "id": "ENG-2126",
+      "title": "Promote audit log to prod",
+      "type": "deployment",
+      "assignee": "eng-7",
+      "status": "done",
+      "priority": "P0",
+      "estimate": 2,
+      "labels": [
+        "devops",
+        "security"
+      ],
+      "addedMidSprint": true,
+      "createdAt": "2026-02-11",
+      "eta": "2026-02-26"
+    },
+    {
+      "id": "ENG-2127",
+      "title": "Audit log retention policy doc",
+      "type": "enhancement",
+      "assignee": "eng-7",
+      "status": "todo",
+      "priority": "P2",
+      "estimate": 1,
+      "labels": [
+        "docs"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-01-25",
+      "eta": null
+    },
+    {
+      "id": "ENG-2128",
+      "title": "Investigate Lighthouse SEO drop on /report",
+      "type": "enhancement",
+      "assignee": "eng-8",
+      "status": "todo",
+      "priority": "P3",
+      "estimate": 2,
+      "labels": [
+        "frontend",
+        "seo"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-01-25",
+      "eta": null
+    }
+  ],
+  "burndown": {
+    "ideal": [
+      91,
+      88,
+      84,
+      81,
+      78,
+      74,
+      71,
+      67,
+      64,
+      61,
+      57,
+      54,
+      51,
+      47,
+      44,
+      40,
+      37,
+      34,
+      30,
+      27,
+      24,
+      20,
+      17,
+      13,
+      10,
+      7,
+      3,
+      0
+    ],
+    "actual": [
+      91,
+      90,
+      88,
+      87,
+      85,
+      82,
+      80,
+      78,
+      75,
+      73,
+      70,
+      67,
+      64,
+      61,
+      58,
+      55,
+      52,
+      49,
+      46,
+      42,
+      39,
+      35,
+      32,
+      28,
+      25,
+      21,
+      18,
+      14
+    ]
+  },
+  "currentDay": null,
+  "fourSprintBaseline": 62,
+  "velocity": 77,
+  "cycleTime": {
+    "days": [
+      4.5,
+      4.6,
+      4.6,
+      4.7,
+      4.7,
+      4.8,
+      4.8,
+      4.9,
+      4.9,
+      5.0,
+      5.1,
+      5.1,
+      5.2,
+      5.2,
+      5.3,
+      5.3,
+      5.4,
+      5.4,
+      5.5,
+      5.6,
+      5.6,
+      5.7,
+      5.7,
+      5.8,
+      5.8,
+      5.9,
+      5.9,
+      6.0
+    ],
+    "teamBaseline": 4.5,
+    "trend": "rising"
+  },
+  "throughputPerWeek": {
+    "weekOne": 9,
+    "weekTwo": 10,
+    "priorAverage": 9
+  },
+  "perEngineer": {
+    "eng-1": {
+      "personalCycleTime": 4.0
+    },
+    "eng-2": {
+      "personalCycleTime": 4.0
+    },
+    "eng-3": {
+      "personalCycleTime": 4.5
+    },
+    "eng-4": {
+      "personalCycleTime": 4.5
+    },
+    "eng-5": {
+      "personalCycleTime": 5.5
+    },
+    "eng-6": {
+      "personalCycleTime": 4.5
+    },
+    "eng-7": {
+      "personalCycleTime": 4.8
+    },
+    "eng-8": {
+      "personalCycleTime": 4.0
+    }
+  }
+}

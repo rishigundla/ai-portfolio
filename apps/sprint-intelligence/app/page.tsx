@@ -40,7 +40,7 @@ export default function HomePage() {
           <StepCard
             num="01"
             title="Pick a sprint"
-            description="Four curated sprints with different stories. A healthy sprint that hit its goal. A scope creep sprint that grew from 22 tickets to 28. A blocked sprint with five blockers across three engineers. A current sprint mid flight."
+            description="Six monthly sprints across the first half of 2026. Four completed sprints carry different stories (healthy, scope creep, blocked, recovered). One sprint is currently in flight at day 17 of 31. One sprint is already filling up with backlog tickets the manager has earmarked for the next cycle."
           />
           <StepCard
             num="02"

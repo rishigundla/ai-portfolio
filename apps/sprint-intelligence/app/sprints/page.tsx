@@ -8,6 +8,7 @@ import {
   getColorClasses,
   getSprintStatusIcon,
   getSprintStatusLabel,
+  getStatusColorToken,
   formatSprintDateRange,
 } from '@/lib/sprints'
 
@@ -48,10 +49,11 @@ export default function SprintsPage() {
           Sprint gallery
         </h1>
         <p className="mt-4 text-text-secondary leading-relaxed">
-          Four synthetic sprints with different stories. Each carries the same
-          team of eight engineers and twenty to thirty tickets with full status,
-          priority, and assignment data. Click any sprint to land in the
-          dashboard.
+          Six monthly sprints across the first half of 2026. Four completed
+          (green), one currently in flight (amber, day 17 of 31), one
+          already filling up with backlog tickets the manager has earmarked
+          for next cycle (slate). Same eight engineer team across every
+          sprint, full ticket status, priority, type, and assignment data.
         </p>
         <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-mono text-text-muted">
           <span className="inline-flex items-center gap-1.5">
@@ -63,11 +65,12 @@ export default function SprintsPage() {
         </div>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
         {sprints.map((sprint) => {
-          const colors = getColorClasses(sprint.colorToken)
+          const colors = getColorClasses(getStatusColorToken(sprint.status))
           const StatusIcon = getSprintStatusIcon(sprint.status)
           const isActive = sprint.status === 'in-progress'
+          const isPlanned = sprint.status === 'planned'
           return (
             <Link
               key={sprint.id}
@@ -112,7 +115,7 @@ export default function SprintsPage() {
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs font-mono text-text-muted">
                 <span className="inline-flex items-center gap-1.5">
                   <Ticket className="h-3.5 w-3.5" />
-                  {sprint.ticketCount} tickets
+                  {sprint.ticketCount} {isPlanned ? 'backlog' : 'tickets'}
                 </span>
                 <span className="text-text-dim">·</span>
                 <span>{team.length} engineers</span>

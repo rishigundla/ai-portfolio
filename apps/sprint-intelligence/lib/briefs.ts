@@ -11,10 +11,12 @@
  */
 
 import type { Fixture } from '@rishi/ai-core'
-import sprint42 from '../../../fixtures/sprint-intelligence/briefs/sprint-42.json'
-import sprint43 from '../../../fixtures/sprint-intelligence/briefs/sprint-43.json'
-import sprint44 from '../../../fixtures/sprint-intelligence/briefs/sprint-44.json'
-import sprint45 from '../../../fixtures/sprint-intelligence/briefs/sprint-45.json'
+import jan2026 from '../../../fixtures/sprint-intelligence/briefs/jan-2026.json'
+import feb2026 from '../../../fixtures/sprint-intelligence/briefs/feb-2026.json'
+import mar2026 from '../../../fixtures/sprint-intelligence/briefs/mar-2026.json'
+import apr2026 from '../../../fixtures/sprint-intelligence/briefs/apr-2026.json'
+import may2026 from '../../../fixtures/sprint-intelligence/briefs/may-2026.json'
+import jun2026 from '../../../fixtures/sprint-intelligence/briefs/jun-2026.json'
 
 // ============================================================
 // Section heading markers
@@ -43,10 +45,12 @@ export const BRIEF_SECTIONS = [
 // ============================================================
 
 const BRIEFS: Record<string, Fixture> = {
-  'sprint-42': sprint42 as Fixture,
-  'sprint-43': sprint43 as Fixture,
-  'sprint-44': sprint44 as Fixture,
-  'sprint-45': sprint45 as Fixture,
+  'jan-2026': jan2026 as Fixture,
+  'feb-2026': feb2026 as Fixture,
+  'mar-2026': mar2026 as Fixture,
+  'apr-2026': apr2026 as Fixture,
+  'may-2026': may2026 as Fixture,
+  'jun-2026': jun2026 as Fixture,
 }
 
 export function getBrief(sprintId: string): Fixture | undefined {

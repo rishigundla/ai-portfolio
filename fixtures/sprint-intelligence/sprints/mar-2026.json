@@ -1,0 +1,533 @@
+{
+  "id": "mar-2026",
+  "metadata": {
+    "name": "Mar 2026 Sprint",
+    "goal": "Cut over auth to the v2 session table. Ship workspace templates and search v2.",
+    "startDate": "2026-03-01",
+    "endDate": "2026-03-31",
+    "status": "completed",
+    "summary": "Blocked sprint. Auth migration stalled on day four waiting on a database team sign off, three engineers idled on the dependency. Workspace templates and search v2 shipped on plan but auth carries cleanly into apr. Velocity 46 SP, the lowest of the four trailing sprints."
+  },
+  "scopePlanned": 24,
+  "scopeFinal": 24,
+  "tickets": [
+    {
+      "id": "ENG-2201",
+      "title": "Auth migration: cutover schema for v2 sessions",
+      "type": "development",
+      "assignee": "eng-2",
+      "status": "blocked",
+      "priority": "P0",
+      "estimate": 8,
+      "labels": [
+        "backend",
+        "auth"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-02-22",
+      "eta": "2026-03-30",
+      "blockerNote": "Migration script needs database team sign off, blocked since day 4. Owner: eng-2, manager escalation in progress."
+    },
+    {
+      "id": "ENG-2202",
+      "title": "Auth migration: dual write to old and new tables",
+      "type": "development",
+      "assignee": "eng-2",
+      "status": "blocked",
+      "priority": "P0",
+      "estimate": 5,
+      "labels": [
+        "backend",
+        "auth"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-02-22",
+      "eta": "2026-03-30",
+      "blockerNote": "Depends on ENG-2201 cutover. Currently parked."
+    },
+    {
+      "id": "ENG-2203",
+      "title": "Auth migration: dual read fallback in API",
+      "type": "development",
+      "assignee": "eng-8",
+      "status": "blocked",
+      "priority": "P0",
+      "estimate": 5,
+      "labels": [
+        "backend",
+        "auth"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-02-22",
+      "eta": "2026-03-30",
+      "blockerNote": "Depends on ENG-2201 cutover. Currently parked."
+    },
+    {
+      "id": "ENG-2204",
+      "title": "Workspace template gallery polish",
+      "type": "development",
+      "assignee": "eng-1",
+      "status": "done",
+      "priority": "P1",
+      "estimate": 5,
+      "labels": [
+        "frontend"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-02-22",
+      "eta": "2026-03-30"
+    },
+    {
+      "id": "ENG-2205",
+      "title": "Workspace template card hover states",
+      "type": "enhancement",
+      "assignee": "eng-3",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 2,
+      "labels": [
+        "frontend",
+        "design"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-02-22",
+      "eta": "2026-03-30"
+    },
+    {
+      "id": "ENG-2206",
+      "title": "Workspace template card bug: bad accent on dark",
+      "type": "bug",
+      "assignee": "eng-3",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 1,
+      "labels": [
+        "frontend"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-02-22",
+      "eta": "2026-03-30"
+    },
+    {
+      "id": "ENG-2207",
+      "title": "Search ranking improvements v2 ship",
+      "type": "development",
+      "assignee": "eng-4",
+      "status": "done",
+      "priority": "P1",
+      "estimate": 5,
+      "labels": [
+        "backend",
+        "search"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-02-22",
+      "eta": "2026-03-30"
+    },
+    {
+      "id": "ENG-2208",
+      "title": "Notification preference toggles UI",
+      "type": "development",
+      "assignee": "eng-6",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "frontend"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-02-22",
+      "eta": "2026-03-30"
+    },
+    {
+      "id": "ENG-2209",
+      "title": "Notification preference toggles wiring to backend",
+      "type": "development",
+      "assignee": "eng-4",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "frontend",
+        "backend"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-02-22",
+      "eta": "2026-03-30"
+    },
+    {
+      "id": "ENG-2210",
+      "title": "Lighthouse SEO regression on /report fix",
+      "type": "bug",
+      "assignee": "eng-8",
+      "status": "blocked",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "frontend",
+        "seo"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-02-22",
+      "eta": "2026-03-30",
+      "blockerNote": "Owner pulled to auth migration cleanup. Carrying to apr."
+    },
+    {
+      "id": "ENG-2211",
+      "title": "PDF export drops trailing newline",
+      "type": "bug",
+      "assignee": "eng-6",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 2,
+      "labels": [
+        "frontend",
+        "pdf"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-02-22",
+      "eta": "2026-03-30"
+    },
+    {
+      "id": "ENG-2212",
+      "title": "Audit log retention policy doc finalise",
+      "type": "enhancement",
+      "assignee": "eng-7",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 1,
+      "labels": [
+        "docs"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-02-22",
+      "eta": "2026-03-30"
+    },
+    {
+      "id": "ENG-2213",
+      "title": "Sentry alert rules tune for noisy frontend",
+      "type": "enhancement",
+      "assignee": "eng-8",
+      "status": "blocked",
+      "priority": "P2",
+      "estimate": 2,
+      "labels": [
+        "observability"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-02-22",
+      "eta": "2026-03-30",
+      "blockerNote": "Owner pulled to auth migration. Carrying."
+    },
+    {
+      "id": "ENG-2214",
+      "title": "P2 backlog burndown one of two",
+      "type": "enhancement",
+      "assignee": "eng-6",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "maintenance"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-02-22",
+      "eta": "2026-03-30"
+    },
+    {
+      "id": "ENG-2215",
+      "title": "P2 backlog burndown two of two",
+      "type": "enhancement",
+      "assignee": "eng-6",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "maintenance"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-02-22",
+      "eta": "2026-03-30"
+    },
+    {
+      "id": "ENG-2216",
+      "title": "Promote search v2 to prod",
+      "type": "deployment",
+      "assignee": "eng-7",
+      "status": "done",
+      "priority": "P1",
+      "estimate": 2,
+      "labels": [
+        "devops",
+        "search"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-02-22",
+      "eta": "2026-03-30"
+    },
+    {
+      "id": "ENG-2217",
+      "title": "Promote workspace templates to prod",
+      "type": "deployment",
+      "assignee": "eng-7",
+      "status": "done",
+      "priority": "P1",
+      "estimate": 2,
+      "labels": [
+        "devops"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-02-22",
+      "eta": "2026-03-30"
+    },
+    {
+      "id": "ENG-2218",
+      "title": "Notifications backend perf cleanup",
+      "type": "enhancement",
+      "assignee": "eng-4",
+      "status": "in-review",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "backend",
+        "perf"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-02-22",
+      "eta": "2026-03-30"
+    },
+    {
+      "id": "ENG-2219",
+      "title": "Bulk archive confirm dialog rewrite",
+      "type": "enhancement",
+      "assignee": "eng-5",
+      "status": "done",
+      "priority": "P3",
+      "estimate": 2,
+      "labels": [
+        "frontend"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-02-22",
+      "eta": "2026-03-30"
+    },
+    {
+      "id": "ENG-2220",
+      "title": "Onboarding video step three swap",
+      "type": "enhancement",
+      "assignee": "eng-5",
+      "status": "done",
+      "priority": "P3",
+      "estimate": 2,
+      "labels": [
+        "frontend",
+        "design"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-02-22",
+      "eta": "2026-03-30"
+    },
+    {
+      "id": "ENG-2221",
+      "title": "Empty state copy on /reports zero state",
+      "type": "enhancement",
+      "assignee": "eng-5",
+      "status": "done",
+      "priority": "P3",
+      "estimate": 1,
+      "labels": [
+        "frontend",
+        "copy"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-02-22",
+      "eta": "2026-03-30"
+    },
+    {
+      "id": "ENG-2222",
+      "title": "Investigate slow gallery render at 1000 items",
+      "type": "development",
+      "assignee": "eng-1",
+      "status": "in-review",
+      "priority": "P2",
+      "estimate": 3,
+      "labels": [
+        "frontend",
+        "perf"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-02-22",
+      "eta": "2026-03-30"
+    },
+    {
+      "id": "ENG-2223",
+      "title": "Add presence service to staging cron warmup",
+      "type": "deployment",
+      "assignee": "eng-7",
+      "status": "done",
+      "priority": "P2",
+      "estimate": 2,
+      "labels": [
+        "devops"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-02-22",
+      "eta": "2026-03-30"
+    },
+    {
+      "id": "ENG-2224",
+      "title": "Auth migration: rollback plan doc",
+      "type": "enhancement",
+      "assignee": "eng-2",
+      "status": "todo",
+      "priority": "P0",
+      "estimate": 2,
+      "labels": [
+        "docs",
+        "auth"
+      ],
+      "addedMidSprint": false,
+      "createdAt": "2026-02-22",
+      "eta": null
+    }
+  ],
+  "burndown": {
+    "ideal": [
+      70,
+      68,
+      65,
+      63,
+      61,
+      58,
+      56,
+      54,
+      51,
+      49,
+      47,
+      44,
+      42,
+      40,
+      37,
+      35,
+      33,
+      30,
+      28,
+      26,
+      23,
+      21,
+      19,
+      16,
+      14,
+      12,
+      9,
+      7,
+      5,
+      2,
+      0
+    ],
+    "actual": [
+      70,
+      67,
+      65,
+      63,
+      61,
+      60,
+      58,
+      57,
+      56,
+      54,
+      53,
+      52,
+      50,
+      49,
+      48,
+      47,
+      46,
+      45,
+      43,
+      42,
+      41,
+      40,
+      39,
+      38,
+      37,
+      36,
+      35,
+      34,
+      33,
+      32,
+      31
+    ]
+  },
+  "currentDay": null,
+  "fourSprintBaseline": 62,
+  "velocity": 39,
+  "cycleTime": {
+    "days": [
+      4.5,
+      4.5,
+      4.6,
+      4.7,
+      4.7,
+      4.8,
+      4.8,
+      4.8,
+      4.9,
+      5.0,
+      5.0,
+      5.0,
+      5.1,
+      5.2,
+      5.2,
+      5.2,
+      5.3,
+      5.3,
+      5.4,
+      5.5,
+      5.5,
+      5.5,
+      5.6,
+      5.7,
+      5.7,
+      5.8,
+      5.8,
+      5.8,
+      5.9,
+      6.0,
+      6.0
+    ],
+    "teamBaseline": 4.5,
+    "trend": "rising"
+  },
+  "throughputPerWeek": {
+    "weekOne": 6,
+    "weekTwo": 9,
+    "priorAverage": 9
+  },
+  "perEngineer": {
+    "eng-1": {
+      "personalCycleTime": 4.0
+    },
+    "eng-2": {
+      "personalCycleTime": 5.5
+    },
+    "eng-3": {
+      "personalCycleTime": 4.5
+    },
+    "eng-4": {
+      "personalCycleTime": 4.5
+    },
+    "eng-5": {
+      "personalCycleTime": 5.5
+    },
+    "eng-6": {
+      "personalCycleTime": 4.5
+    },
+    "eng-7": {
+      "personalCycleTime": 4.8
+    },
+    "eng-8": {
+      "personalCycleTime": 5.5
+    }
+  }
+}

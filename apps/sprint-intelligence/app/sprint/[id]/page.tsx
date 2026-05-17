@@ -9,6 +9,7 @@ import {
   getColorClasses,
   getSprintStatusIcon,
   getSprintStatusLabel,
+  getStatusColorToken,
   formatSprintDateRange,
   sprintDaysElapsed,
   team,
@@ -55,6 +56,7 @@ const ACCENT_HEX: Record<string, string> = {
   rose: '#fb7185',
   teal: '#2dd4bf',
   green: '#34d399',
+  slate: '#94a3b8',
 }
 
 interface PageProps {
@@ -102,10 +104,11 @@ export default async function SprintDetailPage({ params }: PageProps) {
 
   const brief = getBrief(id)
 
-  const colors = getColorClasses(summary.colorToken)
+  const colorToken = getStatusColorToken(summary.status)
+  const colors = getColorClasses(colorToken)
   const StatusIcon = getSprintStatusIcon(summary.status)
   const dayCount = sprintDaysElapsed(summary.startDate, summary.endDate)
-  const accentHex = ACCENT_HEX[summary.colorToken] ?? ACCENT_HEX.accent ?? '#2dd4bf'
+  const accentHex = ACCENT_HEX[colorToken] ?? ACCENT_HEX.accent ?? '#2dd4bf'
 
   return (
     <section className="section-container pt-12 pb-24">

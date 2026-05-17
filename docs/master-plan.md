@@ -109,6 +109,16 @@ User scope call: Cat C items are real-resource-cost themes, not Project-1-close 
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
 
+### 2026-05-17 · 📅 W10.D6 - Sprint Intelligence monthly sprint model and 6-card gallery
+- **Six monthly sprints replace the bi-weekly four.** `jan-2026` through `jun-2026`. Four completed (jan healthy, feb scope creep absorbed, mar blocked, apr recovered), may in flight at day 17 of 31, jun is the backlog sprint with sixteen tickets already earmarked across payments v2, mobile app v2 scaffold, and the telemetry pipeline groundwork.
+- **Generator scripts** keep the bulk reproducible. `scripts/generate-monthly-sprints.py` authors 138 hand curated tickets across the six sprints and computes burndown, cycle time, and per engineer cycle time from the ticket data. `scripts/generate-monthly-briefs.py` emits the six brief fixtures.
+- **Ticket schema expanded.** `TicketType` is now `bug | development | enhancement | deployment` (replaces story / bug / task / spike). Every ticket carries `eta: string | null` and `createdAt: string` so the W10.D7 KPI strip and the W10.D8 per ticket charts have data to read.
+- **Status driven colors.** New `getStatusColorToken(status)` helper maps `completed` to green, `in-progress` to amber, `planned` to slate. New `slate` `ColorToken` added to the design system color map (grey gradient, slate-200 to slate-400 shades). Per sprint `colorToken` on the manifest is now optional and unused.
+- **Gallery layout.** Three column grid at `xl` (was two at `lg`), two columns at `md`, one column on mobile. Header copy now reads 'Six monthly sprints across the first half of 2026'. Backlog cards show 'X backlog' instead of 'X tickets' in the meta strip.
+- **Briefs** kept the same five section markdown structure for the five retrospective briefs. The June planning brief swaps Executive summary for Planning summary plus an Allocation highlights section, so the tone is forward looking (what to watch for next cycle).
+- **Build clean** via direct `next build`. 13 static pages (was 11), six sprint slugs prerendered, `/sprint/[id]` First Load JS unchanged at 52.2 kB. Type check clean. No deploy this day.
+- **Next**: W10.D7 - Filter bar plus KPI strip rewrite. Add a `SprintFilters` client component, a `TopKpiStrip` server component, and a `StoryPointsStrip` server component. Wire `searchParams` through `page.tsx` to filter every downstream KPI. Move the AI brief from the top of the page to the bottom.
+
 ### 2026-05-17 · 🚀 W10.D5 - Sprint Intelligence live on production
 - **Live URL**: <https://ai-portfolio-sprint-intelligence.vercel.app>. All four sprint slugs prerendered, every route returns 200.
 - **Vercel project**. Created `ai-portfolio-sprint-intelligence` on the `rishigundlas-projects` team via `vercel project add`. First deploy attempt from inside `apps/sprint-intelligence/` failed because the upload context did not include the workspace root and pnpm could not resolve `@rishi/design-system` or `@rishi/ai-core`.
