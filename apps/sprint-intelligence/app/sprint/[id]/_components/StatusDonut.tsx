@@ -5,7 +5,15 @@ interface StatusDonutProps {
   accentHex: string
 }
 
-export function StatusDonut({ distribution, accentHex }: StatusDonutProps) {
+const STATUS_FILL: Record<string, string> = {
+  done: 'var(--chart-emerald)',
+  'in-review': 'var(--chart-violet)',
+  'in-progress': 'var(--chart-amber)',
+  todo: 'var(--chart-slate)',
+  blocked: 'var(--chart-rose)',
+}
+
+export function StatusDonut({ distribution, accentHex: _accentHex }: StatusDonutProps) {
   const total = distribution.reduce((acc, e) => acc + e.count, 0)
   if (total === 0) return null
 
@@ -16,12 +24,12 @@ export function StatusDonut({ distribution, accentHex }: StatusDonutProps) {
   const inner = 36
 
   let acc = 0
-  const arcs = distribution.map((entry, i) => {
+  const arcs = distribution.map((entry) => {
     const start = (acc / total) * 2 * Math.PI
     acc += entry.count
     const end = (acc / total) * 2 * Math.PI
-    const opacity = 1 - i * 0.15
-    return { ...entry, start, end, opacity: Math.max(0.25, opacity) }
+    const fill = STATUS_FILL[entry.status] ?? 'var(--chart-slate)'
+    return { ...entry, start, end, fill }
   })
 
   return (
@@ -31,11 +39,13 @@ export function StatusDonut({ distribution, accentHex }: StatusDonutProps) {
           <path
             key={arc.status}
             d={arcPath(cx, cy, radius, inner, arc.start, arc.end)}
-            fill={arc.status === 'blocked' ? 'var(--chart-rose)' : accentHex}
-            opacity={arc.status === 'blocked' ? 0.9 : arc.opacity}
+            fill={arc.fill}
+            opacity={0.9}
           />
         ))}
-        <circle cx={cx} cy={cy} r={inner - 1} fill="#0d111c" />
+        {/* center hole — uses surface token so the donut center matches the
+            card background in both light and dark mode */}
+        <circle cx={cx} cy={cy} r={inner - 1} fill="var(--color-surface)" />
         <text
           x={cx}
           y={cy - 2}
@@ -43,7 +53,7 @@ export function StatusDonut({ distribution, accentHex }: StatusDonutProps) {
           fontSize="16"
           fontFamily="Space Grotesk"
           fontWeight="700"
-          fill="#f1f5f9"
+          fill="var(--color-text-primary)"
         >
           {total}
         </text>
@@ -53,7 +63,7 @@ export function StatusDonut({ distribution, accentHex }: StatusDonutProps) {
           textAnchor="middle"
           fontSize="8"
           fontFamily="JetBrains Mono"
-          fill="var(--chart-slate)"
+          fill="var(--color-text-muted)"
         >
           TICKETS
         </text>
@@ -68,10 +78,7 @@ export function StatusDonut({ distribution, accentHex }: StatusDonutProps) {
             >
               <span
                 className="h-2 w-2 rounded-sm shrink-0"
-                style={{
-                  backgroundColor: arc.status === 'blocked' ? 'var(--chart-rose)' : accentHex,
-                  opacity: arc.status === 'blocked' ? 0.9 : arc.opacity,
-                }}
+                style={{ backgroundColor: arc.fill, opacity: 0.9 }}
               />
               <span className="text-text-secondary truncate flex-1">
                 {arc.label}
