@@ -15,6 +15,18 @@ export const metadata: Metadata = {
   title: 'Sprints',
   description:
     'Pick a synthetic sprint to inspect. Four sprints with different stories: healthy, scope creep, blocked, and currently in flight.',
+  openGraph: {
+    title: 'Sprint gallery · Sprint Intelligence',
+    description:
+      'Four synthetic sprints, each with 20 to 30 tickets and the same eight engineer team. Pick one to land in the dashboard.',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Sprint gallery · Sprint Intelligence',
+    description:
+      'Four synthetic sprints. Pick one to land in the dashboard with KPIs plus a streaming AI brief.',
+  },
 }
 
 export default function SprintsPage() {

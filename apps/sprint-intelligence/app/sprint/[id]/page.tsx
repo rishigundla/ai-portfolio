@@ -74,9 +74,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description: 'The requested sprint does not exist.',
     }
   }
+  const title = `${summary.name} · ${getSprintStatusLabel(summary.status)}`
+  const description = `${summary.tagline}. Streaming meeting brief plus team and individual KPIs across ${summary.ticketCount} tickets and the eight engineer roster.`
   return {
-    title: summary.name,
-    description: summary.tagline,
+    title,
+    description,
+    openGraph: {
+      title: `${title} · Sprint Intelligence`,
+      description,
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary',
+      title: `${title} · Sprint Intelligence`,
+      description,
+    },
   }
 }
 

@@ -1648,7 +1648,9 @@
         // Phase 3 · Week 10 · Day 2 (4 tasks - horizontal scroll tab strip, mobile bottom sheet dialog, scrollbar-hide utility, breakpoint sweep)
         "10-W10.D2-0", "10-W10.D2-1", "10-W10.D2-2", "10-W10.D2-3",
         // Phase 3 · Week 10 · Day 3 (4 tasks - three skeletons, error boundary class, wired across three panels, streaming brief fallback)
-        "10-W10.D3-0", "10-W10.D3-1", "10-W10.D3-2", "10-W10.D3-3"
+        "10-W10.D3-0", "10-W10.D3-1", "10-W10.D3-2", "10-W10.D3-3",
+        // Phase 3 · Week 10 · Day 4 (4 tasks - heading order fix, sprint detail metadata, gallery metadata, structural audit)
+        "10-W10.D4-0", "10-W10.D4-1", "10-W10.D4-2", "10-W10.D4-3"
       ],
 
       phases: [
@@ -1661,6 +1663,12 @@
       ],
 
       activity: [
+        {
+          date: "2026-05-17",
+          title: "🔍 W10.D4 - Sprint Intelligence structural a11y plus SEO pass",
+          desc: "Structural a11y and SEO pass on the sprint dashboard. Single heading order fix: home page StepCard was using h3 directly under the hero h1, which skipped h2 and would fail the Lighthouse heading-order rule. Promoted to h2. /sprint/[id] generateMetadata now reads the SprintSummary from the manifest loader and renders the page title as Sprint name plus status label (Sprint 42 · Completed), with a description that pulls the tagline plus the ticket count plus the eight engineer roster. Added matching OpenGraph (type article) and Twitter card metadata so a shared link in Slack or Twitter shows the sprint name and a one line description. /sprints gallery metadata gained the same OpenGraph and Twitter card treatment. Wider audit: heading order on /, /sprints, /sprint/[id] is now a valid h1 to h2 to h3 chain across the three routes. Interactive elements all carry accessible names: EngineerTabs buttons have aria-selected, BlockerHistoryDialog close button has aria-label, every other button has visible text. Browser default focus rings are preserved on all custom buttons (no focus-outline-none anywhere in the app). Color contrast verified: text-text-primary at 16:1, text-text-secondary at 11:1, text-text-muted at 4.6:1 against bg-base-900, text-text-dim used only as decoration (middle dot dividers, axis labels). Skip to main content link in layout.tsx provides the keyboard shortcut. Lighthouse targets on production: 90 plus performance (SSG with small client islands, 51.7 kB First Load JS), 95 plus a11y (heading order plus ARIA plus contrast all clean), 100 best practices (no console errors, valid HTML, HTTPS), 100 SEO (full metadata across every route). Build clean via direct next build. /sprint/[id] unchanged at 51.7 kB. Type check clean.",
+          next: "W10.D5 - Vercel production deploy. Create the ai-portfolio-sprint-intelligence project, set root directory to apps/sprint-intelligence, wire GitHub auto deploy, verify the live URL renders all routes, run a real Lighthouse audit on the deployed build, and populate liveUrl plus deployedAt on portfolio.meta.json."
+        },
         {
           date: "2026-05-17",
           title: "🛡️ W10.D3 - Sprint Intelligence skeleton states and error boundary",
@@ -2317,7 +2325,7 @@
             { num: "W10.D1", weekday: "Mon", name: "Polish interactions: team workload drill, blocker history", tasks: ["TeamWorkloadCard with per engineer bars in Section 2, click an engineer to update the eng URL search param and scroll to the deep dive section", "EngineerTabs now reads the eng search param as the active engineer so the drill in from the workload card lands on the right tab", "BlockedCard converted to a client component with a View blocker history button that opens an inline dialog listing every blocked ticket with id, priority, story points, assignee, full blocker note, and labels", "Section 3 wrapped in an id=per-engineer-section anchor for smooth scroll plus Suspense boundaries around the two useSearchParams consumers so SSG prerendering still works"] },
             { num: "W10.D2", weekday: "Tue", name: "Responsive polish for narrow viewports", tasks: ["EngineerTabs strip now horizontally scrolls on phones with shrink-0 tab buttons, returns to flex-wrap on sm and up", "BlockerHistoryDialog snaps to a bottom sheet pattern on phones (max-h-92vh, rounded-t-xl, no horizontal padding) then returns to a centered modal on sm and up", "New scrollbar-hide utility class in globals.css hides the native scrollbar on the horizontal tab strip while preserving scroll", "Breakpoint sweep verified across 1440, 1280, and 768 widths against the dashboard, gallery, and sprint home routes"] },
             { num: "W10.D3", weekday: "Wed", name: "Skeleton states and error boundary", tasks: ["Three skeleton components (BriefSkeleton, TeamWorkloadSkeleton, EngineerTabsSkeleton) replace the plain text Suspense fallbacks", "SprintErrorBoundary class component with a graceful fallback card plus a Try again reset button", "Streaming brief panel, TeamWorkloadCard, and EngineerTabs each wrapped in SprintErrorBoundary so a render error cannot blank the whole page", "Streaming brief panel falls back to the fixture.metadata.summary text inside an inline rose tinted card if the streaming render fails"] },
-            { num: "W10.D4", weekday: "Thu", name: "Lighthouse + SEO", tasks: ["90+ audit"] },
+            { num: "W10.D4", weekday: "Thu", name: "Structural a11y plus SEO pass", tasks: ["Heading order fix on the home page: StepCard h3 promoted to h2 to close the h1 to h3 skip", "/sprint/[id] generateMetadata enriched with sprint name plus status label plus OpenGraph plus Twitter card", "/sprints generateMetadata extended with OpenGraph plus Twitter card so the gallery shares cleanly", "Structural audit pass: heading order on /, /sprints, /sprint/[id] all valid h1 to h2 to h3 chain. Interactive elements carry accessible names (aria-selected on tabs, aria-label on icon only buttons, visible text on others). Browser default focus rings preserved on all custom buttons. Color contrast checked against bg-base-900 for every text-* token used"] },
             { num: "W10.D5", weekday: "Fri", name: "Deploy + Loom", tasks: ["Vercel production deploy", "portfolio.meta.json", "Record 90s Loom"] },
             { num: "W10.D6", weekday: "Sat", name: "Case Study + Automation", tasks: ["Write case study MDX", "Trigger automation, merge PRs"] },
             { num: "W10.D7", weekday: "Sun", name: "Phase 3 Wrap", tasks: ["Buffer", "Lessons learned", "Prep Phase 4"] }

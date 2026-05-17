@@ -62,7 +62,7 @@ function StepCard({ num, title, description }: { num: string; title: string; des
   return (
     <div className="rounded-xl border border-surface-border bg-surface p-6 lg:p-8">
       <div className="font-mono text-3xl font-light text-accent mb-3 tracking-tight">{num}</div>
-      <h3 className="font-display text-xl lg:text-2xl font-semibold tracking-tight mb-3">{title}</h3>
+      <h2 className="font-display text-xl lg:text-2xl font-semibold tracking-tight mb-3">{title}</h2>
       <p className="text-sm text-text-secondary leading-relaxed">{description}</p>
     </div>
   )
