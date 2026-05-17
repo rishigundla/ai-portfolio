@@ -18,7 +18,6 @@ import {
   type TicketTimeline,
 } from '@/lib/kpi-calc'
 import { TicketHeatmap } from './TicketHeatmap'
-import { TicketGantt } from './TicketGantt'
 
 interface DeepDivePanelProps {
   activeAssignee: string
@@ -260,18 +259,6 @@ function EngineerView({
         <TicketHeatmap timelines={timelines} sprintLength={sprintLength} />
       </section>
 
-      <section className="space-y-3">
-        <div>
-          <p className="font-mono text-[10px] uppercase tracking-widest text-text-muted">
-            Ticket progress
-          </p>
-          <p className="text-[11px] text-text-muted mt-0.5">
-            Same data as the heatmap, rendered as continuous progress bars per
-            ticket. To-do tickets show a dashed planned range.
-          </p>
-        </div>
-        <TicketGantt timelines={timelines} sprintLength={sprintLength} />
-      </section>
     </div>
   )
 }
@@ -492,18 +479,6 @@ function TeamView({
         <TicketHeatmap timelines={timelines} sprintLength={sprintLength} />
       </section>
 
-      <section className="space-y-3">
-        <div>
-          <p className="font-mono text-[10px] uppercase tracking-widest text-text-muted">
-            Ticket progress
-          </p>
-          <p className="text-[11px] text-text-muted mt-0.5">
-            Same data as the heatmap, rendered as continuous progress bars per
-            ticket. To-do tickets show a dashed planned range.
-          </p>
-        </div>
-        <TicketGantt timelines={timelines} sprintLength={sprintLength} />
-      </section>
     </div>
   )
 }

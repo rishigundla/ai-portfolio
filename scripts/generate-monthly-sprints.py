@@ -87,17 +87,119 @@ def _next_weekday(sprint_start_iso: str, sprint_day: int, sprint_length: int) ->
 PRIORITY_RANK = {"P0": 0, "P1": 1, "P2": 2, "P3": 3}
 
 
-def _contiguous_weekday_run(
-    start_day: int, sprint_start_iso: str, sprint_length: int, work_count: int
+def _sprint_weeks(sprint_start_iso: str, sprint_length: int) -> list[list[int]]:
+    """Return list of weeks. Each week is the 1-indexed sprint days for its Mon-Fri block.
+
+    Partial weeks at sprint boundaries still emitted with whatever weekdays they
+    contain.
+    """
+    start = date.fromisoformat(sprint_start_iso)
+    weeks: list[list[int]] = []
+    current: list[int] = []
+    for day in range(1, sprint_length + 1):
+        weekday = (start + timedelta(days=day - 1)).weekday()
+        if weekday < 5:
+            current.append(day)
+        if weekday == 4:
+            if current:
+                weeks.append(current)
+                current = []
+    if current:
+        weeks.append(current)
+    return weeks
+
+
+def _engineer_profile(
+    sprint_id: str, engineer_id: str, role: str
+) -> dict[str, Any]:
+    """Hash-deterministic cadence profile per (sprint, engineer).
+
+    Gives every engineer a recognizably different heatmap pattern by varying
+    pace, week shape, carryover habit, and meeting-day skips.
+    """
+    role_pace = {
+        "Senior BI Engineer": 0.85,
+        "Senior Data Engineer": 0.85,
+        "Analytics Engineer": 0.95,
+        "BI Engineer": 1.0,
+        "Junior Analytics Engineer": 1.2,
+        "Data Engineering Manager": 1.05,
+    }.get(role, 1.0)
+    pace_jitter = 0.85 + 0.3 * _hash_float(sprint_id, engineer_id, "pace")
+    pace = role_pace * pace_jitter
+
+    carryover_prob = 0.30 + 0.40 * _hash_float(sprint_id, engineer_id, "carryover")
+    carryover_extra = 1 + int(_hash_float(sprint_id, engineer_id, "carryover-extra") * 2)
+    side_ticket_prob = 0.35 * _hash_float(sprint_id, engineer_id, "side")
+
+    shapes = ["front-loaded", "back-loaded", "steady"]
+    shape_idx = int(_hash_float(sprint_id, engineer_id, "shape") * len(shapes))
+    week_shape = shapes[min(shape_idx, len(shapes) - 1)]
+
+    return {
+        "pace": pace,
+        "carryover_prob": carryover_prob,
+        "carryover_extra": carryover_extra,
+        "side_ticket_prob": side_ticket_prob,
+        "week_shape": week_shape,
+    }
+
+
+def _meeting_skip_day(
+    sprint_id: str, engineer_id: str, week_idx: int, week_days: list[int]
+) -> int | None:
+    """Per-week deterministic skip: maybe the engineer had a meeting-heavy day."""
+    if len(week_days) < 4:
+        return None
+    skip_pct = _hash_float(sprint_id, engineer_id, f"skip-{week_idx}")
+    if skip_pct > 0.7:
+        # Pick a midweek day to skip
+        idx = 1 + int(_hash_float(sprint_id, engineer_id, f"skip-pick-{week_idx}") * (len(week_days) - 2))
+        return week_days[idx]
+    return None
+
+
+def _run_within_week(
+    week_days: list[int],
+    work_count: int,
+    week_shape: str,
+    skip_day: int | None,
+    stagger: int = 0,
 ) -> list[int]:
-    """Return up to work_count weekdays starting at start_day, weekends rolled over."""
-    days: list[int] = []
-    d = start_day
-    while len(days) < work_count and d <= sprint_length:
-        if not _is_weekend(sprint_start_iso, d):
-            days.append(d)
-        d += 1
-    return days
+    """Return up to work_count weekdays inside week_days, shaped by profile.
+
+    stagger shifts the run start by N days so multiple tickets sharing a
+    week do not stack on identical days (e.g., two P0 escalations landing
+    the same week stagger by 1 day each).
+    """
+    available = [d for d in week_days if d != skip_day]
+    work_count = min(work_count, max(1, len(available) - stagger))
+    if work_count <= 0 or not available:
+        return []
+    if week_shape == "front-loaded":
+        start = min(stagger, max(0, len(available) - work_count))
+        return available[start:start + work_count]
+    if week_shape == "back-loaded":
+        # Stagger from the back: each subsequent ticket starts 1 day earlier
+        end = len(available) - stagger
+        start = max(0, end - work_count)
+        return available[start:end if end > 0 else len(available)]
+    # steady: center then shift by stagger
+    excess = len(available) - work_count
+    base_offset = excess // 2
+    offset = min(len(available) - work_count, max(0, base_offset + stagger))
+    return available[offset:offset + work_count]
+
+
+def _week_index_for_day(weeks: list[list[int]], day: int) -> int:
+    for i, week in enumerate(weeks):
+        if week and week[0] <= day <= week[-1]:
+            return i
+    # Day falls before any Mon-Fri block; map to nearest week
+    for i, week in enumerate(weeks):
+        if week and day <= week[-1]:
+            return i
+    return max(0, len(weeks) - 1)
 
 
 def schedule_engineer_queue(
@@ -107,20 +209,35 @@ def schedule_engineer_queue(
     sprint_length: int,
     today_day: int,
     is_in_flight: bool,
+    team_lookup: dict[str, dict[str, Any]],
 ) -> dict[str, list[int]]:
-    """Schedule one engineer's tickets sequentially.
+    """Per-week scheduler with per-engineer profile variation.
 
-    Tickets are sorted by priority (P0 first) then createdAt ascending. A
-    currentDay cursor walks forward as each ticket consumes weekdays. The
-    engineer focuses on one ticket at a time. Mid sprint additions are
-    naturally interleaved because their priority + createdDay clamps their
-    start day forward when reached.
+    Every engineer gets a primary ticket each week (when their queue allows).
+    Tickets that don't close in their week carry 1-2 days into the next week.
+    Side tickets (small estimate) may share days with the primary at week end.
 
     Returns: dict mapping ticket_id to its workSchedule list.
     """
     schedules: dict[str, list[int]] = {}
-    queue = sorted(
-        engineer_tickets,
+    if not engineer_tickets:
+        return schedules
+
+    engineer_id = engineer_tickets[0]["assignee"]
+    role = team_lookup.get(engineer_id, {}).get("role", "Engineer")
+    profile = _engineer_profile(sprint_id, engineer_id, role)
+
+    weeks = _sprint_weeks(sprint_start_iso, sprint_length)
+    n_weeks = len(weeks)
+    if n_weeks == 0:
+        for t in engineer_tickets:
+            schedules[t["id"]] = []
+        return schedules
+
+    # Sort active tickets by priority + createdAt
+    active = [t for t in engineer_tickets if t["status"] != "todo"]
+    todos = [t for t in engineer_tickets if t["status"] == "todo"]
+    active.sort(
         key=lambda t: (
             PRIORITY_RANK.get(t.get("priority", "P2"), 3),
             t.get("createdAt", ""),
@@ -128,65 +245,147 @@ def schedule_engineer_queue(
         ),
     )
 
+    for t in todos:
+        schedules[t["id"]] = []
+
+    if not active:
+        return schedules
+
+    # Assign each active ticket a primary week
     sprint_start = date.fromisoformat(sprint_start_iso)
-    current_day = 1
+    ticket_week: dict[str, int] = {}
+    week_load: list[list[str]] = [[] for _ in weeks]
 
-    for ticket in queue:
-        tid = ticket["id"]
-        status = ticket["status"]
-        if status == "todo":
+    # First pass: mid-sprint additions anchor to their createdAt week
+    for t in list(active):
+        if t.get("addedMidSprint"):
+            created = date.fromisoformat(t["createdAt"])
+            created_day = max(1, min(sprint_length, (created - sprint_start).days + 1))
+            week_idx = _week_index_for_day(weeks, created_day)
+            ticket_week[t["id"]] = week_idx
+            week_load[week_idx].append(t["id"])
+
+    # Second pass: spread the remaining active tickets across weeks
+    remaining = [t for t in active if t["id"] not in ticket_week]
+    if remaining:
+        if len(remaining) <= n_weeks:
+            # Sparse engineer: spread their few tickets evenly across the weeks
+            # so they cover as much of the sprint as possible with gaps.
+            step = n_weeks / len(remaining)
+            for i, t in enumerate(remaining):
+                week_idx = min(n_weeks - 1, int(round(i * step)))
+                # Avoid collisions with mid-sprint additions if possible
+                while week_idx < n_weeks - 1 and len(week_load[week_idx]) > 0:
+                    week_idx += 1
+                ticket_week[t["id"]] = week_idx
+                week_load[week_idx].append(t["id"])
+        else:
+            # Dense engineer: round-robin to least-loaded weeks, ensure each week
+            # has at least 1 primary, then double up
+            for t in remaining:
+                week_idx = min(range(n_weeks), key=lambda i: (len(week_load[i]), i))
+                ticket_week[t["id"]] = week_idx
+                week_load[week_idx].append(t["id"])
+
+    # Engineers with fewer tickets than weeks need stronger carryover to stay
+    # visible across the sprint, so we boost their carryover habit.
+    sparse_engineer = len(active) < n_weeks
+    if sparse_engineer:
+        profile = {
+            **profile,
+            "carryover_prob": max(profile["carryover_prob"], 0.85),
+            "carryover_extra": max(profile["carryover_extra"], 2),
+        }
+
+    # Track stagger within each week so multiple tickets sharing a week
+    # do not stack on identical days.
+    week_stagger: dict[int, int] = {i: 0 for i in range(n_weeks)}
+
+    # Third pass: build workSchedule per ticket using the profile
+    # Process active in queue order to keep stagger deterministic.
+    for t in active:
+        tid = t["id"]
+        status = t["status"]
+        estimate = max(1, t.get("estimate") or 1)
+        week_idx = ticket_week[tid]
+        week_days = weeks[week_idx]
+        if not week_days:
             schedules[tid] = []
             continue
 
-        estimate = max(1, ticket.get("estimate") or 1)
-        created = date.fromisoformat(ticket["createdAt"])
-        created_day = max(1, min(sprint_length, (created - sprint_start).days + 1))
-
-        effective_start = max(current_day, created_day)
-        effective_start = _next_weekday(sprint_start_iso, effective_start, sprint_length)
-        if effective_start > sprint_length:
-            schedules[tid] = []
-            continue
+        skip_day = _meeting_skip_day(sprint_id, engineer_id, week_idx, week_days)
+        week_len = len([d for d in week_days if d != skip_day])
 
         if status == "done":
-            work_count = max(1, round(estimate * 0.8))
+            base = max(1, round(estimate * profile["pace"] * 0.7))
+            work_count = min(base, week_len)
         elif status in ("in-progress", "in-review"):
-            days_in_status = float(ticket.get("daysInStatus", 1))
+            days_in_status = float(t.get("daysInStatus", 1))
             work_count = max(1, int(round(min(estimate, days_in_status + 1))))
+            work_count = min(work_count, week_len)
         elif status == "blocked":
             work_count = 1 + int(_hash_float(sprint_id, tid, "blocked-count") * 3)
+            work_count = min(work_count, week_len)
         else:
-            work_count = estimate
+            work_count = min(estimate, week_len)
 
-        run = _contiguous_weekday_run(
-            effective_start, sprint_start_iso, sprint_length, work_count
+        stagger = week_stagger[week_idx]
+        run = _run_within_week(
+            week_days, work_count, profile["week_shape"], skip_day, stagger
         )
+        # Advance the stagger for the next ticket in this week (cap so we
+        # never push past the week boundary entirely).
+        week_stagger[week_idx] = min(week_stagger[week_idx] + 1, max(0, len(week_days) - 1))
 
-        # Shift in-flight in-progress/in-review tickets so their last active
-        # day lands at or near today.
+        # Carryover: if estimate exceeds the week length OR per-ticket hash says so,
+        # add 1-2 days at the start of the next week. Only for done / in-review tickets.
+        if status in ("done", "in-review") and week_idx + 1 < n_weeks:
+            carry_roll = _hash_float(sprint_id, tid, "carry")
+            should_carry = estimate > week_len or carry_roll < profile["carryover_prob"]
+            if should_carry:
+                next_week = weeks[week_idx + 1]
+                carry_count = min(profile["carryover_extra"], len(next_week))
+                # Take the first weekday(s) of next week
+                carry_days = next_week[:carry_count]
+                run = run + carry_days
+
+        # In-flight in-progress / in-review: anchor end of run at today_day
         if status in ("in-progress", "in-review") and is_in_flight and run:
             last_day = run[-1]
-            if last_day < today_day:
-                # Try to shift the run forward without overlapping prior work.
-                target_last = min(sprint_length, today_day)
-                shift = target_last - last_day
-                shifted_start = max(current_day, run[0] + shift)
-                shifted_start = _next_weekday(
-                    sprint_start_iso, shifted_start, sprint_length
-                )
-                # Cap the start so the run fits within sprint_length.
-                new_run = _contiguous_weekday_run(
-                    shifted_start, sprint_start_iso, sprint_length, work_count
-                )
-                if new_run and new_run[-1] <= sprint_length:
-                    run = new_run
-            elif last_day > today_day:
-                # Truncate to today.
+            if last_day != today_day:
+                # Truncate or extend so the run ends at or just before today_day
                 run = [d for d in run if d <= today_day]
+                if not run:
+                    # Place a single day at today_day
+                    run = [today_day]
 
+        # Clamp to sprint
+        run = sorted(set(d for d in run if 1 <= d <= sprint_length))
         schedules[tid] = run
-        if run:
-            current_day = run[-1] + 1
+
+    # Optional side tickets: with prob, a small ticket overlaps the tail of its week
+    if profile["side_ticket_prob"] > 0:
+        for t in active:
+            tid = t["id"]
+            if not schedules.get(tid):
+                continue
+            if t.get("addedMidSprint"):
+                continue
+            if t["status"] != "done":
+                continue
+            if (t.get("estimate") or 0) > 2:
+                continue
+            side_roll = _hash_float(sprint_id, tid, "side-pick")
+            if side_roll >= profile["side_ticket_prob"]:
+                continue
+            week_idx = ticket_week[tid]
+            week_days = weeks[week_idx]
+            if len(week_days) < 2:
+                continue
+            # Add one extra weekday tail-of-week tag to a different ticket already in that week
+            # The "side" effect: keep schedule small but ensure end-of-week overlap exists.
+            tail = week_days[-1:]
+            schedules[tid] = sorted(set(schedules[tid] + tail))
 
     return schedules
 
@@ -328,6 +527,7 @@ def build_fixture(spec: dict[str, Any]) -> dict[str, Any]:
     for e in enriched_tickets:
         by_assignee.setdefault(e["assignee"], []).append(e)
 
+    team_lookup = {m["id"]: m for m in TEAM}
     schedule_map: dict[str, list[int]] = {}
     for assignee, eng_tickets in by_assignee.items():
         per_engineer = schedule_engineer_queue(
@@ -337,6 +537,7 @@ def build_fixture(spec: dict[str, Any]) -> dict[str, Any]:
             day_count,
             today_day,
             is_in_flight,
+            team_lookup,
         )
         schedule_map.update(per_engineer)
 
