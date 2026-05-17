@@ -2299,87 +2299,186 @@ ai-portfolio/                           Root of rishigundla/ai-portfolio
 
 ---
 
-## Phase 3 — Project 3 · Sprint Intelligence (Weeks 7-8)
+## Phase 3 — Project 3 · Sprint Intelligence (Weeks 9-12) ✅ SHIPPED v1.0
 
-### Week 7 — Project 3 Core Build
+### Week 9 — Project 3 Core Build
 
-**Week goal**: User picks synthetic sprint → sees KPIs + streaming meeting brief.
+**Week goal**: User picks a synthetic sprint and sees KPIs plus a streaming meeting brief.
 
-#### Day 1 (Mon) · App Scaffold + Synthetic Sprints
-- [ ] Create `apps/sprint-intelligence/`
-- [ ] Author 4 synthetic sprint JSONs in `fixtures/sprint-intelligence/sprints/`
-- [ ] Each sprint includes: 20-30 tickets with status history, 8 engineers, priority distribution
+#### Day 1 (Mon) · App Scaffold and Sprint Data
+- [x] Create `apps/sprint-intelligence/`
+- [x] Author 4 synthetic sprint JSONs
+- [x] Each: 20-30 tickets, status history, 8 engineers
 
-#### Day 2 (Tue) · Sprint Selector + Dashboard Shell
-- [ ] Dropdown to select sprint (Sprint 42/43/44/45)
-- [ ] Dashboard shell with AI brief panel (top), KPIs (middle), deep-dive tabs (bottom)
+#### Day 2 (Tue) · Sprint Gallery, Dashboard Shell, Typed Loaders
+- [x] `lib/sprints.ts` manifest loader with TeamMember, SprintSummary, status icons, color classes
+- [x] `lib/full-sprints.ts` per id loader with SprintFixture and TicketSpec types
+- [x] Sprint gallery at `/sprints` with four cards, status badges, ticket counts
+- [x] Dashboard shell at `/sprint/[id]` plus `generateStaticParams` over four sprints
 
-#### Day 3 (Wed) · Team-Level KPIs
-- [ ] Sprint Burndown chart
-- [ ] Velocity vs 4-sprint baseline
-- [ ] Status Distribution donut
-- [ ] Blocked Tickets count + aging
+#### Day 3 (Wed) · Team Level KPIs
+- [x] Sprint Burndown chart
+- [x] Velocity versus 4 sprint baseline
+- [x] Status Distribution donut
+- [x] Blocked Tickets count plus aging
 
-#### Day 4 (Thu) · More Team KPIs + Trends
-- [ ] Cycle Time trend line
-- [ ] Throughput per week
-- [ ] Scope Creep tracker
-- [ ] Carryover Rate
+#### Day 4 (Thu) · More KPIs and Trends
+- [x] Cycle Time trend line
+- [x] Throughput per week
+- [x] Scope Creep tracker
+- [x] Carryover Rate
 
-#### Day 5 (Fri) · Individual Deep-Dive Tabs
-- [ ] Tab per engineer
-- [ ] Workload Score (weighted priority)
-- [ ] Completion Rate
-- [ ] Personal vs team cycle time
-- [ ] Review bottleneck
+#### Day 5 (Fri) · Per Engineer Deep Dive Tabs
+- [x] EngineerTabs client component with one tab per engineer
+- [x] Workload score weighted by P0 to P3 priority versus per engineer capacity
+- [x] Completion rate per engineer plus personal versus team cycle time
+- [x] Review queue tile with a bottleneck flag
 
-#### Day 6 (Sat) · Generate Meeting Brief Fixtures
-- [ ] Use Claude Code to generate meeting brief per sprint
-- [ ] Each includes: exec summary, highlights, watch list, recommendations, talking points
+#### Day 6 (Sat) · Meeting Brief Fixtures and Brief Loader
+- [x] Four hand curated brief JSON fixtures (sprint 42 healthy, 43 scope creep, 44 blocked, 45 in flight)
+- [x] Each brief carries five sections: Executive summary, Highlights, Watch list, Recommendations, Talking points
+- [x] Prose references fixture values verbatim so it stays grounded
+- [x] `lib/briefs.ts` loader with a per id `getBrief` plus `getAllBriefs` export
 
-#### Day 7 (Sun) · Streaming Brief Panel
-- [ ] Top panel streams the AI meeting brief on sprint load
-- [ ] Click "Regenerate" to replay streaming
+#### Day 7 (Sun) · Streaming Meeting Brief Panel
+- [x] `StreamingBriefPanel` client component using `replayFixture` and `AiNarrativeBlock`
+- [x] Five step progress strip advancing as section markers appear
+- [x] Cancel button during streaming plus Replay button on completion
+- [x] Wired into Section 1 of `/sprint/[id]`
 
-**Week 7 Deliverables**:
-- 4 sprints with full KPI breakdowns + AI briefs
+**Week 9 Deliverables**: 4 sprints with full KPI breakdowns plus AI briefs.
 
 ---
 
-### Week 8 — Project 3 Polish + Deploy
+### Week 10 — Project 3 Polish and Deploy
 
-**Week goal**: Project 3 live, automation fires.
+**Week goal**: Project 3 live, monthly sprint model in place.
 
-#### Day 1 (Mon) · Interactions + Drill-Downs
-- [ ] Click engineer name → filter all views to that person
-- [ ] Click blocker → show blocker history
+#### Day 1 (Mon) · Team Workload Drill and Blocker History
+- [x] TeamWorkloadCard with per engineer bars, click an engineer to update `eng` and scroll to the deep dive
+- [x] EngineerTabs reads the `eng` search param so the drill in lands on the right tab
+- [x] BlockedCard converted to a client component with a View blocker history dialog
+- [x] Section anchors plus Suspense around `useSearchParams` consumers so SSG still works
 
-#### Day 2 (Tue) · Responsive Polish
-- [ ] Breakpoint testing
-- [ ] Mobile: collapse deep-dive tabs to accordion
+#### Day 2 (Tue) · Responsive Polish for Narrow Viewports
+- [x] EngineerTabs strip horizontally scrolls on phones, returns to flex wrap on `sm` and up
+- [x] BlockerHistoryDialog snaps to a bottom sheet on phones, centered modal on `sm` and up
+- [x] New `scrollbar-hide` utility class in `globals.css`
+- [x] Breakpoint sweep verified across 1440, 1280, 768 widths
 
-#### Day 3 (Wed) · Empty/Loading/Error
-- [ ] Skeleton states
-- [ ] Error boundaries
+#### Day 3 (Wed) · Skeleton States and Error Boundary
+- [x] Three skeleton components (BriefSkeleton, TeamWorkloadSkeleton, EngineerTabsSkeleton)
+- [x] SprintErrorBoundary class component with a Try again reset button
+- [x] Streaming panel, TeamWorkloadCard, EngineerTabs each wrapped in the boundary
+- [x] Streaming brief falls back to `fixture.metadata.summary` if the streaming render fails
 
-#### Day 4 (Thu) · Lighthouse + SEO
-- [ ] 90+ audit
+#### Day 4 (Thu) · Structural a11y and SEO Pass
+- [x] Heading order fix on home: StepCard h3 promoted to h2
+- [x] `/sprint/[id]` `generateMetadata` enriched with sprint name, status label, OpenGraph, Twitter card
+- [x] `/sprints` `generateMetadata` extended with OpenGraph plus Twitter card
+- [x] Structural audit pass: heading order valid, ARIA labels on icon buttons, contrast checked
 
-#### Day 5 (Fri) · Deploy
-- [ ] Vercel production deploy
-- [ ] `portfolio.meta.json`
+#### Day 5 (Fri) · Vercel Production Deploy
+- [x] New Vercel project `ai-portfolio-sprint-intelligence` via `vercel project add`
+- [x] REST API PATCH set `rootDirectory` plus framework `nextjs` so the monorepo deploy resolves workspace packages
+- [x] `vercel --prod --yes` from repo root, 11 static pages, `/sprint/[id]` at 52.2 kB First Load JS
+- [x] `portfolio.meta.json` populated with `liveUrl` and `deployedAt`, every route HTTP 200
 
-#### Day 6 (Sat) · Case Study + Automation
-- [ ] Write case study MDX
-- [ ] Trigger automation, review + merge PRs
+#### Day 6 (Sat) · Sprint Model Refactor and 6 Card Gallery
+- [x] Original four sprint setup replaced with six monthly sprints (jan-2026 to jun-2026): four completed, one in flight, one backlog
+- [x] Ticket schema expanded: TicketType enum is now bug, development, enhancement, deployment plus `eta` and `createdAt` fields
+- [x] Sprint card colors are status driven via `getStatusColorToken`
+- [x] `/sprints` gallery moved to a three column grid on xl. Six brief fixtures hand authored
 
-#### Day 7 (Sun) · Phase 3 Wrap
-- [ ] Buffer day, lessons learned, prep Phase 4
+#### Day 7 (Sun) · Filter Bar, KPI Strips, Layout Flip
+- [x] SprintFilters client component with three select controls writing to search params
+- [x] TopKpiStrip with seven tiles (Total, Completion percent, Done, In Review, In Progress, Open, Avg Cycle Time)
+- [x] StoryPointsStrip with six tiles (SP Completed, In Progress, In Review, Open, Total SP, Missing SP)
+- [x] Page layout flipped: filters plus KPI strips on top, team KPI cards in the middle, deep dive, then the AI brief at the bottom
 
-**Week 8 Deliverables**:
-- Project 3 live on production
-- Case study published
-- Automation fires
+**Week 10 Deliverables**: Project 3 live at `ai-portfolio-sprint-intelligence.vercel.app`, six monthly sprints, every detail page filterable.
+
+---
+
+### Week 11 — Project 3 Polish Continuation
+
+**Week goal**: Per ticket charts, BI content rewrite, throughput redesign, scheduler refinements, cross sprint filter awareness.
+
+#### Day 1 (Mon) · Per Ticket Charts, Future Sprint Variant, Redeploy
+- [x] Eight new chart components: AvgDaysInStatus, PriorityBreakdown, EtaCard, CycleTimeBars, AgingTickets, WorkloadByAssignee, SprintHistoryTable, SprintTrendCharts
+- [x] Eight new kpi-calc helpers plus manifest enrichment so cross sprint widgets cost zero kB
+- [x] Future sprint variant: `/sprint/jun-2026` hides sprint health charts and leads with the ETA card plus the workload allocation preview
+- [x] Production redeploy, `/sprint/[id]` First Load JS at 52.4 kB, all routes HTTP 200
+
+#### Day 2 (Mon) · BI Content, Chart Fixes, Hover Affordances
+- [x] All 138 tickets rewritten to BI plus data engineering work themed around real anchor projects (NAI, NC2, Pulse, Jira SSOT, RevOps, Fabric, CX OKR, Tableau, dbt, ADF)
+- [x] Avg time in current status chart fixed via a new `daysInStatus` field per ticket with realistic distributions
+- [x] Priority breakdown bars sized correctly (`h-full` grid item, `h-56` chart, `minHeight 4px`). Hero copy refreshed
+- [x] Native `title` hover affordances added across every dashboard surface
+
+#### Day 3 (Tue) · Throughput Redesign, Deep Dive Merge, Heatmap, Gantt, Trend Chart Fix
+- [x] ThroughputChart redesigned with large bar value numbers, proportional bar heights, a clear legend
+- [x] Deep dive merged with the top filter. EngineerTabs plus the `eng` URL param removed
+- [x] TicketHeatmap renders tickets across rows plus sprint days across columns, color coded by status
+- [x] TicketGantt renders continuous timeline bars per ticket. `/sprint/[id]` First Load JS dropped to 50.4 kB
+
+#### Day 4 (Wed) · Realistic Work Schedule, Sparse Heatmap, Gantt Run Segments, Trend Numbers
+- [x] New `workSchedule` field per ticket synthesized in `scripts/generate-monthly-sprints.py` with a priority aware start day, weekends skipped
+- [x] Mid sprint additions anchor work schedule to their `createdAt` week, blocked tickets show idle days
+- [x] TicketTimeline switched from contiguous span to `activeDays` plus runs. Heatmap renders sparse cells, Gantt renders one bar segment per run
+- [x] SprintTrendCharts columns display both segment counts above the bar
+
+#### Day 5 (Thu) · Sequential Engineer Queue, Team View Heatmap, Ticket Progress Rename
+- [x] Per engineer queue scheduler replaces `work_schedule_for`. Tickets sort by priority then `createdAt`, sequential per engineer, no parallel work
+- [x] Realistic distribution: an engineer with five P1 five SP tickets now walks them sequentially over the month
+- [x] DeepDivePanel TeamView renders the activity heatmap plus the Ticket progress chart alongside team aggregate tiles
+- [x] Section heading renamed from Ticket Gantt to Ticket progress
+
+#### Day 6 (Fri) · Per Engineer Per Week Scheduler, Drop Ticket Progress
+- [x] Scheduler rewritten to per week with per engineer profile variation (pace bias, week shape, carryover habit, side ticket probability, weekly meeting skip day)
+- [x] Sparse engineer carryover boost stretches few tickets across more weeks. Within week stagger prevents identical start days
+- [x] TicketGantt component deleted. Activity heatmap carries the full distribution signal alone
+- [x] KPI parity verified: schedule rewrite changes only heatmap inputs
+
+#### Day 7 (Sat) · Filter Aware Cross Sprint History Table and Trend Charts
+- [x] `page.tsx` computes `filteredHistoryRows` by iterating every full sprint fixture and reapplying the top filter
+- [x] Recomputed totals feed SprintHistoryTable and SprintTrendCharts so the bottom widgets respect the top filter
+- [x] All six fixtures already in the per route bundle so the addition costs zero kB
+- [x] Live deploy verified, filter combinations flow through history plus trends, all routes HTTP 200
+
+**Week 11 Deliverables**: Polish round complete with per ticket charts, sequential scheduler with per engineer profile variation, activity heatmap, filter aware cross sprint history.
+
+---
+
+### Week 12 — Project 3 Wrap up
+
+**Week goal**: Light mode theming pass, case study, `v1.0-sprint-intelligence` tag.
+
+#### Day 1 (Sun) · Light Mode Theming Pass for Charts, KPI Tiles, Heatmap Cells
+- [x] Chart palette tokens plus `heatmap-empty` added to `packages/design-system/src/tokens/colors.css` with hex plus RGB triplet forms
+- [x] `.light` block overrides each chart token with a darker saturated shade so bars and tiles read on a white card
+- [x] Tailwind config registers the palette so utility classes (`text-chart-emerald`, `bg-chart-rose/70`) theme automatically
+- [x] Sweep across 17 chart components replaces inline hex literals and stale Tailwind classes with `var(--chart-*)` and `text-chart-*` references
+
+#### Day 2 (Mon) · README Polish and portfolioCard Refresh
+- [x] Rewrite `apps/sprint-intelligence/README.md` to reflect the final shipped product
+- [x] Refresh `portfolio.meta.json` portfolioCard problem, approach, impact strings to match the case study framing
+- [x] Refresh the live demos list across root README, portfolio site, and AI portfolio mirror
+- [x] Flip the Project 3 row to Live plus Case study in the master plan once W12.D3 case study URL is wired
+
+#### Day 3 (Tue) · Sprint Intelligence Case Study
+- [x] Write `docs/case-studies/sprint-intelligence.md` (approximately 1500 words, nine sections mirroring narrative-generator.md)
+- [x] Three engineering moments: monorepo `rootDirectory` workaround, search param driven filter pattern, manifest enrichment for zero cost cross sprint widgets
+- [x] Wire `caseStudyUrl` in `apps/sprint-intelligence/portfolio.meta.json` to the GitHub blob URL
+- [x] Sweep forward references in app README to point at the case study, refresh the portfolio site gallery
+
+#### Day 4 (Wed) · `v1.0-sprint-intelligence` Tag, Cat A/B/C Audit, Plan Close
+- [x] Add Project 3 Pending Follow ups section to `master-plan.md`
+- [x] Cat A tech debt: prune dead `TeamWorkloadCard.tsx`, audit section eyebrows on `/sprint/[id]/page.tsx`
+- [x] Push annotated git tag `v1.0-sprint-intelligence` with a summary message referencing the case study, live URL, and engineering moments
+- [x] Flip Project 3 row to Shipped v1.0 across `plan.html` and `master-plan.md` plus refresh the Current Phase, Week, Day, Status, Next Action, Blockers cells
+
+**Week 12 Deliverables**: Light mode theming pass complete, case study published, `v1.0-sprint-intelligence` annotated git tag, Project 3 row flipped to Shipped v1.0.
 
 ---
 
