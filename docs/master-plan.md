@@ -109,6 +109,17 @@ User scope call: Cat C items are real-resource-cost themes, not Project-1-close 
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
 
+### 2026-05-17 · 🧭 W10.D7 - Sprint Intelligence filter bar, KPI strips, layout flip
+- **`SprintFilters` client component.** Three select controls (assignee, ticket type, status) that read and write search params via `router.replace` with `scroll: false`. Mirrors the W10.D1 `eng=N` drill down URL pattern. A clear all link appears when any filter is active.
+- **`TopKpiStrip` server component.** Seven tiles in a `grid-cols-2 sm:grid-cols-4 lg:grid-cols-7` layout: Total Tickets, Completion percent (with a thin progress bar), Done, In Review, In Progress, Open, Avg Cycle Time. Coherent shades: emerald for done, violet for in review, amber for in progress, slate for open.
+- **`StoryPointsStrip` server component.** Six tiles: SP Completed, In Progress, In Review, Open, Total SP, plus Missing SP (count of tickets with `estimate === 0`). The Missing tile turns rose when greater than zero.
+- **Page layout flipped.** Filters bar, then the two KPI strips back to back, then the existing eight team KPI cards (status mix, blocked, workload respect the filters; burndown, velocity, cycle time chart, throughput, scope creep, carryover stay sprint level), then per engineer deep dive, then the AI brief at the bottom as the closing narrative.
+- **Filter aware engineer deep dives.** A temporary fixture clone with `tickets: filteredTickets` feeds `buildEngineerDeepDive` so the workload card and the per engineer tabs both reflect the active filter. The `BlockedCard` uses the same trick.
+- **New `lib/kpi-calc.ts` helpers.** `applyTicketFilters`, `hasActiveFilter`, `computeTopKpis`, `computeStoryPointsKpis`. Exported `TICKET_TYPE_OPTIONS` and `TICKET_STATUS_OPTIONS` arrays back the select labels. Fixed the stale `sprint-44` reference in `estimateOldestBlockAge` to `mar-2026`.
+- **Brief panel** now wrapped in a `Suspense` boundary with `BriefSkeleton` fallback so the rest of the page paints first.
+- **Build clean** via direct `next build`. 13 static pages prerendered, `/sprint/[id]` First Load JS at 52.9 kB versus 52.2 kB after W10.D6 (a 0.7 kB cost for the new client filter, under the 60 kB target). Type check clean. No deploy this day.
+- **Next**: W10.D8 - Per ticket charts, future sprint variant, redeploy. Add `AvgDaysInStatusChart`, `PriorityBreakdownChart`, `EtaCard`, `CycleTimeBars` (per ticket), `AgingTicketsCard`, `WorkloadByAssignee` (DE Tracker style with completion ratio fill), `SprintHistoryTable` across all six sprints, `SprintTrendCharts` for tickets closed plus SP per sprint. Branch the page for the future sprint (`jun-2026`). Update `portfolio.meta.json` `deployedAt`. Run `vercel --prod --yes` from the repo root.
+
 ### 2026-05-17 · 📅 W10.D6 - Sprint Intelligence monthly sprint model and 6-card gallery
 - **Six monthly sprints replace the bi-weekly four.** `jan-2026` through `jun-2026`. Four completed (jan healthy, feb scope creep absorbed, mar blocked, apr recovered), may in flight at day 17 of 31, jun is the backlog sprint with sixteen tickets already earmarked across payments v2, mobile app v2 scaffold, and the telemetry pipeline groundwork.
 - **Generator scripts** keep the bulk reproducible. `scripts/generate-monthly-sprints.py` authors 138 hand curated tickets across the six sprints and computes burndown, cycle time, and per engineer cycle time from the ticket data. `scripts/generate-monthly-briefs.py` emits the six brief fixtures.

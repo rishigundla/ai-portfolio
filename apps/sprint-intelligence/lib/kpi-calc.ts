@@ -12,6 +12,7 @@ import type {
   TicketPriority,
   TicketSpec,
   TicketStatus,
+  TicketType,
 } from './full-sprints'
 import type { TeamMember } from './sprints'
 
@@ -113,7 +114,7 @@ function estimateOldestBlockAge(fixture: SprintFixture): number {
   // Blocked sprint character known from the fixture summary.
   // Until we add per ticket block timestamps, we report the worst case
   // staleness based on the sprint window.
-  if (fixture.id === 'sprint-44') return 9
+  if (fixture.id === 'mar-2026') return 9
   if (fixture.currentDay !== null) {
     return Math.max(1, Math.floor(fixture.currentDay / 2))
   }
@@ -412,3 +413,144 @@ export function buildEngineerDeepDive(
     statusMix: computeStatusDistribution(tickets),
   }
 }
+
+// ============================================================
+// Filter primitives (W10.D7)
+// ============================================================
+
+export interface TicketFilters {
+  assignee?: string
+  type?: string
+  status?: string
+}
+
+export function applyTicketFilters(
+  tickets: TicketSpec[],
+  filters: TicketFilters,
+): TicketSpec[] {
+  const { assignee, type, status } = filters
+  return tickets.filter((t) => {
+    if (assignee && assignee !== 'all' && t.assignee !== assignee) return false
+    if (type && type !== 'all' && t.type !== type) return false
+    if (status && status !== 'all' && t.status !== status) return false
+    return true
+  })
+}
+
+export function hasActiveFilter(filters: TicketFilters): boolean {
+  return (
+    (filters.assignee !== undefined && filters.assignee !== 'all') ||
+    (filters.type !== undefined && filters.type !== 'all') ||
+    (filters.status !== undefined && filters.status !== 'all')
+  )
+}
+
+// ============================================================
+// Top KPI strip (W10.D7)
+// Seven tiles mirroring the DE Tracker top row.
+// ============================================================
+
+export interface TopKpis {
+  totalTickets: number
+  completionPct: number
+  done: number
+  inReview: number
+  inProgress: number
+  open: number
+  avgCycleDays: number | null
+}
+
+export function computeTopKpis(
+  tickets: TicketSpec[],
+  fixture: SprintFixture,
+): TopKpis {
+  const total = tickets.length
+  const done = tickets.filter((t) => t.status === 'done').length
+  const inReview = tickets.filter((t) => t.status === 'in-review').length
+  const inProgress = tickets.filter((t) => t.status === 'in-progress').length
+  // Open / To do bucket on the DE Tracker top strip groups todo plus blocked.
+  const open = tickets.filter(
+    (t) => t.status === 'todo' || t.status === 'blocked',
+  ).length
+  const completionPct = total > 0 ? (done / total) * 100 : 0
+
+  // Avg cycle days: the last filled cycle time value from the fixture
+  // (sprint level signal). Filter aware enough for the strip without
+  // adding per ticket timestamps yet (W10.D8 lifts this to per ticket).
+  const filledCycle = fixture.cycleTime.days.filter(
+    (d): d is number => typeof d === 'number',
+  )
+  const avgCycleDays =
+    filledCycle.length > 0 ? filledCycle[filledCycle.length - 1] ?? null : null
+
+  return {
+    totalTickets: total,
+    completionPct,
+    done,
+    inReview,
+    inProgress,
+    open,
+    avgCycleDays,
+  }
+}
+
+// ============================================================
+// Story points strip (W10.D7)
+// Six tiles mirroring the DE Tracker story points row.
+// ============================================================
+
+export interface StoryPointsKpis {
+  spCompleted: number
+  spInProgress: number
+  spInReview: number
+  spOpen: number
+  spTotal: number
+  missingSp: number
+}
+
+export function computeStoryPointsKpis(tickets: TicketSpec[]): StoryPointsKpis {
+  let spCompleted = 0
+  let spInProgress = 0
+  let spInReview = 0
+  let spOpen = 0
+  let missingSp = 0
+  for (const t of tickets) {
+    if (t.estimate === 0) missingSp += 1
+    switch (t.status) {
+      case 'done':
+        spCompleted += t.estimate
+        break
+      case 'in-progress':
+        spInProgress += t.estimate
+        break
+      case 'in-review':
+        spInReview += t.estimate
+        break
+      case 'todo':
+      case 'blocked':
+        spOpen += t.estimate
+        break
+    }
+  }
+  const spTotal = spCompleted + spInProgress + spInReview + spOpen
+  return { spCompleted, spInProgress, spInReview, spOpen, spTotal, missingSp }
+}
+
+// ============================================================
+// Static option lists for the filter UI
+// ============================================================
+
+export const TICKET_TYPE_OPTIONS: { value: TicketType; label: string }[] = [
+  { value: 'bug', label: 'Bug' },
+  { value: 'development', label: 'Development' },
+  { value: 'enhancement', label: 'Enhancement' },
+  { value: 'deployment', label: 'Deployment' },
+]
+
+export const TICKET_STATUS_OPTIONS: { value: TicketStatus; label: string }[] = [
+  { value: 'done', label: 'Done' },
+  { value: 'in-review', label: 'In review' },
+  { value: 'in-progress', label: 'In progress' },
+  { value: 'todo', label: 'To do' },
+  { value: 'blocked', label: 'Blocked' },
+]
