@@ -6,9 +6,9 @@ interface CycleTimeBarsProps {
 }
 
 const TONE_COLOR: Record<string, string> = {
-  fast: '#34d399',
-  'on-track': '#fbbf24',
-  slow: '#fb7185',
+  fast: 'var(--chart-emerald)',
+  'on-track': 'var(--chart-amber)',
+  slow: 'var(--chart-rose)',
 }
 
 export function CycleTimeBars({ entries, baseline }: CycleTimeBarsProps) {
@@ -27,7 +27,7 @@ export function CycleTimeBars({ entries, baseline }: CycleTimeBarsProps) {
       </p>
       {top.map((entry) => {
         const widthPct = Math.min(100, (entry.days / max) * 100)
-        const color = TONE_COLOR[entry.tone] ?? '#94a3b8'
+        const color = TONE_COLOR[entry.tone] ?? 'var(--chart-slate)'
         const title = `${entry.ticketId} · ${entry.title} · ${entry.days.toFixed(1)}d (${entry.tone})`
         return (
           <div

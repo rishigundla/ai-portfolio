@@ -109,6 +109,15 @@ User scope call: Cat C items are real-resource-cost themes, not Project-1-close 
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
 
+### 2026-05-17 · 🌞 W10.D15 - Sprint Intelligence light-mode theming pass
+- **Theme-aware chart palette**. Added `chart-emerald`, `chart-amber`, `chart-violet`, `chart-rose`, `chart-slate`, `chart-blue`, `chart-indigo` plus `heatmap-empty` tokens to `packages/design-system/src/tokens/colors.css`. Each token has a hex form plus an RGB triplet so Tailwind utilities like `bg-chart-rose/70` honor alpha. Dark-mode values match the previous hardcoded shades. Light-mode overrides use darker saturated equivalents (`chart-emerald` = `#059669`, `chart-rose` = `#e11d48`, `heatmap-empty` = `#e9ecef`) that read on a white card.
+- **Tailwind config registration**. `packages/design-system/tailwind.config.ts` exposes the chart palette and the `heatmap-empty` color so `text-chart-emerald`, `bg-chart-rose/70`, `bg-heatmap-empty` all theme.
+- **Component sweep**. 6 files lost their `text-emerald-300` / `text-amber-300` / `text-violet-300` / `text-rose-300` / `text-slate-300` classes in favor of `text-chart-*`. 17 files lost their inline hex literals (`#34d399`, `#fb7185`, `#fbbf24`, `#a78bfa`, `#94a3b8`, `#60a5fa`, `#1a1f2e`, `#6366f1`) in favor of `var(--chart-*)` and `var(--heatmap-empty)` references in inline styles.
+- **`ACCENT_HEX` map in `page.tsx`** now resolves to `var(--chart-*)` and `var(--color-accent)` CSS variables instead of fixed hex literals so the per-sprint accent re-themes too.
+- **Build clean, type check clean**. `/sprint/[id]` First Load JS unchanged at 50.4 kB. Redeployed to prod, smoke checks across 4 routes (including a filtered URL) all returned HTTP 200.
+- **Dark mode looks identical** to before. **Light mode** now flips charts and tiles to readable saturated shades on the white card background.
+- **Next**: W11.D1 - Project 3 case study at `docs/case-studies/sprint-intelligence.md`. Three engineering moments: monorepo `rootDirectory` workaround, search-param-driven filter pattern, manifest enrichment pattern.
+
 ### 2026-05-17 · 🔎 W10.D14 - Sprint Intelligence filter-aware cross-sprint history and trend charts
 - **Cross-sprint widgets honor the top filter.** `page.tsx` now computes `filteredHistoryRows` by iterating every full sprint fixture from `getAllFullSprints()` and re-applying the top filter (`assignee` + `type` + `status`) to each sprint's ticket array. Recomputed per-sprint totals (`ticketCount`, `closedCount`, `openCount`, `spCompleted`, `spTotal`) feed both `SprintHistoryTable` and `SprintTrendCharts`.
 - **Zero bundle cost.** All six fixtures were already in the per-route bundle via the `FIXTURES` static map. `/sprint/[id]` First Load JS held at 50.4 kB.

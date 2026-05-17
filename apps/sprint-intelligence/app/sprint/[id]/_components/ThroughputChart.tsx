@@ -8,7 +8,7 @@ interface ThroughputChartProps {
 export function ThroughputChart({ summary, accentHex }: ThroughputChartProps) {
   const max = Math.max(summary.weekOne, summary.weekTwo, summary.priorAverage, 1)
   const deltaLabel = `${summary.deltaPct >= 0 ? '+' : ''}${summary.deltaPct.toFixed(0)}%`
-  const deltaColor = summary.deltaPct >= 0 ? '#34d399' : '#fb7185'
+  const deltaColor = summary.deltaPct >= 0 ? 'var(--chart-emerald)' : 'var(--chart-rose)'
 
   return (
     <div className="flex flex-col gap-4">
@@ -48,7 +48,7 @@ export function ThroughputChart({ summary, accentHex }: ThroughputChartProps) {
           label="Prior avg"
           value={summary.priorAverage}
           max={max}
-          color="#94a3b8"
+          color="var(--chart-slate)"
           muted
           title={`Trailing four-sprint average: ${summary.priorAverage} tickets per week`}
         />
@@ -64,7 +64,7 @@ export function ThroughputChart({ summary, accentHex }: ThroughputChartProps) {
         <span className="inline-flex items-center gap-1.5">
           <span
             className="h-2 w-2 rounded-sm"
-            style={{ backgroundColor: '#94a3b8', opacity: 0.6 }}
+            style={{ backgroundColor: 'var(--chart-slate)', opacity: 0.6 }}
           />
           Prior average
         </span>
@@ -96,7 +96,7 @@ function Bar({
     >
       <p
         className="font-display text-2xl font-bold mb-1"
-        style={{ color: muted ? '#94a3b8' : color, opacity: muted ? 0.85 : 1 }}
+        style={{ color: muted ? 'var(--chart-slate)' : color, opacity: muted ? 0.85 : 1 }}
       >
         {value}
       </p>

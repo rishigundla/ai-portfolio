@@ -111,9 +111,9 @@ function EngineerView({
           label="Workload score"
           tone={
             workload.tone === 'heavy'
-              ? '#fb7185'
+              ? 'var(--chart-rose)'
               : workload.tone === 'light'
-                ? '#94a3b8'
+                ? 'var(--chart-slate)'
                 : accentHex
           }
           value={workload.raw.toFixed(1)}
@@ -125,10 +125,10 @@ function EngineerView({
           label="Completion rate"
           tone={
             completion.percent >= 80
-              ? '#34d399'
+              ? 'var(--chart-emerald)'
               : completion.percent >= 50
-                ? '#fbbf24'
-                : '#fb7185'
+                ? 'var(--chart-amber)'
+                : 'var(--chart-rose)'
           }
           value={`${completion.percent.toFixed(0)}%`}
           unit=""
@@ -137,7 +137,7 @@ function EngineerView({
         <StatTile
           icon={<Clock className="h-3.5 w-3.5" />}
           label="Cycle time"
-          tone={cycle.beatsTeam ? '#34d399' : '#fb7185'}
+          tone={cycle.beatsTeam ? 'var(--chart-emerald)' : 'var(--chart-rose)'}
           value={cycle.personal !== null ? `${cycle.personal.toFixed(1)}d` : '—'}
           unit=""
           subtitle={
@@ -157,10 +157,10 @@ function EngineerView({
           label="Review queue"
           tone={
             review.tone === 'bottleneck'
-              ? '#fb7185'
+              ? 'var(--chart-rose)'
               : review.tone === 'queue'
-                ? '#fbbf24'
-                : '#34d399'
+                ? 'var(--chart-amber)'
+                : 'var(--chart-emerald)'
           }
           value={`${review.inReviewCount}`}
           unit="in review"
@@ -325,9 +325,9 @@ function TeamView({
           label="Team workload"
           tone={
             workload.tone === 'heavy'
-              ? '#fb7185'
+              ? 'var(--chart-rose)'
               : workload.tone === 'light'
-                ? '#94a3b8'
+                ? 'var(--chart-slate)'
                 : accentHex
           }
           value={workload.raw.toFixed(1)}
@@ -339,10 +339,10 @@ function TeamView({
           label="Team completion"
           tone={
             completion.percent >= 80
-              ? '#34d399'
+              ? 'var(--chart-emerald)'
               : completion.percent >= 50
-                ? '#fbbf24'
-                : '#fb7185'
+                ? 'var(--chart-amber)'
+                : 'var(--chart-rose)'
           }
           value={`${completion.percent.toFixed(0)}%`}
           unit=""
@@ -353,8 +353,8 @@ function TeamView({
           label="Team cycle time"
           tone={
             latestCycle !== null && latestCycle <= teamCycleBaseline
-              ? '#34d399'
-              : '#fb7185'
+              ? 'var(--chart-emerald)'
+              : 'var(--chart-rose)'
           }
           value={
             latestCycle !== null ? `${latestCycle.toFixed(1)}d` : `${teamCycleBaseline.toFixed(1)}d`
@@ -377,10 +377,10 @@ function TeamView({
           label="Review queue"
           tone={
             review.tone === 'bottleneck'
-              ? '#fb7185'
+              ? 'var(--chart-rose)'
               : review.tone === 'queue'
-                ? '#fbbf24'
-                : '#34d399'
+                ? 'var(--chart-amber)'
+                : 'var(--chart-emerald)'
           }
           value={`${review.inReviewCount}`}
           unit="in review"
@@ -530,17 +530,17 @@ function barWidth(count: number, mix: { count: number }[]): number {
 }
 
 function priorityColor(priority: string, accent: string): string {
-  if (priority === 'P0') return '#fb7185'
-  if (priority === 'P1') return '#fbbf24'
+  if (priority === 'P0') return 'var(--chart-rose)'
+  if (priority === 'P1') return 'var(--chart-amber)'
   if (priority === 'P2') return accent
-  return '#94a3b8'
+  return 'var(--chart-slate)'
 }
 
 function statusColor(status: string, accent: string): string {
-  if (status === 'done') return '#34d399'
+  if (status === 'done') return 'var(--chart-emerald)'
   if (status === 'in-review') return accent
-  if (status === 'in-progress') return '#fbbf24'
-  if (status === 'blocked') return '#fb7185'
+  if (status === 'in-progress') return 'var(--chart-amber)'
+  if (status === 'blocked') return 'var(--chart-rose)'
   return '#475569'
 }
 

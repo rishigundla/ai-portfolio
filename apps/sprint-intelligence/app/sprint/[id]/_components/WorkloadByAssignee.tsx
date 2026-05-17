@@ -5,8 +5,8 @@ interface WorkloadByAssigneeProps {
   entries: WorkloadByAssigneeEntry[]
 }
 
-const COLOR_DONE = '#34d399'
-const COLOR_OPEN = '#6366f1'
+const COLOR_DONE = 'var(--chart-emerald)'
+const COLOR_OPEN = 'var(--chart-indigo)'
 
 export function WorkloadByAssignee({ entries }: WorkloadByAssigneeProps) {
   return (

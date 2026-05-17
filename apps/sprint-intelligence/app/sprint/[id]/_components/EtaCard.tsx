@@ -30,8 +30,8 @@ type Tone = 'neutral' | 'warn' | 'danger'
 
 const TONE_TEXT: Record<Tone, string> = {
   neutral: 'text-text-primary',
-  warn: 'text-amber-300',
-  danger: 'text-rose-300',
+  warn: 'text-chart-amber',
+  danger: 'text-chart-rose',
 }
 
 const TONE_BORDER: Record<Tone, string> = {

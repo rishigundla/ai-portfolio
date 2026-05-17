@@ -14,9 +14,9 @@ const STATUS_ICON: Record<string, React.ComponentType<{ className?: string; stro
 }
 
 const STATUS_TONE: Record<string, string> = {
-  completed: 'text-emerald-300',
-  'in-progress': 'text-amber-300',
-  planned: 'text-slate-300',
+  completed: 'text-chart-emerald',
+  'in-progress': 'text-chart-amber',
+  planned: 'text-chart-slate',
 }
 
 export function SprintHistoryTable({ sprints, activeId }: SprintHistoryTableProps) {
@@ -72,8 +72,8 @@ export function SprintHistoryTable({ sprints, activeId }: SprintHistoryTableProp
                   </Link>
                 </td>
                 <td className="px-2 py-2 text-right text-text-secondary">{total}</td>
-                <td className="px-2 py-2 text-right text-emerald-300">{closed}</td>
-                <td className={`px-2 py-2 text-right ${open > 0 ? 'text-rose-300' : 'text-text-muted'}`}>
+                <td className="px-2 py-2 text-right text-chart-emerald">{closed}</td>
+                <td className={`px-2 py-2 text-right ${open > 0 ? 'text-chart-rose' : 'text-text-muted'}`}>
                   {open}
                 </td>
                 <td className="px-2 py-2 text-right text-text-primary">

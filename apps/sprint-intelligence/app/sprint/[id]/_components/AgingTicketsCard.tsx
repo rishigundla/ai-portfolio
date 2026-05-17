@@ -5,9 +5,9 @@ interface AgingTicketsCardProps {
 }
 
 const TONE_COLOR: Record<string, string> = {
-  fresh: '#34d399',
-  aging: '#fbbf24',
-  stale: '#fb7185',
+  fresh: 'var(--chart-emerald)',
+  aging: 'var(--chart-amber)',
+  stale: 'var(--chart-rose)',
 }
 
 const STATUS_LABEL: Record<string, string> = {
@@ -33,7 +33,7 @@ export function AgingTicketsCard({ entries }: AgingTicketsCardProps) {
       </p>
       {top.map((entry) => {
         const widthPct = Math.min(100, (entry.ageDays / max) * 100)
-        const color = TONE_COLOR[entry.tone] ?? '#94a3b8'
+        const color = TONE_COLOR[entry.tone] ?? 'var(--chart-slate)'
         const title = `${entry.ticketId} · ${entry.title} · ${entry.ageDays.toFixed(1)}d old (${entry.tone})`
         return (
           <div

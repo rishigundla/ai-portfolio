@@ -8,7 +8,7 @@ interface ScopeCreepCardProps {
 export function ScopeCreepCard({ summary, accentHex }: ScopeCreepCardProps) {
   const tone = summary.creepPct >= 20 ? 'severe' : summary.creepPct > 0 ? 'mild' : 'clean'
   const toneColor =
-    tone === 'severe' ? '#fb7185' : tone === 'mild' ? '#fbbf24' : '#34d399'
+    tone === 'severe' ? 'var(--chart-rose)' : tone === 'mild' ? 'var(--chart-amber)' : 'var(--chart-emerald)'
   const toneLabel =
     tone === 'severe' ? 'Scope creep' : tone === 'mild' ? 'Watch' : 'On plan'
 
@@ -29,7 +29,7 @@ export function ScopeCreepCard({ summary, accentHex }: ScopeCreepCardProps) {
         </span>
       </div>
       <div className="space-y-2">
-        <Row label="Planned" value={summary.planned} color="#94a3b8" max={summary.final} />
+        <Row label="Planned" value={summary.planned} color="var(--chart-slate)" max={summary.final} />
         <Row label="Final" value={summary.final} color={accentHex} max={summary.final} />
       </div>
       <div className="flex items-center justify-between text-[11px] font-mono text-text-muted pt-2 border-t border-surface-border">

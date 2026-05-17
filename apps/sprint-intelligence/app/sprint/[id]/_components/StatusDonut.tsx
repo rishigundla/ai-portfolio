@@ -31,7 +31,7 @@ export function StatusDonut({ distribution, accentHex }: StatusDonutProps) {
           <path
             key={arc.status}
             d={arcPath(cx, cy, radius, inner, arc.start, arc.end)}
-            fill={arc.status === 'blocked' ? '#fb7185' : accentHex}
+            fill={arc.status === 'blocked' ? 'var(--chart-rose)' : accentHex}
             opacity={arc.status === 'blocked' ? 0.9 : arc.opacity}
           />
         ))}
@@ -53,7 +53,7 @@ export function StatusDonut({ distribution, accentHex }: StatusDonutProps) {
           textAnchor="middle"
           fontSize="8"
           fontFamily="JetBrains Mono"
-          fill="#94a3b8"
+          fill="var(--chart-slate)"
         >
           TICKETS
         </text>
@@ -69,7 +69,7 @@ export function StatusDonut({ distribution, accentHex }: StatusDonutProps) {
               <span
                 className="h-2 w-2 rounded-sm shrink-0"
                 style={{
-                  backgroundColor: arc.status === 'blocked' ? '#fb7185' : accentHex,
+                  backgroundColor: arc.status === 'blocked' ? 'var(--chart-rose)' : accentHex,
                   opacity: arc.status === 'blocked' ? 0.9 : arc.opacity,
                 }}
               />

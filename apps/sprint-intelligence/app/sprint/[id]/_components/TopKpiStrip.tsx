@@ -27,28 +27,28 @@ export function TopKpiStrip({ kpis, filtered }: TopKpiStripProps) {
       <Tile
         label="Done"
         value={kpis.done}
-        accent="text-emerald-300"
+        accent="text-chart-emerald"
         icon={CheckCircle2}
         title={`${kpis.done} tickets in the Done status`}
       />
       <Tile
         label="In review"
         value={kpis.inReview}
-        accent="text-violet-300"
+        accent="text-chart-violet"
         icon={Eye}
         title={`${kpis.inReview} tickets sitting in code review`}
       />
       <Tile
         label="In progress"
         value={kpis.inProgress}
-        accent="text-amber-300"
+        accent="text-chart-amber"
         icon={Activity}
         title={`${kpis.inProgress} tickets actively in progress`}
       />
       <Tile
         label={filtered ? 'Open' : 'Open / To do'}
         value={kpis.open}
-        accent="text-slate-300"
+        accent="text-chart-slate"
         icon={Circle}
         title={`${kpis.open} tickets in To do or Blocked status`}
       />

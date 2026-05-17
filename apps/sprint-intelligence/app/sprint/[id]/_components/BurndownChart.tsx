@@ -64,7 +64,7 @@ export function BurndownChart({ points, accentHex, currentDay }: BurndownChartPr
             y1={padY}
             x2={toX(currentDay)}
             y2={padY + innerH}
-            stroke="#94a3b8"
+            stroke="var(--chart-slate)"
             strokeWidth="1"
             strokeDasharray="2 3"
             opacity="0.5"

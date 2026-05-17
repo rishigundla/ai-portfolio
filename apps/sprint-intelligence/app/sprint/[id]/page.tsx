@@ -68,15 +68,19 @@ import { SprintHistoryTable } from './_components/SprintHistoryTable'
 import { SprintTrendCharts } from './_components/SprintTrendCharts'
 import { BriefSkeleton } from './_components/skeletons'
 
+// Per-sprint accent shades resolve to the design-system tokens so charts
+// re-color when the user toggles light/dark mode. The header iconography
+// still varies per status via getColorClasses (Tailwind classes which
+// theme on their own).
 const ACCENT_HEX: Record<string, string> = {
-  accent: '#2dd4bf',
-  purple: '#a78bfa',
-  blue: '#60a5fa',
-  amber: '#fbbf24',
-  rose: '#fb7185',
-  teal: '#2dd4bf',
-  green: '#34d399',
-  slate: '#94a3b8',
+  accent: 'var(--color-accent)',
+  purple: 'var(--chart-violet)',
+  blue: 'var(--chart-blue)',
+  amber: 'var(--chart-amber)',
+  rose: 'var(--chart-rose)',
+  teal: 'var(--color-accent)',
+  green: 'var(--chart-emerald)',
+  slate: 'var(--chart-slate)',
 }
 
 interface PageProps {
@@ -141,7 +145,7 @@ export default async function SprintDetailPage({ params, searchParams }: PagePro
   const colors = getColorClasses(colorToken)
   const StatusIcon = getSprintStatusIcon(summary.status)
   const dayCount = sprintDaysElapsed(summary.startDate, summary.endDate)
-  const accentHex = ACCENT_HEX[colorToken] ?? ACCENT_HEX.accent ?? '#2dd4bf'
+  const accentHex = ACCENT_HEX[colorToken] ?? ACCENT_HEX.accent ?? 'var(--color-accent)'
 
   const isPlanned = summary.status === 'planned'
   const topKpis = computeTopKpis(filteredTickets, fixture)

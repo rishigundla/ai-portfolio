@@ -13,7 +13,7 @@ export function CarryoverCard({ summary, accentHex }: CarryoverCardProps) {
         ? 'mild'
         : 'clean'
   const toneColor =
-    tone === 'severe' ? '#fb7185' : tone === 'mild' ? '#fbbf24' : '#34d399'
+    tone === 'severe' ? 'var(--chart-rose)' : tone === 'mild' ? 'var(--chart-amber)' : 'var(--chart-emerald)'
   const toneLabel =
     summary.projected
       ? 'Projected'

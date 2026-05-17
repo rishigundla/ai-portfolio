@@ -10,25 +10,25 @@ export function StoryPointsStrip({ kpis }: StoryPointsStripProps) {
       <Tile
         label="SP completed"
         value={kpis.spCompleted}
-        accent="text-emerald-300"
+        accent="text-chart-emerald"
         title={`Story points completed (sum of estimates for Done tickets)`}
       />
       <Tile
         label="SP in progress"
         value={kpis.spInProgress}
-        accent="text-amber-300"
+        accent="text-chart-amber"
         title="Story points actively in progress"
       />
       <Tile
         label="SP in review"
         value={kpis.spInReview}
-        accent="text-violet-300"
+        accent="text-chart-violet"
         title="Story points sitting in code review"
       />
       <Tile
         label="SP open"
         value={kpis.spOpen}
-        accent="text-slate-300"
+        accent="text-chart-slate"
         title="Story points in To do or Blocked status"
       />
       <Tile
@@ -40,7 +40,7 @@ export function StoryPointsStrip({ kpis }: StoryPointsStripProps) {
       <Tile
         label="Missing SP"
         value={kpis.missingSp}
-        accent={kpis.missingSp > 0 ? 'text-rose-300' : 'text-text-muted'}
+        accent={kpis.missingSp > 0 ? 'text-chart-rose' : 'text-text-muted'}
         title="Tickets without a story point estimate. Indicates planning gaps."
       />
     </div>

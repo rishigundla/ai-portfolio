@@ -6,10 +6,10 @@ interface TicketHeatmapProps {
 }
 
 const STATUS_FILL: Record<string, string> = {
-  done: '#34d399',
-  'in-review': '#a78bfa',
-  'in-progress': '#fbbf24',
-  blocked: '#fb7185',
+  done: 'var(--chart-emerald)',
+  'in-review': 'var(--chart-violet)',
+  'in-progress': 'var(--chart-amber)',
+  blocked: 'var(--chart-rose)',
   todo: '#475569',
 }
 
@@ -98,7 +98,7 @@ export function TicketHeatmap({ timelines, sprintLength }: TicketHeatmapProps) {
                     key={d}
                     className="h-4 rounded-sm"
                     style={{
-                      backgroundColor: isActive ? fill : '#1a1f2e',
+                      backgroundColor: isActive ? fill : 'var(--heatmap-empty)',
                       opacity: isActive ? 0.85 : 1,
                     }}
                     title={

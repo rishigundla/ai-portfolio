@@ -29,7 +29,7 @@ export function BlockedCard({ summary, team }: BlockedCardProps) {
   }
 
   const tone = summary.oldestDaysBlocked >= 5 ? 'severe' : 'mild'
-  const accent = tone === 'severe' ? '#fb7185' : '#fbbf24'
+  const accent = tone === 'severe' ? 'var(--chart-rose)' : 'var(--chart-amber)'
 
   return (
     <>
@@ -128,7 +128,7 @@ function BlockerHistoryDialog({ summary, team, onClose }: BlockerHistoryDialogPr
       >
         <header className="flex items-start justify-between gap-4 p-4 sm:p-5 border-b border-surface-border">
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-widest text-rose-300 mb-1">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-chart-rose mb-1">
               Blocker history
             </p>
             <h2
@@ -160,7 +160,7 @@ function BlockerHistoryDialog({ summary, team, onClose }: BlockerHistoryDialogPr
               className="rounded-lg border border-surface-border bg-base-800/40 p-4 flex flex-col gap-2"
             >
               <div className="flex items-center justify-between gap-3 flex-wrap">
-                <span className="font-mono text-[10px] uppercase tracking-widest text-rose-300">
+                <span className="font-mono text-[10px] uppercase tracking-widest text-chart-rose">
                   {ticket.id} · {ticket.priority} · {ticket.estimate} SP
                 </span>
                 <span className="text-[11px] font-mono text-text-muted">

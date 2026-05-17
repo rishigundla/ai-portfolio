@@ -11,7 +11,7 @@ export function VelocityBar({ velocity, accentHex }: VelocityBarProps) {
   const baselinePct = (velocity.baseline / max) * 100
 
   const deltaLabel = `${velocity.deltaPct >= 0 ? '+' : ''}${velocity.deltaPct.toFixed(1)}%`
-  const deltaColor = velocity.beat ? '#34d399' : '#fb7185'
+  const deltaColor = velocity.beat ? 'var(--chart-emerald)' : 'var(--chart-rose)'
 
   return (
     <div className="flex flex-col gap-3">
@@ -26,7 +26,7 @@ export function VelocityBar({ velocity, accentHex }: VelocityBarProps) {
           label="Four sprint baseline"
           value={`${velocity.baseline} SP`}
           pct={baselinePct}
-          color="#94a3b8"
+          color="var(--chart-slate)"
         />
       </div>
       <div className="flex items-center gap-3 pt-2 border-t border-surface-border text-[11px] font-mono">

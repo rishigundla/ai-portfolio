@@ -61,6 +61,20 @@ const config: Config = {
           sev2: 'var(--color-severity-sev2)',
           sev3: 'var(--color-severity-sev3)',
         },
+        // Chart palette — theme-aware fills for Sprint Intelligence charts,
+        // heatmap cells, and KPI tile accents. Dark-mode values are the
+        // pre-W10.D15 hard-coded shades; light-mode values are darker
+        // saturated equivalents defined in colors.css.
+        chart: {
+          emerald: 'rgb(var(--chart-emerald-rgb) / <alpha-value>)',
+          amber: 'rgb(var(--chart-amber-rgb) / <alpha-value>)',
+          violet: 'rgb(var(--chart-violet-rgb) / <alpha-value>)',
+          rose: 'rgb(var(--chart-rose-rgb) / <alpha-value>)',
+          slate: 'rgb(var(--chart-slate-rgb) / <alpha-value>)',
+          blue: 'rgb(var(--chart-blue-rgb) / <alpha-value>)',
+          indigo: 'rgb(var(--chart-indigo-rgb) / <alpha-value>)',
+        },
+        'heatmap-empty': 'rgb(var(--heatmap-empty-rgb) / <alpha-value>)',
       },
       fontFamily: {
         display: ['Space Grotesk', 'system-ui', 'sans-serif'],

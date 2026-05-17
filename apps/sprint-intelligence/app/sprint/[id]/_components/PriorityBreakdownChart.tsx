@@ -11,8 +11,8 @@ const PRIORITY_LABEL: Record<string, string> = {
   P3: 'Minor (P3)',
 }
 
-const COLOR_DONE = '#34d399'
-const COLOR_REMAIN = '#fb7185'
+const COLOR_DONE = 'var(--chart-emerald)'
+const COLOR_REMAIN = 'var(--chart-rose)'
 
 export function PriorityBreakdownChart({ entries }: PriorityBreakdownChartProps) {
   if (entries.length === 0) {

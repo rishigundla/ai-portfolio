@@ -68,6 +68,30 @@
   --color-severity-sev2: #f59e0b;
   --color-severity-sev3: #eab308;
 
+  /* Chart palette — used by Sprint Intelligence KPI tiles, chart fills,
+     and the activity heatmap. Each token gets a hex and an RGB triplet so
+     Tailwind utilities like bg-chart-rose/70 can apply alpha. The .light
+     block overrides these with darker shades for contrast on a white
+     card. */
+  --chart-emerald: #34d399;
+  --chart-emerald-rgb: 52 211 153;
+  --chart-amber: #fbbf24;
+  --chart-amber-rgb: 251 191 36;
+  --chart-violet: #a78bfa;
+  --chart-violet-rgb: 167 139 250;
+  --chart-rose: #fb7185;
+  --chart-rose-rgb: 251 113 133;
+  --chart-slate: #94a3b8;
+  --chart-slate-rgb: 148 163 184;
+  --chart-blue: #60a5fa;
+  --chart-blue-rgb: 96 165 250;
+  --chart-indigo: #6366f1;
+  --chart-indigo-rgb: 99 102 241;
+
+  /* Heatmap empty cell — dark in dark mode, very light grey in light mode */
+  --heatmap-empty: #1a1f2e;
+  --heatmap-empty-rgb: 26 31 46;
+
   /* Overlay / gradient */
   --color-overlay: rgba(0, 0, 0, 0.7);
   --hero-gradient-start: rgba(10, 10, 15, 0.3);
@@ -114,4 +138,23 @@
   --scrollbar-track: #f1f3f5;
   --scrollbar-thumb: #ced4da;
   --scrollbar-thumb-hover: #adb5bd;
+
+  /* Chart palette overrides — saturated shades that read on a white card */
+  --chart-emerald: #059669;
+  --chart-emerald-rgb: 5 150 105;
+  --chart-amber: #d97706;
+  --chart-amber-rgb: 217 119 6;
+  --chart-violet: #7c3aed;
+  --chart-violet-rgb: 124 58 237;
+  --chart-rose: #e11d48;
+  --chart-rose-rgb: 225 29 72;
+  --chart-slate: #64748b;
+  --chart-slate-rgb: 100 116 139;
+  --chart-blue: #2563eb;
+  --chart-blue-rgb: 37 99 235;
+  --chart-indigo: #4f46e5;
+  --chart-indigo-rgb: 79 70 229;
+
+  --heatmap-empty: #e9ecef;
+  --heatmap-empty-rgb: 233 236 239;
 }

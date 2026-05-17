@@ -54,7 +54,7 @@ export class SprintErrorBoundary extends Component<
 
     return (
       <div className="rounded-lg border border-rose-500/40 bg-rose-500/5 p-5 flex flex-col gap-3">
-        <div className="inline-flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-rose-300">
+        <div className="inline-flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-chart-rose">
           <AlertOctagon className="h-3.5 w-3.5" />
           {this.props.label ?? 'Render error'}
         </div>

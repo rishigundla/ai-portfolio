@@ -37,10 +37,10 @@ export function CycleTimeChart({ points, summary, accentHex }: CycleTimeChartPro
 
   const trendColor =
     summary.trend === 'improving'
-      ? '#34d399'
+      ? 'var(--chart-emerald)'
       : summary.trend === 'rising'
-        ? '#fb7185'
-        : '#94a3b8'
+        ? 'var(--chart-rose)'
+        : 'var(--chart-slate)'
 
   const trendLabel =
     summary.trend === 'improving'
@@ -94,7 +94,7 @@ export function CycleTimeChart({ points, summary, accentHex }: CycleTimeChartPro
           y1={baselineY}
           x2={padX + innerW}
           y2={baselineY}
-          stroke="#94a3b8"
+          stroke="var(--chart-slate)"
           strokeWidth="1"
           strokeDasharray="3 3"
           opacity="0.5"

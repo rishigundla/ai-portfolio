@@ -5,11 +5,11 @@ interface AvgDaysInStatusChartProps {
 }
 
 const STATUS_COLOR: Record<string, string> = {
-  done: '#34d399',
-  'in-review': '#a78bfa',
-  'in-progress': '#fbbf24',
-  todo: '#94a3b8',
-  blocked: '#fb7185',
+  done: 'var(--chart-emerald)',
+  'in-review': 'var(--chart-violet)',
+  'in-progress': 'var(--chart-amber)',
+  todo: 'var(--chart-slate)',
+  blocked: 'var(--chart-rose)',
 }
 
 export function AvgDaysInStatusChart({ entries }: AvgDaysInStatusChartProps) {
@@ -23,7 +23,7 @@ export function AvgDaysInStatusChart({ entries }: AvgDaysInStatusChartProps) {
     <div className="flex flex-col gap-3">
       {entries.map((entry) => {
         const widthPct = Math.min(100, (entry.averageDays / max) * 100)
-        const color = STATUS_COLOR[entry.status] ?? '#94a3b8'
+        const color = STATUS_COLOR[entry.status] ?? 'var(--chart-slate)'
         const title = `${entry.label}: ${entry.count} ticket${entry.count === 1 ? '' : 's'} averaging ${entry.averageDays.toFixed(1)} days in this status`
         return (
           <div

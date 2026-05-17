@@ -40,9 +40,9 @@ export function TeamWorkloadCard({ deepDives, accentHex }: TeamWorkloadCardProps
           const pct = Math.min(150, dive.workload.index * 100)
           const toneColor =
             dive.workload.tone === 'heavy'
-              ? '#fb7185'
+              ? 'var(--chart-rose)'
               : dive.workload.tone === 'light'
-                ? '#94a3b8'
+                ? 'var(--chart-slate)'
                 : accentHex
           return (
             <li key={dive.engineer.id}>

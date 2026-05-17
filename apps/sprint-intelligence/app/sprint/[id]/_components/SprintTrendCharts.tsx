@@ -4,10 +4,10 @@ interface SprintTrendChartsProps {
   sprints: SprintSummary[]
 }
 
-const COLOR_CLOSED = '#34d399'
-const COLOR_OPEN = '#fb7185'
-const COLOR_SP_DONE = '#60a5fa'
-const COLOR_SP_REMAIN = '#fbbf24'
+const COLOR_CLOSED = 'var(--chart-emerald)'
+const COLOR_OPEN = 'var(--chart-rose)'
+const COLOR_SP_DONE = 'var(--chart-blue)'
+const COLOR_SP_REMAIN = 'var(--chart-amber)'
 
 export function SprintTrendCharts({ sprints }: SprintTrendChartsProps) {
   return (
