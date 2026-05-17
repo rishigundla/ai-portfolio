@@ -7,20 +7,17 @@ interface ThroughputChartProps {
 
 export function ThroughputChart({ summary, accentHex }: ThroughputChartProps) {
   const max = Math.max(summary.weekOne, summary.weekTwo, summary.priorAverage, 1)
-
   const deltaLabel = `${summary.deltaPct >= 0 ? '+' : ''}${summary.deltaPct.toFixed(0)}%`
   const deltaColor = summary.deltaPct >= 0 ? '#34d399' : '#fb7185'
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-4">
       <div className="flex items-baseline justify-between">
-        <div>
-          <p className="font-display text-3xl font-bold text-text-primary">
+        <div className="text-[10px] font-mono text-text-muted">
+          <span className="font-display text-2xl font-bold text-text-primary mr-1.5">
             {summary.total}
-          </p>
-          <p className="text-[11px] font-mono text-text-muted">
-            tickets closed
-          </p>
+          </span>
+          tickets closed
         </div>
         <div className="text-right">
           <p
@@ -32,18 +29,20 @@ export function ThroughputChart({ summary, accentHex }: ThroughputChartProps) {
           <p className="text-[10px] font-mono text-text-muted">vs prior average</p>
         </div>
       </div>
-      <div className="flex items-end gap-3 h-24 pt-2">
+      <div className="flex items-end gap-4 h-40 pt-2 border-b border-surface-border/40 pb-1">
         <Bar
           label="Week 1"
           value={summary.weekOne}
           max={max}
           color={accentHex}
+          title={`Week 1: ${summary.weekOne} tickets closed`}
         />
         <Bar
           label="Week 2"
           value={summary.weekTwo}
           max={max}
           color={accentHex}
+          title={`Week 2: ${summary.weekTwo} tickets closed`}
         />
         <Bar
           label="Prior avg"
@@ -51,7 +50,24 @@ export function ThroughputChart({ summary, accentHex }: ThroughputChartProps) {
           max={max}
           color="#94a3b8"
           muted
+          title={`Trailing four-sprint average: ${summary.priorAverage} tickets per week`}
         />
+      </div>
+      <div className="flex items-center gap-4 text-[10px] font-mono text-text-muted">
+        <span className="inline-flex items-center gap-1.5">
+          <span
+            className="h-2 w-2 rounded-sm"
+            style={{ backgroundColor: accentHex }}
+          />
+          This sprint
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <span
+            className="h-2 w-2 rounded-sm"
+            style={{ backgroundColor: '#94a3b8', opacity: 0.6 }}
+          />
+          Prior average
+        </span>
       </div>
     </div>
   )
@@ -63,33 +79,39 @@ function Bar({
   max,
   color,
   muted,
+  title,
 }: {
   label: string
   value: number
   max: number
   color: string
   muted?: boolean
+  title?: string
 }) {
   const heightPct = (value / max) * 100
   return (
-    <div className="flex-1 flex flex-col items-center gap-1.5">
-      <div className="w-full flex flex-col-reverse h-full">
+    <div
+      className="flex-1 flex flex-col items-center h-full"
+      title={title}
+    >
+      <p
+        className="font-display text-2xl font-bold mb-1"
+        style={{ color: muted ? '#94a3b8' : color, opacity: muted ? 0.85 : 1 }}
+      >
+        {value}
+      </p>
+      <div className="flex-1 w-full flex items-end justify-center">
         <div
-          className="w-full rounded-sm"
+          className="w-full rounded-t-sm"
           style={{
             height: `${heightPct}%`,
+            minHeight: '6px',
             backgroundColor: color,
             opacity: muted ? 0.5 : 0.9,
           }}
         />
       </div>
-      <p
-        className="text-[10px] font-mono"
-        style={{ color: muted ? '#94a3b8' : color }}
-      >
-        {value}
-      </p>
-      <p className="text-[9px] font-mono text-text-muted">{label}</p>
+      <p className="text-[10px] font-mono text-text-muted mt-1.5">{label}</p>
     </div>
   )
 }

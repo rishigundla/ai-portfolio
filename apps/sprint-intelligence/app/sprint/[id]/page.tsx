@@ -35,9 +35,11 @@ import {
   computeStatusDistribution,
   computeStoryPointsKpis,
   computeThroughputSummary,
+  computeTicketTimelines,
   computeTopKpis,
   computeVelocityComparison,
   computeWorkloadByAssignee,
+  getSprintLength,
   hasActiveFilter,
 } from '@/lib/kpi-calc'
 import { BurndownChart } from './_components/BurndownChart'
@@ -48,7 +50,7 @@ import { CycleTimeChart } from './_components/CycleTimeChart'
 import { ThroughputChart } from './_components/ThroughputChart'
 import { ScopeCreepCard } from './_components/ScopeCreepCard'
 import { CarryoverCard } from './_components/CarryoverCard'
-import { EngineerTabs } from './_components/EngineerTabs'
+import { DeepDivePanel } from './_components/DeepDivePanel'
 import { KpiCard } from './_components/KpiCard'
 import { StreamingBriefPanel } from './_components/StreamingBriefPanel'
 import { SprintErrorBoundary } from './_components/SprintErrorBoundary'
@@ -63,10 +65,7 @@ import { AgingTicketsCard } from './_components/AgingTicketsCard'
 import { WorkloadByAssignee } from './_components/WorkloadByAssignee'
 import { SprintHistoryTable } from './_components/SprintHistoryTable'
 import { SprintTrendCharts } from './_components/SprintTrendCharts'
-import {
-  BriefSkeleton,
-  EngineerTabsSkeleton,
-} from './_components/skeletons'
+import { BriefSkeleton } from './_components/skeletons'
 
 const ACCENT_HEX: Record<string, string> = {
   accent: '#2dd4bf',
@@ -155,6 +154,9 @@ export default async function SprintDetailPage({ params, searchParams }: PagePro
   )
   const aging = computeAgingTickets(filteredTickets)
   const workloadRows = computeWorkloadByAssignee(filteredTickets, team)
+  const timelines = computeTicketTimelines(filteredTickets, fixture)
+  const sprintLength = getSprintLength(fixture)
+  const activeAssignee = filters.assignee ?? 'all'
 
   return (
     <section className="section-container pt-12 pb-24">
@@ -363,12 +365,20 @@ export default async function SprintDetailPage({ params, searchParams }: PagePro
           <ShellSection
             eyebrow="Per engineer"
             title="Deep dive"
-            description="Tab strip per engineer. Workload score (priority weighted estimates against capacity), completion rate, personal versus team cycle time, review queue tile with a bottleneck flag when more than one ticket sits in review. Honors filters."
+            description="Honors the top filter. Pick a specific engineer in the assignee filter above to see their workload, cycle time, ticket list, and the per-day activity heatmap plus the per-ticket Gantt. With Everyone selected, the panel shows team total numbers."
           >
-            <SprintErrorBoundary label="Engineer deep dive unavailable">
-              <Suspense fallback={<EngineerTabsSkeleton />}>
-                <EngineerTabs deepDives={deepDives} accentHex={accentHex} />
-              </Suspense>
+            <SprintErrorBoundary label="Deep dive unavailable">
+              <DeepDivePanel
+                activeAssignee={activeAssignee}
+                filteredTickets={filteredTickets}
+                deepDives={deepDives}
+                team={team}
+                totalCapacity={totalCapacity}
+                fixture={fixture}
+                timelines={timelines}
+                sprintLength={sprintLength}
+                accentHex={accentHex}
+              />
             </SprintErrorBoundary>
           </ShellSection>
         </div>

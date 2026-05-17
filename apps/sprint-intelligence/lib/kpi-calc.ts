@@ -556,6 +556,102 @@ export const TICKET_STATUS_OPTIONS: { value: TicketStatus; label: string }[] = [
 ]
 
 // ============================================================
+// Per-ticket timelines (W10.D10) — feeds heatmap + gantt
+// ============================================================
+
+export interface TicketTimeline {
+  ticketId: string
+  title: string
+  status: TicketStatus
+  assignee: string
+  estimate: number
+  /** 1-indexed sprint day where the ticket entered active work, null if todo. */
+  startDay: number | null
+  /** 1-indexed sprint day where work ended (today for in-flight, closure day for done). */
+  endDay: number | null
+  /** Number of days the ticket spans inside the sprint window. */
+  spanDays: number
+  /** Plan ghost range used for todo tickets (start to start+estimate) regardless of work. */
+  plannedStartDay: number
+  plannedEndDay: number
+}
+
+function dayOfSprint(iso: string, sprintStartIso: string, sprintLength: number): number {
+  const created = new Date(iso).getTime()
+  const start = new Date(sprintStartIso).getTime()
+  const diff = (created - start) / (1000 * 60 * 60 * 24)
+  if (diff < 0) return 1
+  return Math.min(sprintLength, Math.floor(diff) + 1)
+}
+
+export function computeTicketTimelines(
+  tickets: TicketSpec[],
+  fixture: SprintFixture,
+): TicketTimeline[] {
+  const sprintStart = fixture.metadata.startDate
+  const sprintLength = daysBetween(
+    fixture.metadata.startDate,
+    fixture.metadata.endDate,
+  )
+  const sprintLengthInt = Math.max(1, Math.round(sprintLength) + 1)
+  const isInFlight = fixture.metadata.status === 'in-progress'
+  const todayDay = isInFlight
+    ? Math.min(sprintLengthInt, fixture.currentDay ?? sprintLengthInt)
+    : sprintLengthInt
+
+  const entries: TicketTimeline[] = tickets.map((t) => {
+    const createdDay = dayOfSprint(t.createdAt, sprintStart, sprintLengthInt)
+    const plannedSpan = Math.max(1, t.estimate || 1)
+    const plannedStartDay = Math.min(sprintLengthInt, createdDay)
+    const plannedEndDay = Math.min(sprintLengthInt, plannedStartDay + plannedSpan)
+
+    let startDay: number | null
+    let endDay: number | null
+
+    if (t.status === 'todo') {
+      startDay = null
+      endDay = null
+    } else if (t.status === 'done') {
+      startDay = plannedStartDay
+      endDay = Math.min(sprintLengthInt, plannedStartDay + plannedSpan)
+    } else {
+      // in-progress / in-review / blocked: span from start to today
+      startDay = plannedStartDay
+      endDay = Math.max(startDay, todayDay)
+    }
+
+    const span = startDay !== null && endDay !== null ? endDay - startDay + 1 : 0
+    return {
+      ticketId: t.id,
+      title: t.title,
+      status: t.status,
+      assignee: t.assignee,
+      estimate: t.estimate,
+      startDay,
+      endDay,
+      spanDays: span,
+      plannedStartDay,
+      plannedEndDay,
+    }
+  })
+
+  return entries.sort((a, b) => {
+    // Active tickets first (those with a non-null startDay), longest span first.
+    if (a.startDay === null && b.startDay !== null) return 1
+    if (b.startDay === null && a.startDay !== null) return -1
+    return b.spanDays - a.spanDays
+  })
+}
+
+export function getSprintLength(fixture: SprintFixture): number {
+  const days = daysBetween(
+    fixture.metadata.startDate,
+    fixture.metadata.endDate,
+  )
+  return Math.max(1, Math.round(days) + 1)
+}
+
+// ============================================================
 // Per ticket signals (W10.D8)
 // ============================================================
 

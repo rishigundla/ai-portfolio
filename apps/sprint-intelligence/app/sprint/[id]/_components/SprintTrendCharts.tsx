@@ -31,19 +31,24 @@ function ClosedPerSprintChart({ sprints }: { sprints: SprintSummary[] }) {
           <Legend color={COLOR_OPEN} label="Open" />
         </div>
       </div>
-      <div className="grid grid-cols-6 gap-3 items-end h-40">
+      <div className="grid grid-cols-6 gap-3 h-48">
         {sprints.map((s) => {
           const total = s.ticketCount
           const closed = s.closedCount ?? 0
-          const open = (s.openCount ?? Math.max(0, total - closed))
+          const open = s.openCount ?? Math.max(0, total - closed)
           const totalHeightPct = (total / max) * 100
           const closedShare = total > 0 ? closed / total : 0
+          const title = `${s.name}: ${closed} closed / ${open} open (${total} total)`
           return (
-            <div key={s.id} className="flex flex-col items-center gap-1.5">
+            <div
+              key={s.id}
+              className="flex flex-col items-center h-full"
+              title={title}
+            >
               <div className="flex-1 w-full flex items-end justify-center">
                 <div
                   className="w-9 rounded-t-sm overflow-hidden flex flex-col-reverse"
-                  style={{ height: `${totalHeightPct}%` }}
+                  style={{ height: `${totalHeightPct}%`, minHeight: '4px' }}
                 >
                   <div
                     className="w-full"
@@ -62,10 +67,10 @@ function ClosedPerSprintChart({ sprints }: { sprints: SprintSummary[] }) {
                   />
                 </div>
               </div>
-              <span className="text-[10px] font-mono text-text-muted">
+              <span className="text-[10px] font-mono text-text-muted mt-1.5">
                 {s.id.slice(0, 3)}
               </span>
-              <span className="text-[10px] font-mono text-text-secondary">
+              <span className="text-[10px] font-mono text-text-secondary mt-0.5">
                 {closed}/{total}
               </span>
             </div>
@@ -89,18 +94,23 @@ function StoryPointsPerSprintChart({ sprints }: { sprints: SprintSummary[] }) {
           <Legend color={COLOR_SP_REMAIN} label="Remaining" />
         </div>
       </div>
-      <div className="grid grid-cols-6 gap-3 items-end h-40">
+      <div className="grid grid-cols-6 gap-3 h-48">
         {sprints.map((s) => {
           const total = s.spTotal ?? 0
           const done = s.spCompleted ?? 0
           const totalHeightPct = (total / max) * 100
           const doneShare = total > 0 ? done / total : 0
+          const title = `${s.name}: ${done} completed SP / ${total - done} remaining SP (${total} total)`
           return (
-            <div key={s.id} className="flex flex-col items-center gap-1.5">
+            <div
+              key={s.id}
+              className="flex flex-col items-center h-full"
+              title={title}
+            >
               <div className="flex-1 w-full flex items-end justify-center">
                 <div
                   className="w-9 rounded-t-sm overflow-hidden flex flex-col-reverse"
-                  style={{ height: `${totalHeightPct}%` }}
+                  style={{ height: `${totalHeightPct}%`, minHeight: '4px' }}
                 >
                   <div
                     className="w-full"
@@ -119,10 +129,10 @@ function StoryPointsPerSprintChart({ sprints }: { sprints: SprintSummary[] }) {
                   />
                 </div>
               </div>
-              <span className="text-[10px] font-mono text-text-muted">
+              <span className="text-[10px] font-mono text-text-muted mt-1.5">
                 {s.id.slice(0, 3)}
               </span>
-              <span className="text-[10px] font-mono text-text-secondary">
+              <span className="text-[10px] font-mono text-text-secondary mt-0.5">
                 {done}/{total}
               </span>
             </div>

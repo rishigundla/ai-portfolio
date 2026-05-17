@@ -109,6 +109,18 @@ User scope call: Cat C items are real-resource-cost themes, not Project-1-close 
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
 
+### 2026-05-17 · 📈 W10.D10 - Sprint Intelligence throughput redesign, deep dive merge, heatmap, Gantt
+- **Throughput card redesigned.** Week 1 and Week 2 numbers render in `font-display text-2xl bold` above each bar; Prior avg uses muted slate as a reference. Bar heights proportional inside an `h-40` container, `minHeight: 6px` so even tiny week values stay visible. Legend below the chart clarifies the colors.
+- **SprintTrendCharts bars rendered.** The `items-end h-40` collapse bug on `ClosedPerSprintChart` and `StoryPointsPerSprintChart` is fixed using the same `h-full` + `minHeight: 4px` pattern that fixed `PriorityBreakdownChart` in W10.D9. Both charts now show visible stacked columns per sprint.
+- **Deep dive merged with the top filter.** `EngineerTabs` client component plus its `?eng` URL param removed entirely. File deleted, `EngineerTabsSkeleton` removed from `skeletons.tsx`. New `DeepDivePanel` server component reads `activeAssignee` from the top assignee filter:
+  - Everyone selected → Team total view (team workload, team completion, team cycle time versus baseline with delta, team review queue, plus priority mix and status mix bars).
+  - Specific engineer selected → that engineer's deep dive plus the two new visuals.
+- **`TicketHeatmap`** (new server component). Tickets across rows, sprint days across columns. Filled cells mark days the ticket was active, colored by status (done emerald, in-progress amber, in-review violet, blocked rose, todo slate). Top 12 tickets by descending active span. Day axis with marks at 1, 5, 10, 15, 20, 25, and the last day. `overflow-x-auto` so the 31-column May heatmap scrolls cleanly on mobile. Hover titles on every row plus every active cell.
+- **`TicketGantt`** (new server component). Same timeline data rendered as continuous horizontal bars per ticket, color graded by status. To-do tickets render as a dashed planned range at low opacity.
+- **`computeTicketTimelines` helper** in `lib/kpi-calc.ts` derives per-ticket `startDay` and `endDay` from `createdAt` + `estimate` + the sprint window + `currentDay` for in-flight sprints. Sorted by descending `spanDays`.
+- **Build clean, type check clean.** `/sprint/[id]` First Load JS dropped from 52.4 kB to 50.4 kB (a 2 kB win from removing the `EngineerTabs` client island). Redeployed to prod, all eight routes plus two filtered variants returned HTTP 200 on smoke check.
+- **Next**: W11.D1 - Project 3 case study at `docs/case-studies/sprint-intelligence.md`. Mirror the narrative-generator case study structure. Three engineering moments to cover: the monorepo `rootDirectory` workaround, the search-param-driven filter pattern (now shared across every surface after the engineer tab strip retirement), and the manifest enrichment pattern.
+
 ### 2026-05-17 · 🎨 W10.D9 - Sprint Intelligence polish: BI content, chart fixes, hover affordances
 - **All 138 tickets rewritten to BI / DE work.** Themed around the user real anchor projects: NAI / NC2 / NCI Pulse on Databricks, Jira SSOT data portal, RevOps ACV / GRR / QBR plus Balanced Scorecard, Microsoft Fabric Marketing plus Procurement, CX OKR Tableau dashboard, Tableau Server, Genie Space, dbt, ADF. Sprint narratives kept their shape (Jan healthy, Feb CFO escalation, Mar Fabric migration blocked, Apr recovered, May in flight, Jun backlog).
 - **Team roles refreshed** to a realistic BI / DE org: Senior BI Engineer, Senior Data Engineer (x2), Analytics Engineer, BI Engineer (x2), Junior Analytics Engineer, Data Engineering Manager.
