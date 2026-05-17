@@ -109,6 +109,14 @@ User scope call: Cat C items are real-resource-cost themes, not Project-1-close 
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
 
+### 2026-05-17 · 🔎 W10.D14 - Sprint Intelligence filter-aware cross-sprint history and trend charts
+- **Cross-sprint widgets honor the top filter.** `page.tsx` now computes `filteredHistoryRows` by iterating every full sprint fixture from `getAllFullSprints()` and re-applying the top filter (`assignee` + `type` + `status`) to each sprint's ticket array. Recomputed per-sprint totals (`ticketCount`, `closedCount`, `openCount`, `spCompleted`, `spTotal`) feed both `SprintHistoryTable` and `SprintTrendCharts`.
+- **Zero bundle cost.** All six fixtures were already in the per-route bundle via the `FIXTURES` static map. `/sprint/[id]` First Load JS held at 50.4 kB.
+- **Parity verified**: with no filter applied, the recomputed totals match the manifest pre-computed values exactly. Confirmed on `/sprint/may-2026` with no query string.
+- **Section descriptions updated** on both widgets to call out the filter scope ("Honors the top filter — pick an assignee, type, or status to scope every row").
+- **Live deploy**: smoke checks across `/`, `/sprints`, `/sprint/feb-2026`, `/sprint/feb-2026?assignee=eng-2`, `/sprint/feb-2026?type=bug`, `/sprint/may-2026?assignee=eng-1&type=development` all returned HTTP 200.
+- **Next**: W11.D1 - Project 3 case study at `docs/case-studies/sprint-intelligence.md`. Three engineering moments: monorepo `rootDirectory` workaround, search-param-driven filter pattern (now scoped across every dashboard surface and cross-sprint widget), manifest enrichment pattern.
+
 ### 2026-05-17 · 📆 W10.D13 - Sprint Intelligence per-engineer per-week scheduler, drop Ticket progress
 - **Per-week scheduler with per-engineer profile variation.** New `_sprint_weeks` helper carves each sprint into Mon-Fri blocks. Each engineer derives a hash-deterministic profile: role-based pace plus jitter, week shape (front-loaded / back-loaded / steady), carryover probability 0.3-0.7, carryover extra days 1-2, side ticket probability up to 0.35, plus a per-week meeting skip day. Every engineer's heatmap row reads recognizably different.
 - **Sparse engineer carryover boost.** Engineers with fewer active tickets than weeks get `carryover_prob` forced to 0.85+ so their few tickets stretch across more weeks. Eng-1 in Jan with 2 tickets now covers weeks 0-1 and 2-3 instead of crammed into weeks 0-1.

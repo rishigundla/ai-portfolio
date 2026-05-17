@@ -16,7 +16,8 @@ import {
   team,
   totalCapacity,
 } from '@/lib/sprints'
-import { getFullSprint } from '@/lib/full-sprints'
+import { getAllFullSprints, getFullSprint } from '@/lib/full-sprints'
+import type { SprintSummary } from '@/lib/sprints'
 import { getBrief } from '@/lib/briefs'
 import {
   applyTicketFilters,
@@ -157,6 +158,32 @@ export default async function SprintDetailPage({ params, searchParams }: PagePro
   const timelines = computeTicketTimelines(filteredTickets, fixture)
   const sprintLength = getSprintLength(fixture)
   const activeAssignee = filters.assignee ?? 'all'
+
+  // Per-sprint filtered totals for the cross-sprint widgets at the bottom.
+  // Recomputes every sprint's counts against the active filter so the
+  // history table and trend charts honor the top filter bar.
+  const filteredHistoryRows: SprintSummary[] = getAllFullSprints().map((full) => {
+    const sprintSummary = getSprintSummary(full.id)
+    const filteredSprintTickets = applyTicketFilters(full.tickets, filters)
+    const closedCount = filteredSprintTickets.filter((t) => t.status === 'done').length
+    const spCompleted = filteredSprintTickets
+      .filter((t) => t.status === 'done')
+      .reduce((acc, t) => acc + t.estimate, 0)
+    const spTotal = filteredSprintTickets.reduce((acc, t) => acc + t.estimate, 0)
+    return {
+      id: full.id,
+      name: full.metadata.name,
+      tagline: sprintSummary?.tagline ?? '',
+      startDate: full.metadata.startDate,
+      endDate: full.metadata.endDate,
+      status: full.metadata.status,
+      ticketCount: filteredSprintTickets.length,
+      closedCount,
+      openCount: filteredSprintTickets.length - closedCount,
+      spCompleted,
+      spTotal,
+    }
+  })
 
   return (
     <section className="section-container pt-12 pb-24">
@@ -386,17 +413,17 @@ export default async function SprintDetailPage({ params, searchParams }: PagePro
         <ShellSection
           eyebrow="Sprint history"
           title="All six sprints at a glance"
-          description="Closed plus open ticket counts, completion percent, and story points per sprint across jan to jun 2026. Click a row to navigate."
+          description="Closed plus open ticket counts, completion percent, and story points per sprint across jan to jun 2026. Honors the top filter — pick an assignee, type, or status to scope every row to that slice."
         >
-          <SprintHistoryTable sprints={sprints} activeId={summary.id} />
+          <SprintHistoryTable sprints={filteredHistoryRows} activeId={summary.id} />
         </ShellSection>
 
         <ShellSection
           eyebrow="Cross sprint trend"
           title="Tickets and story points per sprint"
-          description="Stacked column charts side by side. Closed versus open ticket counts on the left, completed versus remaining story points on the right."
+          description="Stacked column charts side by side. Closed versus open ticket counts on the left, completed versus remaining story points on the right. Honors the top filter."
         >
-          <SprintTrendCharts sprints={sprints} />
+          <SprintTrendCharts sprints={filteredHistoryRows} />
         </ShellSection>
 
         <ShellSection
