@@ -109,6 +109,13 @@ User scope call: Cat C items are real-resource-cost themes, not Project-1-close 
 
 _Last 7 days of work, kept rolling. Older entries archived per-phase below._
 
+### 2026-05-17 · 🛡️ W10.D3 - Sprint Intelligence skeleton states and error boundary
+- **Three skeleton components** in `_components/skeletons.tsx`. `BriefSkeleton` matches the streaming brief shape (progress strip plus prose block). `TeamWorkloadSkeleton` mirrors the eight engineer rows. `EngineerTabsSkeleton` mirrors the tab strip plus engineer panel layout with four stat tile placeholders plus a priority mix plus ticket list pair. Each uses Tailwind `animate-pulse` with consistent `base-700` placeholder bars.
+- **`SprintErrorBoundary`** in `_components/SprintErrorBoundary.tsx`. Small React class component (React still requires a class for `getDerivedStateFromError` plus `componentDidCatch`). Default fallback renders an inline rose tinted card with an `AlertOctagon` eyebrow, a short explanation, the error message in a mono `<pre>`, and a `Try again` button that resets the boundary state. `componentDidCatch` logs the failure so a developer can pick it up.
+- **Wired into three places.** Streaming brief panel gets a custom fallback that drops to the `fixture.metadata.summary` text inline so the section still has a sprint summary even when the streaming primitive throws. `TeamWorkloadCard` and `EngineerTabs` each wrap their Suspense in the default boundary so a bad URL state or a malformed engineer fixture stays contained.
+- **Build clean** via direct `next build`. `/sprint/[id]` First Load JS at 51.7 kB, unchanged from W10.D2 because the boundary and skeletons are small additions. Type check clean.
+- **Next**: W10.D4 - Lighthouse pass plus SEO. Run a fresh Lighthouse audit against `/`, `/sprints`, `/sprint/sprint-42` (representative). Target 90 plus perf, 95 plus a11y, 100 BP, 100 SEO. Fix any structural a11y issues (heading order, contrast, focus order). Make sure each `/sprint/[id]` route has `generateMetadata` that names the sprint.
+
 ### 2026-05-17 · 📱 W10.D2 - Sprint Intelligence responsive polish for narrow viewports
 - **EngineerTabs strip.** Now uses a horizontal scroll on narrow viewports (`flex` with `overflow-x-auto` and `shrink-0` on each tab button) and falls back to `flex-wrap` on `sm` and up. Stays calm on phones instead of wrapping eight tabs over three rows.
 - **BlockerHistoryDialog bottom sheet.** On phones the overlay aligns to `items-end`, the outer container drops horizontal padding, and the inner card uses `rounded-t-xl` with `max-h-[92vh]`. On `sm` and up it returns to the centered modal with rounded corners on all sides and `max-h-[80vh]`. Header and list padding tighten on mobile so more content fits.

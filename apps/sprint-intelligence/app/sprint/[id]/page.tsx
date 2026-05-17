@@ -40,6 +40,12 @@ import { EngineerTabs } from './_components/EngineerTabs'
 import { KpiCard } from './_components/KpiCard'
 import { StreamingBriefPanel } from './_components/StreamingBriefPanel'
 import { TeamWorkloadCard } from './_components/TeamWorkloadCard'
+import { SprintErrorBoundary } from './_components/SprintErrorBoundary'
+import {
+  BriefSkeleton,
+  EngineerTabsSkeleton,
+  TeamWorkloadSkeleton,
+} from './_components/skeletons'
 
 const ACCENT_HEX: Record<string, string> = {
   accent: '#2dd4bf',
@@ -147,7 +153,25 @@ export default async function SprintDetailPage({ params }: PageProps) {
           description="Claude streams the brief on page load. Five sections in order: executive summary, highlights, watch list, recommendations, talking points. The progress strip ticks through as each section heading lands."
         >
           {brief ? (
-            <StreamingBriefPanel brief={brief} />
+            <SprintErrorBoundary
+              label="Streaming brief unavailable"
+              fallback={
+                <div className="rounded-lg border border-rose-500/40 bg-rose-500/5 p-5">
+                  <p className="font-mono text-[10px] uppercase tracking-widest text-rose-300 mb-2">
+                    Streaming brief unavailable
+                  </p>
+                  <p className="text-sm text-text-secondary leading-relaxed">
+                    The streaming brief failed to render. The sprint summary
+                    captured at fixture time is below as a fallback.
+                  </p>
+                  <p className="text-text-secondary leading-relaxed mt-3 text-sm">
+                    {fixture.metadata.summary}
+                  </p>
+                </div>
+              }
+            >
+              <StreamingBriefPanel brief={brief} />
+            </SprintErrorBoundary>
           ) : (
             <p className="text-text-secondary leading-relaxed">
               {fixture.metadata.summary}
@@ -249,18 +273,14 @@ export default async function SprintDetailPage({ params }: PageProps) {
               title="Per engineer load against capacity"
               subtitle="Priority weighted estimates as a share of each engineer's capacity. Click an engineer to drop into their deep dive panel below."
             >
-              <Suspense
-                fallback={
-                  <div className="text-[11px] font-mono text-text-muted">
-                    Loading team workload...
-                  </div>
-                }
-              >
-                <TeamWorkloadCard
-                  deepDives={team.map((member) => buildEngineerDeepDive(fixture, member))}
-                  accentHex={accentHex}
-                />
-              </Suspense>
+              <SprintErrorBoundary label="Team workload unavailable">
+                <Suspense fallback={<TeamWorkloadSkeleton />}>
+                  <TeamWorkloadCard
+                    deepDives={team.map((member) => buildEngineerDeepDive(fixture, member))}
+                    accentHex={accentHex}
+                  />
+                </Suspense>
+              </SprintErrorBoundary>
             </KpiCard>
           </div>
         </ShellSection>
@@ -271,18 +291,14 @@ export default async function SprintDetailPage({ params }: PageProps) {
             title="Per engineer deep dive"
             description="Tab strip per engineer. Each engineer card shows workload score (priority weighted estimates against capacity), completion rate, personal versus team cycle time, and a review queue tile with a bottleneck flag when more than one ticket is sitting in review. Below the stat tiles, a priority mix bar and the engineer's ticket list."
           >
-            <Suspense
-              fallback={
-                <div className="text-[11px] font-mono text-text-muted">
-                  Loading engineer tabs...
-                </div>
-              }
-            >
-              <EngineerTabs
-                deepDives={team.map((member) => buildEngineerDeepDive(fixture, member))}
-                accentHex={accentHex}
-              />
-            </Suspense>
+            <SprintErrorBoundary label="Engineer deep dive unavailable">
+              <Suspense fallback={<EngineerTabsSkeleton />}>
+                <EngineerTabs
+                  deepDives={team.map((member) => buildEngineerDeepDive(fixture, member))}
+                  accentHex={accentHex}
+                />
+              </Suspense>
+            </SprintErrorBoundary>
           </ShellSection>
         </div>
       </div>
