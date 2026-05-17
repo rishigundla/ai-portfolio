@@ -3,12 +3,13 @@
 > Five AI-native portfolio projects anchored to real enterprise SaaS data work.
 > Built on Next.js + Vercel with a shared design system. Designed to complete the Senior BI Engineer → Data / Analytics Engineer transition.
 
-**Author**: Rishikesh Gundla — [rishikeshgundla.com](https://rishikeshgundla.com)
-**Status**: Phase 2 · Project 2 (Narrative Generator) v1.0 closing · 207 / 172 tasks · Project 1 shipped v1.0, Project 2 case study shipped (v1.0 tag lands W7.D5)
+**Author**: Rishikesh Gundla [rishikeshgundla.com](https://rishikeshgundla.com)
+**Status**: Phase 3 · Project 3 (Sprint Intelligence) live · 320 / 436 tasks · Projects 1 and 2 shipped v1.0, Project 3 wrap-up days W12.D2 to W12.D4 in flight (README + case study + v1.0 tag)
 **Live demos**:
-- Project 0 (Design System) — [ai-portfolio-design-system-docs.vercel.app](https://ai-portfolio-design-system-docs.vercel.app)
-- Project 1 (Dashboard Factory) — [ai-portfolio-dashboard-factory.vercel.app](https://ai-portfolio-dashboard-factory.vercel.app) · [case study](./docs/case-studies/dashboard-factory.md)
-- Project 2 (Narrative Generator) — [ai-portfolio-narrative-generator.vercel.app](https://ai-portfolio-narrative-generator.vercel.app) · [case study](./docs/case-studies/narrative-generator.md)
+- Project 0 (Design System) [ai-portfolio-design-system-docs.vercel.app](https://ai-portfolio-design-system-docs.vercel.app)
+- Project 1 (Dashboard Factory) [ai-portfolio-dashboard-factory.vercel.app](https://ai-portfolio-dashboard-factory.vercel.app) · [case study](./docs/case-studies/dashboard-factory.md)
+- Project 2 (Narrative Generator) [ai-portfolio-narrative-generator.vercel.app](https://ai-portfolio-narrative-generator.vercel.app) · [case study](./docs/case-studies/narrative-generator.md)
+- Project 3 (Sprint Intelligence) [ai-portfolio-sprint-intelligence.vercel.app](https://ai-portfolio-sprint-intelligence.vercel.app) · case study lands W12.D3
 
 **Plan**: [docs/master-plan.md](./docs/master-plan.md) · [docs/plan.html](./docs/plan.html) (interactive)
 
@@ -21,7 +22,7 @@
 | 0 | [Design System Docs](./apps/design-system-docs/) | Showcase of tokens, primitives, AI components | **Live** | [link](https://ai-portfolio-design-system-docs.vercel.app) |
 | 1 | [Instant Analytics Dashboard Factory](./apps/dashboard-factory/) | Pick a sample dataset → streaming AI profiling → interactive dashboard | **Live** · [case study](./docs/case-studies/dashboard-factory.md) | [link](https://ai-portfolio-dashboard-factory.vercel.app) |
 | 2 | [Dashboard-to-Deck Narrative Generator](./apps/narrative-generator/) | Sample dashboard → streaming AI readout → themed PPTX download | **Live** · [case study](./docs/case-studies/narrative-generator.md) | [link](https://ai-portfolio-narrative-generator.vercel.app) |
-| 3 | AI Sprint Intelligence Dashboard | Synthetic sprints → team + individual KPIs → AI meeting brief | Not started | — |
+| 3 | [AI Sprint Intelligence Dashboard](./apps/sprint-intelligence/) | Monthly sprints → filterable KPI dashboard + activity heatmap → AI meeting brief | **Live** (case study lands W12.D3) | [link](https://ai-portfolio-sprint-intelligence.vercel.app) |
 | 4 | Smart Metric Anomaly Alerting | Curated anomalies → AI root-cause narration with correlation analysis | Not started | — |
 | 5 | AI Pipeline Debugger & Self-Healer | PySpark failure scenarios → AI diagnosis + patch + mock Slack approval | Not started | — |
 
