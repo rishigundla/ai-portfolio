@@ -118,7 +118,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </a>{' '}
                 monorepo · built by{' '}
                 <a
-                  href="https://rishikeshgundla.com"
+                  href="https://portfolio-site-rishigundlas-projects.vercel.app/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-accent hover:text-accent-light underline underline-offset-4 decoration-accent/40 hover:decoration-accent"
