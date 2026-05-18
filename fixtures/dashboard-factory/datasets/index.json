@@ -57,7 +57,7 @@
       "title": "Customer Demographics",
       "tagline": "Customer segmentation by industry, size, region, and lifetime value",
       "domain": "cx",
-      "colorToken": "emerald",
+      "colorToken": "lime",
       "icon": "Users",
       "rowCount": 38,
       "thumbnail": "/datasets/customer-demographics.png"

@@ -33,6 +33,7 @@ export type ColorToken =
   | 'teal'
   | 'green'
   | 'emerald'
+  | 'lime'
 
 export interface DashboardSummary {
   id: string
@@ -157,11 +158,10 @@ const COLOR_CLASSES: Record<ColorToken, ColorClassSet> = {
     badgeText: 'text-green-300',
     badgeBorder: 'border-green-500/30',
   },
-  // Emerald — a distinct green hue (Tailwind emerald-500, #10b981) with
-  // more yellow than the accent (teal-400, #2dd4bf in dark / #0d9488 in
-  // light) and the legacy `teal` / `green` tokens. Added so the 6 dashboard
-  // cards in /dashboards can each carry a unique gradient. Cards previously
-  // assigned `green` or `teal` are reassigned across the unique palette.
+  // Emerald — left in the map for backward compatibility but no longer
+  // assigned to any card. Its 160° hue sits only 10° from the accent
+  // (170° teal), so at the 25% / 5% gradient stops the two tokens
+  // collapse into a near-identical green wash in both modes.
   emerald: {
     thumbBg: 'bg-gradient-to-br from-emerald-500/25 via-emerald-500/5 to-base-800',
     thumbBorder: 'border-emerald-500/20',
@@ -169,6 +169,19 @@ const COLOR_CLASSES: Record<ColorToken, ColorClassSet> = {
     badgeBg: 'bg-emerald-500/10',
     badgeText: 'text-emerald-300',
     badgeBorder: 'border-emerald-500/30',
+  },
+  // Lime — yellow-green at 75° on the color wheel. The empty 125° wheel
+  // gap between amber (45°) and the accent (170°) is the only place a
+  // truly distinct 6th hue fits. 95° from accent and 30° from amber
+  // means the gradient stays visually separate from every other card
+  // on the /dashboards grid at the 25% / 5% gradient stops.
+  lime: {
+    thumbBg: 'bg-gradient-to-br from-lime-500/25 via-lime-500/5 to-base-800',
+    thumbBorder: 'border-lime-500/20',
+    iconColor: 'text-lime-300',
+    badgeBg: 'bg-lime-500/10',
+    badgeText: 'text-lime-300',
+    badgeBorder: 'border-lime-500/30',
   },
 }
 

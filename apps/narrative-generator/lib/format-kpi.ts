@@ -70,6 +70,7 @@ export const HEX_BY_TOKEN: Record<ColorToken, string> = {
   teal: '#2dd4bf',
   green: '#34d399',
   emerald: '#10b981',
+  lime: '#84cc16',
 }
 
 /**

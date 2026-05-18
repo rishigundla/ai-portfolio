@@ -44,7 +44,7 @@ export interface DatasetManifest {
   datasets: DatasetSummary[]
 }
 
-export type ColorToken = 'accent' | 'purple' | 'blue' | 'amber' | 'rose' | 'teal' | 'emerald'
+export type ColorToken = 'accent' | 'purple' | 'blue' | 'amber' | 'rose' | 'teal' | 'emerald' | 'lime'
 
 // ============================================================
 // Manifest accessors
@@ -151,12 +151,10 @@ const COLOR_CLASSES: Record<ColorToken, ColorClassSet> = {
     badgeText: 'text-teal-300',
     badgeBorder: 'border-teal-500/30',
   },
-  // Emerald — a distinct green hue with more yellow than teal, used as the
-  // 6th unique gradient on the /datasets and /wireframe grids so no card
-  // shares its gradient with another. The accent (teal) brand color and
-  // the legacy `teal` token both blend to near-identical greens at the
-  // 25% / 5% gradient stops, so cards previously assigned `teal` are now
-  // reassigned here.
+  // Emerald — a green hue 160° on the color wheel. Left in the map for
+  // backward compatibility but no longer assigned to any card because at
+  // 25% / 5% gradient opacity its 10° hue separation from the accent (teal,
+  // 170°) collapses into a near-identical wash.
   emerald: {
     thumbBg: 'bg-gradient-to-br from-emerald-500/25 via-emerald-500/5 to-base-800',
     thumbBorder: 'border-emerald-500/20',
@@ -164,6 +162,19 @@ const COLOR_CLASSES: Record<ColorToken, ColorClassSet> = {
     badgeBg: 'bg-emerald-500/10',
     badgeText: 'text-emerald-300',
     badgeBorder: 'border-emerald-500/30',
+  },
+  // Lime — yellow-green at 75° on the color wheel. Sits in the empty
+  // 125° gap between amber (45°) and accent (170°), 95° from the brand
+  // teal, so the gradient stays distinct from accent at the 25% / 5%
+  // stops in both dark and light mode. Used as the 6th unique gradient
+  // on /datasets, /wireframe, and /dashboards.
+  lime: {
+    thumbBg: 'bg-gradient-to-br from-lime-500/25 via-lime-500/5 to-base-800',
+    thumbBorder: 'border-lime-500/20',
+    iconColor: 'text-lime-300',
+    badgeBg: 'bg-lime-500/10',
+    badgeText: 'text-lime-300',
+    badgeBorder: 'border-lime-500/30',
   },
 }
 

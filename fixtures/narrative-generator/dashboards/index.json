@@ -43,7 +43,7 @@
       "title": "Finance QBR Reporting",
       "tagline": "Revenue, margin, expense, and burn trajectory at the books closed checkpoint",
       "domain": "finance",
-      "colorToken": "emerald",
+      "colorToken": "lime",
       "icon": "DollarSign",
       "thumbnail": "/dashboards/finance-q3.png",
       "kpiCount": 5,
