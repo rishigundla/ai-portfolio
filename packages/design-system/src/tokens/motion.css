@@ -40,8 +40,9 @@
 }
 
 @keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 20px rgba(45, 212, 191, 0.3); }
-  50% { box-shadow: 0 0 40px rgba(45, 212, 191, 0.6); }
+  /* Themed via accent RGB triplet so the glow tracks light/dark mode. */
+  0%, 100% { box-shadow: 0 0 20px rgb(var(--color-accent-rgb) / 0.3); }
+  50% { box-shadow: 0 0 40px rgb(var(--color-accent-rgb) / 0.6); }
 }
 
 @keyframes float {
@@ -75,7 +76,7 @@
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(45, 212, 191, 0.1),
+    rgb(var(--color-accent-rgb) / 0.1),
     transparent
   );
   background-size: 200% 100%;

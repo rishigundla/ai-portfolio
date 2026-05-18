@@ -94,13 +94,15 @@ export const staggerItem: Variants = {
 }
 
 // Persistent animations (looping)
+// boxShadow strings route through the accent RGB triplet so the glow
+// re-themes between dark (teal-400) and light (teal-600) modes.
 export const pulseGlow = {
-  initial: { boxShadow: '0 0 20px rgba(45, 212, 191, 0.3)' },
+  initial: { boxShadow: '0 0 20px rgb(var(--color-accent-rgb) / 0.3)' },
   animate: {
     boxShadow: [
-      '0 0 20px rgba(45, 212, 191, 0.3)',
-      '0 0 40px rgba(45, 212, 191, 0.6)',
-      '0 0 20px rgba(45, 212, 191, 0.3)',
+      '0 0 20px rgb(var(--color-accent-rgb) / 0.3)',
+      '0 0 40px rgb(var(--color-accent-rgb) / 0.6)',
+      '0 0 20px rgb(var(--color-accent-rgb) / 0.3)',
     ],
     transition: {
       duration: 2,

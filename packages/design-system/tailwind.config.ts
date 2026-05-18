@@ -124,8 +124,11 @@ const config: Config = {
           '100%': { opacity: '1', transform: 'translate(-50%, -50%)' },
         },
         pulseGlow: {
-          '0%, 100%': { boxShadow: '0 0 20px rgba(45, 212, 191, 0.3)' },
-          '50%': { boxShadow: '0 0 40px rgba(45, 212, 191, 0.6)' },
+          // Themed via the accent RGB triplet so the glow tracks the
+          // active theme (dark teal-400, light teal-600). Mirrors the
+          // portfolio-site pulseGlow keyframe.
+          '0%, 100%': { boxShadow: '0 0 20px rgb(var(--color-accent-rgb) / 0.3)' },
+          '50%': { boxShadow: '0 0 40px rgb(var(--color-accent-rgb) / 0.6)' },
         },
         float: {
           '0%, 100%': { transform: 'translateY(0px)' },
@@ -145,11 +148,16 @@ const config: Config = {
         },
       },
       boxShadow: {
-        'glow-sm': '0 0 16px rgba(45, 212, 191, 0.15)',
-        'glow-md': '0 0 24px rgba(45, 212, 191, 0.15)',
-        'glow-lg': '0 0 40px rgba(45, 212, 191, 0.35)',
+        // Glow tokens route through the accent RGB triplet so the glow
+        // re-themes between dark (teal-400) and light (teal-600). The
+        // `card` shadow stays neutral (no accent component) and is left
+        // untouched. The `card-hover` shadow keeps its neutral drop
+        // shadow plus an accent-tinted halo that now themes.
+        'glow-sm': '0 0 16px rgb(var(--color-accent-rgb) / 0.15)',
+        'glow-md': '0 0 24px rgb(var(--color-accent-rgb) / 0.15)',
+        'glow-lg': '0 0 40px rgb(var(--color-accent-rgb) / 0.35)',
         card: '0 4px 12px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.02)',
-        'card-hover': '0 12px 32px rgba(0, 0, 0, 0.25), 0 0 16px rgba(45, 212, 191, 0.15)',
+        'card-hover': '0 12px 32px rgba(0, 0, 0, 0.25), 0 0 16px rgb(var(--color-accent-rgb) / 0.15)',
       },
     },
   },

@@ -16,7 +16,7 @@
   }
 
   ::selection {
-    background: rgba(45, 212, 191, 0.3);
+    background: rgb(var(--color-accent-rgb) / 0.3);
     color: #fff;
   }
 
