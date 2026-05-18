@@ -441,21 +441,32 @@ export function buildKpis(
 ): DashboardKpi[] {
   // 1. Schema measures (sum or avg per the schema's aggregation hint).
   const measureKpis: DashboardKpi[] = measures.slice(0, TARGET_KPI_COUNT).map((measure) => {
-    const values = rows
+    const raw = rows
       .map((r) => r[measure.name])
       .filter((v): v is number => typeof v === 'number')
 
+    // For `avg` measures, drop zero values before aggregation and sparkline
+    // bucketing. Zero in an avg context typically means "no data yet"
+    // (in-progress rows with completion_pct = 0, future-dated rows with
+    // grade = 0) rather than a real 0%. Including those zeros makes
+    // every avg KPI collapse to the same -100% delta and the same
+    // step-down sparkline shape. Sum aggregations keep zeros because a
+    // 0 row contributes 0 to the sum without distorting it.
+    const aggValues =
+      measure.aggregation === 'avg' ? raw.filter((v) => v !== 0) : raw
+    const sparkSource = aggValues.length > 0 ? aggValues : raw
+
     const aggregated =
-      measure.aggregation === 'avg' && values.length > 0
-        ? values.reduce((a, b) => a + b, 0) / values.length
-        : values.reduce((a, b) => a + b, 0)
+      measure.aggregation === 'avg' && aggValues.length > 0
+        ? aggValues.reduce((a, b) => a + b, 0) / aggValues.length
+        : aggValues.reduce((a, b) => a + b, 0)
 
     return {
       label: measure.label,
       value: formatKpiValue(aggregated, measure),
       rawValue: aggregated,
       unit: measure.unit,
-      sparkline: bucketSparkline(values, 8),
+      sparkline: bucketSparkline(sparkSource, 8),
       delta: period ? computeMeasureDelta(measure, period) : undefined,
     }
   })
@@ -641,13 +652,20 @@ function computeMeasureDelta(
   period: NonNullable<ReturnType<typeof splitByPeriod>>,
 ): KpiDelta | undefined {
   const aggregate = (rows: Record<string, unknown>[]): number | null => {
-    const values = rows
+    const raw = rows
       .map((r) => r[measure.name])
       .filter((v): v is number => typeof v === 'number')
-    if (values.length === 0) return null
-    return measure.aggregation === 'avg'
-      ? values.reduce((a, b) => a + b, 0) / values.length
-      : values.reduce((a, b) => a + b, 0)
+    if (raw.length === 0) return null
+    // Same zero-exclusion rule for avg as `buildKpis`. Without it the
+    // current period's "no data yet" rows collapse the mean to 0 and
+    // every avg measure delta becomes -100%, which made multiple KPI
+    // cards on the same dashboard look identical.
+    if (measure.aggregation === 'avg') {
+      const nonZero = raw.filter((v) => v !== 0)
+      if (nonZero.length === 0) return null
+      return nonZero.reduce((a, b) => a + b, 0) / nonZero.length
+    }
+    return raw.reduce((a, b) => a + b, 0)
   }
 
   const curr = aggregate(period.currentRows)

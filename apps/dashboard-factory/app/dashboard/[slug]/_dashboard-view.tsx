@@ -482,19 +482,33 @@ function HeatmapChartView({
     return m
   }, [data.cells])
 
+  // Widen the y-label column when long labels would otherwise truncate.
+  // Heatmap dimension labels are domain-driven (subjects, regions, products,
+  // industries) so 110px is too tight for strings like "Computer Science",
+  // "Financial Services", "Manufacturing & Logistics". Sample the longest
+  // label and derive a min width so the full text renders without truncation
+  // while keeping the column from dominating the chart on short labels.
+  const longestY = data.yLabels.reduce((acc, label) => Math.max(acc, label.length), 0)
+  const yColPx = Math.max(110, Math.min(180, longestY * 8 + 16))
+  // Data labels render inside each cell when the cell is large enough to fit
+  // legible text. With more than 60 cells the grid gets too dense for in-cell
+  // text and the labels fall back to hover-only via the title attribute.
+  const cellCount = data.xLabels.length * data.yLabels.length
+  const showCellLabels = cellCount <= 60
+
   return (
     <div className="w-full h-[280px] flex flex-col text-xs">
       {/* Grid: y-label column + one column per x-label */}
       <div
         className="flex-1 grid gap-px overflow-hidden rounded-md border border-surface-border"
         style={{
-          gridTemplateColumns: `minmax(80px, 110px) repeat(${data.xLabels.length}, minmax(0, 1fr))`,
+          gridTemplateColumns: `${yColPx}px repeat(${data.xLabels.length}, minmax(0, 1fr))`,
           gridTemplateRows: `repeat(${data.yLabels.length}, minmax(0, 1fr))`,
         }}
       >
         {data.yLabels.map((y) => (
           <React.Fragment key={y}>
-            <div className="flex items-center px-2 bg-surface text-text-secondary truncate">
+            <div className="flex items-center px-2 bg-surface text-text-secondary whitespace-nowrap">
               {y}
             </div>
             {data.xLabels.map((x) => {
@@ -504,14 +518,33 @@ function HeatmapChartView({
                 <div
                   key={`${x}|${y}`}
                   title={`${y} · ${x}: ${formatChartValue(v)} ${data.valueLabel}`}
-                  className="bg-surface relative"
+                  className="bg-surface relative flex items-center justify-center"
                   style={{
                     backgroundColor:
                       intensity > 0
                         ? `rgb(var(--color-accent-rgb) / ${0.08 + intensity * 0.8})`
                         : 'var(--color-surface)',
                   }}
-                />
+                >
+                  {showCellLabels && v > 0 && (
+                    <span
+                      className="font-mono text-[10px] font-semibold pointer-events-none"
+                      style={{
+                        // High intensity cells get a high contrast text color
+                        // that flips with the theme so the value reads against
+                        // the saturated accent fill. Low intensity cells use
+                        // the default text token so the label reads against
+                        // the near-surface background.
+                        color:
+                          intensity > 0.55
+                            ? 'var(--color-base-900)'
+                            : 'var(--color-text-primary)',
+                      }}
+                    >
+                      {formatChartValue(v)}
+                    </span>
+                  )}
+                </div>
               )
             })}
           </React.Fragment>
@@ -522,7 +555,7 @@ function HeatmapChartView({
       <div
         className="grid gap-px mt-2 text-text-muted font-mono text-[10px]"
         style={{
-          gridTemplateColumns: `minmax(80px, 110px) repeat(${data.xLabels.length}, minmax(0, 1fr))`,
+          gridTemplateColumns: `${yColPx}px repeat(${data.xLabels.length}, minmax(0, 1fr))`,
         }}
       >
         <div />
