@@ -4,7 +4,7 @@
     "title": "Healthcare Operations",
     "tagline": "Clinic visits, wait times, patient satisfaction, and charges across departments",
     "domain": "operations",
-    "colorToken": "teal",
+    "colorToken": "emerald",
     "icon": "Stethoscope",
     "thumbnail": "/datasets/healthcare-operations.png",
     "rowCount": 36,

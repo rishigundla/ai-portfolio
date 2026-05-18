@@ -32,6 +32,7 @@ export type ColorToken =
   | 'rose'
   | 'teal'
   | 'green'
+  | 'emerald'
 
 export interface DashboardSummary {
   id: string
@@ -155,6 +156,19 @@ const COLOR_CLASSES: Record<ColorToken, ColorClassSet> = {
     badgeBg: 'bg-green-500/10',
     badgeText: 'text-green-300',
     badgeBorder: 'border-green-500/30',
+  },
+  // Emerald — a distinct green hue (Tailwind emerald-500, #10b981) with
+  // more yellow than the accent (teal-400, #2dd4bf in dark / #0d9488 in
+  // light) and the legacy `teal` / `green` tokens. Added so the 6 dashboard
+  // cards in /dashboards can each carry a unique gradient. Cards previously
+  // assigned `green` or `teal` are reassigned across the unique palette.
+  emerald: {
+    thumbBg: 'bg-gradient-to-br from-emerald-500/25 via-emerald-500/5 to-base-800',
+    thumbBorder: 'border-emerald-500/20',
+    iconColor: 'text-emerald-300',
+    badgeBg: 'bg-emerald-500/10',
+    badgeText: 'text-emerald-300',
+    badgeBorder: 'border-emerald-500/30',
   },
 }
 

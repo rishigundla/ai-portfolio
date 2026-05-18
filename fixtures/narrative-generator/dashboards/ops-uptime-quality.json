@@ -4,7 +4,7 @@
     "title": "Platform Operations Dashboard",
     "tagline": "SLO performance, incident profile, and platform reliability across the trailing quarter",
     "domain": "operations",
-    "colorToken": "teal",
+    "colorToken": "amber",
     "icon": "Activity",
     "thumbnail": "/dashboards/ops-uptime-quality.png",
     "period": "Trailing 90 days",

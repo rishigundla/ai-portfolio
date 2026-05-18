@@ -44,7 +44,7 @@ export interface DatasetManifest {
   datasets: DatasetSummary[]
 }
 
-export type ColorToken = 'accent' | 'purple' | 'blue' | 'amber' | 'rose' | 'teal'
+export type ColorToken = 'accent' | 'purple' | 'blue' | 'amber' | 'rose' | 'teal' | 'emerald'
 
 // ============================================================
 // Manifest accessors
@@ -150,6 +150,20 @@ const COLOR_CLASSES: Record<ColorToken, ColorClassSet> = {
     badgeBg: 'bg-teal-500/10',
     badgeText: 'text-teal-300',
     badgeBorder: 'border-teal-500/30',
+  },
+  // Emerald — a distinct green hue with more yellow than teal, used as the
+  // 6th unique gradient on the /datasets and /wireframe grids so no card
+  // shares its gradient with another. The accent (teal) brand color and
+  // the legacy `teal` token both blend to near-identical greens at the
+  // 25% / 5% gradient stops, so cards previously assigned `teal` are now
+  // reassigned here.
+  emerald: {
+    thumbBg: 'bg-gradient-to-br from-emerald-500/25 via-emerald-500/5 to-base-800',
+    thumbBorder: 'border-emerald-500/20',
+    iconColor: 'text-emerald-300',
+    badgeBg: 'bg-emerald-500/10',
+    badgeText: 'text-emerald-300',
+    badgeBorder: 'border-emerald-500/30',
   },
 }
 
