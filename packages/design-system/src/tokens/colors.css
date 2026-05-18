@@ -87,6 +87,8 @@
   --chart-blue-rgb: 96 165 250;
   --chart-indigo: #6366f1;
   --chart-indigo-rgb: 99 102 241;
+  --chart-lime: #84cc16;
+  --chart-lime-rgb: 132 204 22;
 
   /* Heatmap empty cell — dark in dark mode, very light grey in light mode */
   --heatmap-empty: #1a1f2e;
@@ -169,6 +171,8 @@
   --chart-blue-rgb: 37 99 235;
   --chart-indigo: #4f46e5;
   --chart-indigo-rgb: 79 70 229;
+  --chart-lime: #4d7c0f;
+  --chart-lime-rgb: 77 124 15;
 
   --heatmap-empty: #e9ecef;
   --heatmap-empty-rgb: 233 236 239;

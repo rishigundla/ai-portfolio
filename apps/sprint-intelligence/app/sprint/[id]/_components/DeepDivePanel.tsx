@@ -17,7 +17,28 @@ import {
   type EngineerDeepDive,
   type TicketTimeline,
 } from '@/lib/kpi-calc'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@rishi/design-system/primitives'
 import { TicketHeatmap } from './TicketHeatmap'
+
+const STATUS_TONE_LABEL: Record<string, string> = {
+  done: 'Done',
+  'in-review': 'In review',
+  'in-progress': 'In progress',
+  blocked: 'Blocked',
+  todo: 'To do',
+}
+
+const PRIORITY_NAME: Record<string, string> = {
+  P0: 'Critical (P0)',
+  P1: 'High (P1)',
+  P2: 'Major (P2)',
+  P3: 'Minor (P3)',
+}
 
 interface DeepDivePanelProps {
   activeAssignee: string
@@ -176,32 +197,53 @@ function EngineerView({
           {priorityMix.length === 0 ? (
             <p className="text-[11px] text-text-muted">No tickets to show.</p>
           ) : (
-            <ul className="space-y-1.5">
-              {priorityMix.map((entry) => (
-                <li
-                  key={entry.priority}
-                  className="flex items-center gap-2 text-[11px] font-mono"
-                >
-                  <span className="text-text-primary font-semibold w-7">
-                    {entry.priority}
-                  </span>
-                  <div className="flex-1 h-2 rounded-sm bg-base-700 overflow-hidden">
-                    <div
-                      className="h-full rounded-sm"
-                      style={{
-                        width: `${barWidth(entry.count, priorityMix)}%`,
-                        backgroundColor: priorityColor(entry.priority, accentHex),
-                        opacity: 0.9,
-                      }}
-                    />
-                  </div>
-                  <span className="text-text-secondary">
-                    {entry.count} ticket{entry.count === 1 ? '' : 's'}
-                  </span>
-                  <span className="text-text-muted">{entry.storyPoints} SP</span>
-                </li>
-              ))}
-            </ul>
+            <TooltipProvider delayDuration={120} skipDelayDuration={60}>
+              <ul className="space-y-1.5">
+                {priorityMix.map((entry) => {
+                  const fill = priorityColor(entry.priority, accentHex)
+                  return (
+                    <Tooltip key={entry.priority}>
+                      <TooltipTrigger asChild>
+                        <li className="flex items-center gap-2 text-[11px] font-mono cursor-default">
+                          <span className="text-text-primary font-semibold w-7">
+                            {entry.priority}
+                          </span>
+                          <div className="flex-1 h-2 rounded-sm bg-base-700 overflow-hidden">
+                            <div
+                              className="h-full rounded-sm"
+                              style={{
+                                width: `${barWidth(entry.count, priorityMix)}%`,
+                                backgroundColor: fill,
+                                opacity: 0.9,
+                              }}
+                            />
+                          </div>
+                          <span className="text-text-secondary">
+                            {entry.count} ticket{entry.count === 1 ? '' : 's'}
+                          </span>
+                          <span className="text-text-muted">{entry.storyPoints} SP</span>
+                        </li>
+                      </TooltipTrigger>
+                      <TooltipContent sideOffset={6}>
+                        <div className="text-text-muted font-mono text-[10px] uppercase tracking-wider mb-1">
+                          {PRIORITY_NAME[entry.priority] ?? entry.priority}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span
+                            className="h-2 w-2 rounded-full shrink-0"
+                            style={{ backgroundColor: fill }}
+                          />
+                          <span className="text-text-secondary">Tickets</span>
+                          <span className="text-text-primary font-mono font-semibold">
+                            {entry.count} · {entry.storyPoints} SP
+                          </span>
+                        </div>
+                      </TooltipContent>
+                    </Tooltip>
+                  )
+                })}
+              </ul>
+            </TooltipProvider>
           )}
         </div>
 
@@ -214,38 +256,58 @@ function EngineerView({
               Nothing on this sprint.
             </p>
           ) : (
-            <ul className="space-y-1 max-h-48 overflow-y-auto pr-1">
-              {tickets.map((t) => (
-                <li
-                  key={t.id}
-                  className="flex items-center gap-2 text-[11px] font-mono py-1 border-b border-surface-border last:border-b-0"
-                  title={`${t.id} · ${t.title} · ${t.priority} · ${t.estimate} SP`}
-                >
-                  <span
-                    className="inline-flex shrink-0 items-center justify-center h-4 w-4 rounded-sm text-[9px] font-bold"
-                    style={{
-                      backgroundColor: statusColor(t.status, accentHex),
-                      // base-900 flips between near-black (dark mode) and near-white
-                      // (light mode), so the glyph text always reads against the chip
-                      // background. chart-* tokens lighten in dark mode and darken in
-                      // light mode, so a fixed dark text color disappeared in light.
-                      color: 'var(--color-base-900)',
-                      opacity: 0.95,
-                    }}
-                    aria-label={t.status}
-                  >
-                    {statusGlyph(t.status)}
-                  </span>
-                  <span className="text-text-secondary text-[10px] w-12">
-                    {t.priority}
-                  </span>
-                  <span className="text-text-primary truncate flex-1">
-                    {t.title}
-                  </span>
-                  <span className="text-text-muted">{t.estimate} SP</span>
-                </li>
-              ))}
-            </ul>
+            <TooltipProvider delayDuration={120} skipDelayDuration={60}>
+              <ul className="space-y-1 max-h-48 overflow-y-auto pr-1">
+                {tickets.map((t) => {
+                  const fill = statusColor(t.status, accentHex)
+                  const statusLabel = STATUS_TONE_LABEL[t.status] ?? t.status
+                  return (
+                    <Tooltip key={t.id}>
+                      <TooltipTrigger asChild>
+                        <li
+                          className="flex items-center gap-2 text-[11px] font-mono py-1 border-b border-surface-border last:border-b-0 cursor-default"
+                        >
+                          <span
+                            className="inline-flex shrink-0 items-center justify-center h-4 w-4 rounded-sm text-[9px] font-bold"
+                            style={{
+                              backgroundColor: fill,
+                              color: 'var(--color-base-900)',
+                              opacity: 0.95,
+                            }}
+                            aria-label={t.status}
+                          >
+                            {statusGlyph(t.status)}
+                          </span>
+                          <span className="text-text-secondary text-[10px] w-12">
+                            {t.priority}
+                          </span>
+                          <span className="text-text-primary truncate flex-1">
+                            {t.title}
+                          </span>
+                          <span className="text-text-muted">{t.estimate} SP</span>
+                        </li>
+                      </TooltipTrigger>
+                      <TooltipContent sideOffset={6}>
+                        <div className="text-text-muted font-mono text-[10px] uppercase tracking-wider mb-1">
+                          {t.id}
+                        </div>
+                        <div className="text-text-primary text-xs mb-1">{t.title}</div>
+                        <div className="flex items-center gap-2">
+                          <span
+                            className="h-2 w-2 rounded-full shrink-0"
+                            style={{ backgroundColor: fill }}
+                          />
+                          <span className="text-text-secondary">{statusLabel}</span>
+                          <span className="text-text-primary font-mono font-semibold">
+                            {t.priority} · {t.estimate} SP
+                          </span>
+                        </div>
+                      </TooltipContent>
+                    </Tooltip>
+                  )
+                })}
+              </ul>
+            </TooltipProvider>
           )}
         </div>
       </section>
@@ -400,32 +462,53 @@ function TeamView({
           {priorityMix.length === 0 ? (
             <p className="text-[11px] text-text-muted">No tickets to show.</p>
           ) : (
-            <ul className="space-y-1.5">
-              {priorityMix.map((entry) => (
-                <li
-                  key={entry.priority}
-                  className="flex items-center gap-2 text-[11px] font-mono"
-                >
-                  <span className="text-text-primary font-semibold w-7">
-                    {entry.priority}
-                  </span>
-                  <div className="flex-1 h-2 rounded-sm bg-base-700 overflow-hidden">
-                    <div
-                      className="h-full rounded-sm"
-                      style={{
-                        width: `${barWidth(entry.count, priorityMix)}%`,
-                        backgroundColor: priorityColor(entry.priority, accentHex),
-                        opacity: 0.9,
-                      }}
-                    />
-                  </div>
-                  <span className="text-text-secondary">
-                    {entry.count} ticket{entry.count === 1 ? '' : 's'}
-                  </span>
-                  <span className="text-text-muted">{entry.storyPoints} SP</span>
-                </li>
-              ))}
-            </ul>
+            <TooltipProvider delayDuration={120} skipDelayDuration={60}>
+              <ul className="space-y-1.5">
+                {priorityMix.map((entry) => {
+                  const fill = priorityColor(entry.priority, accentHex)
+                  return (
+                    <Tooltip key={entry.priority}>
+                      <TooltipTrigger asChild>
+                        <li className="flex items-center gap-2 text-[11px] font-mono cursor-default">
+                          <span className="text-text-primary font-semibold w-7">
+                            {entry.priority}
+                          </span>
+                          <div className="flex-1 h-2 rounded-sm bg-base-700 overflow-hidden">
+                            <div
+                              className="h-full rounded-sm"
+                              style={{
+                                width: `${barWidth(entry.count, priorityMix)}%`,
+                                backgroundColor: fill,
+                                opacity: 0.9,
+                              }}
+                            />
+                          </div>
+                          <span className="text-text-secondary">
+                            {entry.count} ticket{entry.count === 1 ? '' : 's'}
+                          </span>
+                          <span className="text-text-muted">{entry.storyPoints} SP</span>
+                        </li>
+                      </TooltipTrigger>
+                      <TooltipContent sideOffset={6}>
+                        <div className="text-text-muted font-mono text-[10px] uppercase tracking-wider mb-1">
+                          {PRIORITY_NAME[entry.priority] ?? entry.priority}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span
+                            className="h-2 w-2 rounded-full shrink-0"
+                            style={{ backgroundColor: fill }}
+                          />
+                          <span className="text-text-secondary">Tickets</span>
+                          <span className="text-text-primary font-mono font-semibold">
+                            {entry.count} · {entry.storyPoints} SP
+                          </span>
+                        </div>
+                      </TooltipContent>
+                    </Tooltip>
+                  )
+                })}
+              </ul>
+            </TooltipProvider>
           )}
         </div>
 
@@ -436,35 +519,55 @@ function TeamView({
           {statusMix.filter((s) => s.count > 0).length === 0 ? (
             <p className="text-[11px] text-text-muted">No tickets to show.</p>
           ) : (
-            <ul className="space-y-1.5">
-              {statusMix
-                .filter((s) => s.count > 0)
-                .map((entry) => (
-                  <li
-                    key={entry.status}
-                    className="flex items-center gap-2 text-[11px] font-mono"
-                    title={`${entry.label}: ${entry.count} tickets, ${entry.storyPoints} SP`}
-                  >
-                    <span className="text-text-primary font-semibold w-20">
-                      {entry.label}
-                    </span>
-                    <div className="flex-1 h-2 rounded-sm bg-base-700 overflow-hidden">
-                      <div
-                        className="h-full rounded-sm"
-                        style={{
-                          width: `${barWidth(entry.count, statusMix.filter((s) => s.count > 0))}%`,
-                          backgroundColor: statusColor(entry.status, accentHex),
-                          opacity: 0.9,
-                        }}
-                      />
-                    </div>
-                    <span className="text-text-secondary">
-                      {entry.count} ticket{entry.count === 1 ? '' : 's'}
-                    </span>
-                    <span className="text-text-muted">{entry.storyPoints} SP</span>
-                  </li>
-                ))}
-            </ul>
+            <TooltipProvider delayDuration={120} skipDelayDuration={60}>
+              <ul className="space-y-1.5">
+                {statusMix
+                  .filter((s) => s.count > 0)
+                  .map((entry) => {
+                    const fill = statusColor(entry.status, accentHex)
+                    return (
+                      <Tooltip key={entry.status}>
+                        <TooltipTrigger asChild>
+                          <li className="flex items-center gap-2 text-[11px] font-mono cursor-default">
+                            <span className="text-text-primary font-semibold w-20">
+                              {entry.label}
+                            </span>
+                            <div className="flex-1 h-2 rounded-sm bg-base-700 overflow-hidden">
+                              <div
+                                className="h-full rounded-sm"
+                                style={{
+                                  width: `${barWidth(entry.count, statusMix.filter((s) => s.count > 0))}%`,
+                                  backgroundColor: fill,
+                                  opacity: 0.9,
+                                }}
+                              />
+                            </div>
+                            <span className="text-text-secondary">
+                              {entry.count} ticket{entry.count === 1 ? '' : 's'}
+                            </span>
+                            <span className="text-text-muted">{entry.storyPoints} SP</span>
+                          </li>
+                        </TooltipTrigger>
+                        <TooltipContent sideOffset={6}>
+                          <div className="text-text-muted font-mono text-[10px] uppercase tracking-wider mb-1">
+                            {entry.label}
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span
+                              className="h-2 w-2 rounded-full shrink-0"
+                              style={{ backgroundColor: fill }}
+                            />
+                            <span className="text-text-secondary">Tickets</span>
+                            <span className="text-text-primary font-mono font-semibold">
+                              {entry.count} · {entry.storyPoints} SP
+                            </span>
+                          </div>
+                        </TooltipContent>
+                      </Tooltip>
+                    )
+                  })}
+              </ul>
+            </TooltipProvider>
           )}
         </div>
       </section>

@@ -940,13 +940,19 @@ export function buildFunnelChart(
   })
   const ordered = isMonotonicDesc ? semantic : [...semantic].sort((a, b) => b.value - a.value)
 
-  const max = ordered.reduce((m, s) => Math.max(m, s.value), 0)
+  // Share-of-total percentage so the displayed values across every bar in
+  // a single funnel chart sum to exactly 100% (the user-facing audit
+  // requirement). Bar widths are still computed in the view from value/max
+  // so the visual proportionality of stage drop-off is preserved.
+  const sumValue = ordered.reduce((acc, s) => acc + s.value, 0)
   const total = rows.length
-  const stages = ordered.map((s) => ({
-    label: s.label,
-    value: s.value,
-    pct: max > 0 ? (s.value / max) * 100 : 0,
-  }))
+  const stages = roundPctSumTo100(
+    ordered.map((s) => ({
+      label: s.label,
+      value: s.value,
+      pct: sumValue > 0 ? (s.value / sumValue) * 100 : 0,
+    })),
+  )
 
   return {
     id: 'funnel',
@@ -961,6 +967,23 @@ export function buildFunnelChart(
       valueLabel: 'Records',
     },
   }
+}
+
+// Adjust a set of percentage values so the integer-rounded labels sum to
+// exactly 100. Floating-point share computations otherwise leave a 99 or
+// 101 total once each stage is `.toFixed(0)` in the view. The largest
+// stage absorbs the residual so the visual impact stays minimal.
+function roundPctSumTo100<T extends { pct: number }>(stages: T[]): T[] {
+  if (stages.length === 0) return stages
+  const rounded = stages.map((s) => ({ ...s, pct: Math.round(s.pct) }))
+  const diff = 100 - rounded.reduce((acc, s) => acc + s.pct, 0)
+  if (diff === 0) return rounded
+  let maxIdx = 0
+  for (let i = 1; i < rounded.length; i++) {
+    if (rounded[i]!.pct > rounded[maxIdx]!.pct) maxIdx = i
+  }
+  rounded[maxIdx] = { ...rounded[maxIdx]!, pct: rounded[maxIdx]!.pct + diff }
+  return rounded
 }
 
 /**
@@ -986,13 +1009,18 @@ export function buildFunnelChartFromMeasures(
     })
     .filter((s) => s.value > 0)
 
-  const max = stages.reduce((m, s) => Math.max(m, s.value), 0)
+  // Share-of-total percentage (sum = 100% across every stage), matching
+  // the dimension funnel path above so every funnel rendered in Project 1
+  // surfaces a coherent distribution rather than per-stage drop-off.
+  const sumValue = stages.reduce((acc, s) => acc + s.value, 0)
   const total = rows.length
-  const stagesWithPct = stages.map((s) => ({
-    label: s.label,
-    value: s.value,
-    pct: max > 0 ? (s.value / max) * 100 : 0,
-  }))
+  const stagesWithPct = roundPctSumTo100(
+    stages.map((s) => ({
+      label: s.label,
+      value: s.value,
+      pct: sumValue > 0 ? (s.value / sumValue) * 100 : 0,
+    })),
+  )
 
   return {
     id: 'measure-funnel',

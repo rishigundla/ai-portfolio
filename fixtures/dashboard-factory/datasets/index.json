@@ -46,7 +46,7 @@
       "id": "financial-complaints",
       "title": "Financial Complaints",
       "tagline": "Consumer complaint analysis with response rates, dispute outcomes, and product breakdowns",
-      "domain": "cx",
+      "domain": "finance",
       "colorToken": "rose",
       "icon": "FileWarning",
       "rowCount": 36,

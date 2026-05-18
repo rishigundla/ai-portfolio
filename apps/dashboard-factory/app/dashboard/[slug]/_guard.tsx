@@ -96,10 +96,14 @@ function DashboardSuccess({
         title={dataset.title}
         description={dataset.tagline}
       >
-        {/* Header strip */}
+        {/* Header strip. Icon container uses the solid badge background
+            + border (same classes the domain tag uses) so the icon and the
+            tag side-by-side read as the same dashboard accent. The gallery
+            cards keep the gradient thumbBg via getColorClasses; only the
+            detail page swaps in the solid set. */}
         <div className="flex items-center gap-4 mb-8 -mt-2">
           <div
-            className={`flex h-14 w-14 sm:h-16 sm:w-16 shrink-0 items-center justify-center rounded-xl border ${colors.thumbBorder} ${colors.thumbBg}`}
+            className={`flex h-14 w-14 sm:h-16 sm:w-16 shrink-0 items-center justify-center rounded-xl border ${colors.badgeBorder} ${colors.badgeBg}`}
           >
             <Icon
               className={`h-6 w-6 sm:h-7 sm:w-7 ${colors.iconColor}`}

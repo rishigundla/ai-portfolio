@@ -74,6 +74,27 @@ export const HEX_BY_TOKEN: Record<ColorToken, string> = {
 }
 
 /**
+ * CSS variable accent per dataset token. Both KPI value text and chart
+ * series use the same variable string so the live colors match exactly
+ * within a single dashboard. Each variable auto-themes between dark
+ * (bright -300/400 shade) and light (darker -600/700 shade) via the
+ * design system tokens. The teal-based tokens reuse var(--color-accent)
+ * which already themes. lime maps to var(--chart-lime) added in the
+ * design system for the Finance dashboard.
+ */
+export const ACCENT_VAR_BY_TOKEN: Record<ColorToken, string> = {
+  accent: 'var(--color-accent)',
+  purple: 'var(--chart-violet)',
+  blue: 'var(--chart-blue)',
+  amber: 'var(--chart-amber)',
+  rose: 'var(--chart-rose)',
+  teal: 'var(--color-accent)',
+  green: 'var(--chart-emerald)',
+  emerald: 'var(--chart-emerald)',
+  lime: 'var(--chart-lime)',
+}
+
+/**
  * Format a KPI delta line ("↑ 12.4% vs Q2") for both the on-screen
  * preview and the PPTX. Returns null when the KPI has no delta.
  */

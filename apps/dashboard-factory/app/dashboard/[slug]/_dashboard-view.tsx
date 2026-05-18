@@ -21,6 +21,12 @@ import {
   ZAxis,
 } from 'recharts'
 import { ChartCard, KpiCard } from '@rishi/design-system/components'
+import {
+  Tooltip as RadixTooltip,
+  TooltipContent as RadixTooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@rishi/design-system/primitives'
 import { cn } from '@rishi/design-system/lib/cn'
 import type {
   DashboardChart,
@@ -34,6 +40,13 @@ interface DashboardViewProps {
   layout: DashboardLayout
   /** Color classes from the dataset's colorToken — used to theme charts. */
   colors: ColorClassSet
+  /**
+   * Resolved hex string for the dataset's accent. Used to color KPI values,
+   * sparkline strokes, chart bars / lines / dots / data labels, and any
+   * other highlighted chart element so every chart pulls from the same
+   * dashboard accent (not the design system teal default).
+   */
+  accentHex: string
   /** Bar/donut click handlers — open the drill-down dialog on the parent. */
   onBarClick?: (dimensionKey: string, dimensionLabel: string, label: string) => void
   onDonutClick?: (dimensionKey: string, dimensionLabel: string, label: string) => void
@@ -49,6 +62,7 @@ interface DashboardViewProps {
 export function DashboardView({
   layout,
   colors,
+  accentHex,
   onBarClick,
   onDonutClick,
 }: DashboardViewProps) {
@@ -68,6 +82,7 @@ export function DashboardView({
             unit={kpi.unit}
             sparkline={kpi.sparkline}
             delta={kpi.delta}
+            accent={accentHex}
           />
         ))}
       </div>
@@ -92,6 +107,7 @@ export function DashboardView({
                   <ChartRenderer
                     chart={chart}
                     colors={colors}
+                    accentHex={accentHex}
                     onBarClick={onBarClick}
                     onDonutClick={onDonutClick}
                   />
@@ -202,6 +218,7 @@ function CustomTooltip({ active, payload, label }: TooltipProps<number, string>)
 export function ChartRenderer({
   chart,
   colors,
+  accentHex,
   onBarClick,
   onDonutClick,
 }: {
@@ -210,26 +227,30 @@ export function ChartRenderer({
    *  on the contract so callers can stay future-proof. Optional from W4.D7
    *  so reusable contexts (drill-down dialog) don't have to plumb it. */
   colors?: ColorClassSet
+  /** Dataset accent hex. Optional so the drill-down dialog can call without
+   *  threading it. Falls back to the design-system accent when omitted. */
+  accentHex?: string
   onBarClick?: (dimensionKey: string, dimensionLabel: string, label: string) => void
   onDonutClick?: (dimensionKey: string, dimensionLabel: string, label: string) => void
 }) {
+  const accent = accentHex ?? 'var(--color-accent)'
   switch (chart.data.type) {
     case 'bar':
-      return <BarChartView data={chart.data} colors={colors} onBarClick={onBarClick} />
+      return <BarChartView data={chart.data} colors={colors} accent={accent} onBarClick={onBarClick} />
     case 'line':
-      return <LineChartView data={chart.data} colors={colors} />
+      return <LineChartView data={chart.data} colors={colors} accent={accent} />
     case 'donut':
       return (
-        <DonutChartView data={chart.data} colors={colors} onDonutClick={onDonutClick} />
+        <DonutChartView data={chart.data} colors={colors} accent={accent} onDonutClick={onDonutClick} />
       )
     case 'heatmap':
-      return <HeatmapChartView data={chart.data} />
+      return <HeatmapChartView data={chart.data} accent={accent} />
     case 'scatter':
-      return <ScatterChartView data={chart.data} />
+      return <ScatterChartView data={chart.data} accent={accent} />
     case 'funnel':
-      return <FunnelChartView data={chart.data} onSegmentClick={onBarClick} />
+      return <FunnelChartView data={chart.data} accent={accent} onSegmentClick={onBarClick} />
     case 'histogram':
-      return <HistogramChartView data={chart.data} />
+      return <HistogramChartView data={chart.data} accent={accent} />
   }
 }
 
@@ -240,10 +261,12 @@ export function ChartRenderer({
 function BarChartView({
   data,
   colors: _colors,
+  accent = 'var(--color-accent)',
   onBarClick,
 }: {
   data: Extract<DashboardChartData, { type: 'bar' }>
   colors?: ColorClassSet
+  accent?: string
   onBarClick?: (dimensionKey: string, dimensionLabel: string, label: string) => void
 }) {
   if (data.bars.length === 0) {
@@ -280,11 +303,11 @@ function BarChartView({
           />
           <Tooltip
             content={<CustomTooltip />}
-            cursor={{ fill: 'rgb(var(--color-accent-rgb) / 0.08)' }}
+            cursor={{ fill: hexToRgba(accent, 0.08) }}
           />
           <Bar
             dataKey="value"
-            fill="var(--color-accent)"
+            fill={accent}
             fillOpacity={0.75}
             radius={[0, 4, 4, 0]}
             cursor={isClickable ? 'pointer' : undefined}
@@ -300,16 +323,36 @@ function BarChartView({
   )
 }
 
+// Convert a hex color (#RRGGBB) to an rgba() string at the given alpha.
+// Used for chart hover cursors and heatmap intensity tints so they share
+// the dataset accent without needing to maintain a parallel CSS variable.
+// Falls back to a teal accent if the input is not a 6-char hex (e.g.
+// caller passed a CSS variable string).
+function hexToRgba(hex: string, alpha: number): string {
+  if (!hex.startsWith('#') || hex.length !== 7) {
+    return `rgb(var(--color-accent-rgb) / ${alpha})`
+  }
+  const r = parseInt(hex.slice(1, 3), 16)
+  const g = parseInt(hex.slice(3, 5), 16)
+  const b = parseInt(hex.slice(5, 7), 16)
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`
+}
+
 function LineChartView({
   data,
   colors: _colors,
+  accent = 'var(--color-accent)',
 }: {
   data: Extract<DashboardChartData, { type: 'line' }>
   colors?: ColorClassSet
+  accent?: string
 }) {
   if (data.points.length === 0) {
     return <EmptyChart message="No time-series data" />
   }
+  // Unique gradient id per accent so two charts with different accents
+  // on the same page do not collide on the linearGradient id.
+  const gradId = `line-area-gradient-${accent.replace(/[^a-z0-9]/gi, '')}`
   return (
     <div className="w-full h-[280px]">
       <ResponsiveContainer width="100%" height="100%">
@@ -318,9 +361,9 @@ function LineChartView({
           margin={{ top: 8, right: 16, left: 0, bottom: 4 }}
         >
           <defs>
-            <linearGradient id="line-area-gradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="var(--color-accent)" stopOpacity={0.3} />
-              <stop offset="100%" stopColor="var(--color-accent)" stopOpacity={0} />
+            <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={accent} stopOpacity={0.3} />
+              <stop offset="100%" stopColor={accent} stopOpacity={0} />
             </linearGradient>
           </defs>
           <CartesianGrid
@@ -344,7 +387,7 @@ function LineChartView({
           <Tooltip
             content={<CustomTooltip />}
             cursor={{
-              stroke: 'var(--color-accent)',
+              stroke: accent,
               strokeWidth: 1,
               strokeDasharray: '3 3',
             }}
@@ -352,13 +395,13 @@ function LineChartView({
           <Area
             type="monotone"
             dataKey="value"
-            stroke="var(--color-accent)"
+            stroke={accent}
             strokeWidth={2}
-            fill="url(#line-area-gradient)"
-            dot={{ fill: 'var(--color-accent)', r: 3, strokeWidth: 0 }}
+            fill={`url(#${gradId})`}
+            dot={{ fill: accent, r: 3, strokeWidth: 0 }}
             activeDot={{
               r: 5,
-              fill: 'var(--color-accent-light)',
+              fill: accent,
               strokeWidth: 0,
             }}
           />
@@ -371,10 +414,12 @@ function LineChartView({
 function DonutChartView({
   data,
   colors: _colors,
+  accent = 'var(--color-accent)',
   onDonutClick,
 }: {
   data: Extract<DashboardChartData, { type: 'donut' }>
   colors?: ColorClassSet
+  accent?: string
   onDonutClick?: (dimensionKey: string, dimensionLabel: string, label: string) => void
 }) {
   if (data.slices.length === 0 || data.total === 0) {
@@ -386,6 +431,10 @@ function DonutChartView({
     if (!onDonutClick || label === 'Other') return
     onDonutClick(data.dimensionKey, data.dimensionLabel, label)
   }
+  // First slot resolves to the dataset accent so the donut leads with the
+  // dashboard's accent. Slots 2-6 stay in the chart palette for hue
+  // separation across slices.
+  const palette = [accent, ...PALETTE.slice(1)]
   return (
     <div className="w-full h-full flex items-center gap-4">
       {/* Donut + centered total label */}
@@ -409,7 +458,7 @@ function DonutChartView({
               {data.slices.map((_, i) => (
                 <Cell
                   key={i}
-                  fill={PALETTE[i % PALETTE.length]}
+                  fill={palette[i % palette.length]}
                   fillOpacity={0.85}
                 />
               ))}
@@ -419,7 +468,10 @@ function DonutChartView({
         </ResponsiveContainer>
         {/* Center text overlay, pointer-events-none so slice hover still works */}
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-          <div className="font-display text-2xl font-semibold text-text-primary leading-none">
+          <div
+            className="font-display text-2xl font-semibold leading-none"
+            style={{ color: accent }}
+          >
             {data.total}
           </div>
           <div className="font-mono text-[10px] uppercase tracking-wider text-text-muted mt-1">
@@ -440,7 +492,7 @@ function DonutChartView({
             >
               <span
                 className="h-2 w-2 rounded-full shrink-0"
-                style={{ backgroundColor: PALETTE[i % PALETTE.length] }}
+                style={{ backgroundColor: palette[i % palette.length] }}
               />
               <span className="flex-1 truncate text-text-secondary text-xs sm:text-sm">
                 {slice.label}
@@ -470,8 +522,10 @@ function EmptyChart({ message }: { message: string }) {
 
 function HeatmapChartView({
   data,
+  accent = 'var(--color-accent)',
 }: {
   data: Extract<DashboardChartData, { type: 'heatmap' }>
+  accent?: string
 }) {
   if (data.cells.length === 0 || data.max === 0) {
     return <EmptyChart message="No heatmap data" />
@@ -497,59 +551,85 @@ function HeatmapChartView({
   const showCellLabels = cellCount <= 60
 
   return (
-    <div className="w-full h-[280px] flex flex-col text-xs">
-      {/* Grid: y-label column + one column per x-label */}
-      <div
-        className="flex-1 grid gap-px overflow-hidden rounded-md border border-surface-border"
-        style={{
-          gridTemplateColumns: `${yColPx}px repeat(${data.xLabels.length}, minmax(0, 1fr))`,
-          gridTemplateRows: `repeat(${data.yLabels.length}, minmax(0, 1fr))`,
-        }}
-      >
-        {data.yLabels.map((y) => (
-          <React.Fragment key={y}>
-            <div className="flex items-center px-2 bg-surface text-text-secondary whitespace-nowrap">
-              {y}
-            </div>
-            {data.xLabels.map((x) => {
-              const v = cellMap.get(`${x}|${y}`) ?? 0
-              const intensity = data.max > 0 ? v / data.max : 0
-              return (
-                <div
-                  key={`${x}|${y}`}
-                  title={`${y} · ${x}: ${formatChartValue(v)} ${data.valueLabel}`}
-                  className="bg-surface relative flex items-center justify-center"
-                  style={{
-                    backgroundColor:
-                      intensity > 0
-                        ? `rgb(var(--color-accent-rgb) / ${0.08 + intensity * 0.8})`
-                        : 'var(--color-surface)',
-                  }}
-                >
-                  {showCellLabels && v > 0 && (
-                    <span
-                      className="font-mono text-[10px] font-semibold pointer-events-none"
-                      style={{
-                        // High intensity cells get a high contrast text color
-                        // that flips with the theme so the value reads against
-                        // the saturated accent fill. Low intensity cells use
-                        // the default text token so the label reads against
-                        // the near-surface background.
-                        color:
-                          intensity > 0.55
-                            ? 'var(--color-base-900)'
-                            : 'var(--color-text-primary)',
-                      }}
-                    >
-                      {formatChartValue(v)}
-                    </span>
-                  )}
-                </div>
-              )
-            })}
-          </React.Fragment>
-        ))}
-      </div>
+    <TooltipProvider delayDuration={120} skipDelayDuration={60}>
+      <div className="w-full h-[280px] flex flex-col text-xs">
+        {/* Grid: y-label column + one column per x-label. Each value-bearing
+            cell is wrapped in a Radix Tooltip so the hover surface renders
+            the same styled tooltip the rest of the dashboard uses. Native
+            title was a plain black box that did not theme; the Radix
+            primitive resolves to bg-surface-elevated + border-surface-border
+            in both modes. */}
+        <div
+          className="flex-1 grid gap-px overflow-hidden rounded-md border border-surface-border"
+          style={{
+            gridTemplateColumns: `${yColPx}px repeat(${data.xLabels.length}, minmax(0, 1fr))`,
+            gridTemplateRows: `repeat(${data.yLabels.length}, minmax(0, 1fr))`,
+          }}
+        >
+          {data.yLabels.map((y) => (
+            <React.Fragment key={y}>
+              <div className="flex items-center px-2 bg-surface text-text-secondary whitespace-nowrap">
+                {y}
+              </div>
+              {data.xLabels.map((x) => {
+                const v = cellMap.get(`${x}|${y}`) ?? 0
+                const intensity = data.max > 0 ? v / data.max : 0
+                const cell = (
+                  <div
+                    className="bg-surface relative flex items-center justify-center w-full h-full"
+                    style={{
+                      backgroundColor:
+                        intensity > 0
+                          ? hexToRgba(accent, 0.08 + intensity * 0.8)
+                          : 'var(--color-surface)',
+                    }}
+                  >
+                    {showCellLabels && v > 0 && (
+                      <span
+                        className="font-mono text-[10px] font-semibold pointer-events-none"
+                        style={{
+                          // High intensity cells get a high contrast text color
+                          // that flips with the theme so the value reads against
+                          // the saturated accent fill. Low intensity cells use
+                          // the default text token so the label reads against
+                          // the near-surface background.
+                          color:
+                            intensity > 0.55
+                              ? 'var(--color-base-900)'
+                              : 'var(--color-text-primary)',
+                        }}
+                      >
+                        {formatChartValue(v)}
+                      </span>
+                    )}
+                  </div>
+                )
+                return v > 0 ? (
+                  <RadixTooltip key={`${x}|${y}`}>
+                    <TooltipTrigger asChild>{cell}</TooltipTrigger>
+                    <RadixTooltipContent sideOffset={6}>
+                      <div className="text-text-muted font-mono text-[10px] uppercase tracking-wider mb-1">
+                        {y} · {x}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="h-2 w-2 rounded-full shrink-0"
+                          style={{ backgroundColor: accent }}
+                        />
+                        <span className="text-text-secondary">{data.valueLabel}</span>
+                        <span className="text-text-primary font-mono font-semibold">
+                          {formatChartValue(v)}
+                        </span>
+                      </div>
+                    </RadixTooltipContent>
+                  </RadixTooltip>
+                ) : (
+                  <React.Fragment key={`${x}|${y}`}>{cell}</React.Fragment>
+                )
+              })}
+            </React.Fragment>
+          ))}
+        </div>
 
       {/* x-axis labels under the grid (skipped first column for y-label gutter) */}
       <div
@@ -572,14 +652,14 @@ function HeatmapChartView({
         <div
           className="flex-1 h-1.5 rounded-full"
           style={{
-            background:
-              'linear-gradient(to right, rgb(var(--color-accent-rgb) / 0.08), rgb(var(--color-accent-rgb) / 0.88))',
+            background: `linear-gradient(to right, ${hexToRgba(accent, 0.08)}, ${hexToRgba(accent, 0.88)})`,
           }}
         />
         <span>{formatChartValue(data.max)}</span>
         <span className="text-text-secondary truncate">{data.valueLabel}</span>
       </div>
-    </div>
+      </div>
+    </TooltipProvider>
   )
 }
 
@@ -589,8 +669,10 @@ function HeatmapChartView({
 
 function ScatterChartView({
   data,
+  accent = 'var(--color-accent)',
 }: {
   data: Extract<DashboardChartData, { type: 'scatter' }>
+  accent?: string
 }) {
   if (data.points.length === 0) {
     return <EmptyChart message="No scatter data" />
@@ -635,13 +717,13 @@ function ScatterChartView({
           <ZAxis range={[40, 40]} />
           <Tooltip
             content={<ScatterTooltip xLabel={data.xLabel} yLabel={data.yLabel} />}
-            cursor={{ strokeDasharray: '3 3', stroke: 'var(--color-accent)' }}
+            cursor={{ strokeDasharray: '3 3', stroke: accent }}
           />
           <Scatter
             data={data.points}
-            fill="var(--color-accent)"
+            fill={accent}
             fillOpacity={0.7}
-            stroke="var(--color-accent-light)"
+            stroke={accent}
             strokeWidth={1}
           />
         </ScatterChart>
@@ -692,9 +774,11 @@ function ScatterTooltip({
 
 function FunnelChartView({
   data,
+  accent = 'var(--color-accent)',
   onSegmentClick,
 }: {
   data: Extract<DashboardChartData, { type: 'funnel' }>
+  accent?: string
   onSegmentClick?: (dimensionKey: string, dimensionLabel: string, label: string) => void
 }) {
   if (data.stages.length === 0) {
@@ -708,46 +792,71 @@ function FunnelChartView({
     if (!isClickable || !data.dimensionKey || !data.dimensionLabel) return
     onSegmentClick!(data.dimensionKey, data.dimensionLabel, label)
   }
+  // Bar widths still scale by value/max so the funnel reads as a funnel
+  // (largest stage = full width, others narrow proportionally). The
+  // displayed percentage now sums to 100% across all stages because the
+  // builder switched to share-of-total computation.
   const max = data.stages.reduce((m, s) => Math.max(m, s.value), 0)
 
   return (
-    <div className="w-full h-[280px] flex flex-col justify-center gap-1.5 px-2">
-      {data.stages.map((stage, i) => {
-        const widthPct = max > 0 ? (stage.value / max) * 100 : 0
-        return (
-          <div
-            key={`${stage.label}-${i}`}
-            className="flex items-center gap-3 group"
-          >
-            <div className="w-28 shrink-0 text-xs text-text-secondary truncate text-right">
-              {stage.label}
+    <TooltipProvider delayDuration={120} skipDelayDuration={60}>
+      <div className="w-full h-[280px] flex flex-col justify-center gap-1.5 px-2">
+        {data.stages.map((stage, i) => {
+          const widthPct = max > 0 ? (stage.value / max) * 100 : 0
+          return (
+            <div
+              key={`${stage.label}-${i}`}
+              className="flex items-center gap-3 group"
+            >
+              <div className="w-28 shrink-0 text-xs text-text-secondary truncate text-right">
+                {stage.label}
+              </div>
+              <div className="flex-1 flex justify-center items-center h-7">
+                <RadixTooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      disabled={!isClickable}
+                      onClick={() => triggerStage(stage.label)}
+                      className={cn(
+                        'h-full rounded-md transition-all min-w-[2px]',
+                        isClickable ? 'cursor-pointer' : 'cursor-default',
+                      )}
+                      style={{ width: `${widthPct}%`, backgroundColor: accent }}
+                      aria-label={`${stage.label}: ${stage.value}`}
+                    />
+                  </TooltipTrigger>
+                  <RadixTooltipContent sideOffset={6}>
+                    <div className="text-text-muted font-mono text-[10px] uppercase tracking-wider mb-1">
+                      {stage.label}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span
+                        className="h-2 w-2 rounded-full shrink-0"
+                        style={{ backgroundColor: accent }}
+                      />
+                      <span className="text-text-secondary">{data.valueLabel}</span>
+                      <span className="text-text-primary font-mono font-semibold">
+                        {formatChartValue(stage.value)}
+                      </span>
+                      <span className="text-text-muted font-mono">
+                        ({stage.pct}%)
+                      </span>
+                    </div>
+                  </RadixTooltipContent>
+                </RadixTooltip>
+              </div>
+              <div className="w-14 shrink-0 text-right text-xs font-mono font-semibold text-text-primary">
+                {formatChartValue(stage.value)}
+              </div>
+              <div className="w-12 shrink-0 text-right text-xs font-mono text-text-muted">
+                {stage.pct}%
+              </div>
             </div>
-            <div className="flex-1 flex justify-center items-center h-7">
-              <button
-                type="button"
-                disabled={!isClickable}
-                onClick={() => triggerStage(stage.label)}
-                title={`${stage.label}: ${formatChartValue(stage.value)} ${data.valueLabel} · ${stage.pct.toFixed(0)}% of stage 1`}
-                className={cn(
-                  'h-full rounded-md bg-accent transition-all min-w-[2px]',
-                  isClickable
-                    ? 'hover:bg-accent-light cursor-pointer'
-                    : 'cursor-default',
-                )}
-                style={{ width: `${widthPct}%` }}
-                aria-label={`${stage.label}: ${stage.value}`}
-              />
-            </div>
-            <div className="w-14 shrink-0 text-right text-xs font-mono font-semibold text-text-primary">
-              {formatChartValue(stage.value)}
-            </div>
-            <div className="w-12 shrink-0 text-right text-xs font-mono text-text-muted">
-              {stage.pct.toFixed(0)}%
-            </div>
-          </div>
-        )
-      })}
-    </div>
+          )
+        })}
+      </div>
+    </TooltipProvider>
   )
 }
 
@@ -757,8 +866,10 @@ function FunnelChartView({
 
 function HistogramChartView({
   data,
+  accent = 'var(--color-accent)',
 }: {
   data: Extract<DashboardChartData, { type: 'histogram' }>
+  accent?: string
 }) {
   if (data.bins.length === 0) {
     return <EmptyChart message="No histogram data" />
@@ -793,11 +904,11 @@ function HistogramChartView({
           />
           <Tooltip
             content={<HistogramTooltip measureLabel={data.measureLabel} unit={data.unit} />}
-            cursor={{ fill: 'rgb(var(--color-accent-rgb) / 0.08)' }}
+            cursor={{ fill: hexToRgba(accent, 0.08) }}
           />
           <Bar
             dataKey="count"
-            fill="var(--color-accent)"
+            fill={accent}
             fillOpacity={0.75}
             radius={[2, 2, 0, 0]}
           />

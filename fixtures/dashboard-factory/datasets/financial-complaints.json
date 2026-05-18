@@ -3,7 +3,7 @@
   "metadata": {
     "title": "Financial Complaints",
     "tagline": "Consumer complaint analysis with response rates, dispute outcomes, and product breakdowns",
-    "domain": "cx",
+    "domain": "finance",
     "colorToken": "rose",
     "icon": "FileWarning",
     "thumbnail": "/datasets/financial-complaints.png",

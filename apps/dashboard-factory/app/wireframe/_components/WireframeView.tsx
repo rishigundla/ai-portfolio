@@ -13,7 +13,7 @@ import {
   Button,
 } from '@rishi/design-system/primitives'
 import { buildWireframeLayout } from '@/lib/wireframe-engine'
-import type { ColorClassSet } from '@/lib/datasets'
+import { type ColorClassSet, HEX_BY_TOKEN, type ColorToken } from '@/lib/datasets'
 import { DashboardView } from '@/app/dashboard/[slug]/_dashboard-view'
 
 interface WireframeViewProps {
@@ -49,14 +49,19 @@ export function WireframeView({ slug, colors }: WireframeViewProps) {
   }
 
   const { layout, dataset } = wireframe
+  const accentHex =
+    HEX_BY_TOKEN[dataset.metadata.colorToken as ColorToken] ?? HEX_BY_TOKEN.accent
 
   return (
     <div className="space-y-6">
       {/* Status row — wireframe badge on the left, Export-to-Figma on the right */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
+          {/* Wireframe header icon. Solid badge classes (matching the
+              "Wireframe" tag below it) instead of the gradient thumbBg so
+              the icon and tag share the same dashboard accent fill. */}
           <div
-            className={`inline-flex h-12 w-12 items-center justify-center rounded-lg ${colors.thumbBg} border ${colors.thumbBorder}`}
+            className={`inline-flex h-12 w-12 items-center justify-center rounded-lg ${colors.badgeBg} border ${colors.badgeBorder}`}
           >
             <Wand2 className={`h-5 w-5 ${colors.iconColor}`} strokeWidth={1.5} aria-hidden="true" />
           </div>
@@ -81,7 +86,7 @@ export function WireframeView({ slug, colors }: WireframeViewProps) {
       </div>
 
       {/* The engine output rendered through DashboardView */}
-      <DashboardView layout={layout} colors={colors} />
+      <DashboardView layout={layout} colors={colors} accentHex={accentHex} />
 
       {/* Footer hint */}
       <p className="mt-8 max-w-2xl text-xs text-text-muted leading-relaxed">

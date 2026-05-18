@@ -26,9 +26,20 @@ export interface KpiCardProps extends React.HTMLAttributes<HTMLDivElement> {
   sparkline?: number[]
   state?: KpiState
   errorMessage?: string
+  /**
+   * Optional dashboard accent (CSS color or hex string). When provided the
+   * KPI value and sparkline render in this color so the card visually ties
+   * back to the dashboard's color token. Defaults to the design system
+   * accent token, which is the original behavior.
+   */
+  accent?: string
 }
 
-const Sparkline: React.FC<{ data: number[]; className?: string }> = ({ data, className }) => {
+const Sparkline: React.FC<{ data: number[]; className?: string; stroke?: string }> = ({
+  data,
+  className,
+  stroke,
+}) => {
   if (!data || data.length < 2) return null
   const min = Math.min(...data)
   const max = Math.max(...data)
@@ -50,7 +61,7 @@ const Sparkline: React.FC<{ data: number[]; className?: string }> = ({ data, cla
     >
       <polyline
         fill="none"
-        stroke="var(--color-accent)"
+        stroke={stroke ?? 'var(--color-accent)'}
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -75,7 +86,21 @@ const DeltaIcon = ({ direction }: { direction: KpiDirection }) => {
 }
 
 export const KpiCard = React.forwardRef<HTMLDivElement, KpiCardProps>(
-  ({ label, value, unit, delta, sparkline, state = 'ready', errorMessage, className, ...props }, ref) => {
+  (
+    {
+      label,
+      value,
+      unit,
+      delta,
+      sparkline,
+      state = 'ready',
+      errorMessage,
+      className,
+      accent,
+      ...props
+    },
+    ref,
+  ) => {
     // LOADING
     if (state === 'loading') {
       return (
@@ -127,7 +152,12 @@ export const KpiCard = React.forwardRef<HTMLDivElement, KpiCardProps>(
       >
         <div className="font-mono text-[11px] uppercase tracking-wider text-text-muted">{label}</div>
         <div className="mt-2 flex items-baseline gap-1.5">
-          <span className="text-3xl font-display font-semibold text-text-primary tracking-tight">{value}</span>
+          <span
+            className="text-3xl font-display font-semibold tracking-tight"
+            style={{ color: accent ?? 'var(--color-text-primary)' }}
+          >
+            {value}
+          </span>
           {unit && <span className="text-sm text-text-muted font-mono">{unit}</span>}
         </div>
         {delta && (
@@ -139,7 +169,7 @@ export const KpiCard = React.forwardRef<HTMLDivElement, KpiCardProps>(
         )}
         {sparkline && sparkline.length > 1 && (
           <div className="mt-3">
-            <Sparkline data={sparkline} />
+            <Sparkline data={sparkline} stroke={accent} />
           </div>
         )}
       </motion.div>

@@ -1,3 +1,6 @@
+'use client'
+
+import { useState } from 'react'
 import type { CycleTimePoint, CycleTimeSummary } from '@/lib/kpi-calc'
 
 interface CycleTimeChartProps {
@@ -7,6 +10,7 @@ interface CycleTimeChartProps {
 }
 
 export function CycleTimeChart({ points, summary, accentHex }: CycleTimeChartProps) {
+  const [hoverIdx, setHoverIdx] = useState<number | null>(null)
   if (points.length === 0) return null
 
   const width = 320
@@ -49,6 +53,11 @@ export function CycleTimeChart({ points, summary, accentHex }: CycleTimeChartPro
         ? 'Rising'
         : 'Flat'
 
+  const hovered = hoverIdx !== null ? filled[hoverIdx] ?? null : null
+  const hoveredLeftPct = hovered ? (toX(hovered.day) / width) * 100 : 0
+  const hoveredTopPct = hovered ? (toY(hovered.value) / height) * 100 : 0
+  const deltaVsBaseline = hovered ? hovered.value - summary.baseline : 0
+
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center justify-between text-[10px] font-mono">
@@ -72,102 +81,127 @@ export function CycleTimeChart({ points, summary, accentHex }: CycleTimeChartPro
           {trendLabel}
         </span>
       </div>
-      <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-auto">
-        <line
-          x1={padX}
-          y1={padY + innerH}
-          x2={padX + innerW}
-          y2={padY + innerH}
-          stroke="var(--color-surface-border)"
-          strokeWidth="1"
-        />
-        <line
-          x1={padX}
-          y1={padY}
-          x2={padX}
-          y2={padY + innerH}
-          stroke="var(--color-surface-border)"
-          strokeWidth="1"
-        />
-        <line
-          x1={padX}
-          y1={baselineY}
-          x2={padX + innerW}
-          y2={baselineY}
-          stroke="var(--chart-slate)"
-          strokeWidth="1"
-          strokeDasharray="3 3"
-          opacity="0.5"
-        />
-        {linePath && (
-          <path
-            d={linePath}
-            fill="none"
-            stroke={accentHex}
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+      <div className="relative">
+        <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-auto">
+          <line
+            x1={padX}
+            y1={padY + innerH}
+            x2={padX + innerW}
+            y2={padY + innerH}
+            stroke="var(--color-surface-border)"
+            strokeWidth="1"
           />
+          <line
+            x1={padX}
+            y1={padY}
+            x2={padX}
+            y2={padY + innerH}
+            stroke="var(--color-surface-border)"
+            strokeWidth="1"
+          />
+          <line
+            x1={padX}
+            y1={baselineY}
+            x2={padX + innerW}
+            y2={baselineY}
+            stroke="var(--chart-slate)"
+            strokeWidth="1"
+            strokeDasharray="3 3"
+            opacity="0.5"
+          />
+          {linePath && (
+            <path
+              d={linePath}
+              fill="none"
+              stroke={accentHex}
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          )}
+          {filled.map((p, i) => (
+            <circle
+              key={`ct-${p.day}`}
+              cx={toX(p.day)}
+              cy={toY(p.value)}
+              r={hoverIdx === i ? 3.4 : 2.2}
+              fill={accentHex}
+            />
+          ))}
+          {filled.map((p, i) => (
+            <circle
+              key={`ct-hit-${p.day}`}
+              cx={toX(p.day)}
+              cy={toY(p.value)}
+              r={8}
+              fill="transparent"
+              className="cursor-default"
+              onMouseEnter={() => setHoverIdx(i)}
+              onMouseLeave={() => setHoverIdx(null)}
+            />
+          ))}
+          <text
+            x={padX}
+            y={height - 4}
+            fontSize="9"
+            fill="var(--color-text-muted)"
+            fontFamily="JetBrains Mono"
+          >
+            Day 1
+          </text>
+          <text
+            x={padX + innerW - 32}
+            y={height - 4}
+            fontSize="9"
+            fill="var(--color-text-muted)"
+            fontFamily="JetBrains Mono"
+          >
+            Day {lastDay}
+          </text>
+          <text
+            x={padX - 24}
+            y={padY + 4}
+            fontSize="9"
+            fill="var(--color-text-muted)"
+            fontFamily="JetBrains Mono"
+          >
+            {maxScale}d
+          </text>
+          <text
+            x={padX - 12}
+            y={padY + innerH + 4}
+            fontSize="9"
+            fill="var(--color-text-muted)"
+            fontFamily="JetBrains Mono"
+          >
+            0
+          </text>
+        </svg>
+        {hovered && (
+          <div
+            className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-[calc(100%+8px)] rounded-md border border-surface-border bg-surface-elevated px-3 py-1.5 text-xs text-text-primary shadow-lg"
+            style={{ left: `${hoveredLeftPct}%`, top: `${hoveredTopPct}%` }}
+          >
+            <div className="text-text-muted font-mono text-[10px] uppercase tracking-wider mb-1">
+              Day {hovered.day}
+            </div>
+            <div className="flex items-center gap-2 mb-0.5">
+              <span
+                className="h-2 w-2 rounded-full shrink-0"
+                style={{ backgroundColor: accentHex }}
+              />
+              <span className="text-text-secondary">Average</span>
+              <span className="text-text-primary font-mono font-semibold">
+                {hovered.value.toFixed(1)}d
+              </span>
+            </div>
+            <div className="text-text-muted font-mono text-[10px]">
+              {deltaVsBaseline >= 0 ? '+' : ''}
+              {deltaVsBaseline.toFixed(1)}d vs baseline
+            </div>
+          </div>
         )}
-        {filled.map((p) => (
-          <circle
-            key={`ct-${p.day}`}
-            cx={toX(p.day)}
-            cy={toY(p.value)}
-            r="2.2"
-            fill={accentHex}
-          />
-        ))}
-        <text
-          x={padX}
-          y={height - 4}
-          fontSize="9"
-          fill="var(--color-text-muted)"
-          fontFamily="JetBrains Mono"
-        >
-          Day 1
-        </text>
-        <text
-          x={padX + innerW - 32}
-          y={height - 4}
-          fontSize="9"
-          fill="var(--color-text-muted)"
-          fontFamily="JetBrains Mono"
-        >
-          Day {lastDay}
-        </text>
-        <text
-          x={padX - 24}
-          y={padY + 4}
-          fontSize="9"
-          fill="var(--color-text-muted)"
-          fontFamily="JetBrains Mono"
-        >
-          {maxScale}d
-        </text>
-        <text
-          x={padX - 12}
-          y={padY + innerH + 4}
-          fontSize="9"
-          fill="var(--color-text-muted)"
-          fontFamily="JetBrains Mono"
-        >
-          0
-        </text>
-      </svg>
-      {summary.latest !== null && summary.earliest !== null && (
-        <div className="flex items-center justify-between text-[11px] font-mono text-text-muted pt-2 border-t border-surface-border">
-          <span>Day one</span>
-          <span className="text-text-secondary font-semibold">
-            {summary.earliest.toFixed(1)}d
-          </span>
-          <span className="text-text-dim">→</span>
-          <span>Latest</span>
-          <span className="text-text-secondary font-semibold">
-            {summary.latest.toFixed(1)}d
-          </span>
-        </div>
-      )}
+      </div>
     </div>
   )
 }

@@ -58,10 +58,12 @@ export default async function GeneratePage({ params }: PageProps) {
         title={summary.title}
         description={summary.tagline}
       >
-        {/* Dataset header strip */}
+        {/* Dataset header strip. Icon container reuses the badge solid
+            color treatment (matching tag) so the icon and any nearby tag
+            read as the same dashboard accent in both modes. */}
         <div className="flex items-center gap-4 mb-10 -mt-2">
           <div
-            className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-xl border ${colors.thumbBorder} ${colors.thumbBg}`}
+            className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-xl border ${colors.badgeBorder} ${colors.badgeBg}`}
           >
             <Icon className={`h-7 w-7 ${colors.iconColor}`} strokeWidth={1.5} />
           </div>

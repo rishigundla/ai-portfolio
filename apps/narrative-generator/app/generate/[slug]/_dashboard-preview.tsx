@@ -9,7 +9,7 @@ import type {
   ChartDataPoint,
 } from '@/lib/full-dashboards'
 import { getColorClasses, type ColorClassSet } from '@/lib/dashboards'
-import { formatKpiValue, HEX_BY_TOKEN } from '@/lib/format-kpi'
+import { formatKpiValue, HEX_BY_TOKEN, ACCENT_VAR_BY_TOKEN } from '@/lib/format-kpi'
 
 // Hover tooltip mirroring the Recharts CustomTooltip used in Project 1's
 // completion trend chart (see apps/dashboard-factory/.../_dashboard-view.tsx).
@@ -63,19 +63,24 @@ interface DashboardPreviewProps {
 
 export function DashboardPreview({ dashboard }: DashboardPreviewProps) {
   const colors = getColorClasses(dashboard.metadata.colorToken)
+  // Both the KPI value text and the chart series pull from the same CSS
+  // variable so they render the same color per theme. accentHex stays
+  // available for callers that still need a raw hex (e.g. SVG attributes
+  // that need a static color in test environments).
+  const accentVar = ACCENT_VAR_BY_TOKEN[dashboard.metadata.colorToken]
   const accentHex = HEX_BY_TOKEN[dashboard.metadata.colorToken]
 
   return (
     <div className="space-y-5">
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         {dashboard.kpis.map((kpi) => (
-          <KpiTile key={kpi.id} kpi={kpi} colors={colors} />
+          <KpiTile key={kpi.id} kpi={kpi} accentVar={accentVar} />
         ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {dashboard.charts.map((chart) => (
-          <ChartCard key={chart.id} chart={chart} accentHex={accentHex} />
+          <ChartCard key={chart.id} chart={chart} accentHex={accentVar} />
         ))}
       </div>
 
@@ -84,7 +89,7 @@ export function DashboardPreview({ dashboard }: DashboardPreviewProps) {
   )
 }
 
-function KpiTile({ kpi, colors }: { kpi: KpiSpec; colors: ColorClassSet }) {
+function KpiTile({ kpi, accentVar }: { kpi: KpiSpec; accentVar: string }) {
   const hasDelta =
     typeof kpi.deltaPct === 'number' && kpi.deltaDirection !== undefined
   const Arrow = kpi.deltaDirection === 'up' ? TrendingUp : TrendingDown
@@ -95,7 +100,8 @@ function KpiTile({ kpi, colors }: { kpi: KpiSpec; colors: ColorClassSet }) {
         {kpi.label}
       </p>
       <p
-        className={`font-display text-2xl sm:text-3xl font-semibold tracking-tight ${colors.iconColor} truncate`}
+        className="font-display text-2xl sm:text-3xl font-semibold tracking-tight truncate"
+        style={{ color: accentVar }}
       >
         {formatKpiValue(kpi)}
       </p>
@@ -186,6 +192,12 @@ function LineChartSvg({
 
   const path = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ')
   const areaPath = `${path} L ${points[points.length - 1]?.x} ${padTop + innerH} L ${points[0]?.x} ${padTop + innerH} Z`
+  // React.useId() returns a stable id per chart instance. Stripping colons
+  // keeps it usable as an SVG fragment id inside url(#...). The id MUST NOT
+  // be derived from accentHex because that is now a CSS variable string
+  // like "var(--chart-violet)" whose punctuation breaks url(#...) lookup,
+  // which makes the gradient unresolvable and the area fall back to black.
+  const gradId = `area-grad-${React.useId().replace(/:/g, '')}`
 
   // Convert an SVG-space point (within the 280x160 viewBox) into the
   // tooltip's pixel-space coordinates relative to the container, so the
@@ -212,12 +224,12 @@ function LineChartSvg({
         onMouseLeave={() => setHover(null)}
       >
         <defs>
-          <linearGradient id={`line-grad-${accentHex.slice(1)}`} x1="0" y1="0" x2="0" y2="1">
+          <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor={accentHex} stopOpacity="0.32" />
             <stop offset="100%" stopColor={accentHex} stopOpacity="0" />
           </linearGradient>
         </defs>
-        <path d={areaPath} fill={`url(#line-grad-${accentHex.slice(1)})`} />
+        <path d={areaPath} fill={`url(#${gradId})`} />
         <path d={path} fill="none" stroke={accentHex} strokeWidth="2" />
         {points.map((p) => (
           // Each data point is the styled-tooltip hit target plus an

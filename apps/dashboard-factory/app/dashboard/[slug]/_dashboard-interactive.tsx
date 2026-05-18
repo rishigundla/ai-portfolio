@@ -28,7 +28,7 @@ import { DashboardView } from './_dashboard-view'
 import { DrilldownTable } from './_drilldown-table'
 import { DrilldownSummary } from './_drilldown-summary'
 import { DrilldownDistribution } from './_drilldown-distribution'
-import type { ColorClassSet } from '@/lib/datasets'
+import { type ColorClassSet, HEX_BY_TOKEN } from '@/lib/datasets'
 import { pluralize } from '@/lib/format'
 import { toast } from '@/lib/toast-store'
 
@@ -52,6 +52,14 @@ export function DashboardInteractive({
 }: DashboardInteractiveProps) {
   const { rows, metadata } = fullDataset
   const schema = metadata.schema
+  // Resolve the dataset accent hex once per dashboard. Threaded through
+  // DashboardView so every chart series, KPI value, sparkline, hover
+  // cursor, heatmap intensity, scatter dot, funnel bar, and PDF header
+  // pulls from the same dashboard accent rather than the design system
+  // teal default.
+  const accentHex =
+    HEX_BY_TOKEN[metadata.colorToken as keyof typeof HEX_BY_TOKEN] ??
+    HEX_BY_TOKEN.accent
 
   // Pick the primary dimension (first dimension column) as the segment filter
   const primaryDimension = React.useMemo(
@@ -180,7 +188,20 @@ export function DashboardInteractive({
       const pageBgRgb: [number, number, number] = isDark ? [10, 10, 15] : [255, 255, 255]
       const titleRgb: [number, number, number] = isDark ? [241, 245, 249] : [26, 26, 46]
       const subtitleRgb: [number, number, number] = isDark ? [148, 163, 184] : [100, 116, 139]
-      const accentRgb: [number, number, number] = isDark ? [45, 212, 191] : [13, 148, 136]
+      // Resolve the dataset accent into an RGB triplet so the PDF header
+      // brand line ("Dashboard Factory") and any accent-keyed surface
+      // tints render in the dashboard's accent color rather than a fixed
+      // teal. The same accentHex flows into the on-screen DashboardView
+      // so the PDF capture matches the live UI.
+      const hexToRgbTriplet = (hex: string): [number, number, number] => {
+        if (!hex.startsWith('#') || hex.length !== 7) return [45, 212, 191]
+        return [
+          parseInt(hex.slice(1, 3), 16),
+          parseInt(hex.slice(3, 5), 16),
+          parseInt(hex.slice(5, 7), 16),
+        ]
+      }
+      const accentRgb: [number, number, number] = hexToRgbTriplet(accentHex)
       const placeholderColor = isDark ? 'rgb(148, 163, 184)' : 'rgb(100, 116, 139)'
 
       // Capture at 2x device pixel ratio for crisp text/charts on print.
@@ -457,6 +478,7 @@ export function DashboardInteractive({
         <DashboardView
           layout={layout}
           colors={colors}
+          accentHex={accentHex}
           onBarClick={handleBarClick}
           onDonutClick={handleBarClick}
         />

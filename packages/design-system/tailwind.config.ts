@@ -73,6 +73,7 @@ const config: Config = {
           slate: 'rgb(var(--chart-slate-rgb) / <alpha-value>)',
           blue: 'rgb(var(--chart-blue-rgb) / <alpha-value>)',
           indigo: 'rgb(var(--chart-indigo-rgb) / <alpha-value>)',
+          lime: 'rgb(var(--chart-lime-rgb) / <alpha-value>)',
         },
         'heatmap-empty': 'rgb(var(--heatmap-empty-rgb) / <alpha-value>)',
       },
