@@ -117,20 +117,24 @@ function LineChartSvg({
   const min = Math.min(...values)
   const range = max - min || 1
   const width = 280
-  const height = 140
+  const height = 160
   const padX = 12
-  const padY = 14
+  // Reserve more top padding when data labels render above each point so the
+  // top-most label is not clipped by the SVG viewBox edge.
+  const showLabels = data.length <= 8
+  const padTop = showLabels ? 18 : 14
+  const padBottom = 14
   const innerW = width - padX * 2
-  const innerH = height - padY * 2
+  const innerH = height - padTop - padBottom
 
   const points = data.map((d, i) => {
     const x = padX + (i / Math.max(1, data.length - 1)) * innerW
-    const y = padY + innerH - ((d.value - min) / range) * innerH
+    const y = padTop + innerH - ((d.value - min) / range) * innerH
     return { x, y, label: d.label, value: d.value }
   })
 
   const path = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ')
-  const areaPath = `${path} L ${points[points.length - 1]?.x} ${padY + innerH} L ${points[0]?.x} ${padY + innerH} Z`
+  const areaPath = `${path} L ${points[points.length - 1]?.x} ${padTop + innerH} L ${points[0]?.x} ${padTop + innerH} Z`
 
   return (
     <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full" preserveAspectRatio="none">
@@ -143,7 +147,28 @@ function LineChartSvg({
       <path d={areaPath} fill={`url(#line-grad-${accentHex.slice(1)})`} />
       <path d={path} fill="none" stroke={accentHex} strokeWidth="2" />
       {points.map((p) => (
-        <circle key={`${p.label}-${p.x}`} cx={p.x} cy={p.y} r="2.2" fill={accentHex} />
+        // Wrap each data point in a <g> with a <title> so hovering the dot
+        // surfaces a native tooltip in dense charts (where in-line labels
+        // would clutter). The dot itself is enlarged slightly so the
+        // tooltip hit area is generous on touch devices.
+        <g key={`${p.label}-${p.x}`}>
+          <title>{`${p.label}: ${formatBarValue(p.value)}`}</title>
+          <circle cx={p.x} cy={p.y} r="2.6" fill={accentHex} />
+          {showLabels && (
+            // Always-on label above the data point for charts with eight or
+            // fewer points. Above that threshold the labels collapse into
+            // hover-only via the <title> tag set above.
+            <text
+              x={p.x}
+              y={p.y - 6}
+              textAnchor="middle"
+              className="fill-text-primary font-mono"
+              fontSize="9"
+            >
+              {formatBarValue(p.value)}
+            </text>
+          )}
+        </g>
       ))}
     </svg>
   )
@@ -296,27 +321,47 @@ function formatBarValue(v: number): string {
 
 function RowsTable({ rows }: { rows: Record<string, unknown>[] }) {
   if (rows.length === 0) return null
-  const columns = Object.keys(rows[0] ?? {}).slice(0, 6)
-  const preview = rows.slice(0, 5)
+  // Show every column the fixture defines (capped at 8 to keep the table
+  // from overflowing on narrow viewports). Surface up to eight preview rows
+  // so the table reads as a real data sample rather than a teaser strip.
+  const columns = Object.keys(rows[0] ?? {}).slice(0, 8)
+  const preview = rows.slice(0, 8)
+  // Decide alignment per column based on the value type of the first
+  // non-null cell. Numeric columns right-align so digits stack and read as
+  // tabular figures; everything else stays left-aligned.
+  const alignByCol = new Map<string, 'left' | 'right'>()
+  for (const col of columns) {
+    const sample = preview.find((row) => row[col] !== null && row[col] !== undefined)
+    const v = sample?.[col]
+    alignByCol.set(col, typeof v === 'number' ? 'right' : 'left')
+  }
 
   return (
     <div className="rounded-lg border border-surface-border bg-surface overflow-hidden">
-      <div className="flex items-center justify-between px-4 py-3 border-b border-surface-border">
-        <h3 className="font-display text-sm font-semibold text-text-primary">
-          Sample rows
-        </h3>
-        <span className="font-mono text-[10px] uppercase tracking-widest text-text-muted">
-          {preview.length} of {rows.length}
+      <div className="flex items-center justify-between px-5 py-4 border-b border-surface-border">
+        <div>
+          <h3 className="font-display text-base font-semibold text-text-primary">
+            Detail Table
+          </h3>
+          <p className="text-[11px] text-text-muted mt-0.5">
+            Source rows backing the KPIs and charts above.
+          </p>
+        </div>
+        <span className="font-mono text-[10px] uppercase tracking-widest text-text-muted shrink-0">
+          {preview.length} of {rows.length} rows
         </span>
       </div>
       <div className="overflow-x-auto">
-        <table className="w-full text-[11px]">
+        <table className="w-full text-[12px] border-collapse">
           <thead className="bg-base-700/50">
             <tr>
               {columns.map((col) => (
                 <th
                   key={col}
-                  className="px-3 py-2 text-left font-mono font-medium text-text-muted uppercase tracking-wider whitespace-nowrap"
+                  scope="col"
+                  className={`px-4 py-3 font-mono text-[10px] font-semibold text-text-secondary uppercase tracking-wider whitespace-nowrap border-b border-surface-border ${
+                    alignByCol.get(col) === 'right' ? 'text-right' : 'text-left'
+                  }`}
                 >
                   {col.replace(/_/g, ' ')}
                 </th>
@@ -325,15 +370,23 @@ function RowsTable({ rows }: { rows: Record<string, unknown>[] }) {
           </thead>
           <tbody className="divide-y divide-surface-border">
             {preview.map((row, i) => (
-              <tr key={i} className="hover:bg-base-700/30">
-                {columns.map((col) => (
-                  <td
-                    key={col}
-                    className="px-3 py-2 text-text-secondary whitespace-nowrap"
-                  >
-                    {formatCellValue(row[col])}
-                  </td>
-                ))}
+              <tr key={i} className="transition-colors hover:bg-base-800/40">
+                {columns.map((col) => {
+                  const formatted = formatCellValue(row[col])
+                  return (
+                    <td
+                      key={col}
+                      title={formatted}
+                      className={`px-4 py-2.5 text-text-primary whitespace-nowrap max-w-[220px] truncate ${
+                        alignByCol.get(col) === 'right'
+                          ? 'text-right font-mono tabular-nums'
+                          : 'text-left'
+                      }`}
+                    >
+                      {formatted}
+                    </td>
+                  )
+                })}
               </tr>
             ))}
           </tbody>
@@ -344,11 +397,13 @@ function RowsTable({ rows }: { rows: Record<string, unknown>[] }) {
 }
 
 function formatCellValue(value: unknown): string {
-  if (value === null || value === undefined) return ''
+  if (value === null || value === undefined) return '—'
   if (typeof value === 'number') {
     if (Math.abs(value) >= 1_000_000) return `${(value / 1_000_000).toFixed(2)}M`
     if (Math.abs(value) >= 10_000) return value.toLocaleString()
-    return String(value)
+    if (Number.isInteger(value)) return value.toLocaleString()
+    return value.toFixed(2)
   }
+  if (typeof value === 'boolean') return value ? 'Yes' : 'No'
   return String(value)
 }
