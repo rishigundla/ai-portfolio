@@ -67,8 +67,18 @@ export default async function GeneratePage({ params }: PageProps) {
       header={
         <div className="max-w-2xl">
           <div className="flex items-center gap-3 mb-3">
+            {/*
+              Icon container reuses the badge background + border classes
+              (solid color tint) instead of the gradient thumbBg used on
+              the dashboard selection cards. The gradient on a 9x9 box
+              read as faded olive next to the tag's solid lime fill, so
+              icon and tag looked like different accents. Sharing the
+              badge background closes the gap and makes the icon, tag,
+              KPI numbers, and chart accent visually pull from the same
+              dashboard accent in both modes.
+            */}
             <div
-              className={`inline-flex h-9 w-9 items-center justify-center rounded-md border ${colors.thumbBg} ${colors.thumbBorder}`}
+              className={`inline-flex h-9 w-9 items-center justify-center rounded-md border ${colors.badgeBg} ${colors.badgeBorder}`}
             >
               <Icon className={`h-5 w-5 ${colors.iconColor}`} strokeWidth={1.5} />
             </div>

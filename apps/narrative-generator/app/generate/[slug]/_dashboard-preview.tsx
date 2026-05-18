@@ -1,3 +1,6 @@
+'use client'
+
+import * as React from 'react'
 import { TrendingUp, TrendingDown } from 'lucide-react'
 import type {
   DashboardFixture,
@@ -7,6 +10,52 @@ import type {
 } from '@/lib/full-dashboards'
 import { getColorClasses, type ColorClassSet } from '@/lib/dashboards'
 import { formatKpiValue, HEX_BY_TOKEN } from '@/lib/format-kpi'
+
+// Hover tooltip mirroring the Recharts CustomTooltip used in Project 1's
+// completion trend chart (see apps/dashboard-factory/.../_dashboard-view.tsx).
+// Same surface, border, padding, text hierarchy, and shadow so the two
+// projects share a single tooltip language.
+interface ChartTooltipPoint {
+  x: number
+  y: number
+  label: string
+  value: number
+  seriesName?: string
+  swatchColor?: string
+}
+
+function ChartTooltip({ point }: { point: ChartTooltipPoint | null }) {
+  if (!point) return null
+  return (
+    <div
+      // 24px offset above the cursor with horizontal center keeps the
+      // tooltip from sitting on top of the data point and triggering
+      // pointer-leave loops on small marks.
+      className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-full"
+      style={{ left: point.x, top: point.y - 8 }}
+    >
+      <div className="rounded-md border border-surface-border bg-surface-elevated px-3 py-2 shadow-lg text-xs backdrop-blur-sm">
+        <div className="text-text-muted mb-1 font-mono text-[10px] uppercase tracking-wider whitespace-nowrap">
+          {point.label}
+        </div>
+        <div className="flex items-center gap-2 whitespace-nowrap">
+          {point.swatchColor && (
+            <span
+              className="h-2 w-2 rounded-full shrink-0"
+              style={{ backgroundColor: point.swatchColor }}
+            />
+          )}
+          {point.seriesName && (
+            <span className="text-text-secondary">{point.seriesName}</span>
+          )}
+          <span className="text-text-primary font-mono font-semibold">
+            {formatBarValue(point.value)}
+          </span>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 interface DashboardPreviewProps {
   dashboard: DashboardFixture
@@ -111,6 +160,8 @@ function LineChartSvg({
   data: ChartDataPoint[]
   accentHex: string
 }) {
+  const [hover, setHover] = React.useState<ChartTooltipPoint | null>(null)
+  const containerRef = React.useRef<HTMLDivElement>(null)
   if (data.length === 0) return null
   const values = data.map((d) => d.value)
   const max = Math.max(...values)
@@ -136,41 +187,68 @@ function LineChartSvg({
   const path = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ')
   const areaPath = `${path} L ${points[points.length - 1]?.x} ${padTop + innerH} L ${points[0]?.x} ${padTop + innerH} Z`
 
+  // Convert an SVG-space point (within the 280x160 viewBox) into the
+  // tooltip's pixel-space coordinates relative to the container, so the
+  // ChartTooltip can sit at the hovered data point in the DOM regardless
+  // of the SVG's responsive scaling.
+  const handleEnter = (p: (typeof points)[number]) => {
+    const rect = containerRef.current?.getBoundingClientRect()
+    if (!rect) return
+    setHover({
+      x: (p.x / width) * rect.width,
+      y: (p.y / height) * rect.height,
+      label: p.label,
+      value: p.value,
+      swatchColor: accentHex,
+    })
+  }
+
   return (
-    <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full" preserveAspectRatio="none">
-      <defs>
-        <linearGradient id={`line-grad-${accentHex.slice(1)}`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={accentHex} stopOpacity="0.32" />
-          <stop offset="100%" stopColor={accentHex} stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      <path d={areaPath} fill={`url(#line-grad-${accentHex.slice(1)})`} />
-      <path d={path} fill="none" stroke={accentHex} strokeWidth="2" />
-      {points.map((p) => (
-        // Wrap each data point in a <g> with a <title> so hovering the dot
-        // surfaces a native tooltip in dense charts (where in-line labels
-        // would clutter). The dot itself is enlarged slightly so the
-        // tooltip hit area is generous on touch devices.
-        <g key={`${p.label}-${p.x}`}>
-          <title>{`${p.label}: ${formatBarValue(p.value)}`}</title>
-          <circle cx={p.x} cy={p.y} r="2.6" fill={accentHex} />
-          {showLabels && (
-            // Always-on label above the data point for charts with eight or
-            // fewer points. Above that threshold the labels collapse into
-            // hover-only via the <title> tag set above.
-            <text
-              x={p.x}
-              y={p.y - 6}
-              textAnchor="middle"
-              className="fill-text-primary font-mono"
-              fontSize="9"
-            >
-              {formatBarValue(p.value)}
-            </text>
-          )}
-        </g>
-      ))}
-    </svg>
+    <div ref={containerRef} className="relative w-full h-full">
+      <svg
+        viewBox={`0 0 ${width} ${height}`}
+        className="w-full h-full"
+        preserveAspectRatio="none"
+        onMouseLeave={() => setHover(null)}
+      >
+        <defs>
+          <linearGradient id={`line-grad-${accentHex.slice(1)}`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={accentHex} stopOpacity="0.32" />
+            <stop offset="100%" stopColor={accentHex} stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <path d={areaPath} fill={`url(#line-grad-${accentHex.slice(1)})`} />
+        <path d={path} fill="none" stroke={accentHex} strokeWidth="2" />
+        {points.map((p) => (
+          // Each data point is the styled-tooltip hit target plus an
+          // optional always-on label when the chart has eight or fewer
+          // points. The native <title> is intentionally NOT used so the
+          // tooltip stays styled (matching Project 1's CustomTooltip).
+          <g
+            key={`${p.label}-${p.x}`}
+            onMouseEnter={() => handleEnter(p)}
+            style={{ cursor: 'pointer' }}
+          >
+            {/* invisible larger hit area so hover is reliable on small dots */}
+            <circle cx={p.x} cy={p.y} r="8" fill="transparent" />
+            <circle cx={p.x} cy={p.y} r="2.6" fill={accentHex} />
+            {showLabels && (
+              <text
+                x={p.x}
+                y={p.y - 6}
+                textAnchor="middle"
+                className="font-mono"
+                fontSize="9"
+                fill={accentHex}
+              >
+                {formatBarValue(p.value)}
+              </text>
+            )}
+          </g>
+        ))}
+      </svg>
+      <ChartTooltip point={hover} />
+    </div>
   )
 }
 
@@ -181,15 +259,41 @@ function BarChartSvg({
   data: ChartDataPoint[]
   accentHex: string
 }) {
+  const [hover, setHover] = React.useState<ChartTooltipPoint | null>(null)
+  const containerRef = React.useRef<HTMLDivElement>(null)
   if (data.length === 0) return null
   const max = Math.max(...data.map((d) => d.value))
 
+  const handleEnter = (
+    d: ChartDataPoint,
+    target: HTMLElement,
+  ) => {
+    const rect = containerRef.current?.getBoundingClientRect()
+    const dot = target.getBoundingClientRect()
+    if (!rect) return
+    setHover({
+      x: dot.left + dot.width / 2 - rect.left,
+      y: dot.top - rect.top,
+      label: d.label,
+      value: d.value,
+      swatchColor: accentHex,
+    })
+  }
+
   return (
-    <div className="flex flex-col gap-1.5">
+    <div
+      ref={containerRef}
+      className="relative flex flex-col gap-1.5"
+      onMouseLeave={() => setHover(null)}
+    >
       {data.map((d) => {
         const pct = (d.value / max) * 100
         return (
-          <div key={d.label} className="flex items-center gap-2">
+          <div
+            key={d.label}
+            className="flex items-center gap-2"
+            onMouseEnter={(e) => handleEnter(d, e.currentTarget)}
+          >
             <span className="text-[10px] text-text-muted w-20 truncate font-mono">
               {d.label}
             </span>
@@ -199,12 +303,16 @@ function BarChartSvg({
                 style={{ width: `${pct}%`, backgroundColor: accentHex, opacity: 0.85 }}
               />
             </div>
-            <span className="text-[10px] text-text-secondary font-mono w-14 text-right truncate">
+            <span
+              className="text-[10px] font-mono w-14 text-right truncate"
+              style={{ color: accentHex }}
+            >
               {formatBarValue(d.value)}
             </span>
           </div>
         )
       })}
+      <ChartTooltip point={hover} />
     </div>
   )
 }
@@ -250,8 +358,31 @@ function DonutChartSvg({
     return { start, end, fill, label: d.label, value: d.value }
   })
 
+  const [hover, setHover] = React.useState<ChartTooltipPoint | null>(null)
+  const containerRef = React.useRef<HTMLDivElement>(null)
+
+  const handleEnter = (
+    arc: (typeof arcs)[number],
+    target: SVGPathElement | HTMLLIElement,
+  ) => {
+    const rect = containerRef.current?.getBoundingClientRect()
+    const t = target.getBoundingClientRect()
+    if (!rect) return
+    setHover({
+      x: t.left + t.width / 2 - rect.left,
+      y: t.top - rect.top,
+      label: arc.label,
+      value: arc.value,
+      swatchColor: arc.fill,
+    })
+  }
+
   return (
-    <div className="flex items-center gap-4">
+    <div
+      ref={containerRef}
+      className="relative flex items-center gap-4"
+      onMouseLeave={() => setHover(null)}
+    >
       <svg viewBox={`0 0 ${size} ${size}`} className="w-32 h-32 shrink-0">
         {arcs.map((arc, i) => (
           <path
@@ -259,6 +390,8 @@ function DonutChartSvg({
             d={arcPath(cx, cy, radius, inner, arc.start, arc.end)}
             fill={arc.fill}
             opacity={0.9}
+            onMouseEnter={(e) => handleEnter(arc, e.currentTarget)}
+            style={{ cursor: 'pointer' }}
           />
         ))}
         {/* Center fill uses the surface token so the donut hole matches the
@@ -268,7 +401,11 @@ function DonutChartSvg({
       </svg>
       <ul className="flex-1 space-y-1 min-w-0">
         {arcs.map((arc, i) => (
-          <li key={`${arc.label}-${i}`} className="flex items-center gap-2 text-[11px]">
+          <li
+            key={`${arc.label}-${i}`}
+            className="flex items-center gap-2 text-[11px]"
+            onMouseEnter={(e) => handleEnter(arc, e.currentTarget)}
+          >
             <span
               className="h-2 w-2 rounded-sm shrink-0"
               style={{ backgroundColor: arc.fill, opacity: 0.9 }}
@@ -280,6 +417,7 @@ function DonutChartSvg({
           </li>
         ))}
       </ul>
+      <ChartTooltip point={hover} />
     </div>
   )
 }
