@@ -170,14 +170,61 @@ export function DashboardInteractive({
       // a static PDF). Cleared in finally{} below regardless of outcome.
       target.setAttribute('data-exporting', 'true')
 
+      // Theme detection at export time. ThemeProvider sets a .dark or
+      // .light class on <html>. Without theme adaptation the PDF page
+      // background stayed white while the captured dashboard stayed dark,
+      // and the header title rendered near-white on white so the dataset
+      // name was invisible in both themes.
+      const isDark = document.documentElement.classList.contains('dark')
+      const pageBg = isDark ? '#0a0a0f' : '#ffffff'
+      const pageBgRgb: [number, number, number] = isDark ? [10, 10, 15] : [255, 255, 255]
+      const titleRgb: [number, number, number] = isDark ? [241, 245, 249] : [26, 26, 46]
+      const subtitleRgb: [number, number, number] = isDark ? [148, 163, 184] : [100, 116, 139]
+      const accentRgb: [number, number, number] = isDark ? [45, 212, 191] : [13, 148, 136]
+      const placeholderColor = isDark ? 'rgb(148, 163, 184)' : 'rgb(100, 116, 139)'
+
       // Capture at 2x device pixel ratio for crisp text/charts on print.
-      // backgroundColor: matches the app's base-900 so the PDF page tint
-      // outside the captured region looks intentional, not a leak.
+      // backgroundColor follows the active theme so the page tint outside
+      // the rendered content blends with the dashboard surface.
+      //
+      // onclone: html2canvas baseline-aligns text inside native <input>
+      // and Radix Select trigger <button> elements regardless of flex
+      // centering applied by the design system, which vertically clips
+      // letters in the FilterBar capture (top halves disappear). Replace
+      // the inputs with equivalent <div> nodes that render text correctly
+      // and assign Select triggers an explicit line-height matching the
+      // box height. Touches the cloned DOM only, never the live page.
       const canvas = await html2canvas(target, {
-        backgroundColor: '#0a0a0f',
+        backgroundColor: pageBg,
         scale: 2,
         useCORS: true,
         logging: false,
+        onclone: (clonedDoc, clonedRoot) => {
+          const root = clonedRoot.querySelector('#dashboard-capture-target') ?? clonedRoot
+          const inputs = root.querySelectorAll('input')
+          inputs.forEach((inp) => {
+            const node = inp as HTMLInputElement
+            const div = clonedDoc.createElement('div')
+            div.className = node.className
+            div.style.display = 'flex'
+            div.style.alignItems = 'center'
+            const showValue = node.value || node.placeholder || ''
+            div.textContent = showValue
+            if (!node.value && node.placeholder) {
+              div.style.color = placeholderColor
+            }
+            node.parentNode?.replaceChild(div, node)
+          })
+          const triggers = root.querySelectorAll(
+            'button[role="combobox"], button[aria-haspopup]',
+          )
+          triggers.forEach((btn) => {
+            const el = btn as HTMLElement
+            el.style.lineHeight = '36px'
+            el.style.paddingTop = '0'
+            el.style.paddingBottom = '0'
+          })
+        },
       })
 
       // A4 portrait at 72 DPI = 595 x 842 pt. We use jsPDF's default 'mm'
@@ -194,6 +241,15 @@ export function DashboardInteractive({
       const usableWidthMm = pageWidthMm - marginMm * 2
       const usableHeightMm = pageHeightMm - marginMm * 2 - headerHeightMm
 
+      // Paint the page background ourselves so the PDF matches the
+      // active theme (jsPDF's default is white). Repeated on every
+      // additional page added by the multi-page slicing path below.
+      const drawPageBackground = () => {
+        pdf.setFillColor(pageBgRgb[0], pageBgRgb[1], pageBgRgb[2])
+        pdf.rect(0, 0, pageWidthMm, pageHeightMm, 'F')
+      }
+      drawPageBackground()
+
       // Programmatic header on page 1 so the PDF identifies the source
       // dataset + export date even when shared without context. Renders
       // as native PDF text (selectable, searchable) above the canvas
@@ -202,13 +258,13 @@ export function DashboardInteractive({
         year: 'numeric', month: 'short', day: 'numeric',
       })
       pdf.setFontSize(14)
-      pdf.setTextColor(45, 212, 191) // accent teal
+      pdf.setTextColor(accentRgb[0], accentRgb[1], accentRgb[2]) // accent (theme aware)
       pdf.text('Dashboard Factory', marginMm, marginMm + 5)
       pdf.setFontSize(11)
-      pdf.setTextColor(241, 245, 249) // text-primary
+      pdf.setTextColor(titleRgb[0], titleRgb[1], titleRgb[2]) // text primary (theme aware)
       pdf.text(metadata.title, marginMm, marginMm + 11)
       pdf.setFontSize(8)
-      pdf.setTextColor(148, 163, 184) // text-muted (slate-400)
+      pdf.setTextColor(subtitleRgb[0], subtitleRgb[1], subtitleRgb[2]) // text muted (theme aware)
       pdf.text(
         `Exported ${exportDateStamp} • ${filteredRows.length} of ${rows.length} rows`,
         pageWidthMm - marginMm,
@@ -251,9 +307,11 @@ export function DashboardInteractive({
         while (yOffsetPx < canvas.height) {
           const remainingPx = canvas.height - yOffsetPx
           const thisSlicePx = Math.min(slicePxHeight, remainingPx)
-          // Reset slice canvas to background color in case it's the last
-          // (short) slice, so we don't see ghost pixels from the previous one.
-          sliceCtx.fillStyle = '#0a0a0f'
+          // Reset slice canvas to the active theme background so any
+          // padding around the last (short) slice does not show as a
+          // contrasting band, and ghost pixels from the previous slice
+          // are cleared.
+          sliceCtx.fillStyle = pageBg
           sliceCtx.fillRect(0, 0, sliceCanvas.width, sliceCanvas.height)
           sliceCtx.drawImage(
             canvas,
@@ -261,7 +319,10 @@ export function DashboardInteractive({
             0, 0, sliceCanvas.width, thisSlicePx,
           )
           const sliceMmHeight = (thisSlicePx * usableWidthMm) / canvas.width
-          if (!isFirstPage) pdf.addPage()
+          if (!isFirstPage) {
+            pdf.addPage()
+            drawPageBackground()
+          }
           // First page reserves headerHeightMm at top for the title;
           // subsequent pages start at the regular margin (no header).
           const yPosMm = isFirstPage ? marginMm + headerHeightMm : marginMm
