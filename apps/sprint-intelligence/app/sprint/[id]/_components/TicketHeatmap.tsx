@@ -10,7 +10,7 @@ const STATUS_FILL: Record<string, string> = {
   'in-review': 'var(--chart-violet)',
   'in-progress': 'var(--chart-amber)',
   blocked: 'var(--chart-rose)',
-  todo: '#475569',
+  todo: 'var(--chart-slate)',
 }
 
 const STATUS_LABEL: Record<string, string> = {
@@ -74,7 +74,7 @@ export function TicketHeatmap({ timelines, sprintLength }: TicketHeatmapProps) {
 
         {top.map((entry) => {
           const activeSet = new Set(entry.activeDays)
-          const fill = STATUS_FILL[entry.status] ?? '#475569'
+          const fill = STATUS_FILL[entry.status] ?? 'var(--chart-slate)'
           const rowTitle =
             entry.spanDays > 0
               ? `${entry.ticketId} · ${entry.title} · ${entry.spanDays} active day${entry.spanDays === 1 ? '' : 's'} (${STATUS_LABEL[entry.status] ?? entry.status})`

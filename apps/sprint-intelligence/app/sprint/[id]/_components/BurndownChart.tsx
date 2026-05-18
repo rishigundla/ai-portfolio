@@ -49,8 +49,8 @@ export function BurndownChart({ points, accentHex, currentDay }: BurndownChartPr
         </span>
       </div>
       <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-auto" preserveAspectRatio="xMidYMid meet">
-        <line x1={padX} y1={padY + innerH} x2={padX + innerW} y2={padY + innerH} stroke="#2a3147" strokeWidth="1" />
-        <line x1={padX} y1={padY} x2={padX} y2={padY + innerH} stroke="#2a3147" strokeWidth="1" />
+        <line x1={padX} y1={padY + innerH} x2={padX + innerW} y2={padY + innerH} stroke="var(--color-surface-border)" strokeWidth="1" />
+        <line x1={padX} y1={padY} x2={padX} y2={padY + innerH} stroke="var(--color-surface-border)" strokeWidth="1" />
         <path d={idealPath} fill="none" stroke={accentHex} strokeOpacity="0.55" strokeWidth="1.5" strokeDasharray="4 3" />
         {actualPath && (
           <path d={actualPath} fill="none" stroke={accentHex} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -70,16 +70,16 @@ export function BurndownChart({ points, accentHex, currentDay }: BurndownChartPr
             opacity="0.5"
           />
         )}
-        <text x={padX} y={height - 4} fontSize="9" fill="#64748b" fontFamily="JetBrains Mono">
+        <text x={padX} y={height - 4} fontSize="9" fill="var(--color-text-muted)" fontFamily="JetBrains Mono">
           Day 1
         </text>
-        <text x={padX + innerW - 32} y={height - 4} fontSize="9" fill="#64748b" fontFamily="JetBrains Mono">
+        <text x={padX + innerW - 32} y={height - 4} fontSize="9" fill="var(--color-text-muted)" fontFamily="JetBrains Mono">
           Day {lastDay}
         </text>
-        <text x={padX - 22} y={padY + 4} fontSize="9" fill="#64748b" fontFamily="JetBrains Mono">
+        <text x={padX - 22} y={padY + 4} fontSize="9" fill="var(--color-text-muted)" fontFamily="JetBrains Mono">
           {max} SP
         </text>
-        <text x={padX - 14} y={padY + innerH + 4} fontSize="9" fill="#64748b" fontFamily="JetBrains Mono">
+        <text x={padX - 14} y={padY + innerH + 4} fontSize="9" fill="var(--color-text-muted)" fontFamily="JetBrains Mono">
           0
         </text>
       </svg>

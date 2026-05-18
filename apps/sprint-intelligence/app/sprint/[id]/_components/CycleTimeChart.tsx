@@ -78,7 +78,7 @@ export function CycleTimeChart({ points, summary, accentHex }: CycleTimeChartPro
           y1={padY + innerH}
           x2={padX + innerW}
           y2={padY + innerH}
-          stroke="#2a3147"
+          stroke="var(--color-surface-border)"
           strokeWidth="1"
         />
         <line
@@ -86,7 +86,7 @@ export function CycleTimeChart({ points, summary, accentHex }: CycleTimeChartPro
           y1={padY}
           x2={padX}
           y2={padY + innerH}
-          stroke="#2a3147"
+          stroke="var(--color-surface-border)"
           strokeWidth="1"
         />
         <line
@@ -122,7 +122,7 @@ export function CycleTimeChart({ points, summary, accentHex }: CycleTimeChartPro
           x={padX}
           y={height - 4}
           fontSize="9"
-          fill="#64748b"
+          fill="var(--color-text-muted)"
           fontFamily="JetBrains Mono"
         >
           Day 1
@@ -131,7 +131,7 @@ export function CycleTimeChart({ points, summary, accentHex }: CycleTimeChartPro
           x={padX + innerW - 32}
           y={height - 4}
           fontSize="9"
-          fill="#64748b"
+          fill="var(--color-text-muted)"
           fontFamily="JetBrains Mono"
         >
           Day {lastDay}
@@ -140,7 +140,7 @@ export function CycleTimeChart({ points, summary, accentHex }: CycleTimeChartPro
           x={padX - 24}
           y={padY + 4}
           fontSize="9"
-          fill="#64748b"
+          fill="var(--color-text-muted)"
           fontFamily="JetBrains Mono"
         >
           {maxScale}d
@@ -149,7 +149,7 @@ export function CycleTimeChart({ points, summary, accentHex }: CycleTimeChartPro
           x={padX - 12}
           y={padY + innerH + 4}
           fontSize="9"
-          fill="#64748b"
+          fill="var(--color-text-muted)"
           fontFamily="JetBrains Mono"
         >
           0

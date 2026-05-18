@@ -225,7 +225,11 @@ function EngineerView({
                     className="inline-flex shrink-0 items-center justify-center h-4 w-4 rounded-sm text-[9px] font-bold"
                     style={{
                       backgroundColor: statusColor(t.status, accentHex),
-                      color: '#0a0d16',
+                      // base-900 flips between near-black (dark mode) and near-white
+                      // (light mode), so the glyph text always reads against the chip
+                      // background. chart-* tokens lighten in dark mode and darken in
+                      // light mode, so a fixed dark text color disappeared in light.
+                      color: 'var(--color-base-900)',
                       opacity: 0.95,
                     }}
                     aria-label={t.status}
@@ -541,7 +545,7 @@ function statusColor(status: string, accent: string): string {
   if (status === 'in-review') return accent
   if (status === 'in-progress') return 'var(--chart-amber)'
   if (status === 'blocked') return 'var(--chart-rose)'
-  return '#475569'
+  return 'var(--chart-slate)'
 }
 
 function statusGlyph(status: string): string {

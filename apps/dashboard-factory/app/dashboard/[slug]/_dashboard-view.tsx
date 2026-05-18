@@ -280,7 +280,7 @@ function BarChartView({
           />
           <Tooltip
             content={<CustomTooltip />}
-            cursor={{ fill: 'rgba(45, 212, 191, 0.08)' }}
+            cursor={{ fill: 'rgb(var(--color-accent-rgb) / 0.08)' }}
           />
           <Bar
             dataKey="value"
@@ -508,7 +508,7 @@ function HeatmapChartView({
                   style={{
                     backgroundColor:
                       intensity > 0
-                        ? `rgba(45, 212, 191, ${0.08 + intensity * 0.8})`
+                        ? `rgb(var(--color-accent-rgb) / ${0.08 + intensity * 0.8})`
                         : 'var(--color-surface)',
                   }}
                 />
@@ -540,7 +540,7 @@ function HeatmapChartView({
           className="flex-1 h-1.5 rounded-full"
           style={{
             background:
-              'linear-gradient(to right, rgba(45, 212, 191, 0.08), rgba(45, 212, 191, 0.88))',
+              'linear-gradient(to right, rgb(var(--color-accent-rgb) / 0.08), rgb(var(--color-accent-rgb) / 0.88))',
           }}
         />
         <span>{formatChartValue(data.max)}</span>
@@ -760,7 +760,7 @@ function HistogramChartView({
           />
           <Tooltip
             content={<HistogramTooltip measureLabel={data.measureLabel} unit={data.unit} />}
-            cursor={{ fill: 'rgba(45, 212, 191, 0.08)' }}
+            cursor={{ fill: 'rgb(var(--color-accent-rgb) / 0.08)' }}
           />
           <Bar
             dataKey="count"
