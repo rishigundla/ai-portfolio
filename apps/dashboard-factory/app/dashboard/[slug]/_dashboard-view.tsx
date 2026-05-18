@@ -142,13 +142,20 @@ function chartGridSpan(index: number, total: number): string {
 // Shared palette + tooltip
 // ============================================================
 
+// Donut chart palette — routes through the design-system chart tokens so
+// every slice re-themes between dark and light mode. The first slot is
+// the dataset accent (already themed), the remaining slots are the
+// chart palette in an order that maximizes contrast between adjacent
+// indices (cool, cool, warm, warm, cool-green). Adjacent indices are
+// always from different hue families so a typical 2-3 slice donut never
+// renders two near-identical fills.
 const PALETTE = [
   'var(--color-accent)',
-  '#a78bfa', // purple-400
-  '#60a5fa', // blue-400
-  '#fbbf24', // amber-400
-  '#fb7185', // rose-400
-  '#34d399', // emerald-400
+  'var(--chart-violet)',
+  'var(--chart-blue)',
+  'var(--chart-amber)',
+  'var(--chart-rose)',
+  'var(--chart-emerald)',
 ] as const
 
 function formatChartValue(value: number): string {

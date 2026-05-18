@@ -184,9 +184,26 @@ function BarChartSvg({
   )
 }
 
+// Donut segment palette — design-system chart tokens that re-theme between
+// dark and light mode. Index rotation maximizes hue contrast between
+// adjacent slices (cool-green, cool-purple, warm-yellow, cool-blue,
+// warm-pink, neutral-slate) so a 2-5 slice donut never renders two
+// near-identical fills. The dataset accentHex stays in use elsewhere
+// in the dashboard (bar chart, KPI accents); only the donut segments
+// switch to the shared chart palette so the slices are visually
+// separable at a glance.
+const DONUT_PALETTE = [
+  'var(--chart-emerald)',
+  'var(--chart-violet)',
+  'var(--chart-amber)',
+  'var(--chart-blue)',
+  'var(--chart-rose)',
+  'var(--chart-slate)',
+] as const
+
 function DonutChartSvg({
   data,
-  accentHex,
+  accentHex: _accentHex,
 }: {
   data: ChartDataPoint[]
   accentHex: string
@@ -204,8 +221,8 @@ function DonutChartSvg({
     const start = (acc / total) * 2 * Math.PI
     acc += d.value
     const end = (acc / total) * 2 * Math.PI
-    const opacity = 0.95 - i * 0.13
-    return { start, end, opacity, label: d.label, value: d.value }
+    const fill = DONUT_PALETTE[i % DONUT_PALETTE.length]
+    return { start, end, fill, label: d.label, value: d.value }
   })
 
   return (
@@ -215,18 +232,21 @@ function DonutChartSvg({
           <path
             key={`${arc.label}-${i}`}
             d={arcPath(cx, cy, radius, inner, arc.start, arc.end)}
-            fill={accentHex}
-            opacity={Math.max(0.3, arc.opacity)}
+            fill={arc.fill}
+            opacity={0.9}
           />
         ))}
-        <circle cx={cx} cy={cy} r={inner - 1} fill="#0d111c" />
+        {/* Center fill uses the surface token so the donut hole matches the
+            chart card background in both dark and light mode. Previously
+            this was hardcoded to #0d111c which stayed dark in light mode. */}
+        <circle cx={cx} cy={cy} r={inner - 1} fill="var(--color-surface)" />
       </svg>
       <ul className="flex-1 space-y-1 min-w-0">
         {arcs.map((arc, i) => (
           <li key={`${arc.label}-${i}`} className="flex items-center gap-2 text-[11px]">
             <span
               className="h-2 w-2 rounded-sm shrink-0"
-              style={{ backgroundColor: accentHex, opacity: Math.max(0.3, arc.opacity) }}
+              style={{ backgroundColor: arc.fill, opacity: 0.9 }}
             />
             <span className="text-text-secondary truncate flex-1">{arc.label}</span>
             <span className="text-text-muted font-mono">
