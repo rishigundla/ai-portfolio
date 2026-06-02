@@ -31,9 +31,9 @@ Three shipped products, one shared engine. Every demo runs instantly. No signup,
 
 </td><td valign="center">
 
-[![Live Demo](https://img.shields.io/badge/%E2%96%B6%20LIVE%20DEMO-2DD4BF?style=for-the-badge&logo=vercel&logoColor=black)](https://ai-portfolio-dashboard-factory.vercel.app)
+[![Live Demo](https://img.shields.io/badge/%E2%96%B6%20LIVE%20DEMO-2563EB?style=for-the-badge)](https://ai-portfolio-dashboard-factory.vercel.app)
 
-[![Case Study](https://img.shields.io/badge/Read%20the%20case%20study-1A1A1A?style=for-the-badge)](./docs/case-studies/dashboard-factory.md)
+[![Case Study](https://img.shields.io/badge/Read%20the%20case%20study-475569?style=for-the-badge)](./docs/case-studies/dashboard-factory.md)
 
 </td></tr>
 
@@ -44,9 +44,9 @@ Three shipped products, one shared engine. Every demo runs instantly. No signup,
 
 </td><td valign="center">
 
-[![Live Demo](https://img.shields.io/badge/%E2%96%B6%20LIVE%20DEMO-2DD4BF?style=for-the-badge&logo=vercel&logoColor=black)](https://ai-portfolio-narrative-generator.vercel.app)
+[![Live Demo](https://img.shields.io/badge/%E2%96%B6%20LIVE%20DEMO-2563EB?style=for-the-badge)](https://ai-portfolio-narrative-generator.vercel.app)
 
-[![Case Study](https://img.shields.io/badge/Read%20the%20case%20study-1A1A1A?style=for-the-badge)](./docs/case-studies/narrative-generator.md)
+[![Case Study](https://img.shields.io/badge/Read%20the%20case%20study-475569?style=for-the-badge)](./docs/case-studies/narrative-generator.md)
 
 </td></tr>
 
@@ -57,9 +57,9 @@ Three shipped products, one shared engine. Every demo runs instantly. No signup,
 
 </td><td valign="center">
 
-[![Live Demo](https://img.shields.io/badge/%E2%96%B6%20LIVE%20DEMO-2DD4BF?style=for-the-badge&logo=vercel&logoColor=black)](https://ai-portfolio-sprint-intelligence.vercel.app)
+[![Live Demo](https://img.shields.io/badge/%E2%96%B6%20LIVE%20DEMO-2563EB?style=for-the-badge)](https://ai-portfolio-sprint-intelligence.vercel.app)
 
-[![Case Study](https://img.shields.io/badge/Read%20the%20case%20study-1A1A1A?style=for-the-badge)](./docs/case-studies/sprint-intelligence.md)
+[![Case Study](https://img.shields.io/badge/Read%20the%20case%20study-475569?style=for-the-badge)](./docs/case-studies/sprint-intelligence.md)
 
 </td></tr>
 </table>
